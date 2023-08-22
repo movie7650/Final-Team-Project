@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Body Header -->
+<div th:fragment="bodyHeader" class="container">
+	<div class="header">
+		<div class="header-box">
+			<div class="header-category">
+				<div class="header-category-box">
+					<img class="header-category-img" th:src="@{/assets/header/category.svg}">
+					<div class="header-category-content">카테고리</div>
+				</div>
+			</div>
+			<div class="header-logo">
+				<img class="header-logo-img" th:src="@{/assets/header/daitso_logo_header.png}">	
+			</div>
+			<div class="header-search">
+				<div class="header-search-box">
+					<form class="header-search-form">
+						<div class="header-search-input">
+                        	<input id="search-product" type="text" placeholder="다있소 매장상품을 검색해보세요!">
+                    	</div>
+                    	<div class="header-search-submit">
+                        	<button class="header-search-btn" type="submit"><img th:src="@{/assets/header/search.svg}"></button>
+                    	</div>
+					</form>
+				</div>					
+			</div>
+			<div class="header-mydaitso">
+				<div class="header-mydaitso-box">
+					<img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}">
+					<div class="header-mydaitso-content"><a>마이다있소</a></div>
+				</div>
+			</div>
+			<div class="header-cart">
+				<div class="header-cart-box">
+					<img class="header-cart-img" th:src="@{/assets/header/cart.svg}">
+					<div class="header-cart-content"><a>장바구니</a></div>
+				</div>
+			</div>				
+		</div>
+	</div>
+</div>
+</html>
