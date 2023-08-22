@@ -2,9 +2,10 @@ package com.example.daitso.customer.model;
 
 import java.sql.Date;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
 public class Customer {
 	private int customerId;
 	private String customerEmail;

@@ -2,9 +2,10 @@ package com.example.daitso.config;
 
 import java.sql.Date;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
 public class CommonCode {
 	private int commonCodeId;
 	private String commonCodeNm;

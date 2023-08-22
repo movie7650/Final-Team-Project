@@ -2,9 +2,10 @@ package com.example.daitso.inquiry.model;
 
 import java.sql.Date;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
 public class Inquiry {
 	private int inquiryId;
 	private int productId;
@@ -17,5 +18,4 @@ public class Inquiry {
 	private String creator;
 	private Date modifyDt;
 	private String modifier;
-
 }

@@ -2,9 +2,11 @@ package com.example.daitso.cart.model;
 
 import java.sql.Date;
 
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class Cart {
 	private int cartId;
 	private int productId;

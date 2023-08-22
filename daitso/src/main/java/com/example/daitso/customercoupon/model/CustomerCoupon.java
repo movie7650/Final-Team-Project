@@ -2,9 +2,10 @@ package com.example.daitso.customercoupon.model;
 
 import java.sql.Date;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
 public class CustomerCoupon {
 	private int customerCouponId;
 	private int customerId;
