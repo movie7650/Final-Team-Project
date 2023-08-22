@@ -23,9 +23,9 @@ public class Product {
 	private String productImageSecond;
 	private String productImageThird;
 	private String status;
-	private Date create_dt;
+	private Date createDt;
 	private String creator;
-	private Date modify_dt;
+	private Date modifyDt;
 	private String modifier;
 	private String productCode;
 }

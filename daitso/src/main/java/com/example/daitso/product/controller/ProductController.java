@@ -1,5 +1,29 @@
 package com.example.daitso.product.controller;
 
-public class ProductController {
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.daitso.product.model.Product;
+import com.example.daitso.product.service.IProductService;
+
+@Controller
+@RequestMapping("/product")
+public class ProductController {
+	
+	@Autowired
+	IProductService productService;
+	
+	@GetMapping("/{categoryId}")
+	public String productList(@PathVariable int categoryId) {
+		System.out.println(categoryId);
+		List<Product> list = productService.selectProductList(categoryId);
+		
+		return "/main/product";
+	}
+	
 }
