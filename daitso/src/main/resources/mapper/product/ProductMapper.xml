@@ -1,3 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.product.ProductMapper"></mapper>
+<mapper namespace="com.example.daitso.product.repository.IProductRepository">
+
+<resultMap type="com.example.daitso.product.model.Product" id="productMap">
+	<result column="product_id"		property="productId" />
+	<result column="category_id"	property="categoryId" />
+	<result column="product_nm"		property="productNm" />
+	<result column="product_content"	property="productContent" />
+	<result column="product_price"	property="productPrice" />
+	<result column="product_stock"	property="productStock" />
+	<result column="product_sales_count"	property="productSalesCount" />
+	<result column="product_option_first"	property="productOptionFirst" />
+	<result column="product_option_second"	property="productOptionSecond" />
+	<result column="product_option_third"	property="productOptionThird" />
+	<result column="product_image_first"	property="productImageFirst" />
+	<result column="product_image_second"	property="productImageSecond" />
+	<result column="product_image_third"	property="productImageThird" />
+	<result column="status"					property="status" />
+	<result column="create_dt"				property="createDt" />
+	<result column="creator"				property="creator" />
+	<result column="modify_dt"				property="modifyDt" />
+	<result column="modifier"				property="modifier" />
+</resultMap>
+
+<select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
+	SELECT product_id		AS		productId,
+			category_id		AS		categoryId,
+			product_nm		AS		productNm,
+			product_content	AS		productContent,
+			product_price	AS		productPrice,
+			product_stock	AS		productStock,
+			product_image_first		AS		productImageFirst
+	FROM product
+		WHERE category_id in (
+    	SELECT category_id from category
+    	START WITH category_id = 14
+    	CONNECT BY PRIOR category_id = category_pr_id)
+    	AND status = 'N'
+</select>
+
+</mapper>
