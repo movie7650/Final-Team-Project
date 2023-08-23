@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head th:replace="~{/include/header :: header}">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-
+	<div class="container">
+	<div>
+          <table>
+              <thead>
+                 <tr>
+					<th>상품명</th> 
+				</tr>
+                </thead>
+                
+                <tbody>
+                <tr th:each="product : ${products}">
+                	<td th:text="${product.productNm}">
+                	</td>
+                </tr>
+	</div>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 </body>
 </html>
