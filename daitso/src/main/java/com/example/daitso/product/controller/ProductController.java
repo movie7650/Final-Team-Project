@@ -26,4 +26,9 @@ public class ProductController {
 		return "/main/product";
 	}
 	
+	@GetMapping("")
+	public String main() {
+		return "/main/main";
+	}
+	
 }
