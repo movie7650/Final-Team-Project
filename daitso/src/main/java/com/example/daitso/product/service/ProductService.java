@@ -19,4 +19,10 @@ public class ProductService implements IProductService {
 	public List<Product> selectProductList(int categoryId) {
 		return productRepository.selectProductList(categoryId);
 	}
+	
+	@Override
+	public List<Product> selectAllProducts() {
+		return productRepository.selectAllProducts();
+	}
+
 }
