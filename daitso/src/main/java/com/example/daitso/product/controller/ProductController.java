@@ -31,7 +31,6 @@ public class ProductController {
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
 		model.addAttribute("products",products);
-		System.out.println(products);
 		return "admin/product/admin-product";
 	}
 	

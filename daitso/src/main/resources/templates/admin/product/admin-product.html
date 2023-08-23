@@ -6,20 +6,29 @@
 </head>
 <body>
 	<div class="container">
-	<div>
-          <table>
-              <thead>
-                 <tr>
-					<th>상품명</th> 
-				</tr>
-                </thead>
-                
-                <tbody>
-                <tr th:each="product : ${products}">
-                	<td th:text="${product.productNm}">
-                	</td>
-                </tr>
-	</div>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+		<div>
+			<table>
+				<thead>
+					<tr>
+						<th>상품 코드</th>
+						<th>상품명</th>
+						<th>사이즈</th>
+						<th>색상</th>
+						<th>기타</th>
+						<th>수량</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="product : ${products}">
+						<td th:text="${product.productCode}"></td>
+						<td th:text="${product.productNm}"></td>
+						<td th:text="${product.productOptionFirst}"></td>
+						<td th:text="${product.productOptionSecond}"></td>
+						<td th:text="${product.productOptionThird}"></td>
+						<td th:text="${product.productStock}"></td>
+					</tr>
+					</div>
+					<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 </body>
 </html>
