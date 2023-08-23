@@ -27,6 +27,11 @@ public class ProductController {
 		return "/main/product";
 	}
 	
+	@GetMapping("")
+	public String main() {
+		return "/main/main";
+	}
+	
 	@GetMapping("/admin-product")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
