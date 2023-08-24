@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/include/header :: header}">
+<body>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+<form th:action method="post">
+		<section class="section">
+			<div class="row">
+				<div class="col-lg-20">
+					<div class="card">
+						<div class="card-body" style="width:1000px">
+							<h5 class="card-title">상품 등록하기</h5>
+							<!-- General Form Elements -->
+							<form>
+								<div class="row mb-3">
+									<label form="categoryId" class="col-sm-2 col-form-label">카테고리</label>
+									<div class="col-sm-10">
+										<select class="form-select"	aria-label="Default select example" id="categoryId">
+											<option selected>카테고리 선택</option>
+											<option value="1">One</option>
+											<option value="2">Two</option>
+											<option value="3">Three</option>
+										</select>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productCode" for="inputText" class="col-sm-2 col-form-label">상품 코드</label>
+									<div class="col-sm-10">
+										<input type="text" id="productCode" class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productNm" form="productNm" for="inputText" class="col-sm-2 col-form-label">상품명</label>
+									<div class="col-sm-10">
+										<input type="text" id="productNm" class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productContent" for="inputText" class="col-sm-2 col-form-label">상품 상세내용</label>
+									<div class="col-sm-10">
+										<textarea id="productContent" class="form-control" style="height: 100px"></textarea>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productOptionFirst" for="inputText" class="col-sm-2 col-form-label">사이즈</label>
+									<div class="col-sm-10">
+										<input type="text" id="productOptionFirst" class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productOptionSecond" for="inputText" class="col-sm-2 col-form-label">색상</label>
+									<div class="col-sm-10">
+										<input type="text"  id="productOptionSecond"  class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productOptionThird" for="inputText" class="col-sm-2 col-form-label">기타</label>
+									<div class="col-sm-10">
+										<input type="text" id="productOptionThird" class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productPrice" for="inputNumber" class="col-sm-2 col-form-label">상품 가격</label>
+									<div class="col-sm-10">
+										<input type="number" id="productPrice" class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productStock" for="inputNumber" class="col-sm-2 col-form-label">재고 수량</label>
+									<div class="col-sm-10">
+										<input type="number" id="productStock" class="form-control">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label form="productImageFirst" for="inputText" class="col-sm-2 col-form-label">상품 이미지 등록</label>
+									<div class="col-sm-10">
+										<input class="form-control" type="file" id="formFile">
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-primary" th:onclick="|location.href='@{/product/add)}'|">저장</button>
+										<button type="close" class="btn btn-primary">닫기</button>
+									</div>
+								</div>
+
+							</form>
+							<!-- End General Form Elements -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</form>
+</div>
+		<a href="#"
+		class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.min.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+	<script src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
+	<!-- Vendor CSS Files -->
+	<link href="assets/vendor/bootstrap/css/bootstrap.min.css"
+		rel="stylesheet">
+	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+		rel="stylesheet">
+	<link href="assets/vendor/boxicons/css/boxicons.min.css"
+		rel="stylesheet">
+	<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+	<!-- Template Main CSS File -->
+	<link href="assets/css/style.css" rel="stylesheet">
+
+	<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>
+
+
+
+

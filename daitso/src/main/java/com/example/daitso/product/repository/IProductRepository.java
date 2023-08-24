@@ -14,5 +14,6 @@ public interface IProductRepository {
 
 	List<Product> selectProductList(@Param("categoryId") int categoryId);
 	List<Product> selectAllProducts();
+	void registerProducts(Product product);
 
 }
