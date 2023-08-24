@@ -16,5 +16,5 @@ public class Category {
 	private String creator;
 	private Date modifyDt;
 	private String modifier;
-	
+	private int level;
 }

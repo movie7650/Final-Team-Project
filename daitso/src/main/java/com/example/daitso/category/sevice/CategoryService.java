@@ -25,5 +25,10 @@ public class CategoryService implements ICategoryService{
 	public List<Category> getSecondCategoryIdAndNameByFirstCategoryId(int categoryId) {
 		return categoryRepository.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
 	}
+	
+	@Override
+	public List<Category> selectCategoryList(int categoryid) {
+		return categoryRepository.selectCategoryList(categoryid);
+	}
 
 }
