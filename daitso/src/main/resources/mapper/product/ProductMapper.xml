@@ -39,4 +39,9 @@
     	AND status = 'N'
 </select>
 
+<select id="selectProduct" parameterType="int" resultMap="productMap">
+	SELECT * FROM product
+	WHERE product_id = #{productId}
+</select>
+
 </mapper>

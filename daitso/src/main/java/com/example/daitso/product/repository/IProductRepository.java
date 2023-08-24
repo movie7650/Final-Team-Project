@@ -13,6 +13,9 @@ import com.example.daitso.product.model.Product;
 public interface IProductRepository {
 
 	List<Product> selectProductList(@Param("categoryId") int categoryId);
+	
 	List<Product> selectAllProducts();
+	
+	Product selectProduct(@Param("productId") int productId);
 
 }

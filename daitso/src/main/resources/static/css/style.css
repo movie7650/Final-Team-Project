@@ -3,3 +3,31 @@
 body {
 	font-family: 'Inter', sans-serif;
 }
+
+.product-box{
+	margin-right: 10%;
+}
+
+.product-box:hover{
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.8);
+	cursor: pointer;
+}
+
+.product-path-bar{
+	height: 30px;
+	background-color: #dadada;
+	display:flex;
+	align-items:center
+}
+
+.product-sidebar{
+	width: 20%;
+	display: flex;
+	justify-content: center;
+}
+
+.product-large-box{
+	width:80%; 
+	display:flex; 
+	flex-wrap: wrap;
+} 

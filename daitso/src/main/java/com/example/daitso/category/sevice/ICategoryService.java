@@ -1,5 +1,9 @@
 package com.example.daitso.category.sevice;
 
-public interface ICategoryService {
+import java.util.List;
 
+import com.example.daitso.category.model.Category;
+
+public interface ICategoryService {
+	List<Category> selectCategoryList(int categoryid);
 }

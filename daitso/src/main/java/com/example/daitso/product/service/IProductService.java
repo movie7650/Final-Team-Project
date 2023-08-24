@@ -12,5 +12,8 @@ import com.example.daitso.product.model.Product;
 public interface IProductService {
 	
 	List<Product> selectProductList(int categoryId);
+	
 	List<Product> selectAllProducts();
+	
+	Product selectProduct(int productId);
 }

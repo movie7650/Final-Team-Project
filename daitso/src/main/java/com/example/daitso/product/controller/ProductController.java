@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.daitso.category.model.Category;
+import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.service.IProductService;
 
@@ -18,18 +20,18 @@ public class ProductController {
 	
 	@Autowired
 	IProductService productService;
-	
-	@GetMapping("/{categoryId}")
-	public String productList(@PathVariable int categoryId) {
-		System.out.println(categoryId);
-		List<Product> list = productService.selectProductList(categoryId);
-		
-		return "/main/product";
-	}
+
 	
 	@GetMapping("")
 	public String main() {
 		return "/main/main";
+	}
+	
+	@GetMapping("/{categoryId}")
+	public String selectProduct(@PathVariable int categoryId, Model model) {
+		Product product = productService.selectProduct(categoryId);
+		System.out.println(product);
+		return "/main/productDetail";
 	}
 	
 	@GetMapping("/admin-product")
