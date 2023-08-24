@@ -19,4 +19,19 @@ public class CategoryService implements ICategoryService{
 		return categoryRepository.selectAllCategories();
 	}
 
+	@Autowired
+	ICategoryRepository categoryRepository;
+	
+	// 상위 카테고리(식품,도서,...) 고유번호와 이름 갖고오기
+	@Override
+	public List<Category> getAllFirstCategoryIdAndName() {
+		return categoryRepository.getAllFirstCategoryIdAndName();
+	}
+
+	// 상위 카테고리(식품,도서,...) 고유번호로 부터 하위 카테고리 고유번호와 이름 갖고오기
+	@Override
+	public List<Category> getSecondCategoryIdAndNameByFirstCategoryId(int categoryId) {
+		return categoryRepository.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+	}
+
 }

@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.category.repository.ICategoryRepository">
-
-<select id="selectAllCategories" resultType="com.example.daitso.category.model.Category">
-<![CDATA[
-	select
-		   category_nm as "categoryNm"
-	from category
-]]>
-</select>
+	
+	<!-- 상위 카테고리(식품,도서,...) 고유번호와 이름 갖고오기 -->
+	<select id="getAllFirstCategoryIdAndName" resultType="com.example.daitso.category.model.Category">
+        <![CDATA[
+		select category_id AS "categoryId", category_nm AS "categoryNm"
+		from category 
+		where category_pr_id = 0
+		order by category_id
+		]]>
+    </select>
+    
+    <!-- 상위 카테고리(식품,도서,...) 고유번호로 부터 하위 카테고리 고유번호와 이름 갖고오기 -->
+	<select id="getSecondCategoryIdAndNameByFirstCategoryId" parameterType="int" resultType="com.example.daitso.category.model.Category">
+        <![CDATA[
+		select category_id AS "categoryId", category_nm AS "categoryNm"
+		from category 
+		where category_pr_id = #{categoryId}
+		order by category_id
+		]]>
+    </select>
+    
 </mapper>
