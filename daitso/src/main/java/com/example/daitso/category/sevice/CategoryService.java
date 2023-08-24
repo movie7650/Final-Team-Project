@@ -14,14 +14,6 @@ public class CategoryService implements ICategoryService{
 	@Autowired
 	ICategoryRepository categoryRepository;
 	
-	@Override
-	public List<Category> selectAllCategories() {
-		return categoryRepository.selectAllCategories();
-	}
-
-	@Autowired
-	ICategoryRepository categoryRepository;
-	
 	// 상위 카테고리(식품,도서,...) 고유번호와 이름 갖고오기
 	@Override
 	public List<Category> getAllFirstCategoryIdAndName() {
