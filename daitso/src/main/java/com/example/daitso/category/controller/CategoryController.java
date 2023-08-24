@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
@@ -19,10 +21,20 @@ import com.example.daitso.product.service.IProductService;
 public class CategoryController {
 	
 	@Autowired
-	IProductService productService;
+	ICategoryService categoryService;
 	
 	@Autowired
-	ICategoryService categoryService;
+	IProductService productService;
+	
+	@GetMapping("/getAllFirstCategoryIdAndName")
+	public @ResponseBody List<Category> getAllFirstCategoryIdAndName() {
+		return categoryService.getAllFirstCategoryIdAndName();	
+	}
+	
+	@GetMapping("/getSecondCategoryIdAndNameByFirstCategoryId/{categoryId}")
+	public @ResponseBody List<Category> getSecondCategoryIdAndNameByFirstCategoryId(@PathVariable int categoryId) {
+		return categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);	
+	}
 	
 	@GetMapping("/{categoryId}")
 	public String productList(@PathVariable int categoryId, Model model) {

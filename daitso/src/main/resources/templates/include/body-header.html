@@ -4,10 +4,14 @@
 <div th:fragment="bodyHeader" class="container">
 	<div class="header">
 		<div class="header-box">
-			<div class="header-category">
-				<div class="header-category-box">
-					<img class="header-category-img" th:src="@{/assets/header/category.svg}">
-					<div class="header-category-content">카테고리</div>
+			<div class="header-category-container">
+				<div id="header-category">
+					<div class="header-category-box">
+						<img class="header-category-img" th:src="@{/assets/header/category.svg}">
+						<div class="header-category-content">카테고리</div>
+					</div>
+				</div>
+				<div id="header-category-list">
 				</div>
 			</div>
 			<div class="header-logo">

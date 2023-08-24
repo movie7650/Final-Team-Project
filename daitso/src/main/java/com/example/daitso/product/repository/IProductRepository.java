@@ -18,4 +18,7 @@ public interface IProductRepository {
 	
 	Product selectProduct(@Param("productId") int productId);
 
+	void registerProducts(Product product);
+
+
 }

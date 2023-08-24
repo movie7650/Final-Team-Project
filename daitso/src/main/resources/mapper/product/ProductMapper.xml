@@ -39,9 +39,32 @@
     	AND status = 'N'
 </select>
 
+
 <select id="selectProduct" parameterType="int" resultMap="productMap">
 	SELECT * FROM product
 	WHERE product_id = #{productId}
 </select>
+
+<select id="selectAllProducts" resultType="com.example.daitso.product.model.Product">
+<![CDATA[
+	select product_code as "productCode",
+		   product_nm as "productNm",
+		   product_option_first as "productOptionFirst",
+		   product_option_second as "productOptionSecond",
+		   product_option_third as "productOptionThird",
+		   product_stock as "ProductStock"
+	from product
+]]>
+</select>
+
+<insert id="registerProducts" parameterType="com.example.daitso.product.model.Product">
+<![CDATA[
+	INSERT INTO product (product_id, category_id, product_code, product_nm, product_content,product_image_first,
+	product_price, product_stock, product_option_first, product_option_second, product_option_third)
+	VALUES (product_seq.NEXTVAL, #{categoryId}, #{productCode}, #{productNm}, #{productContent},#{productImageFirst},
+	#{productPrice}, #{productStock}, #{productOptionFirst}, #{productOptionSecond}, #{productOptionThird})
+]]>
+</insert>
+
 
 </mapper>
