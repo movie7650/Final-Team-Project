@@ -10,7 +10,7 @@ import com.example.daitso.category.repository.ICategoryRepository;
 
 @Service
 public class CategoryService implements ICategoryService{
-
+	
 	@Autowired
 	ICategoryRepository categoryRepository;
 	
