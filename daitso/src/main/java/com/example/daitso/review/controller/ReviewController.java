@@ -1,5 +1,22 @@
 package com.example.daitso.review.controller;
 
-public class ReviewController {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.daitso.review.service.IReviewService;
+
+@Controller
+public class ReviewController {
+	
+	@Autowired
+	IReviewService reviewService;
+	
+	@RequestMapping("/")
+	public String header() {
+		return "include/mypage-bread-board";
+		
+	}
+	
 }
