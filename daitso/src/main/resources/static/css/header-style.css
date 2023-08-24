@@ -47,7 +47,7 @@
 	width: 1050px;
 	background-color: white;
 	padding: 30px 0 20px 30px;
-	visibility: hidden;
+	display:none;
 	border: 1px solid #E1E1E1;
 	box-shadow: 5px 5px 5px #E1E1E1;
 }
