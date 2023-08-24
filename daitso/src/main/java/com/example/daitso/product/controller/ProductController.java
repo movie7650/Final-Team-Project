@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.service.IProductService;
+
 
 @Controller
 @RequestMapping("/product")
@@ -32,11 +34,22 @@ public class ProductController {
 		return "/main/main";
 	}
 	
-	@GetMapping("/admin-product")
+	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
 		model.addAttribute("products",products);
 		return "admin/product/admin-product";
 	}
 	
+	@GetMapping("/admin/register")
+	public String addForm() {
+		return "admin/product/admin-register";
+//		return "admin/product/test3";
+	}
+
+	@PostMapping("/admin/register")
+	public String registerProducts(Product product) {
+		productService.registerProducts(product);
+		return "redirect:/product/admin";
+	}
 }

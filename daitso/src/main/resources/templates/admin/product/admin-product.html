@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html>
-<head th:replace="~{/include/header :: header}">
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
 <body>
-	<div class="container">
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div class="container" style="max-width: 1000px">
+		<div class="row">
+			<div class="col">
+				<button class="btn btn-primary float-right" style="background-color:#39594e"
+				onclick="location.href='admin-register.html'" th:onclick="|location.href='@{/product/admin/register}'|"
+				type="button" >+등록</button>
+			</div>
+		</div>
+		<hr class="my-4">
 		<div>
-			<table>
+			<table class="table">
 				<thead>
 					<tr>
 						<th>상품 코드</th>
@@ -28,7 +34,10 @@
 						<td th:text="${product.productOptionThird}"></td>
 						<td th:text="${product.productStock}"></td>
 					</tr>
-					</div>
-					<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
 </html>
