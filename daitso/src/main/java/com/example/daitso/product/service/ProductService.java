@@ -25,4 +25,10 @@ public class ProductService implements IProductService {
 		return productRepository.selectAllProducts();
 	}
 
+	@Override
+	public void registerProducts(Product product) {
+		productRepository.registerProducts(product);
+	}
+
+
 }
