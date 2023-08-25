@@ -4,8 +4,10 @@
 
 <select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
 	SELECT category_id AS categoryId, 
+			category_pr_id AS categoryPrId,
 			category_nm AS categoryNm, 
-			level
+			level,
+			CONNECT_BY_ISLEAF AS isLeaf
 	FROM category 
 	WHERE CONNECT_BY_ROOT category_nm = 
     	(SELECT 

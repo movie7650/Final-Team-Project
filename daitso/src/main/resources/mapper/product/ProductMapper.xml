@@ -34,7 +34,7 @@
 	FROM product
 		WHERE category_id in (
     	SELECT category_id from category
-    	START WITH category_id = 14
+    	START WITH category_id = #{categoryId}
     	CONNECT BY PRIOR category_id = category_pr_id)
     	AND status = 'N'
 </select>

@@ -16,18 +16,28 @@
 		</div>
 		<div style="display: flex;">
 			<div class="product-sidebar">
-				<div style="width: 30%;">
+				<div >
 					<div style="border: solid">
 					<ul>
 						<th:block th:each="list : ${categoryList}">
-							<p th:if="${list.level == 1}">[[${list.categoryNm}]] 카테고리</p>
-							<li th:if="${list.level != 1}">
-								<p>[[${list.categoryNm}]] <span>[[${list.level}]]</span></p>
+							<p style="text-align:center; font-weight:bold" th:if="${list.level == 1}">[[${list.categoryNm}]]</p>
+							<!-- <li th:if="${list.level != 1}">
+								<span th:each="num: ${#numbers.sequence(1, list.level)}">&nbsp&nbsp</span>
+								<span>[[${list.categoryNm}]]</span>
+							</li> -->
+							<li th:class="list+${list.categoryId}"  th:if="${list.level == 2}">
+								<a th:href="@{/category/{id}(id=${list.categoryId})}">[[${list.categoryNm}]] 
+									<a th:class="show-btn+${list.categoryId}"  href="#" th:onclick="showDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
+										<img style="width:10px" th:src="@{/assets/common/angle-down-solid.svg}"></img>
+									</a>
+									<a th:class="hidden-btn+${list.categoryId}" href="#" style="display:none" th:onclick="hideDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
+										<img style="width:10px" th:src="@{/assets/common/angle-up-solid.svg}"></img>
+									</a>
+								</a>
 							</li>						
 						</th:block>
 					</ul>
-					</div>
-					
+					</div>	
 				</div>
 			</div>
 			<div class="product-large-box">
@@ -45,8 +55,13 @@
 		</div>
 	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
-</body>
-<script>
+	<script th:inline="javascript">
+	
+	/*<![CDATA[*/
+    var cList = /*[[${categoryList}]]*/
+    /*]]>*/
+	
+
 	function goProductDetail(id){
 		let tag = document.createElement('form');
 		
@@ -55,5 +70,54 @@
 		document.body.appendChild(tag);
 		tag.submit(); 
 	}
+	
+	function showDownCategory(categoryId, level){
+		
+		var showBtn = document.querySelector(`.show-btn${categoryId}`);
+		var hiddenBtn = document.querySelector(`.hidden-btn${categoryId}`);
+		console.log(hiddenBtn);
+		var lbody = document.querySelector(`.list${categoryId}`);
+		showBtn.style.display = "none";
+		hiddenBtn.style.display = "inline";
+		var frame = `<ul class="down-ul${categoryId}-level${level}"></ul>`;
+		lbody.innerHTML += frame;
+		var mbody = document.querySelector(`.down-ul${categoryId}-level${level}`);
+		cList.forEach(list => {
+			if(list.categoryPrId == categoryId){
+				var category = `
+						<li class="list${list.categoryId}">
+							<a href="/category/${list.categoryId}">${list.categoryNm}
+								${list.isLeaf == 0 ?  
+									`<a class="show-btn${list.categoryId}"  href="#" onclick="showDownCategory(${list.categoryId}, ${list.level})"> 
+									 	<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
+									 </a>
+									 <a class="hidden-btn${list.categoryId}" href="#" style="display:none" onclick="hideDownCategory(${list.categoryId}, ${list.level})">
+										<img style="width:10px" src="/assets/common/angle-up-solid.svg"></img>
+									</a>
+									 `
+									: ``
+								}
+									
+							</a>
+						</li> 
+				`
+				mbody.innerHTML += category;
+			}
+		})
+		
+		
+	}
+	
+	function hideDownCategory(categoryId, level){
+		var showBtn = document.querySelector(`.show-btn${categoryId}`);
+		var hiddenBtn = document.querySelector(`.hidden-btn${categoryId}`);
+		var downUl = document.querySelector(`.down-ul${categoryId}-level${level}`);
+		showBtn.style.display = "inline";
+		hiddenBtn.style.display = "none";
+		downUl.innerHTML = "";
+		
+	}
 </script>
+</body>
+
 </html>
