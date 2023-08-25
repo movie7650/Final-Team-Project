@@ -13,9 +13,9 @@ public class ReviewController {
 	@Autowired
 	IReviewService reviewService;
 	
-	@RequestMapping("/")
+	@RequestMapping("/review")
 	public String header() {
-		return "include/mypage-bread-board";
+		return "mypage/review";
 		
 	}
 	
