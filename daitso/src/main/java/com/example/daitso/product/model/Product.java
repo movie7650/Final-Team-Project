@@ -28,4 +28,6 @@ public class Product {
 	private Date modifyDt;
 	private String modifier;
 	private String productCode;
+	
+	private int subCategoryId;
 }
