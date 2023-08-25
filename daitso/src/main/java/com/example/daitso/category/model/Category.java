@@ -17,4 +17,5 @@ public class Category {
 	private Date modifyDt;
 	private String modifier;
 	private int level;
+	private int isLeaf;
 }
