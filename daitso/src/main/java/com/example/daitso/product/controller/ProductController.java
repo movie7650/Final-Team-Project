@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.category.model.Category;
@@ -50,12 +51,12 @@ public class ProductController {
 	}
 
 	@PostMapping("/admin/register")
-	public String registerProducts(Product product) {
+	public String registerProducts(@RequestParam int productId, @RequestParam String productCode,Product product) {
 		productService.registerProducts(product);
+		productService.changeProductCode(productId, productCode);
 		return "redirect:/product/admin";
 	}
 	
-
 	@GetMapping("/subCategories/{categoryId}")
     @ResponseBody
     public List<Category> getSubCategories(@PathVariable int categoryId) {
