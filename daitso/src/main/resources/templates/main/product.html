@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>카테고리별 상품 리스트</title>
+</head>
+<div th:replace="~{/include/header :: header}"></div>
+<body>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div class="product-body">
+		<div>
+			<img style="width: 100%;" th:src="@{/images/mainImages.png}">		
+		</div>
+		<div class="product-path-bar">
+			<span style="margin-left:20%">전체 > 초콜릿</span>
+		</div>
+		<div style="display: flex;">
+			<div class="product-sidebar">
+				<div style="width: 30%;">
+					<div style="border: solid">
+					<ul>
+						<th:block th:each="list : ${categoryList}">
+							<p th:if="${list.level == 1}">[[${list.categoryNm}]] 카테고리</p>
+							<li th:if="${list.level != 1}">
+								<p>[[${list.categoryNm}]] <span>[[${list.level}]]</span></p>
+							</li>						
+						</th:block>
+					</ul>
+					</div>
+					
+				</div>
+			</div>
+			<div class="product-large-box">
+				<th:block th:each="list : ${productList}">
+					<div class="product-box" th:onclick="goProductDetail([[${list.productId}]])">
+						<div style="width: 248px; height: 195px;">
+							<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
+						</div>
+						<div style="width: 248px;">
+							<span>[[${list.productNm}]]</span>
+						</div>					
+					</div>
+				</th:block>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+<script>
+	function goProductDetail(id){
+		let tag = document.createElement('form');
+		
+		tag.setAttribute('method', 'get');
+		tag.setAttribute('action', `/product/${id}`);
+		document.body.appendChild(tag);
+		tag.submit(); 
+	}
+</script>
+</html>

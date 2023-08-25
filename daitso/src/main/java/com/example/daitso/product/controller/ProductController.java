@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.category.model.Category;
@@ -24,22 +23,15 @@ public class ProductController {
 	
 	@Autowired
 	IProductService productService;
+
 	@Autowired
 	ICategoryService categoryService;
-	
-	@GetMapping("/{categoryId}")
-	public String productList(@PathVariable int categoryId) {
-		System.out.println(categoryId);
-		List<Product> list = productService.selectProductList(categoryId);
-		
-		return "/main/product";
-	}
-	
 	
 	@GetMapping("")
 	public String main() {
 		return "/main/main";
 	}
+	
 	
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
@@ -65,10 +57,19 @@ public class ProductController {
 		return "redirect:/product/admin";
 	}
 	
+
 	@GetMapping("/getSubCategories/{categoryId}")
     @ResponseBody
     public List<Category> getSubCategories(@PathVariable int categoryId) {
         List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
         return subCategories;
     }
+
+	@GetMapping("/{categoryId}")
+	public String selectProduct(@PathVariable int categoryId, Model model) {
+		Product product = productService.selectProduct(categoryId);
+		System.out.println(product);
+		return "/main/productDetail";
+	}
+
 }

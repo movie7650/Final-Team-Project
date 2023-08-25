@@ -2,11 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>카테고리별 상품 리스트</title>
 </head>
 <div th:replace="~{/include/header :: header}"></div>
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	
 	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script>
+	function goProductDetail(id){
+		let tag = document.createElement('form');
+		
+		tag.setAttribute('method', 'get');
+		tag.setAttribute('action', `/product/${id}`);
+		document.body.appendChild(tag);
+		tag.submit(); 
+	}
+</script>
 </html>
