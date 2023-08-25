@@ -10,5 +10,4 @@ public interface IProductService {
 	List<Product> selectAllProducts();
 	void registerProducts(Product product);
 
-
 }

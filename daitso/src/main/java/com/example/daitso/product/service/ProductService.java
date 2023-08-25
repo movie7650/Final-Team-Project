@@ -29,6 +29,5 @@ public class ProductService implements IProductService {
 	public void registerProducts(Product product) {
 		productRepository.registerProducts(product);
 	}
-
-
+	
 }

@@ -1,134 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="~{/include/header :: header}">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-<form th:action method="post">
+	<div
+		class="container d-flex justify-content-center align-items-center min-vh-100">
+		<!-- 상품 상세 내용-->
 		<section class="section">
 			<div class="row">
 				<div class="col-lg-20">
 					<div class="card">
-						<div class="card-body" style="width:1000px">
+						<div class="card-body" style="width: 800px">
 							<h5 class="card-title">상품 등록하기</h5>
-							<!-- General Form Elements -->
-							<form>
+							<form th:action method="post">
+								<!-- 
 								<div class="row mb-3">
-									<label class="col-sm-2 col-form-label">카테고리</label>
+									<label form="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
 									<div class="col-sm-10">
-										<select class="form-select"	aria-label="Default select example" id="categoryId">
-											<option selected>카테고리 선택</option>
-											<option value="1">One</option>
-											<option value="2">Two</option>
-											<option value="3">Three</option>
+										<select id="categoryId" name="categoryId">
+										    <option value="">전체</option>
+										    <option th:each="category : ${categories}"
+										            th:value="${category.categoryId}" th:text="${category.categoryNm}">
+										    </option>
 										</select>
 									</div>
 								</div>
+								-->
+
+
+								<!-- 상위 카테고리 -->
 								<div class="row mb-3">
-									<labelfor="inputText" class="col-sm-2 col-form-label">상품 코드</label>
+									<label for="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
 									<div class="col-sm-10">
-										<input type="text" id="productCode" class="form-control">
+										<select id="categoryId" name="categoryId" onchange="getSubCategories(this.value)">
+											<option value="">전체</option>
+											<option th:each="category : ${categories}"
+												th:value="${category.categoryId}"
+												th:text="${category.categoryNm}"></option>
+										</select>
 									</div>
 								</div>
+
+								<!-- 하위 카테고리 -->
 								<div class="row mb-3">
-									<label form="productNm" for="inputText" class="col-sm-2 col-form-label">상품명</label>
+									<label for="subCategoryId" class="col-sm-2 col-form-label">하위	카테고리</label>
 									<div class="col-sm-10">
-										<input type="text" id="productNm" class="form-control">
+										<select id="subCategoryId" name="subCategoryId">
+											<option value="">전체</option>
+										</select>
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputText" class="col-sm-2 col-form-label">상품 상세내용</label>
+									<label form="productPrice" class="col-sm-2 col-form-label">상품코드</label>
 									<div class="col-sm-10">
-										<textarea id="productContent" class="form-control" style="height: 100px"></textarea>
+										<input type="text" id="productCode" name="productCode">
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputText" class="col-sm-2 col-form-label">사이즈</label>
+									<label form="productNm" class="col-sm-2 col-form-label">상품명</label>
 									<div class="col-sm-10">
-										<input type="text" id="productOptionFirst" class="form-control">
+										<input type="text" id="productNm" name="productNm">
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputText" class="col-sm-2 col-form-label">색상</label>
+									<label form="productContent" class="col-sm-2 col-form-label">상품
+										상세내용</label>
 									<div class="col-sm-10">
-										<input type="text"  id="productOptionSecond"  class="form-control">
+										<textarea id="productContent" name="productContent"
+											style="height: 200px; width: 400px"></textarea>
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputText" class="col-sm-2 col-form-label">기타</label>
+									<label form="productOptionFirst"
+										class="col-sm-2 col-form-label">사이즈</label>
 									<div class="col-sm-10">
-										<input type="text" id="productOptionThird" class="form-control">
+										<input type="text" id="productOptionFirst"
+											name="productOptionFirst">
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputNumber" class="col-sm-2 col-form-label">상품 가격</label>
+									<label form="productOptionSecond"
+										class="col-sm-2 col-form-label">색상</label>
 									<div class="col-sm-10">
-										<input type="number" id="productPrice" class="form-control">
+										<input type="text" id="productOptionSecond"
+											name="productOptionSecond">
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputNumber" class="col-sm-2 col-form-label">재고 수량</label>
+									<label form="productOptionThird"
+										class="col-sm-2 col-form-label">기타</label>
 									<div class="col-sm-10">
-										<input type="number" id="productStock" class="form-control">
+										<input type="text" id="productOptionThird"
+											name="productOptionThird">
 									</div>
 								</div>
+
 								<div class="row mb-3">
-									<label for="inputText" class="col-sm-2 col-form-label">상품 이미지 등록</label>
+									<label form="productPrice" class="col-sm-2 col-form-label">가격</label>
 									<div class="col-sm-10">
-										<input class="form-control" type="file" id="formFile">
+										<input type="number" id="productPrice" name="productPrice">
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label form="productStock" class="col-sm-2 col-form-label">수량</label>
+									<div class="col-sm-10">
+										<input type="number" id="productStock" name="productStock">
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label form="productImageFirst" class="col-sm-2 col-form-label">상품
+										이미지</label>
+									<div class="col-sm-10">
+										<input type="file" id="productImageFirst"
+											name="productImageFirst">
 									</div>
 								</div>
 
 								<div class="row mb-3">
 									<div class="col-sm-10">
-										<button type="submit" class="btn btn-primary" th:onclick="|location.href='@{/product/add)}'|">저장</button>
-										<button type="close" class="btn btn-primary">닫기</button>
-									</div>
+										<button class="btn btn-primary"  onclick="submitForm()"
+											th:onclick="|location.href='@{/product/add)}'|" type="submit">저장</button>
+										<button class="btn btn-secondary"
+											th:onclick="|location.href='@{/product/admin}'|"
+											type="button">닫기</button>
+											</div>
 								</div>
-
 							</form>
-							<!-- End General Form Elements -->
 						</div>
 					</div>
-				</div>
-			</div>
-		</section>
-	</form>
-</div>
-		<a href="#"
-		class="back-to-top d-flex align-items-center justify-content-center"><i
-		class="bi bi-arrow-up-short"></i></a>
+			</section>
+		</div>
+	<!--/container -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-	<!-- Vendor JS Files -->
-	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="assets/vendor/chart.js/chart.umd.js"></script>
-	<script src="assets/vendor/echarts/echarts.min.js"></script>
-	<script src="assets/vendor/quill/quill.min.js"></script>
-	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
-	<script src="assets/vendor/php-email-form/validate.js"></script>
-	<!-- Template Main JS File -->
-	<script src="assets/js/main.js"></script>
-	<script src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
-	<!-- Vendor CSS Files -->
-	<link href="assets/vendor/bootstrap/css/bootstrap.min.css"
-		rel="stylesheet">
-	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
-		rel="stylesheet">
-	<link href="assets/vendor/boxicons/css/boxicons.min.css"
-		rel="stylesheet">
-	<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-	<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-	<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-	<!-- Template Main CSS File -->
-	<link href="assets/css/style.css" rel="stylesheet">
+<script th:inline="javascript">
+    function getSubCategories(categoryId) {
+        var subCategorySelect = document.getElementById("subCategoryId");
+        subCategorySelect.innerHTML = '<option value="">전체</option>';   
+        if (categoryId !== "") {
+            fetch("/product/getSubCategories/" + categoryId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(subCategory => {
+                        var option = document.createElement("option");
+                        option.value = subCategory.categoryId;
+                        option.textContent = subCategory.categoryNm;
+                        subCategorySelect.appendChild(option);
+                    });
+                });
+        }
+    }
+</script>
 
-	<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="~{/include/footer :: footer}"></div>
 </body>
 </html>
-
-
-
-
