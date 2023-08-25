@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 	<div class="container" style="max-width: 1000px">
 		<div class="row">
-			<div class="col">
+			<div class="col" style="z-index:1">
 				<button class="btn btn-primary float-right" style="background-color:#39594e"
 				onclick="location.href='admin-register.html'" th:onclick="|location.href='@{/product/admin/register}'|"
 				type="button" >+등록</button>
@@ -24,7 +24,6 @@
 						<th>수량</th>
 					</tr>
 				</thead>
-
 				<tbody>
 					<tr th:each="product : ${products}">
 						<td th:text="${product.productCode}"></td>

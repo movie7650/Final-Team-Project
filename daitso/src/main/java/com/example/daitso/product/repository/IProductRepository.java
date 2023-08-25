@@ -20,5 +20,6 @@ public interface IProductRepository {
 
 	void registerProducts(Product product);
 
+	void changeProductCode(@Param("productId") int productId, @Param("productCode") String productCode);
 
 }
