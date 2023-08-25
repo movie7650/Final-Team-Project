@@ -1,11 +1,8 @@
 package com.example.daitso.product.controller;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.TinyBitSet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
@@ -40,9 +38,6 @@ public class ProductController {
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
-		products = products.stream()
-				.sorted(Comparator.comparingInt(Product::getProductId))
-                .collect(Collectors.toList());
 		model.addAttribute("products",products);
 		return "admin/product/admin-product";
 	}
@@ -67,6 +62,12 @@ public class ProductController {
     public List<Category> getSubCategories(@PathVariable int categoryId) {
         List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
         return subCategories;
+    }
+	
+	@PostMapping("/admin/delete")
+    public String deleteProduct(@RequestParam int productId) {
+	    productService.deleteProduct(productId);
+        return "redirect:/product/admin";
     }
 
 	@GetMapping("/{categoryId}")

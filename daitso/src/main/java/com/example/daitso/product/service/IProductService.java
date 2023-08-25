@@ -13,5 +13,6 @@ public interface IProductService {
 	Product selectProduct(int productId);
 	
 	void registerProducts(Product product);
-
+	
+	void deleteProduct(int productId);
 }
