@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-
 body {
 	width: 100vw;
 	overflow-x:hidden;
@@ -164,7 +163,7 @@ body {
 }
 
 .sign-up-modal-content {
-	padding: 20px 15px 0 15px;
+	padding: 20px 18px 0 15px;
 	font-size: 13px;
 	line-height: 16px;
 }
