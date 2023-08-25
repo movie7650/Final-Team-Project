@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<body>
+	<div class="sign-up-logo">
+		<img class="sign-up-logo-img" th:src="@{/assets/header/daitso_logo_header.png}">	
+	</div>
+	<div class="sign-up-input-container">
+		<div class="sign-up-input-boxes">
+			<div class="sign-up-title">회원 정보를 입력해주세요</div>
+			<div class="sign-up-form">
+				<form th:action="@{/customer/sign-up}" th:object="${customerSignUp}"
+					th:method="post">
+					<div>
+						<div class="sign-up-input-box">
+							<div class="sign-up-input-img-box">
+								<img class="sign-up-input-img" th:src="@{/assets/loginandsignup/email.svg}">
+							</div>
+								<input id="customerEmail" onkeyup="emailCheck()" type="email"
+								class="sign-up-input-value"
+								placeholder="아이디(이메일)" th:field="*{customerEmail}" required>
+						</div>
+						<div id="emailConfirm"
+							style="font-size: 13px; font-weight: bold; margin-left: 10px;"></div>
+						<div class="sign-up-input-box">
+							<div class="sign-up-input-img-box">
+								<img class="sign-up-input-img" th:src="@{/assets/loginandsignup/password.svg}">
+							</div>
+							<input id="customerPw" type="password"
+								class="sign-up-input-value"
+								placeholder="비밀번호" th:field="*{customerPw}" required>
+						</div>
+						<div class="sign-up-input-box">
+							<div class="sign-up-input-img-box">
+								<img class="sign-up-input-img" th:src="@{/assets/loginandsignup/password.svg}">
+							</div>
+							<input id="customerRePw" type="password"
+								class="sign-up-input-value"
+								placeholder="비밀번호 확인" required>
+						</div>
+						<div class="sign-up-input-box">
+							<div class="sign-up-input-img-box">
+								<img class="sign-up-input-img" th:src="@{/assets/loginandsignup/customer_gray.svg}">
+							</div>
+							<input type="text"
+								class="sign-up-input-value"
+								placeholder="이름" th:field="*{customerNm}" required>
+						</div>
+						<div class="sign-up-input-box">
+							<div class="sign-up-input-img-box">
+								<img class="sign-up-input-img" th:src="@{/assets/loginandsignup/phone.svg}">
+							</div>
+							<input type="text"
+								class="sign-up-input-value"
+								placeholder="휴대폰 번호" th:field="*{customerTelno}" required>
+						</div>
+						<div id="passwordConfirm"
+							style="color: red; font-size: 13px; font-weight: bold;"></div>
+						<div>
+							<button type="submit">동의하고 계속하기</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+	var pw1 = document.querySelector("#customerPw");
+	var pw2 = document.querySelector("#customerRePw");
+	var pwConfirm = document.querySelector("#passwordConfirm");
+	pw2.onkeyup = function(event) {
+		if (pw1.value !== pw2.value) {
+			pwConfirm.innerText = "비밀번호가 일치하지 않습니다.";
+			pw2.style.border = "1.5px solid red";
+
+		} else {
+			pwConfirm.innerText = "";
+			pw2.style.border = "none";
+		}
+	}
+
+	/* var emailConfirm = document.querySelector("#emailConfirm");
+	var emailBox = document.querySelector("#userEmail");
+	
+	const emailCheck = () => {
+		const email = document.getElementById("userEmail").value;
+		$.ajax({
+			type: "post",
+			url: "./emailcheck",
+			data: {
+				"userEmail": email
+			},
+			success: function(res) {
+				if(res == 0) {
+					emailConfirm.innerText = "사용가능한 이메일입니다!";	
+					emailConfirm.style.color = "blue";
+					emailBox.style.border = "1.5px solid blue";
+				} else {
+					emailConfirm.innerText = "이미 사용하고 있는 이메일입니다!";
+					emailConfirm.style.color = "red";
+					emailBox.style.border = "1.5px solid red";
+				}
+			},
+			error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		    }
+		})
+	} */
+</script>
+</html>
