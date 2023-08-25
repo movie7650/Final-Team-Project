@@ -30,6 +30,7 @@ public class ProductService implements IProductService {
 		return productRepository.selectProduct(productId);
 	}
 
+	@Override
 	public void registerProducts(Product product) {
 		productRepository.registerProducts(product);
 	}
