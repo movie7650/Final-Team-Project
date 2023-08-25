@@ -34,4 +34,10 @@ public class ProductService implements IProductService {
 		productRepository.registerProducts(product);
 	}
 
+	@Override
+	public void changeProductCode(int productId, String productCode) {
+		productRepository.changeProductCode(productId, productCode);
+		
+	}
+
 }

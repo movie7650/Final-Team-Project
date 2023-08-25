@@ -14,4 +14,5 @@ public interface IProductService {
 	
 	void registerProducts(Product product);
 
+	void changeProductCode(int productId, String productCode);
 }
