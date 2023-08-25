@@ -1,8 +1,11 @@
 package com.example.daitso.product.controller;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.TinyBitSet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,9 @@ public class ProductController {
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
+		products = products.stream()
+				.sorted(Comparator.comparingInt(Product::getProductId))
+                .collect(Collectors.toList());
 		model.addAttribute("products",products);
 		return "admin/product/admin-product";
 	}
@@ -51,9 +57,8 @@ public class ProductController {
 	}
 
 	@PostMapping("/admin/register")
-	public String registerProducts(@RequestParam int productId, @RequestParam String productCode,Product product) {
+	public String registerProducts(Product product) {
 		productService.registerProducts(product);
-		productService.changeProductCode(productId, productCode);
 		return "redirect:/product/admin";
 	}
 	
