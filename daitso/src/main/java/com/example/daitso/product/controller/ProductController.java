@@ -51,14 +51,12 @@ public class ProductController {
 
 	@PostMapping("/admin/register")
 	public String registerProducts(Product product) {
-//		List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
-//	    model.addAttribute("subCategories", subCategories); 
 		productService.registerProducts(product);
 		return "redirect:/product/admin";
 	}
 	
 
-	@GetMapping("/getSubCategories/{categoryId}")
+	@GetMapping("/subCategories/{categoryId}")
     @ResponseBody
     public List<Category> getSubCategories(@PathVariable int categoryId) {
         List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);

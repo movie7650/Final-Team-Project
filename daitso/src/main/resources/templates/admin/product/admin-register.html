@@ -30,7 +30,7 @@
 
 								<!-- 상위 카테고리 -->
 								<div class="row mb-3">
-									<label for="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
+									<label form="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
 									<div class="col-sm-10">
 										<select id="categoryId" name="categoryId" onchange="getSubCategories(this.value)">
 											<option value="">전체</option>
@@ -43,10 +43,10 @@
 
 								<!-- 하위 카테고리 -->
 								<div class="row mb-3">
-									<label for="subCategoryId" class="col-sm-2 col-form-label">하위	카테고리</label>
+									<label form="subCategoryId" class="col-sm-2 col-form-label">하위 카테고리</label>
 									<div class="col-sm-10">
 										<select id="subCategoryId" name="subCategoryId">
-											<option value="">전체</option>
+											<option value="" >전체</option>
 										</select>
 									</div>
 								</div>
@@ -127,7 +127,7 @@
 								<div class="row mb-3">
 									<div class="col-sm-10">
 										<button class="btn btn-primary"  onclick="submitForm()"
-											th:onclick="|location.href='@{/product/add)}'|" type="submit">저장</button>
+											th:onclick="|location.href='@{/product/register)}'|" type="submit">저장</button>
 										<button class="btn btn-secondary"
 											th:onclick="|location.href='@{/product/admin}'|"
 											type="button">닫기</button>
@@ -146,7 +146,7 @@
         var subCategorySelect = document.getElementById("subCategoryId");
         subCategorySelect.innerHTML = '<option value="">전체</option>';   
         if (categoryId !== "") {
-            fetch("/product/getSubCategories/" + categoryId)
+            fetch("/product/subCategories/" + categoryId)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(subCategory => {

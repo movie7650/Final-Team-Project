@@ -61,7 +61,7 @@
 <![CDATA[
 	INSERT INTO product (product_id, category_id, product_code, product_nm, product_content,product_image_first,
 	product_price, product_stock, product_option_first, product_option_second, product_option_third)
-	VALUES (product_seq.NEXTVAL, #{categoryId}, #{productCode}, #{productNm}, #{productContent},#{productImageFirst},
+	VALUES (product_seq.NEXTVAL, #{subCategoryId}, #{productCode}, #{productNm}, #{productContent},#{productImageFirst},
 	#{productPrice}, #{productStock}, #{productOptionFirst}, #{productOptionSecond}, #{productOptionThird})
 ]]>
 </insert>
