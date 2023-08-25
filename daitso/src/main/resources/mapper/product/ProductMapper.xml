@@ -67,13 +67,16 @@
 </insert>
 
 <!-- 상품 코드 변경 -->
-<update id="changeProductCode" parameterType="com.example.daitso.product.model.Product">
+<update id="changeProductCode">
 <![CDATA[
     UPDATE product
     SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
-    WHERE product_id = #{productId};
+    WHERE product_id = (
+        SELECT product_id as "productId" FROM
+        (SELECT * FROM product ORDER BY product_id DESC)
+        WHERE ROWNUM= 1
+    )
    ]]>
 </update>
-
 
 </mapper>
