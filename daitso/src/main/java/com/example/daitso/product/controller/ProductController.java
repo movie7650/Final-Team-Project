@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
@@ -34,24 +33,38 @@ public class ProductController {
 		return "/main/main";
 	}
 	
+//	@GetMapping("/admin")
+//	public String selectAllProducts(Model model) {
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		return "admin/product/admin-product";
+//	}
+	
+//	@GetMapping("/admin/register")
+//	public String addForm(Model model) {
+//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//		model.addAttribute("categories",categories);
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		return "admin/product/admin-register";
+//	}
+
+//	@PostMapping("/admin/register")
+//	public String registerProducts(Product product) {
+//		productService.registerProducts(product);
+//		return "redirect:/product/admin";
+//	}
 	
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
 		model.addAttribute("products",products);
-		return "admin/product/admin-product";
-	}
-	
-	@GetMapping("/admin/register")
-	public String addForm(Model model) {
 		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
 		model.addAttribute("categories",categories);
-		List<Product> products = productService.selectAllProducts();
-		model.addAttribute("products",products);
-		return "admin/product/admin-register";
+		return "admin/product/productRegister";
 	}
-
-	@PostMapping("/admin/register")
+	
+	@PostMapping("/admin")
 	public String registerProducts(Product product) {
 		productService.registerProducts(product);
 		return "redirect:/product/admin";
