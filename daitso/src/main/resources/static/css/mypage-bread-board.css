@@ -1,14 +1,15 @@
 @charset "UTF-8";
 
 .main {
+	position:relative;
 	height: auto;
 }
 .top-container{
 	width:62%;
-	margin-left:17.45%;
+	margin-left:17.8%;
 	display:flex;
 	
-	height:150px;
+	height:40px;
 }
 
 .top-rectangle-01 {
@@ -68,10 +69,11 @@
 	color:#fff;
 }
 .left-menu-container{
+	margin-top:6%;
 	
 	width:10.4%;
 	height:auto;
-	margin-left:17.45%;
+	margin-left:17.8%;
 	
 }
 .left-menu{
@@ -90,10 +92,11 @@
 }
 .left-menu-semi-01{
 	margin-left:10%;
-	padding-top:1%;
+	padding-top:7%;
 }
 .left-menu-semi-01 > a{
 	color:black;
+	text-decoration:none;
 }
 .left-menu-semi-01 > a:hover{
 	color:#668663;

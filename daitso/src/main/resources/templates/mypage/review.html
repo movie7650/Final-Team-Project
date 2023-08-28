@@ -3,12 +3,41 @@
 <head th:replace="~{/include/header :: header}">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+	<div class="title-review">리뷰관리</div>
+	<div class="rivew-menu-container">
+		<div class="review-menu">리뷰작성</div>
+		<div class="review-menu">작성한리뷰</div>
+	</div><!--review-menu-container  -->
+	
+	<div class="purchase-product-container">
+		<div class="product-name">남성 무지 오버사이즈 티셔츠</div><!-- 타임리프로 DB불러와야함 -->
+		<div class="star-point">(별점들어갈자리)</div>
+		<div class="star-point">(필수)</div>
+	</div><!-- purchase-product-container -->
+	
+	<div class="review-detail-container">
+		<div class="review-detail-title">상세리뷰</div>
+		<textarea placeholder="고객님의 소중한 후기를 여기에 작성하세요!" class="review-detail-content"></textarea>   <!-- 타임리프로 DB입력해야함 -->
+	</div><!-- review-detail-container -->
+	
+	<div class="review-photo-container">
+	<label for="review-photo-button">
+		<div class="photo-upload">사진첨부하기</div>
+	</label>
+		<input id="review-photo-button" name="review-photo-button" type="file">
+	</div><!-- review-photo-container -->
+	
+	<div class="button-container">
+		<div class="button-container-01">
+			<button class="save-button" type="submit">저장하기</button>
+			<button class="cancle-button" type="reset">취소하기</button>
+		</div><!--button-container-01  -->
+	</div><!-- button-container -->
 
 
 
-
-<div th:replace="~{/include/footer :: footer}"></div>
+	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
 </html>
