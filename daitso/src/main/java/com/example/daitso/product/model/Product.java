@@ -28,6 +28,7 @@ public class Product {
 	private Date modifyDt;
 	private String modifier;
 	private String productCode;
-	
+	private float reviewStarPoint;
+	private int reviewCount;
 	private int subCategoryId;
 }

@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>카테고리별 상품 리스트</title>
+<style>
+
+</style>
 </head>
 <div th:replace="~{/include/header :: header}"></div>
 <body>
@@ -12,25 +15,25 @@
 			<img style="width: 100%;" th:src="@{/images/mainImages.png}">		
 		</div>
 		<div class="product-path-bar">
-			<span style="margin-left:20%">전체 > 초콜릿</span>
+			<span style="margin-left:20%">전체 [[${path}]]</span>
 		</div>
 		<div style="display: flex;">
 			<div class="product-sidebar">
 				<div >
-					<div style="border: solid">
+					<div style="border: solid 2px #dedede">
 					<ul>
 						<th:block th:each="list : ${categoryList}">
-							<p style="text-align:center; font-weight:bold" th:if="${list.level == 1}">[[${list.categoryNm}]]</p>
+							<p style="text-align:center; border-bottom: solid 2px #dedede" th:if="${list.level == 1}">[[${list.categoryNm}]]</p>
 							<!-- <li th:if="${list.level != 1}">
 								<span th:each="num: ${#numbers.sequence(1, list.level)}">&nbsp&nbsp</span>
 								<span>[[${list.categoryNm}]]</span>
 							</li> -->
-							<li th:class="list+${list.categoryId}"  th:if="${list.level == 2}">
+							<li th:class="list+${list.categoryId} + ' ' + font-l + ' ' + font-s-13 + ' ' + margin-b-5"  th:if="${list.level == 2}">
 								<a th:href="@{/category/{id}(id=${list.categoryId})}">[[${list.categoryNm}]] 
-									<a th:class="show-btn+${list.categoryId}"  href="#" th:onclick="showDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
+									<a th:class="show-btn+${list.categoryId} "  th:onclick="showDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
 										<img style="width:10px" th:src="@{/assets/common/angle-down-solid.svg}"></img>
 									</a>
-									<a th:class="hidden-btn+${list.categoryId}" href="#" style="display:none" th:onclick="hideDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
+									<a th:class="hidden-btn+${list.categoryId}"  style="display:none" th:onclick="hideDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
 										<img style="width:10px" th:src="@{/assets/common/angle-up-solid.svg}"></img>
 									</a>
 								</a>
@@ -40,17 +43,29 @@
 					</div>	
 				</div>
 			</div>
-			<div class="product-large-box">
-				<th:block th:each="list : ${productList}">
-					<div class="product-box" th:onclick="goProductDetail([[${list.productId}]])">
-						<div style="width: 248px; height: 195px;">
-							<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
+			<div style="width:77%;">
+				<div class="product-large-box">
+					<th:block th:each="list : ${productList}">
+						<div style="width: 212px; height:467px" class="product-box" th:onclick="goProductDetail([[${list.productId}]])">
+							<div style="width: 212px; height: 212px;">
+								<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
+							</div>
+							<div style="width: 212px;">
+								<p style="font-size:13px; margin-bottom: 0px">[[${list.productNm}]]</p>
+								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red">[[${list.productPrice}]]원</p>
+								<div>상품 리뷰([[${list.reviewCount}]])</div>
+								<div class="star-parent">
+									<div class="star-fill" th:style="'width: ' + ${list.reviewStarPoint} + '%;'">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
+									<div class="star-base">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
+								</div>
+							</div>					
 						</div>
-						<div style="width: 248px;">
-							<span>[[${list.productNm}]]</span>
-						</div>					
-					</div>
-				</th:block>
+					</th:block>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -75,23 +90,25 @@
 		
 		var showBtn = document.querySelector(`.show-btn${categoryId}`);
 		var hiddenBtn = document.querySelector(`.hidden-btn${categoryId}`);
-		console.log(hiddenBtn);
 		var lbody = document.querySelector(`.list${categoryId}`);
 		showBtn.style.display = "none";
 		hiddenBtn.style.display = "inline";
 		var frame = `<ul class="down-ul${categoryId}-level${level}"></ul>`;
 		lbody.innerHTML += frame;
 		var mbody = document.querySelector(`.down-ul${categoryId}-level${level}`);
+		
+		
 		cList.forEach(list => {
 			if(list.categoryPrId == categoryId){
+				var span = document.createElement('span');
 				var category = `
-						<li class="list${list.categoryId}">
+						<li class="list${list.categoryId} font-l font-s-13">
 							<a href="/category/${list.categoryId}">${list.categoryNm}
 								${list.isLeaf == 0 ?  
-									`<a class="show-btn${list.categoryId}"  href="#" onclick="showDownCategory(${list.categoryId}, ${list.level})"> 
+									`<a class="show-btn${list.categoryId}" onclick="showDownCategory(${list.categoryId}, ${list.level})"> 
 									 	<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
 									 </a>
-									 <a class="hidden-btn${list.categoryId}" href="#" style="display:none" onclick="hideDownCategory(${list.categoryId}, ${list.level})">
+									 <a class="hidden-btn${list.categoryId}" style="display:none" onclick="hideDownCategory(${list.categoryId}, ${list.level})">
 										<img style="width:10px" src="/assets/common/angle-up-solid.svg"></img>
 									</a>
 									 `
@@ -102,8 +119,13 @@
 						</li> 
 				`
 				mbody.innerHTML += category;
+				for (let j=0; j<list.level-1; j++){
+					span.innerHTML += '&nbsp';
+				}
+				const tag = document.querySelector(`.list${list.categoryId}`);		
+				tag.prepend(span);
 			}
-		})
+		});
 		
 		
 	}

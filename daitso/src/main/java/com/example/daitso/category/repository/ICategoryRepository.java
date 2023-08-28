@@ -17,5 +17,7 @@ public interface ICategoryRepository {
 	List<Category> getSecondCategoryIdAndNameByFirstCategoryId(int categoryId);
 	
 	List<Category> selectCategoryList(@Param("categoryId") int categoryId);
+	
+	String selectCategoryPath(@Param("categoryId") int categoryId);
 }
 
