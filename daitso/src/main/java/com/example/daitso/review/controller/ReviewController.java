@@ -15,9 +15,13 @@ public class ReviewController {
 	IReviewService reviewService;
 	 //리뷰 페이지 불러오기
 	@RequestMapping("/review")
-	public String header() {
+	public String Review() {
 		return "mypage/review";
 		
+	}
+	@RequestMapping("/orderlist")
+	public String OrderList() {
+		return "mypage/order-list";
 	}
 	
 }
