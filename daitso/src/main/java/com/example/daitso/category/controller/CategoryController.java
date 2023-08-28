@@ -42,9 +42,11 @@ public class CategoryController {
 	public String productList(@PathVariable int categoryId, Model model) {
 		List<Product> list = productService.selectProductList(categoryId);
 		List<Category> categoryList = categoryService.selectCategoryList(categoryId);
+		String path = categoryService.selectCategoryPath(categoryId);
 		
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("productList", list);
+		model.addAttribute("path", path);
 		
 		return "/main/product";
 	}

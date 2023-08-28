@@ -31,4 +31,9 @@ public class CategoryService implements ICategoryService{
 		return categoryRepository.selectCategoryList(categoryid);
 	}
 
+	@Override
+	public String selectCategoryPath(int categoryId) {
+		return categoryRepository.selectCategoryPath(categoryId);
+	}
+
 }

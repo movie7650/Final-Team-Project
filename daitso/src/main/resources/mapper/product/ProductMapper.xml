@@ -24,19 +24,23 @@
 </resultMap>
 
 <select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
-	SELECT product_id		AS		productId,
+	SELECT p.product_id		AS		productId,
 			category_id		AS		categoryId,
 			product_nm		AS		productNm,
 			product_content	AS		productContent,
 			product_price	AS		productPrice,
 			product_stock	AS		productStock,
-			product_image_first		AS		productImageFirst
-	FROM product
-		WHERE category_id in (
-    	SELECT category_id from category
+			product_image_first		AS		productImageFirst,
+            NVL(avg(review_star_point)*20,0) AS reviewStarPoint,
+            count(review_star_point) AS reviewCount
+	FROM product p
+    LEFT JOIN review r on p.product_id = r.product_id
+    WHERE category_id in (
+    	SELECT category_id from category c
     	START WITH category_id = #{categoryId}
     	CONNECT BY PRIOR category_id = category_pr_id)
-    	AND status = 'N'
+    AND p.status = 'N'
+    GROUP BY p.product_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first
 </select>
 
 
