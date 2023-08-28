@@ -47,13 +47,15 @@
 
 <select id="selectAllProducts" resultType="com.example.daitso.product.model.Product">
 <![CDATA[
-	select product_code as "productCode",
+	select product_id as "productId",
+		   product_code as "productCode",
 		   product_nm as "productNm",
 		   product_option_first as "productOptionFirst",
 		   product_option_second as "productOptionSecond",
 		   product_option_third as "productOptionThird",
 		   product_stock as "ProductStock"
 	from product
+	order by product_id desc
 ]]>
 </select>
 
@@ -67,13 +69,22 @@
 </insert>
 
 <!-- 상품 코드 변경 -->
-<update id="changeProductCode" parameterType="com.example.daitso.product.model.Product">
+<update id="changeProductCode">
 <![CDATA[
     UPDATE product
     SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
-    WHERE product_id = #{productId};
+    WHERE product_id = (
+        SELECT product_id as "productId" FROM
+        (SELECT * FROM product ORDER BY product_id DESC)
+        WHERE ROWNUM= 1
+    )
    ]]>
 </update>
 
+<delete id="deleteProduct" parameterType="int">
+<![CDATA[
+	 DELETE FROM product WHERE product_id = #{productId}
+]]>
+</delete>
 
 </mapper>
