@@ -63,6 +63,7 @@
 ]]>
 </select>
 
+<!-- 상품 등록 -->
 <insert id="registerProducts" parameterType="com.example.daitso.product.model.Product">
 <![CDATA[
 	INSERT INTO product (product_id, category_id, product_nm, product_content,product_image_first,
@@ -85,10 +86,20 @@
    ]]>
 </update>
 
+<!-- 상품 삭제 -->
 <delete id="deleteProduct" parameterType="int">
 <![CDATA[
 	 DELETE FROM product WHERE product_id = #{productId}
 ]]>
 </delete>
+
+<!-- 상품 수정 -->
+<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
+<![CDATA[
+	UPDATE product
+	SET product_price = #{productPrice}, product_stock = #{productStock}
+	WHERE product_id = #{productId}
+]]>
+</update>
 
 </mapper>
