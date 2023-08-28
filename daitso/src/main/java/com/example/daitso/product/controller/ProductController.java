@@ -33,27 +33,40 @@ public class ProductController {
 		return "/main/main";
 	}
 	
+//	@GetMapping("/admin")
+//	public String selectAllProducts(Model model) {
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		return "admin/product/admin-product";
+//	}
+	
+//	@GetMapping("/admin/register")
+//	public String addForm(Model model) {
+//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//		model.addAttribute("categories",categories);
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		return "admin/product/admin-register";
+//	}
+
+//	@PostMapping("/admin/register")
+//	public String registerProducts(Product product) {
+//		productService.registerProducts(product);
+//		return "redirect:/product/admin";
+//	}
 	
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
 		model.addAttribute("products",products);
-		return "admin/product/admin-product";
-	}
-	
-	@GetMapping("/admin/register")
-	public String addForm(Model model) {
 		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
 		model.addAttribute("categories",categories);
-		List<Product> products = productService.selectAllProducts();
-		model.addAttribute("products",products);
-		return "admin/product/admin-register";
+		return "admin/product/productRegister";
 	}
-
-	@PostMapping("/admin/register")
-	public String registerProducts(@RequestParam int productId, @RequestParam String productCode,Product product) {
+	
+	@PostMapping("/admin")
+	public String registerProducts(Product product) {
 		productService.registerProducts(product);
-		productService.changeProductCode(productId, productCode);
 		return "redirect:/product/admin";
 	}
 	
@@ -62,6 +75,12 @@ public class ProductController {
     public List<Category> getSubCategories(@PathVariable int categoryId) {
         List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
         return subCategories;
+    }
+	
+	@PostMapping("/admin/delete")
+    public String deleteProduct(@RequestParam int productId) {
+	    productService.deleteProduct(productId);
+        return "redirect:/product/admin";
     }
 
 	@GetMapping("/{categoryId}")

@@ -1,6 +1,9 @@
 package com.example.daitso.category.sevice;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.example.daitso.category.model.Category;
 
 public interface ICategoryService {
@@ -12,4 +15,6 @@ public interface ICategoryService {
 	List<Category> getSecondCategoryIdAndNameByFirstCategoryId(int categoryId);
 	
 	List<Category> selectCategoryList(int categoryid);
+	
+	String selectCategoryPath(int categoryId);
 }
