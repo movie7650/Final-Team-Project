@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header">
+<head th:fragment="bsHeader">
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>다있소</title>
@@ -14,9 +14,33 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/sign-up.css}">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
-    
-    
+    <!-- BootStrap -->
+    <link href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Modal -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .modal-content {
+            opacity: 1;
+            visibility: visible;
+        }
+        #productNm, #productOptionFirst, #productOptionSecond, #productOptionThird,
+        #productPrice, #productStock {
+            width: 80%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #productContent {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }      
+    </style>
     <!-- JS -->
     <script>
     window.onload = function() {	
@@ -41,7 +65,7 @@
     	    		// 서버에서 주는 json데이터가 출력 됨
     	        	let datas = json;
     	        	datas.map(function(data) {
-    	        		/* console.log(`${data.categoryNm}`); */
+    	        		console.log(`${data.categoryNm}`);
     	        		const div1 = document.createElement('div');
     	        		div1.setAttribute('id', 'header-category-first')
     	        		const div2 = document.createElement('div');
@@ -88,7 +112,7 @@
 		     	        		div3.setAttribute('id', 'header-category-second')
 		     	        		div3.style.marginLeft = '40px';
     		     		       	datas.map(function(data) {
-    		     	        		//console.log(`${data.categoryNm}`);
+    		     	        		console.log(`${data.categoryNm}`);
     		     	        		const span = document.createElement('span');
     		     	        		span.style.marginRight = '18px';
     		     	        		const a = document.createElement('a');

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-	<div class="container" style="max-width: 1000px">
+	<div class="container" style="max-width: 1200px">
 		<div class="row">
-			<div class="col">
+			<div class="col" style="z-index:1">
 				<button class="btn btn-primary float-right" style="background-color:#39594e"
 				onclick="location.href='admin-register.html'" th:onclick="|location.href='@{/product/admin/register}'|"
 				type="button" >+등록</button>
@@ -22,9 +22,10 @@
 						<th>색상</th>
 						<th>기타</th>
 						<th>수량</th>
+						<th>이미지</th>
+						<th></th>
 					</tr>
 				</thead>
-
 				<tbody>
 					<tr th:each="product : ${products}">
 						<td th:text="${product.productCode}"></td>
@@ -33,6 +34,19 @@
 						<td th:text="${product.productOptionSecond}"></td>
 						<td th:text="${product.productOptionThird}"></td>
 						<td th:text="${product.productStock}"></td>
+						<td><button name="plus" value="${product.prodcutId}"
+									class="btn btn-xs" style="background-color:#668663; color:#ffff">더보기</button>
+						</td>
+						<td>
+						<div class="btn-group">
+						<button class="btn btn-xs" style="background-color:#39594e; color:#ffff" 
+									value="${product.prodcutId}" type="submit">수정</button>
+						<form th:action="@{/product/admin/delete(productId=${product.productId})}" method="post">
+							<button class="btn btn-xs" style="background-color:red; color:#fff"
+							type="submit">삭제</button>
+						</form>
+						</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

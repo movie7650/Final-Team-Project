@@ -20,5 +20,8 @@ public interface IProductRepository {
 
 	void registerProducts(Product product);
 
+	void changeProductCode();
+	
+	void deleteProduct(int productId);
 
 }

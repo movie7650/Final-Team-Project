@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
@@ -23,33 +25,69 @@ public class ProductController {
 	@Autowired
 	IProductService productService;
 
+	@Autowired
+	ICategoryService categoryService;
 	
 	@GetMapping("")
 	public String main() {
 		return "/main/main";
 	}
+	
+//	@GetMapping("/admin")
+//	public String selectAllProducts(Model model) {
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		return "admin/product/admin-product";
+//	}
+	
+//	@GetMapping("/admin/register")
+//	public String addForm(Model model) {
+//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//		model.addAttribute("categories",categories);
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		return "admin/product/admin-register";
+//	}
+
+//	@PostMapping("/admin/register")
+//	public String registerProducts(Product product) {
+//		productService.registerProducts(product);
+//		return "redirect:/product/admin";
+//	}
+	
+	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
 		model.addAttribute("products",products);
-		return "admin/product/admin-product";
+		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+		model.addAttribute("categories",categories);
+		return "admin/product/productRegister";
 	}
 	
-	@GetMapping("/admin/register")
-	public String addForm() {
-		return "admin/product/admin-register";
-//		return "admin/product/test3";
-	}
-
-	@PostMapping("/admin/register")
+	@PostMapping("/admin")
 	public String registerProducts(Product product) {
 		productService.registerProducts(product);
 		return "redirect:/product/admin";
 	}
 	
+	@GetMapping("/subCategories/{categoryId}")
+    @ResponseBody
+    public List<Category> getSubCategories(@PathVariable int categoryId) {
+        List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+        return subCategories;
+    }
+	
+	@PostMapping("/admin/delete")
+    public String deleteProduct(@RequestParam int productId) {
+	    productService.deleteProduct(productId);
+        return "redirect:/product/admin";
+    }
+
 	@GetMapping("/{categoryId}")
 	public String selectProduct(@PathVariable int categoryId, Model model) {
 		Product product = productService.selectProduct(categoryId);
 		System.out.println(product);
 		return "/main/productDetail";
 	}
+
 }
