@@ -95,10 +95,10 @@ public class ProductController {
     }
 	
 	@GetMapping("/update/{productId}")
-	public String updateProduct(@RequestParam int productId, Model model) {
-		Product product = productService.selectProduct(productId);
+	public String selectProductId(@PathVariable int productId, Model model) {
+		Product product = productService.selectProductId(productId);
 		model.addAttribute("product", product);
-		return "admin/product/update";
+		return "admin/product/productRegister";
 	}
 	
 	@PostMapping("/update")
@@ -106,11 +106,13 @@ public class ProductController {
 		productService.updateProduct(product);
 		model.addAttribute("product", product);
 		session.setAttribute("productId", product.getProductId());
+		session.setAttribute("productCode", product.getProductCode());
+		session.setAttribute("productNm", product.getProductNm());
 		session.setAttribute("productPrice", product.getProductPrice());
 		session.setAttribute("productStock", product.getProductStock());
 		return "admin/product/message";
 	}
-
+	
 	@GetMapping("/{categoryId}")
 	public String selectProduct(@PathVariable int categoryId, Model model) {
 		Product product = productService.selectProduct(categoryId);
