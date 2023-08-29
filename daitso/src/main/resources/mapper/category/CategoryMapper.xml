@@ -22,6 +22,15 @@
 	ORDER SIBLINGS BY category_nm
 </select>
 
+<select id="selectCategoryPath" parameterType="int" resultType="String">
+	SELECT sys_connect_by_path(category_nm, ' > ') as path
+	FROM category 
+	WHERE category_id = #{categoryId}
+	START WITH category_pr_id = 0
+	CONNECT BY PRIOR category_id = category_pr_id	
+	ORDER SIBLINGS BY category_nm
+</select>
+
 
 	
 	<!-- 상위 카테고리(식품,도서,...) 고유번호와 이름 갖고오기 -->

@@ -42,4 +42,10 @@ public class ProductService implements IProductService {
 		productRepository.deleteProduct(productId);
 	}
 
+
+	@Override
+	public void updateProduct(Product product) {
+		productRepository.updateProduct(product);
+	}
+
 }

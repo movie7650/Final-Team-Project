@@ -17,6 +17,8 @@ import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.service.IProductService;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/product")
@@ -61,13 +63,17 @@ public class ProductController {
 		model.addAttribute("products",products);
 		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
 		model.addAttribute("categories",categories);
+		
 		return "admin/product/productRegister";
 	}
 	
 	@PostMapping("/admin")
-	public String registerProducts(Product product) {
+	public String registerProducts(Product product, Model model) {
 		productService.registerProducts(product);
-		return "redirect:/product/admin";
+		model.addAttribute("message","상품이 등록되었습니다.");
+	    model.addAttribute("searchUrl","/product/admin");
+//		return "redirect:/product/admin";
+	    return "admin/product/message";
 	}
 	
 	@GetMapping("/subCategories/{categoryId}")
@@ -78,10 +84,32 @@ public class ProductController {
     }
 	
 	@PostMapping("/admin/delete")
-    public String deleteProduct(@RequestParam int productId) {
+    public String deleteProduct(@RequestParam int productId, Model model) {
 	    productService.deleteProduct(productId);
-        return "redirect:/product/admin";
+	    model.addAttribute("message","상품이 삭제되었습니다.");
+	    model.addAttribute("searchUrl","/product/admin");
+//	    String message = "상품이 삭제되었습니다.";
+//	    redirectAttributes.addFlashAttribute("message",message);
+//	    return "redirect:/product/admin";
+	    return "admin/product/message";
     }
+	
+	@GetMapping("/update/{productId}")
+	public String updateProduct(@RequestParam int productId, Model model) {
+		Product product = productService.selectProduct(productId);
+		model.addAttribute("product", product);
+		return "admin/product/update";
+	}
+	
+	@PostMapping("/update")
+	public String updateProduct(Product product, Model model, HttpSession session) {
+		productService.updateProduct(product);
+		model.addAttribute("product", product);
+		session.setAttribute("productId", product.getProductId());
+		session.setAttribute("productPrice", product.getProductPrice());
+		session.setAttribute("productStock", product.getProductStock());
+		return "admin/product/message";
+	}
 
 	@GetMapping("/{categoryId}")
 	public String selectProduct(@PathVariable int categoryId, Model model) {
