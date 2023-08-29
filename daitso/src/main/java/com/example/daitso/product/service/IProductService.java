@@ -6,7 +6,9 @@ import com.example.daitso.product.model.Product;
 
 public interface IProductService {
 	
-	List<Product> selectProductList(int categoryId);
+	List<Product> selectProductList(int categoryId, int start);
+	
+	int selectCountProductList(int categoryId);
 	
 	List<Product> selectAllProducts();
 	

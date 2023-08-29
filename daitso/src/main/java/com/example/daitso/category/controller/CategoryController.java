@@ -49,10 +49,33 @@ public class CategoryController {
 	@GetMapping("/{categoryId}/{page}")
 	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model) {
 		session.setAttribute("page", page);
-		
-		List<Product> list = productService.selectProductList(categoryId);
+		model.addAttribute("categoryId", categoryId);
+		List<Product> list = productService.selectProductList(categoryId, page);
 		List<Category> categoryList = categoryService.selectCategoryList(categoryId);
 		String path = categoryService.selectCategoryPath(categoryId);
+		
+		int listCnt = productService.selectCountProductList(categoryId);
+		int totalPage = 0;
+		if(listCnt > 0) {
+			totalPage = (int)Math.ceil(listCnt/16.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/16.0));
+		int nowPageBlock = (int)(Math.ceil(page/16.0));
+		int startPage = (nowPageBlock-1)*16 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock * 16) {
+			endPage = nowPageBlock * 16;
+		}else {
+			endPage = totalPage;
+		}
+		
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 		
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("productList", list);

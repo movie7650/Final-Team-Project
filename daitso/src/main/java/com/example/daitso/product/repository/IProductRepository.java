@@ -14,6 +14,8 @@ public interface IProductRepository {
 
 	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
 	
+	int selectCountProductList(@Param("categoryId") int categoryId);
+	
 	List<Product> selectAllProducts();
 	
 	Product selectProduct(@Param("productId") int productId);
@@ -25,5 +27,6 @@ public interface IProductRepository {
 	void deleteProduct(int productId);
 
 	Product selectProductId(int productId);
+	
 	void updateProduct(Product product);
 }
