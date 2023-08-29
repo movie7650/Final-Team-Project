@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="~{/include/user-header :: userHeader}"></head>
 <body>
 	<div class="sign-up-container">
 		<div class="sign-up-logo">
@@ -84,7 +84,7 @@
 										th:src="@{/assets/loginandsignup/phone.svg}">
 								</div>
 								<input id="customerTelno" type="text" class="sign-up-input-value"
-									placeholder="휴대폰 번호('-' 없이)" th:field="*{customerTelno}" onchange="telnoCheck()" required>
+									placeholder="휴대폰 번호('01x-xxxx-xxxx')" th:field="*{customerTelno}" onchange="telnoCheck()" required>
 							</div>
 							<div id="telnoConfirm"
 								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
@@ -288,12 +288,7 @@
 					emailConfirm.style.color = "red";
 					emailBox.style.border = "1.5px solid red";
 					emailAuthBtn.style.display = "none";
-				} else {
-					emailConfirm.innerText = "이메일을 입력하세요!";
-					emailConfirm.style.color = "red";
-					emailBox.style.border = "1.5px solid red";
-					emailAuthBtn.style.display = "none";
-				}
+				} 
 			})
 		}                            
 		else { 
@@ -414,26 +409,29 @@
     	var telnoConfirm = document.querySelector("#telnoConfirm");
     	var telnoBox = document.getElementById("customerTelno");
     	
-    	fetch('http://localhost:8080/customer/checkTelnoDupllicated/' + telno)
-		.then((res) => {
-			return res.json();
-		})
-		.then((json) => {
-			console.log(json);
-			if(json == 0) {
-				telnoConfirm.innerText = "사용가능한 휴대폰번호입니다!";	
-				telnoConfirm.style.color = "blue";
-				telnoBox.style.border = "1.5px solid blue";
-			} else if(json == 1) {
-				telnoConfirm.innerText = "이미 사용하고 있는 휴대폰번호입니다!";
-				telnoConfirm.style.color = "red";
-				telnoBox.style.border = "1.5px solid red";
-			} else {
-				telnoConfirm.innerText = "휴대폰번호를 입력하세요!";
-				telnoConfirm.style.color = "red";
-				telnoBox.style.border = "1.5px solid red";
-			}
-		})
+    	var patternPhone = /^01([0|1|6|7|8|9])-[0-9]{3,4}-[0-9]{4}$/;
+    	if(patternPhone.test(telno)){
+    		fetch('http://localhost:8080/customer/checkTelnoDupllicated/' + telno)
+    		.then((res) => {
+    			return res.json();
+    		})
+    		.then((json) => {
+    			console.log(json);
+    			if(json == 0) {
+    				telnoConfirm.innerText = "사용가능한 휴대폰 번호입니다!";	
+    				telnoConfirm.style.color = "blue";
+    				telnoBox.style.border = "1.5px solid blue";
+    			} else if(json == 1) {
+    				telnoConfirm.innerText = "이미 사용하고 있는 휴대폰 번호입니다!";
+    				telnoConfirm.style.color = "red";
+    				telnoBox.style.border = "1.5px solid red";
+    			}
+    		})	
+    	} else {
+    		telnoConfirm.innerText = "올바른 휴대폰 번호 양식이 아닙니다";
+			telnoConfirm.style.color = "red";
+			telnoBox.style.border = "1.5px solid red";
+    	}
     }
 </script>
 </html>

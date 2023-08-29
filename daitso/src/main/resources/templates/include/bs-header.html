@@ -47,15 +47,6 @@
 			const categoryList = document.getElementById('header-category-list');
 			const category = document.getElementById('header-category');
 			
-			category.addEventListener('mouseover', () => {
-    	   		categoryList.style.display = 'block';
-    	    });
-			
-			categoryList.addEventListener('mouseleave', () => {
-    	   		categoryList.style.display = 'none';
-    	    });
-			
-			
     	    fetch('http://localhost:8080/category/getAllFirstCategoryIdAndName')
     	  		.then((res) => {
     	  			//Promise 반환
