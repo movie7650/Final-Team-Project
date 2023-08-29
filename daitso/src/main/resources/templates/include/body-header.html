@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!-- Body Header -->
-<div th:fragment="bodyHeader" class="container">
+<div th:fragment="bodyHeader">
+	<div class="header-login-and-sign-up">
+		<div>
+			<span><a th:href="@{/customer/sign-up}">회원가입</a></span>
+			<span><a th:href="@{/customer/login}">로그인</a></span>
+		</div>
+	</div>
 	<div class="header">
 		<div class="header-box">
 			<div class="header-category-container">
