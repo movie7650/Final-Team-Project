@@ -9,6 +9,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <!-- CSS File -->
     <link rel="stylesheet" th:href="@{/css/header-style.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -27,15 +28,6 @@
     window.onload = function() {	
 			const categoryList = document.getElementById('header-category-list');
 			const category = document.getElementById('header-category');
-			
-			category.addEventListener('mouseover', () => {
-    	   		categoryList.style.display = 'block';
-    	    });
-			
-			categoryList.addEventListener('mouseleave', () => {
-    	   		categoryList.style.display = 'none';
-    	    });
-			
 			
     	    fetch('http://localhost:8080/category/getAllFirstCategoryIdAndName')
     	  		.then((res) => {
