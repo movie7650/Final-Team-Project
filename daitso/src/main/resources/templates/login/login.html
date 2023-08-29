@@ -4,10 +4,12 @@
 <body>
 	<div class="login-container">
 		<div class="login-logo">
-			<a th:href="@{/}">
-				<img class="login-logo-img"
+			<a th:href="@{/}"> <img class="login-logo-img"
 				th:src="@{/assets/header/daitso_logo_header.png}">
 			</a>
+		</div>
+		<div class="login-title-box">
+			<div class="login-title">이메일 로그인</div>
 		</div>
 		<div class="login-input-container">
 			<div class="login-input-boxes">
@@ -20,9 +22,8 @@
 									<img class="login-input-img"
 										th:src="@{/assets/loginandsignup/email.svg}">
 								</div>
-								<input id="customerEmail" type="email"
-									class="login-input-value" placeholder="아이디(이메일)"
-									th:field="*{customerEmail}" required>
+								<input id="customerEmail" type="email" class="login-input-value"
+									placeholder="아이디(이메일)" th:field="*{customerEmail}" required>
 							</div>
 							<div id="emailConfirm"
 								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
@@ -32,14 +33,17 @@
 									<img class="login-input-img"
 										th:src="@{/assets/loginandsignup/password.svg}">
 								</div>
-								<input id="customerPw" type="password"
-									class="login-input-value" placeholder="비밀번호"
-									th:field="*{customerPw}" required>
+								<input id="customerPw" type="password" class="login-input-value"
+									placeholder="비밀번호" th:field="*{customerPw}" required>
 							</div>
+							<div class="login-find">아이디/비밀번호 찾기</div>
 							<div>
-								<button class ="login-btn" type="submit">로그인</button>
+								<button class="login-btn" type="submit">로그인</button>
 							</div>
 							<div class="login-line"></div>
+							<div>
+								<div class="login-sign-up-btn" onclick="moveSignUpPage()">회원가입</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -48,5 +52,8 @@
 	</div>
 </body>
 <script type="text/javascript" th:inline="javascript">
+	function moveSignUpPage(){
+		window.location.href = 'http://localhost:8080/customer/sign-up';
+	}
 </script>
 </html>

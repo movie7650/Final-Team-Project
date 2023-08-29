@@ -21,21 +21,44 @@
 									<img class="sign-up-input-img"
 										th:src="@{/assets/loginandsignup/email.svg}">
 								</div>
-								<input id="customerEmail" onkeyup="emailCheck()" type="email"
+								<input id="customerEmail" onchange="emailCheck()" type="email"
 									class="sign-up-input-value" placeholder="아이디(이메일)"
 									th:field="*{customerEmail}" required>
 							</div>
 							<div id="emailConfirm"
 								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
 							</div>
+							<div class="sign-up-auth-btn">이메일 인증</div>
+							<div class="sign-up-auth-box">
+								<div class="sign-up-auth-text">이메일로 전송된 인증코드를 입력해주세요.</div>
+								<div class="sign-up-auth">
+									<input id="auth-number" type="text" placeholder="인증코드 6자리 입력" maxlength='6' required>
+									<div style="display:flex;">
+										<div class="auth-time-left">
+											<span class="minutes"></span>
+											<span>:</span>
+											<span class="seconds"></span>
+										</div>
+										<div class="auth-btn" onclick="authNumCheck()">확인</div>
+									</div>
+								</div>
+								<div class="sign-up-auth-error">기간이 만료되었습니다!</div>
+								<div class="sign-up-auth-re">
+									<span style="color:#777777;">이메일을 받지 못하셨나요?</span>
+									<span class="re-auth-btn" style="text-decoration: underline; cursor: pointer; color:#777777; font-weight: bold;">이메일 재전송하기</span>
+								</div>
+							</div>
 							<div class="sign-up-input-box">
 								<div class="sign-up-input-img-box">
 									<img class="sign-up-input-img"
 										th:src="@{/assets/loginandsignup/password.svg}">
 								</div>
-								<input id="customerPw" type="password"
+								<input id="customerPw" type="password" onkeyup="passwordPattern()"
 									class="sign-up-input-value" placeholder="비밀번호"
-									th:field="*{customerPw}" required>
+									th:field="*{customerPw}" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" required>
+							</div>
+							<div id="passwordPattern" style="font-size: 13px; font-weight: bold; margin: 10px 0 15px 20px; display:none;">
+								 [참고] 8자리에서 최대 16자리까지 숫자, 영문, 특수문자 각 1개 이상 포함
 							</div>
 							<div class="sign-up-input-box">
 								<div class="sign-up-input-img-box">
@@ -60,12 +83,15 @@
 									<img class="sign-up-input-img"
 										th:src="@{/assets/loginandsignup/phone.svg}">
 								</div>
-								<input type="text" class="sign-up-input-value"
-									placeholder="휴대폰 번호" th:field="*{customerTelno}" required>
+								<input id="customerTelno" type="text" class="sign-up-input-value"
+									placeholder="휴대폰 번호('-' 없이)" th:field="*{customerTelno}" onchange="telnoCheck()" required>
+							</div>
+							<div id="telnoConfirm"
+								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
 							</div>
 							<div class="sign-up-line"></div>
 							<div class="sign-up-checkAll">
-								<input type="checkbox" name="checkAll" id="checkAll" class="checkAll" style="width: 15px; height: 15px; accent-color: #39594E;" required>
+								<input type="checkbox" name="checkAll" id="checkAll" class="checkAll" style="width: 15px; height: 15px; accent-color: #39594E;">
 								<div class="sign-up-checkAll-title">모두 확인하였으며 동의합니다.</div>
 							</div>
 							<div class="sign-up-checkAll-content">전체 동의에는 필수 및 선택 정보에 대한 동의가 포함되어 있으며, 개별적으로 동의를 선택 하실 수 있습니다. 선택 항목에 대한 동의를 거부하시는 경우에도 서비스 이용이 가능합니다.</div>
@@ -152,19 +178,27 @@
 <script type="text/javascript" th:inline="javascript">
 
 	history.scrollRestoration = "manual";
+	var authBox = document.querySelector(".sign-up-auth");
+	var authContainer = document.querySelector(".sign-up-auth-box");
+	var authBtn = document.querySelector(".sign-up-auth-btn");
 	
+	function passwordPattern() {
+		var passwordPattern = document.querySelector("#passwordPattern");
+		passwordPattern.style.display = "block";
+	}
+		
 	// 비밀번호 확인 
 	var pw1 = document.querySelector("#customerPw");
 	var pw2 = document.querySelector("#customerRePw");
 	var pwConfirm = document.querySelector("#passwordConfirm");
-	pw2.onkeyup = function(event) {
+	pw2.onkeyup = function() {
 		if (pw1.value !== pw2.value) {
 			pwConfirm.innerText = "비밀번호가 일치하지 않습니다.";
 			pw2.style.border = "1.5px solid red";
 
 		} else {
 			pwConfirm.innerText = "";
-			pw2.style.border = "none";
+			pw2.style.border = "1px solid #D9D9D9";
 		}
 	}
 
@@ -197,7 +231,6 @@
 	            agreements[item.id] = false;
 	        });
 	    }
-	    toggleSubmitButoon();
 	});
 	
 	check.forEach((item) => item.addEventListener('input', toggleCheckbox));
@@ -230,33 +263,177 @@
 	   	modal.style.display = "none";
 	});
 	
-	// 이메일 중복확인
+	// 이메일 중복확인 및 양식확인
 	var emailConfirm = document.querySelector("#emailConfirm");
-	 /*var emailBox = document.querySelector("#userEmail");
+	var emailBox = document.querySelector("#customerEmail");
+	
+	var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
 	
 	const emailCheck = () => {
-		const email = document.getElementById("userEmail").value;
-		$.ajax({
-			type: "post",
-			url: "./emailcheck",
-			data: {
-				"userEmail": email
-			},
-			success: function(res) {
-				if(res == 0) {
+		const email = document.getElementById("customerEmail").value;
+		if(reg_email.test(email)) { 
+			fetch('http://localhost:8080/customer/checkEmailDupllicated/' + email)
+			.then((res) => {
+				return res.json();
+			})
+			.then((json) => {
+				console.log(json);
+				if(json == 0) {
 					emailConfirm.innerText = "사용가능한 이메일입니다!";	
 					emailConfirm.style.color = "blue";
 					emailBox.style.border = "1.5px solid blue";
-				} else {
+					emailAuthBtn.style.display = "block";
+				} else if(json == 1) {
 					emailConfirm.innerText = "이미 사용하고 있는 이메일입니다!";
 					emailConfirm.style.color = "red";
 					emailBox.style.border = "1.5px solid red";
+					emailAuthBtn.style.display = "none";
+				} else {
+					emailConfirm.innerText = "이메일을 입력하세요!";
+					emailConfirm.style.color = "red";
+					emailBox.style.border = "1.5px solid red";
+					emailAuthBtn.style.display = "none";
 				}
-			},
-			error:function(request,status,error){
-		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-		    }
+			})
+		}                            
+		else { 
+			emailConfirm.innerText = "올바른 이메일 양식이 아닙니다.";	
+			emailConfirm.style.color = "red";
+			emailBox.style.border = "1.5px solid red";
+			emailAuthBtn.style.display = "none";
+		}                            
+	}
+	
+	// 이메일 인증
+	var emailAuthBtn = document.querySelector(".sign-up-auth-btn");
+	var reEmailAuthBtn = document.querySelector(".re-auth-btn");
+	
+	emailAuthBtn.onclick = async() =>  {
+		
+		// 버튼 비활성화
+		emailAuthBtn.onclick = null;
+		emailAuthBtn.style.color = "#D9D9D9";
+		
+		// 인증번호 받는 상자 나타내기
+		authContainer.style.display = "flex";
+		
+		// 인증번호 받기 + 타이머
+		getAuthfirstStep();
+	}
+	
+	reEmailAuthBtn.onclick = async() => {
+		
+		// 인증번호 받기 + 타이머
+		getAuthfirstStep();
+	}
+	
+	// 인증번호 + 타이머 
+	const getAuthfirstStep = async() => {
+		
+		// 인증번호
+		let randomNum = await getRandomNum();
+		window.localStorage.setItem('randomNum', randomNum);
+		
+		// 3분 타이머
+        var leftSec = 180;
+        // 이미 타이머가 작동중이면 중지
+        if (isRunning){
+            clearInterval(timer);
+        }
+        startTimer(leftSec);
+	}
+	
+	// 인증번호 생성 및 인증번호 이메일 보내기  
+	const getRandomNum = () => {
+		const email = document.getElementById("customerEmail").value;
+	    //Promise로 fetch를 감싼다
+	    return new Promise((resolve, reject) => {
+	        fetch('http://localhost:8080/customer/authEmail/' + email)
+	        .then(response => response.json())
+	        .then(data => {
+	            //Promise resolve 메소드를 이용해 success 시 data를 반환
+	            resolve(data);
+	        })
+	        .catch(error => {
+	            alert('에러');
+	        })
+	    });
+	}
+		
+    // 타이머
+    var timer;
+    var isRunning = false;
+ 
+    function startTimer(count) {
+        var minutes, seconds;
+        timer = setInterval(function () {
+            minutes = parseInt(count / 60, 10);
+            seconds = parseInt(count % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            document.querySelector(".minutes").innerText = minutes;
+            document.querySelector(".seconds").innerText = seconds;
+            // 타이머 종료
+            if (--count < 0) {
+                clearInterval(timer);
+                authBox.style.border = "1.5px solid red";
+                document.querySelector(".sign-up-auth-error").style.display="block";
+                window.localStorage.removeItem('randomNum');
+                isRunning = false;
+            }
+        }, 1000);
+        isRunning = true;
+    }
+    
+    
+    // 올바른 인증번호인지 확인
+    function authNumCheck() {
+    	const randomNum = window.localStorage.getItem('randomNum');
+    	const authNum = document.getElementById("auth-number").value;
+ 
+    	if (randomNum === authNum) {
+    		window.localStorage.removeItem('randomNum');
+    		authContainer.style.display="none";
+    		authBtn.style.display="none";
+    		emailConfirm.innerText = "인증이 완료되었습니다!";
+    		authBox.style.border = "1.5px solid #8BBA66";
+            document.querySelector(".sign-up-auth-error").style.color="#8BBA66";
+    		document.getElementById('customerEmail').readOnly = true; 
+    		document.getElementById('customerEmail').style.backgroundColor = "#EFEFEF";
+    	} else {
+    		authBox.style.border = "1.5px solid red";
+            document.querySelector(".sign-up-auth-error").style.display="block";
+            document.querySelector(".sign-up-auth-error").style.color="red";
+            document.querySelector(".sign-up-auth-error").innerText="인증번호가 틀립니다."
+    	}
+    }
+    
+    // 휴대폰 번호 중복확인
+    function telnoCheck() {
+    	const telno = document.getElementById("customerTelno").value;
+    	var telnoConfirm = document.querySelector("#telnoConfirm");
+    	var telnoBox = document.getElementById("customerTelno");
+    	
+    	fetch('http://localhost:8080/customer/checkTelnoDupllicated/' + telno)
+		.then((res) => {
+			return res.json();
 		})
-	} */
+		.then((json) => {
+			console.log(json);
+			if(json == 0) {
+				telnoConfirm.innerText = "사용가능한 휴대폰번호입니다!";	
+				telnoConfirm.style.color = "blue";
+				telnoBox.style.border = "1.5px solid blue";
+			} else if(json == 1) {
+				telnoConfirm.innerText = "이미 사용하고 있는 휴대폰번호입니다!";
+				telnoConfirm.style.color = "red";
+				telnoBox.style.border = "1.5px solid red";
+			} else {
+				telnoConfirm.innerText = "휴대폰번호를 입력하세요!";
+				telnoConfirm.style.color = "red";
+				telnoBox.style.border = "1.5px solid red";
+			}
+		})
+    }
 </script>
 </html>
