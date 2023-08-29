@@ -49,4 +49,9 @@ public class ProductService implements IProductService {
 		productRepository.updateProduct(product);
 	}
 
+	@Override
+	public Product selectProductId(int productId) {
+		return productRepository.selectProductId(productId);
+	}
+
 }
