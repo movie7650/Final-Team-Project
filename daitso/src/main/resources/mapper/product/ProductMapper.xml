@@ -111,4 +111,16 @@
 ]]>
 </update>
 
+<select id="selectProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
+<![CDATA[
+	select product_id as "productId",
+		   product_nm as "productNm",
+		   product_code as "productCode",
+		   product_price as "productPrice",
+		   product_stock as "productStock"
+	from product
+	where product_id = #{productId}
+]]>
+</select>
+
 </mapper>

@@ -41,8 +41,11 @@
 								style="background-color: #668663; color: #ffff">더보기</button></td>
 						<td>
 							<div class="btn-group">
+							<!-- <form th:action="@{/product/update/{productId}(productId=${product.productId})}" method="get">  -->
 								<button class="btn btn-xs" style="background-color: #39594e; color: #ffff"
-								data-bs-toggle="modal" data-bs-target="#updateModal" type="submit">수정</button>
+								data-bs-toggle="modal" data-bs-target="#updateModal"
+								type="submit">수정</button>
+						
 								<form th:action="@{/product/admin/delete(productId=${product.productId})}"
 									method="post">
 									<button class="btn btn-xs" style="background-color: red; color: #fff" 
@@ -55,6 +58,7 @@
             </table>
         </div>
 </div>
+
 <!-- 상품 등록 모달 -->
 <div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document" style="max-width: 800px;">
@@ -65,7 +69,7 @@
 			<form th:action method="post">
 				<div class="modal-body">
 					<div class="row mb-3">
-						<label form="categoryId" class="col-sm-2 col-form-label">상위
+						<label for="categoryId" class="col-sm-2 col-form-label">상위
 							카테고리</label>
 						<div class="col-sm-10">
 							<select id="categoryId" name="categoryId"
@@ -89,14 +93,14 @@
 					</div>
 
 					<div class="row mb-3">
-						<label form="productNm" class="col-sm-2 col-form-label">상품명</label>
+						<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
 						<div class="col-sm-10">
 							<input type="text" id="productNm" name="productNm">
 						</div>
 					</div>
 
 					<div class="row mb-3">
-						<label form="productContent" class="col-sm-2 col-form-label">상품
+						<label for="productContent" class="col-sm-2 col-form-label">상품
 							상세내용</label>
 						<div class="col-sm-10">
 							<textarea id="productContent" name="productContent"
@@ -105,7 +109,7 @@
 					</div>
 
 					<div class="row mb-3">
-						<label form="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
+						<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
 						<div class="col-sm-10">
 							<input type="text" id="productOptionFirst"
 								name="productOptionFirst">
@@ -113,7 +117,7 @@
 					</div>
 
 					<div class="row mb-3">
-						<label form="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
+						<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
 						<div class="col-sm-10">
 							<input type="text" id="productOptionSecond"
 								name="productOptionSecond">
@@ -121,7 +125,7 @@
 					</div>
 
 					<div class="row mb-3">
-						<label form="productOptionThird" class="col-sm-2 col-form-label">기타</label>
+						<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
 						<div class="col-sm-10">
 							<input type="text" id="productOptionThird"
 								name="productOptionThird">
@@ -129,21 +133,21 @@
 					</div>
 
 					<div class="row mb-3">
-						<label form="productPrice" class="col-sm-2 col-form-label">가격</label>
+						<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
 						<div class="col-sm-10">
 							<input type="number" id="productPrice" name="productPrice">
 						</div>
 					</div>
 
 					<div class="row mb-3">
-						<label form="productStock" class="col-sm-2 col-form-label">수량</label>
+						<label for="productStock" class="col-sm-2 col-form-label">수량</label>
 						<div class="col-sm-10">
 							<input type="number" id="productStock" name="productStock">
 						</div>
 					</div>
 
 					<div class="row mb-3">
-						<label form="productImageFirst" class="col-sm-2 col-form-label">상품
+						<label for="productImageFirst" class="col-sm-2 col-form-label">상품
 							이미지</label>
 						<div class="col-sm-10">
 							<input type="file" id="productImageFirst"
@@ -155,7 +159,7 @@
 						<!--
 									<button type="button" class="btn btn-secondary"	data-dismiss="modal">닫기</button>
 									<button type="submit" class="btn btn-primary">저장</button>
-								 -->
+						-->
 						<button class="btn btn-primary" onclick="submitForm()"
 							style="background-color: #668663"
 							th:onclick="|location.href='@{/product/admin)}'|"
@@ -169,30 +173,46 @@
 		</div>
 	</div>
 </div>
+
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <!-- 상품 수정 모달 -->
 	<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document" style="max-width: 800px;">
 			<div class="modal-content">
-				<form th:action method="post">
+				<form th:action="@{/product/update}" method="post">
 					<div class="modal-header">
 						<h5 class="modal-title">상품 수정</h5>
 					</div>
 					<div class="modal-body">
+					<span th:each="product : ${product}">
 						<div class="row mb-3">
-							<label form="productPrice" class="col-sm-2 col-form-label">가격</label>
+							<label for="productNm" class="col-sm-2 col-form-label" >상품명</label>
 							<div class="col-sm-10">
-								<input type="number" id="productPrice" name="productPrice">
+								<input type="text" name="productNm" th:value="${product.productNm}" readonly="readonly">
+							</div>
+						</div>
+						
+						<div class="row mb-3">
+							<label for="productCode" class="col-sm-2 col-form-label">상품 코드</label>
+							<div class="col-sm-10">
+								<input type="number" name="productCode" th:value="${product.productCode}" readonly="readonly">
+							</div>
+						</div>
+						
+						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
+							<div class="col-sm-10">
+								<input type="number" name="productPrice" th:value="${product.productPrice}">
 							</div>
 						</div>
 
 						<div class="row mb-3">
-							<label form="productStock" class="col-sm-2 col-form-label">수량</label>
+							<label for="productStock" class="col-sm-2 col-form-label">수량</label>
 							<div class="col-sm-10">
-								<input type="number" id="productStock" name="productStock">
+								<input type="number" name="productStock" th:value="${product.productStock}">
 							</div>
 						</div>
-
+					</span>
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
 								type="submit" th:onclick="|location.href='@{/product/update}'|">저장</button>
