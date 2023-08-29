@@ -52,6 +52,15 @@
     WHERE rnum between #{start} and #{end} and snum = 1
 </select>
 
+<select id="selectCountProductList" parameterType="int" resultType="int">
+	SELECT count(*)
+	FROM (select distinct product_nm from product 
+	WHERE category_id IN (
+		SELECT category_id 
+		FROM category START WITH category_id = #{categoryId} 
+		CONNECT BY PRIOR category_id = category_pr_id))
+</select>
+
 
 <select id="selectProduct" parameterType="int" resultMap="productMap">
 	SELECT * FROM product

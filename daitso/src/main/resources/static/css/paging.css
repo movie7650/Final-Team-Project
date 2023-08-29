@@ -1,0 +1,45 @@
+@charset "UTF-8";
+.pagination1 {
+	all: unset;
+   margin-top:10px;
+   list-style:none;
+   display:block;
+   text-align:center;
+   align-items: center;
+}
+.pagination-container {
+  text-align: center;
+}
+
+
+.pagination1 li {
+   text-align:center;
+   align-items: center;
+   display:inline;
+   vertical-align:middle;
+}
+.pagination1 li a {
+   display:-moz-inline-stack;   /*FF2*/
+   display:inline-block;
+   vertical-align:top;
+   padding:4px;
+   margin-right:3px;
+   color:#000;
+   font:bold 12px tahoma;
+   border:1px solid #eee;
+   text-align:center;
+   text-decoration:none;
+   width /**/:26px;
+   float:none;
+}
+.pagination1 li a:hover, .pagination1 li a:focus {
+   color:#fff;
+   border:1px solid #39594e;
+   background-color:#39594e;
+}
+
+.pagination1 li a.now {
+   color:#fff;
+   background-color:#39594e;
+   border:1px solid #39594e;
+}
