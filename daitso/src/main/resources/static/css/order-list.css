@@ -8,3 +8,21 @@
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
+.order-category{
+	position:absolute;
+	margin-top:-38%;
+	margin-left:30%;
+	width:auto;
+	
+	
+}
+.order-rectangle{
+	float:left;
+	border:solid 1.5px #668663;
+	width:214px;
+	height:45px;
+	text-align:center;
+	padding-top:1%;
+	font-family:Inter;
+	border-collapse:collapse;
+}
