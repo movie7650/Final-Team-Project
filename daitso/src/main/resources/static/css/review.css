@@ -1,34 +1,34 @@
 @charset "UTF-8";
 .title-review{
 	padding-bottom:1%;
-	font-size:200%;
+	font-size:150%;
 	position:absolute;
-	margin-top:-45%;
+	margin-top:-38%;
 	margin-left:30%;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 .rivew-menu-container{
 	position:absolute;
-	margin-top:-38%;
+	margin-top:-33%;
 	margin-left:31%;
 	width:auto;
 	height:auto;
 }
 .review-menu{
 	float:left;
-	font-size:150%;
+	font-size:100%;
 	border:solid 1.5px #668663;
 	width:400px;
 	height:40px;
 	text-align:center;
-	padding-top:0px;
+	padding-top:1%;
 }
 .purchase-product-container{
 	position:absolute;
 	border-top: solid 3px #668663;
 	border-bottom:solid 3px #668663;
-	margin-top:-33%;
+	margin-top:-28%;
 	margin-left:30%;
 	padding-bottom:1%;
 	padding-top:1%;
@@ -36,16 +36,18 @@
 	height:auto;
 }
 .product-name{
-	font-size:150%;
+	font-size:100%;
+	margin-left:2%;
 }
 .star-point{
+	margin-left:2%;
 	float:left;
 	color:red;
 	
 }
 .review-detail-container{
 	position:absolute;
-	margin-top:-25%;
+	margin-top:-21%;
 	margin-left:33%;
 	
 	
@@ -69,6 +71,7 @@
 	height:80px;
 	margin-left:30%;
 	padding-top:1%;
+	margin-top:2%;
 }
 #review-photo-button{
 	
@@ -116,6 +119,6 @@
 	cursor:pointer;
 }
 textarea::placeholder{
-	font-size:150%;
+	font-size:110%;
 	
 }

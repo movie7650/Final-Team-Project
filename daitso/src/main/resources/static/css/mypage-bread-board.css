@@ -21,11 +21,11 @@
 }
 
 .page-title {
-	margin-left: 10%;
+	margin-left: 15%;
 	width: 185px;
 	height: 80px;
 	font-family: Inter;
-	font-size: 30px;
+	font-size: 150%;
 	font-weight: bold;
 	font-stretch: normal;
 	font-style: normal;
@@ -47,7 +47,7 @@
   width: 159px;
   height: 47px;
   font-family: Inter;
-  font-size: 20px;
+  font-size: 100%;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
@@ -56,16 +56,16 @@
   color: #fff;
 }
 .rectangle-count-wrap{
-	
+	text-align:right;
 	margin-top:10%;
 }
 .rectangle-count{
-	font-size:50px;
+	font-size:200%;
 	color:#fff;
 }
 .rectangle-02-count{
 	margin-right:10%;
-	font-size:20px;
+	font-size:100%;
 	color:#fff;
 }
 .left-menu-container{
@@ -84,15 +84,16 @@
 	border-bottom:solid 1px #c0c0c0;
 }
 .left-menu-title{
-	font-size:150%;
+	font-size:110%;
 	font-weight:bold;
 	font-family:Inter;
 	margin-left:10%;
 	padding-top:10%;
 }
 .left-menu-semi-01{
+	font-size:80%;
 	margin-left:10%;
-	padding-top:7%;
+	padding-top:0%;
 }
 .left-menu-semi-01 > a{
 	color:black;
