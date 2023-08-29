@@ -35,47 +35,26 @@ public class ProductController {
 		return "/main/main";
 	}
 	
-//	@GetMapping("/admin")
-//	public String selectAllProducts(Model model) {
-//		List<Product> products = productService.selectAllProducts();
-//		model.addAttribute("products",products);
-//		return "admin/product/admin-product";
-//	}
-	
-//	@GetMapping("/admin/register")
-//	public String addForm(Model model) {
-//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-//		model.addAttribute("categories",categories);
-//		List<Product> products = productService.selectAllProducts();
-//		model.addAttribute("products",products);
-//		return "admin/product/admin-register";
-//	}
-
-//	@PostMapping("/admin/register")
-//	public String registerProducts(Product product) {
-//		productService.registerProducts(product);
-//		return "redirect:/product/admin";
-//	}
-	
+	//전체 상품 조회하기
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model) {
 		List<Product> products = productService.selectAllProducts();
 		model.addAttribute("products",products);
 		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
 		model.addAttribute("categories",categories);
-		
 		return "admin/product/productRegister";
 	}
 	
+	//상품 등록하기
 	@PostMapping("/admin")
 	public String registerProducts(Product product, Model model) {
 		productService.registerProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 	    model.addAttribute("searchUrl","/product/admin");
-//		return "redirect:/product/admin";
 	    return "admin/product/message";
 	}
 	
+	//하위 카테고리 불러오기
 	@GetMapping("/subCategories/{categoryId}")
     @ResponseBody
     public List<Category> getSubCategories(@PathVariable int categoryId) {
@@ -83,25 +62,33 @@ public class ProductController {
         return subCategories;
     }
 	
+	//상품 삭제하기
 	@PostMapping("/admin/delete")
     public String deleteProduct(@RequestParam int productId, Model model) {
 	    productService.deleteProduct(productId);
 	    model.addAttribute("message","상품이 삭제되었습니다.");
 	    model.addAttribute("searchUrl","/product/admin");
-//	    String message = "상품이 삭제되었습니다.";
-//	    redirectAttributes.addFlashAttribute("message",message);
-//	    return "redirect:/product/admin";
 	    return "admin/product/message";
     }
 	
-	@GetMapping("/update/{productId}")
-	public String selectProductId(@PathVariable int productId, Model model) {
-		Product product = productService.selectProductId(productId);
-		model.addAttribute("product", product);
-		return "admin/product/productRegister";
+	//상품 수정하기
+//	@GetMapping("/admin/update/{productId}")
+//	@ResponseBody
+//	public String selectProductId(@PathVariable int productId, Model model) {
+//		Product product = productService.selectProductId(productId);
+//		model.addAttribute("product", product);
+//		return "admin/product/productRegister";
+//	}
+	
+	//상품 수정을 위해 해당 상품 정보 불러오기
+	@GetMapping("/admin/update/{productId}")
+	@ResponseBody
+	public Product selectProductId(@PathVariable int productId, Model model) {
+		return productService.selectProductId(productId);
 	}
 	
-	@PostMapping("/update")
+	//상품 수정하기
+	@PostMapping("/admin/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
 		productService.updateProduct(product);
 		model.addAttribute("product", product);
@@ -110,6 +97,13 @@ public class ProductController {
 		session.setAttribute("productNm", product.getProductNm());
 		session.setAttribute("productPrice", product.getProductPrice());
 		session.setAttribute("productStock", product.getProductStock());
+		System.out.println(product.getProductId());
+		System.out.println(product.getProductCode());
+		System.out.println(product.getProductNm());
+		System.out.println(product.getProductPrice());
+		System.out.println(product.getProductStock());
+		model.addAttribute("message","상품이 수정되었습니다.");
+		model.addAttribute("searchUrl","/product/admin");
 		return "admin/product/message";
 	}
 	
