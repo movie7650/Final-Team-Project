@@ -12,7 +12,7 @@ import com.example.daitso.product.model.Product;
 @Repository
 public interface IProductRepository {
 
-	List<Product> selectProductList(@Param("categoryId") int categoryId);
+	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
 	
 	List<Product> selectAllProducts();
 	
