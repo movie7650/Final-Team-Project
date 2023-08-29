@@ -16,6 +16,8 @@ import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.service.IProductService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
@@ -39,7 +41,15 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/{categoryId}")
-	public String productList(@PathVariable int categoryId, Model model) {
+	public String productList(@PathVariable int categoryId, HttpSession session ,Model model) {
+		
+		return productList(categoryId, 1, session, model);
+	}
+	
+	@GetMapping("/{categoryId}/{page}")
+	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model) {
+		session.setAttribute("page", page);
+		
 		List<Product> list = productService.selectProductList(categoryId);
 		List<Category> categoryList = categoryService.selectCategoryList(categoryId);
 		String path = categoryService.selectCategoryPath(categoryId);
@@ -50,4 +60,5 @@ public class CategoryController {
 		
 		return "/main/product";
 	}
+
 }
