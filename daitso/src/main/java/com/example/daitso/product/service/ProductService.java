@@ -25,8 +25,8 @@ public class ProductService implements IProductService {
 	}
 	
 	@Override
-	public List<Product> selectAllProducts() {
-		return productRepository.selectAllProducts();
+	public List<Product> selectAllProducts(int page, int pageSize) {
+		return productRepository.selectAllProducts(page, pageSize);
 	}
 
 	@Override

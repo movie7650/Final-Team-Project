@@ -17,7 +17,8 @@ public interface IProductRepository {
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
 	
-	List<Product> selectAllProducts();
+//	List<Product> selectAllProducts();
+	List<Product> selectAllProducts(@Param("page") int page, @Param("pageSize") int pageSize);
 	
 	Product selectProduct(@Param("productId") int productId);
 

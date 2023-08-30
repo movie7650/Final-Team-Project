@@ -11,7 +11,8 @@ public interface IProductService {
 	int selectCountProductList(int categoryId);
 	
 	
-	List<Product> selectAllProducts();
+//	List<Product> selectAllProducts();
+	List<Product> selectAllProducts(int page, int pageSize);
 	
 	Product selectProduct(int productId);
 	
