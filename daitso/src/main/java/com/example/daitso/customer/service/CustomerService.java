@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
 import com.example.daitso.customer.repository.ICustomerRepository;
 
@@ -40,5 +41,10 @@ public class CustomerService implements ICustomerService {
 		customerSignUp.setCustomerPw(encryptedPassword);
 		
 		customerRepository.insertIntoCustomer(customerSignUp);
+	}
+
+	@Override
+	public CustomerName getCustomerNmByCustomerId(int customerId) {
+		return customerRepository.getCustomerNmByCustomerId(customerId);
 	}	
 }
