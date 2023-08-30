@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.example.daitso.customer.model.CustomerName;
+import com.example.daitso.customer.model.CustomerSecurity;
 import com.example.daitso.customer.model.CustomerSignUp;
 
 @Repository
@@ -19,4 +21,10 @@ public interface ICustomerRepository {
 	
 	// 회원가입
 	void insertIntoCustomer(CustomerSignUp customerSignUp);
+	
+	// 로그인
+	Optional<CustomerSecurity> findByCustomerEmail(String customerEmail);
+	
+	// 사용자 고유번호로부터 사용자 이름 갖고오기
+	CustomerName getCustomerNmByCustomerId(int customerId);
 }

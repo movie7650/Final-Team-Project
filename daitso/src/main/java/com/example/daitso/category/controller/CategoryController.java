@@ -29,13 +29,13 @@ public class CategoryController {
 	IProductService productService;
 	
 	// header에 상위 카테고리 띄우기
-	@GetMapping("/getAllFirstCategoryIdAndName")
+	@GetMapping("/first-category")
 	public @ResponseBody List<Category> getAllFirstCategoryIdAndName() {
 		return categoryService.getAllFirstCategoryIdAndName();	
 	}
 	
 	// header에 하위 카테고리 띄우기
-	@GetMapping("/getSecondCategoryIdAndNameByFirstCategoryId/{categoryId}")
+	@GetMapping("/second-category/{categoryId}")
 	public @ResponseBody List<Category> getSecondCategoryIdAndNameByFirstCategoryId(@PathVariable int categoryId) {
 		return categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);	
 	}

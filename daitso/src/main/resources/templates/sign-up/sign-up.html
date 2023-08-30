@@ -4,7 +4,7 @@
 <body>
 	<div class="sign-up-container">
 		<div class="sign-up-logo">
-			<a th:href="@{/}">
+			<a th:href="@{/customer/test}">
 				<img class="sign-up-logo-img"
 				th:src="@{/assets/header/daitso_logo_header.png}">
 			</a>
@@ -194,11 +194,11 @@
 	pw2.onkeyup = function() {
 		if (pw1.value !== pw2.value) {
 			pwConfirm.innerText = "비밀번호가 일치하지 않습니다.";
-			pw2.style.border = "1.5px solid red";
+			pw2.style.borderBottom = "2px solid red";
 
 		} else {
 			pwConfirm.innerText = "";
-			pw2.style.border = "1px solid #D9D9D9";
+			pw2.style.borderBottom = "1px solid #D9D9D9";
 		}
 	}
 
@@ -272,7 +272,7 @@
 	const emailCheck = () => {
 		const email = document.getElementById("customerEmail").value;
 		if(reg_email.test(email)) { 
-			fetch('http://localhost:8080/customer/checkEmailDupllicated/' + email)
+			fetch('http://localhost:8080/customer/email-dupllicated/' + email)
 			.then((res) => {
 				return res.json();
 			})
@@ -281,12 +281,12 @@
 				if(json == 0) {
 					emailConfirm.innerText = "사용가능한 이메일입니다!";	
 					emailConfirm.style.color = "blue";
-					emailBox.style.border = "1.5px solid blue";
+					emailBox.style.borderBottom = "2px solid blue";
 					emailAuthBtn.style.display = "block";
 				} else if(json == 1) {
 					emailConfirm.innerText = "이미 사용하고 있는 이메일입니다!";
 					emailConfirm.style.color = "red";
-					emailBox.style.border = "1.5px solid red";
+					emailBox.style.borderBottom = "2px solid red";
 					emailAuthBtn.style.display = "none";
 				} 
 			})
@@ -294,7 +294,7 @@
 		else { 
 			emailConfirm.innerText = "올바른 이메일 양식이 아닙니다.";	
 			emailConfirm.style.color = "red";
-			emailBox.style.border = "1.5px solid red";
+			emailBox.style.borderBottom = "2px solid red";
 			emailAuthBtn.style.display = "none";
 		}                            
 	}
@@ -343,7 +343,7 @@
 		const email = document.getElementById("customerEmail").value;
 	    //Promise로 fetch를 감싼다
 	    return new Promise((resolve, reject) => {
-	        fetch('http://localhost:8080/customer/authEmail/' + email)
+	        fetch('http://localhost:8080/customer/auth/' + email)
 	        .then(response => response.json())
 	        .then(data => {
 	            //Promise resolve 메소드를 이용해 success 시 data를 반환
@@ -391,12 +391,12 @@
     		authContainer.style.display="none";
     		authBtn.style.display="none";
     		emailConfirm.innerText = "인증이 완료되었습니다!";
-    		authBox.style.border = "1.5px solid #8BBA66";
+    		authBox.style.borderBottom = "2px solid #8BBA66";
             document.querySelector(".sign-up-auth-error").style.color="#8BBA66";
     		document.getElementById('customerEmail').readOnly = true; 
     		document.getElementById('customerEmail').style.backgroundColor = "#EFEFEF";
     	} else {
-    		authBox.style.border = "1.5px solid red";
+    		authBox.style.borderBottom = "2px solid red";
             document.querySelector(".sign-up-auth-error").style.display="block";
             document.querySelector(".sign-up-auth-error").style.color="red";
             document.querySelector(".sign-up-auth-error").innerText="인증번호가 틀립니다."
@@ -411,7 +411,7 @@
     	
     	var patternPhone = /^01([0|1|6|7|8|9])-[0-9]{3,4}-[0-9]{4}$/;
     	if(patternPhone.test(telno)){
-    		fetch('http://localhost:8080/customer/checkTelnoDupllicated/' + telno)
+    		fetch('http://localhost:8080/customer/telno-dupllicated/' + telno)
     		.then((res) => {
     			return res.json();
     		})
@@ -420,17 +420,17 @@
     			if(json == 0) {
     				telnoConfirm.innerText = "사용가능한 휴대폰 번호입니다!";	
     				telnoConfirm.style.color = "blue";
-    				telnoBox.style.border = "1.5px solid blue";
+    				telnoBox.style.borderBottom = "2px solid blue";
     			} else if(json == 1) {
     				telnoConfirm.innerText = "이미 사용하고 있는 휴대폰 번호입니다!";
     				telnoConfirm.style.color = "red";
-    				telnoBox.style.border = "1.5px solid red";
+    				telnoBox.style.borderBottom = "2px solid red";
     			}
     		})	
     	} else {
     		telnoConfirm.innerText = "올바른 휴대폰 번호 양식이 아닙니다";
 			telnoConfirm.style.color = "red";
-			telnoBox.style.border = "1.5px solid red";
+			telnoBox.style.borderBottom = "2px solid red";
     	}
     }
 </script>

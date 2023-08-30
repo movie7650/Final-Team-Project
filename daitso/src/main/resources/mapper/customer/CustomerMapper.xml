@@ -30,4 +30,23 @@
         	( customer_seq.nextval, #{customerEmail}, #{customerPw}, #{customerNm}, #{customerTelno}, 101)
         ]]>
     </insert>
+    
+    <!-- 로그인 -->
+    <select id="findByCustomerEmail" parameterType="String" resultType="com.example.daitso.customer.model.CustomerSecurity">
+        <![CDATA[
+		select customer_id as customerId, customer_email as customerEmail, 
+		customer_pw as customerPw, customer_nm as customerNm, customer_telno as customerTelno
+		from customer
+		where customer_email = #{customerEmail}
+		]]>
+    </select>
+    
+    <!-- 사용자 고유번호로부터 사용자 이름 갖고오기 -->
+    <select id="getCustomerNmByCustomerId" parameterType="int" resultType="com.example.daitso.customer.model.CustomerName">
+        <![CDATA[
+		select customer_nm as customerNm
+		from customer
+		where customer_id = #{customerId}
+		]]>
+    </select>
 </mapper>
