@@ -9,7 +9,7 @@ import lombok.Setter;
 public class Review {
 	private int reviewId;
 	private int productId;
-	private int customerId;
+	//private int customerId; 필요시 사용
 	private String reviewContent;
 	private int reviewStarPoint;
 	private int reviewHeartCount;
@@ -21,4 +21,5 @@ public class Review {
 	private String creator;
 	private Date modifyDt;
 	private String modifier;
+	private String customerNm;
 }

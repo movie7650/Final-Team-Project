@@ -32,7 +32,14 @@ public interface IProductRepository {
 	
 	void updateProduct(Product product);
 	
+	List<String> selectProductOptionFirst(String productNm);
+	
+	List<String> selectProductOptionSecond(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst);
+	
+	List<String> selectProductOptionThird(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
+
 	
 	List<Product> selectPagedProducts(int startRow, int endRow);
 	int getTotalProductCount();
+
 }

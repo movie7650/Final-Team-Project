@@ -7,17 +7,89 @@
 <div th:replace="~{/include/header :: header}"></div>
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-	
+	<div class="d-flex justify-content-center align-items-center" style="height: 530px">
+		<div class="d-flex" style="width: 1100px; height:440px">
+			<div style="width: 473px; height: 440px;">
+				<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
+			</div>
+			<div style="margin-left: 77px; width: 500px; height:440px">
+				<h3>[[${product.productNm}]]</h3>
+				<div style="height:24px">
+				<div class="star-parent">
+					<div class="star-fill" th:style="'width: ' + ${reviewAvg} + '%;'">
+						<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+					</div>
+					<div class="star-base">
+						<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>([[${rCnt}]])</span>
+					</div>
+				</div>
+				</div>
+				<hr></hr>
+				<h5 class="total-price" style="color: red" data-th-text="${#numbers.formatInteger(product.productPrice,3,'COMMA')}+원"></h5>
+				<p class="font-s-13">무료 배송(산간 지역은 별도)<p>
+				<div class="d-flex">
+					<span class="align-self-center">옵션</span>
+					<div class="d-flex" style="margin-left:10px">
+						<select name="size">
+							<th:block th:each="option : ${oListFirst}">
+								<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}">[[${option.OPTIONFIRST}]]</option>
+							</th:block>
+						</select>
+						<div>색상</div>
+						<div>기타</div>
+					</div>
+				</div>
+				<div class="d-flex" style="margin-bottom:20px">
+					<span class="align-self-center">수량</span>
+					<input class="cnt-input" style="margin-left: 10px; border: 1px solid; border-right:none;" type="text" value=1 readonly>
+					<div class="d-flex flex-column" style="border: 1px solid; border-left: none;">
+						<button class="cnt-btn" onclick="cntBtn('plus')"><img th:src="@{/assets/common/angle-up-solid.svg}"></button>
+						<button class="cnt-btn" onclick="cntBtn('minus')"><img th:src="@{/assets/common/angle-down-solid.svg}"></button>					
+					</div>
+				</div>
+				<div class="d-flex" style="height:40px">
+					<div class="add-cart-btn d-flex justify-content-center align-items-center width-50-per">
+						<span>장바구니 담기</span>
+					</div>
+					<div class="direct-purchase-btn d-flex justify-content-center align-items-center width-50-per" >
+						<span>구매하기</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
-<script>
-	function goProductDetail(id){
-		let tag = document.createElement('form');
-		
-		tag.setAttribute('method', 'get');
-		tag.setAttribute('action', `/product/${id}`);
-		document.body.appendChild(tag);
-		tag.submit(); 
+<script th:inline="javascript">
+	const cntInput = document.querySelector(".cnt-input");
+	/*<![CDATA[*/		
+	var pStock = /*[[${product.productStock}]]*/
+	/*]]>*/
+	pPrice = /*[[${product.productPrice}]]*/
+	
+	function cntBtn(division){
+		const totalPrice = document.querySelector(".total-price");
+		if(division == 'plus'){
+			var num = cntInput.value;
+			if(num == pStock){
+				window.alert("max holloway");
+			}else{
+				
+				var tPrice = (Number(num) + 1) * pPrice;
+				totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+				cntInput.value = Number(num) + 1;				
+			}
+		}
+		else if(division == 'minus'){
+			var num = cntInput.value;
+			if(num == 1){
+				window.alert('1미만은 안됨')
+			}else{
+				var tPrice = (Number(num) - 1) * pPrice;
+				totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+				cntInput.value = Number(num) - 1;			
+			}
+		}
 	}
 </script>
 </html>
