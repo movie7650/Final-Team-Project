@@ -5,6 +5,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  
  -->
+ 
+ <style>
+ .modal-body input {
+            width: 80%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+ </style>
 <body>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="container" style="max-width: 1200px">
@@ -41,16 +52,15 @@
 								style="background-color: #668663; color: #ffff">더보기</button></td>
 						<td>
 							<div class="btn-group">
-							<!-- <form th:action="@{/product/update/{productId}(productId=${product.productId})}" method="get">  -->
+							    <!-- 상품 수정 모달을 열기 위한 버튼 -->
 								<button class="btn btn-xs" style="background-color: #39594e; color: #ffff"
-								data-bs-toggle="modal" data-bs-target="#updateModal"
-								type="submit">수정</button>
-						
-								<form th:action="@{/product/admin/delete(productId=${product.productId})}"
-									method="post">
-									<button class="btn btn-xs" style="background-color: red; color: #fff" 
-									type="submit">삭제</button>
-								</form>
+   								 data-bs-toggle="modal" data-bs-target="#updateModal"
+    							 type="button" th:onclick="setProductInfo([[${product.productId}]])">수정</button>
+    							 
+								<!-- <button class="btn btn-xs" style="background-color: red; color: #fff" 
+        						type="button" th:attr="onclick='deleteProduct(\'' + ${product.productId} + '\');'">삭제</button> -->
+        						<button class="btn btn-xs" style="background-color: red; color: #fff" 
+        						type="button" th:onclick="deleteProduct([[${product.productId}]])">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -69,11 +79,10 @@
 			<form th:action method="post">
 				<div class="modal-body">
 					<div class="row mb-3">
-						<label for="categoryId" class="col-sm-2 col-form-label">상위
-							카테고리</label>
+						<label for="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
 						<div class="col-sm-10">
-							<select id="categoryId" name="categoryId"
-								onchange="getSubCategories(this.value)">
+							<select id="categoryId" name="categoryId" 
+								onchange="getSubCategories(this.value)" required>
 								<option value="">전체</option>
 								<option th:each="category : ${categories}"
 									th:value="${category.categoryId}"
@@ -81,12 +90,12 @@
 							</select>
 						</div>
 					</div>
-
+					
 					<div class="row mb-3">
 						<label form="subCategoryId" class="col-sm-2 col-form-label">하위
 							카테고리</label>
 						<div class="col-sm-10">
-							<select id="subCategoryId" name="subCategoryId">
+							<select id="subCategoryId" name="subCategoryId" required>
 								<option value="">전체</option>
 							</select>
 						</div>
@@ -95,7 +104,7 @@
 					<div class="row mb-3">
 						<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
 						<div class="col-sm-10">
-							<input type="text" id="productNm" name="productNm">
+							<input type="text" id="productNm" name="productNm" placeholder="* 필수 입력 항목입니다." required>
 						</div>
 					</div>
 
@@ -135,14 +144,14 @@
 					<div class="row mb-3">
 						<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
 						<div class="col-sm-10">
-							<input type="number" id="productPrice" name="productPrice">
+							<input type="number" id="productPrice" name="productPrice" placeholder="* 필수 입력 항목입니다." required>
 						</div>
 					</div>
 
 					<div class="row mb-3">
 						<label for="productStock" class="col-sm-2 col-form-label">수량</label>
 						<div class="col-sm-10">
-							<input type="number" id="productStock" name="productStock">
+							<input type="number" id="productStock" name="productStock" placeholder="* 필수 입력 항목입니다." required>
 						</div>
 					</div>
 
@@ -151,7 +160,7 @@
 							이미지</label>
 						<div class="col-sm-10">
 							<input type="file" id="productImageFirst"
-								name="productImageFirst">
+								name="productImageFirst" required>
 						</div>
 					</div>
 
@@ -160,10 +169,8 @@
 									<button type="button" class="btn btn-secondary"	data-dismiss="modal">닫기</button>
 									<button type="submit" class="btn btn-primary">저장</button>
 						-->
-						<button class="btn btn-primary" onclick="submitForm()"
-							style="background-color: #668663"
-							th:onclick="|location.href='@{/product/admin)}'|"
-							type="submit">저장</button>
+						<button class="btn btn-primary" style="background-color: #668663"
+							th:onclick="|location.href='@{/product/admin)}'|" type="submit">저장</button>
 						<button class="btn btn-secondary"
 							th:onclick="|location.href='@{/product/admin}'|" type="button">닫기</button>
 					</div>
@@ -174,56 +181,57 @@
 	</div>
 </div>
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
 <!-- 상품 수정 모달 -->
-	<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document" style="max-width: 800px;">
 			<div class="modal-content">
-				<form th:action="@{/product/update}" method="post">
 					<div class="modal-header">
 						<h5 class="modal-title">상품 수정</h5>
 					</div>
+					<form th:action="@{/product/admin/update}" method="post">
+					<input type="hidden" id="updateProductId" name="productId">
 					<div class="modal-body">
-					<span th:each="product : ${product}">
 						<div class="row mb-3">
-							<label for="productNm" class="col-sm-2 col-form-label" >상품명</label>
+							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
 							<div class="col-sm-10">
-								<input type="text" name="productNm" th:value="${product.productNm}" readonly="readonly">
+								<input type="text" id="updateProductNm" name="productNm" readonly="readonly">
 							</div>
 						</div>
 						
 						<div class="row mb-3">
 							<label for="productCode" class="col-sm-2 col-form-label">상품 코드</label>
 							<div class="col-sm-10">
-								<input type="number" name="productCode" th:value="${product.productCode}" readonly="readonly">
+								<input type="number" id="updateProductCode" name="productCode" readonly="readonly">
 							</div>
 						</div>
-						
 						<div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
 							<div class="col-sm-10">
-								<input type="number" name="productPrice" th:value="${product.productPrice}">
+								<input type="number" id="updateProductPrice" name="productPrice" >
 							</div>
 						</div>
 
 						<div class="row mb-3">
 							<label for="productStock" class="col-sm-2 col-form-label">수량</label>
 							<div class="col-sm-10">
-								<input type="number" name="productStock" th:value="${product.productStock}">
+								<input type="number" id="updateProductStock" name="productStock" >
 							</div>
 						</div>
-					</span>
+						
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
-								type="submit" th:onclick="|location.href='@{/product/update}'|">저장</button>
+								type="submit">저장</button>
 							<button class="btn btn-secondary"
 							th:onclick="|location.href='@{/product/admin}'|" type="button">닫기</button>
 						</div>
 					</div>
-				</form>
+				 </form>
 			</div>
 		</div>
-	</div>
+	</div>	
+<div th:replace="~{/include/footer :: footer}"></div>
+
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:inline="javascript">
@@ -244,7 +252,37 @@
                 });
         }
     }
-	</script>
-<div th:replace="~{/include/footer :: footer}"></div>
+    
+    function deleteProduct(productId) {
+        if (!confirm('정말 삭제하시겠습니까?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteForm" action="/product/admin/delete?productId=${productId}" method="post">
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        setTimeout(() => {
+            document.getElementById('deleteForm').submit();
+        }, 50) //대기시간
+    }
+    
+    function setProductInfo(productId) {
+         fetch("/product/admin/update/" + productId)
+            .then(response => response.json())
+            .then(data => {
+                const product = data;
+                console.log(product);
+                document.getElementById("updateProductId").value = product.productId;
+                document.getElementById("updateProductNm").value = product.productNm;
+                document.getElementById("updateProductCode").value = product.productCode;
+                document.getElementById("updateProductPrice").value = product.productPrice;
+                document.getElementById("updateProductStock").value = product.productStock;
+            }); 
+            /* console.log(productId); */
+    }
+    </script>
 </body>
 </html>

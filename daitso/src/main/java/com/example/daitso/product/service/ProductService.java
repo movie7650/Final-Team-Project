@@ -17,9 +17,9 @@ public class ProductService implements IProductService {
 	IProductRepository productRepository;
 
 	@Override
-	public List<Product> selectProductList(int categoryId) {
-		int start=0; int end=0;
-		return productRepository.selectProductList(categoryId, 1, 14);
+	public List<Product> selectProductList(int categoryId, int page) {
+		int start = (page-1)*16 + 1;
+		return productRepository.selectProductList(categoryId, start, start+15);
 	}
 	
 	@Override
@@ -52,6 +52,11 @@ public class ProductService implements IProductService {
 	@Override
 	public Product selectProductId(int productId) {
 		return productRepository.selectProductId(productId);
+	}
+
+	@Override
+	public int selectCountProductList(int categoryId) {
+		return productRepository.selectCountProductList(categoryId);
 	}
 
 }
