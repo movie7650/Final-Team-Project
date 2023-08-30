@@ -46,6 +46,7 @@ public class ProductController {
 //	}
 	
 	
+	//전체 상품 조회하기
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model,
 			@RequestParam(defaultValue = "1") int page,
