@@ -57,9 +57,43 @@
 }
 
 .font-s-13{
-	font-size: 15px;
+	font-size: 13px;
 }
 
 .margin-b-5{
 	margin-bottom: 5px;
+}
+
+.width-50-per{
+	width: 50%;
+}
+
+.add-cart-btn{
+	background-color:#39594e;
+	color:white;
+}
+
+.add-cart-btn:hover{
+	background-color:#7989e2;
+	cursor: pointer;
+	border: 1px solid #39594e;
+}
+
+.direct-purchase-btn{
+	border:1px solid #39594e;
+	cursor: pointer;
+}
+
+.direct-purchase-btn:hover{
+	background-color:#7989e2;
+	color:white;
+}
+
+.cnt-btn{
+	width: 22px;
+	border:none; 
+	font-size:10px;
+}
+.cnt-btn:focus{
+	outline: none;
 }

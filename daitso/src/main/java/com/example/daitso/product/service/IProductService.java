@@ -21,8 +21,18 @@ public interface IProductService {
 	void deleteProduct(int productId);
 	
 	Product selectProductId(int productId);
+	
 	void updateProduct(Product product);
 	
+
+	List<String> selectProductOptionFirst(String productNm);
+	
+	List<String> selectProductOptionSecond(String productNm, String productOptionFirst);
+	
+	List<String> selectProductOptionThird(String productNm, String productOptionFirst, String productOptionSecond);
+
 	List<Product> selectPagedProducts(int startRow, int endRow);
+	
 	int getTotalProductCount();
+
 }
