@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!-- Body Header -->
 <div th:fragment="bodyHeader">
 	<div class="header-login-and-sign-up">
 		<div>
-			<span><a th:href="@{/customer/sign-up}">회원가입</a></span>
-			<span><a th:href="@{/customer/login}">로그인</a></span>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/sign-up}">회원가입</a></span>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/login}">로그인</a></span>
+			<span sec:authorize="isAuthenticated()"><a th:href="@{/customer/logout}">로그아웃</a></span>
+			<span sec:authorize="isAuthenticated()"><a id="customer-name"></a></span>
 		</div>
 	</div>
 	<div class="header">
@@ -38,13 +40,19 @@
 			<div class="header-mydaitso">
 				<div class="header-mydaitso-box">
 					<img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}">
-					<div class="header-mydaitso-content"><a>마이다있소</a></div>
+					<div class="header-mydaitso-content">
+						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;">마이다있소</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/customer/cart}" style="color:black; text-decoration: none;">마이다있소</a>
+					</div>
 				</div>
 			</div>
 			<div class="header-cart">
 				<div class="header-cart-box">
 					<img class="header-cart-img" th:src="@{/assets/header/cart.svg}">
-					<div class="header-cart-content"><a>장바구니</a></div>
+					<div class="header-cart-content">
+						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;">장바구니</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/customer/cart}" style="color:black; text-decoration: none;">장바구니</a>
+					</div>
 				</div>
 			</div>				
 		</div>

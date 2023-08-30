@@ -16,7 +16,9 @@ public interface IProductRepository {
 	
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
-	List<Product> selectAllProducts();
+	
+//	List<Product> selectAllProducts();
+	List<Product> selectAllProducts(@Param("page") int page, @Param("pageSize") int pageSize);
 	
 	Product selectProduct(@Param("productId") int productId);
 
@@ -35,4 +37,9 @@ public interface IProductRepository {
 	List<String> selectProductOptionSecond(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst);
 	
 	List<String> selectProductOptionThird(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
+
+	
+	List<Product> selectPagedProducts(int startRow, int endRow);
+	int getTotalProductCount();
+
 }

@@ -40,15 +40,48 @@ public class ProductController {
 		return "/main/main";
 	}
 	
-	//전체 상품 조회하기
+//	//전체 상품 조회하기
+//	@GetMapping("/admin")
+//	public String selectAllProducts(Model model) {
+//		List<Product> products = productService.selectAllProducts();
+//		model.addAttribute("products",products);
+//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//		model.addAttribute("categories",categories);
+//		return "admin/product/admin-product";
+//	}
+	
+	
 	@GetMapping("/admin")
-	public String selectAllProducts(Model model) {
-		List<Product> products = productService.selectAllProducts();
-		model.addAttribute("products",products);
-		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-		model.addAttribute("categories",categories);
-		return "admin/product/productRegister";
-	}
+	public String selectAllProducts(Model model,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int pageSize
+	) {
+	    int totalCount = productService.getTotalProductCount();  //총 상품 갯수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    // 페이지 번호를 범위 내로 제한
+	    if (page < 1) {
+	        page = 1;
+	    } else if (page > totalPages) {
+	        page = totalPages;
+	    }
+
+	    int startRow = (page - 1) * pageSize + 1;
+	    int endRow = startRow + pageSize - 1;
+
+	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
+	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+
+	    model.addAttribute("products", products);
+	    model.addAttribute("categories", categories);
+
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+
+	    return "admin/product/admin-product";
+	}	
 	
 	//상품 등록하기
 	@PostMapping("/admin")
@@ -60,7 +93,7 @@ public class ProductController {
 	}
 	
 	//하위 카테고리 불러오기
-	@GetMapping("/subCategories/{categoryId}")
+	@GetMapping("/sub-categories/{categoryId}")
     @ResponseBody
     public List<Category> getSubCategories(@PathVariable int categoryId) {
         List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
@@ -75,15 +108,6 @@ public class ProductController {
 	    model.addAttribute("searchUrl","/product/admin");
 	    return "admin/product/message";
     }
-	
-	//상품 수정하기
-//	@GetMapping("/admin/update/{productId}")
-//	@ResponseBody
-//	public String selectProductId(@PathVariable int productId, Model model) {
-//		Product product = productService.selectProductId(productId);
-//		model.addAttribute("product", product);
-//		return "admin/product/productRegister";
-//	}
 	
 	//상품 수정을 위해 해당 상품 정보 불러오기
 	@GetMapping("/admin/update/{productId}")
