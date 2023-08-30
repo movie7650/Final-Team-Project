@@ -69,15 +69,15 @@
 
 <select id="selectAllProducts" resultType="com.example.daitso.product.model.Product">
 <![CDATA[
-	select product_id as "productId",
+	SELECT product_id as "productId",
 		   product_code as "productCode",
 		   product_nm as "productNm",
 		   product_option_first as "productOptionFirst",
 		   product_option_second as "productOptionSecond",
 		   product_option_third as "productOptionThird",
 		   product_stock as "ProductStock"
-	from product
-	order by product_id desc
+	FROM product
+	ORDER BY product_id DESC
 ]]>
 </select>
 
@@ -120,15 +120,44 @@
 ]]>
 </update>
 
+<!-- 상품 수정을 위한 해당 상품 정보 가져오기 -->
 <select id="selectProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
 <![CDATA[
-	select product_id as "productId",
+	SELECT product_id as "productId",
 		   product_nm as "productNm",
 		   product_code as "productCode",
 		   product_price as "productPrice",
 		   product_stock as "productStock"
-	from product
-	where product_id = #{productId}
+	FROM product
+	WHERE product_id = #{productId}
+]]>
+</select>
+
+
+<select id="getTotalProductCount" parameterType="int">
+<![CDATA[
+	SELECT count(*)
+	FROM product
+]]>
+</select>
+
+<select id="selectPagedProducts" resultType="com.example.daitso.product.model.Product">
+<![CDATA[
+	SELECT product_id as "productId",
+			   product_code as "productCode",
+			   product_nm as "productNm",
+			   product_option_first as "productOptionFirst",
+			   product_option_second as "productOptionSecond",
+			   product_option_third as "productOptionThird",
+			   product_stock as "ProductStock",
+	           rownum as rnum
+	FROM (
+        SELECT
+            p.*,
+            ROW_NUMBER() OVER (ORDER BY product_id) AS rnum
+        FROM product p
+    ) paging
+    WHERE rnum BETWEEN #{startRow} AND #{endRow}
 ]]>
 </select>
 

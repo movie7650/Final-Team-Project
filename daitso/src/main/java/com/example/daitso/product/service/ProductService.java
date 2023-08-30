@@ -1,6 +1,8 @@
 package com.example.daitso.product.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,6 @@ public class ProductService implements IProductService {
 		productRepository.deleteProduct(productId);
 	}
 
-
 	@Override
 	public void updateProduct(Product product) {
 		productRepository.updateProduct(product);
@@ -58,5 +59,16 @@ public class ProductService implements IProductService {
 	public int selectCountProductList(int categoryId) {
 		return productRepository.selectCountProductList(categoryId);
 	}
+
+	@Override
+	 public List<Product> selectPagedProducts(int startRow, int endRow) {
+        return productRepository.selectPagedProducts(startRow, endRow);
+    }
+
+	@Override
+	public int getTotalProductCount() {
+		return productRepository.getTotalProductCount();
+	}
+
 
 }
