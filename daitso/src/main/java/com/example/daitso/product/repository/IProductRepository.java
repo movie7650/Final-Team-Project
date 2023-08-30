@@ -29,4 +29,10 @@ public interface IProductRepository {
 	Product selectProductId(int productId);
 	
 	void updateProduct(Product product);
+	
+	List<String> selectProductOptionFirst(String productNm);
+	
+	List<String> selectProductOptionSecond(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst);
+	
+	List<String> selectProductOptionThird(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
 }

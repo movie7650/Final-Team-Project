@@ -40,12 +40,14 @@ public class CategoryController {
 		return categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);	
 	}
 	
+	// category별 상품 조회 1페이지
 	@GetMapping("/{categoryId}")
 	public String productList(@PathVariable int categoryId, HttpSession session ,Model model) {
 		
 		return productList(categoryId, 1, session, model);
 	}
 	
+	// category별 상품 조회 2~페이지
 	@GetMapping("/{categoryId}/{page}")
 	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model) {
 		session.setAttribute("page", page);
@@ -60,12 +62,12 @@ public class CategoryController {
 			totalPage = (int)Math.ceil(listCnt/16.0);
 		}
 		
-		int totalPageBlock = (int)(Math.ceil(totalPage/16.0));
-		int nowPageBlock = (int)(Math.ceil(page/16.0));
-		int startPage = (nowPageBlock-1)*16 + 1;
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock = (int)(Math.ceil(page/10.0));
+		int startPage = (nowPageBlock-1)*10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock * 16) {
-			endPage = nowPageBlock * 16;
+		if(totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
 		}else {
 			endPage = totalPage;
 		}
