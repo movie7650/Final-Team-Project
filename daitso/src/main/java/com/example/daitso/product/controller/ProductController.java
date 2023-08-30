@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductEnroll;
 import com.example.daitso.product.service.IProductService;
 
 import jakarta.servlet.http.HttpSession;
@@ -35,88 +38,90 @@ public class ProductController {
 		return "/main/main";
 	}
 	
-//	//전체 상품 조회하기
-//	@GetMapping("/admin")
-//	public String selectAllProducts(Model model) {
-//		List<Product> products = productService.selectAllProducts();
-//		model.addAttribute("products",products);
-//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-//		model.addAttribute("categories",categories);
-//		return "admin/product/admin-product";
-//	}
-	
-	
+	//전체 상품 조회하기
 	@GetMapping("/admin")
-	public String selectAllProducts(
-	    Model model,
-	    @RequestParam(defaultValue = "1") int page,
-	    @RequestParam(defaultValue = "10") int pageSize
-	) {
-	    int totalCount = productService.getTotalProductCount();
-	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-
-	    // 페이지 번호를 범위 내로 제한
-	    if (page < 1) {
-	        page = 1;
-	    } else if (page > totalPages) {
-	        page = totalPages;
-	    }
-
-	    int startRow = (page - 1) * pageSize + 1;
-	    int endRow = startRow + pageSize - 1;
-
-	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
-	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-
-	    model.addAttribute("products", products);
-	    model.addAttribute("categories", categories);
-
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("totalPages", totalPages);
-
-	    return "admin/product/admin-product";
+	public String selectAllProducts(Model model) {
+		List<Product> products = productService.selectAllProducts();
+		model.addAttribute("products",products);
+		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+		model.addAttribute("categories",categories);
+		return "admin/product/admin-product";
 	}
 	
-	@GetMapping("/admin/{page}")
-	public String selectPageProducts(
-	    @PathVariable int page,
-	    @RequestParam(defaultValue = "10") int pageSize,
-	    Model model
-	) {
-	    int totalCount = productService.getTotalProductCount();
-	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-
-	    // 페이지 번호를 범위 내로 제한
-	    if (page < 1) {
-	        page = 1;
-	    } else if (page > totalPages) {
-	        page = totalPages;
-	    }
-
-	    int startRow = (page - 1) * pageSize + 1;
-	    int endRow = startRow + pageSize - 1;
-
-	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
-	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-
-	    model.addAttribute("products", products);
-	    model.addAttribute("categories", categories);
-
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("totalPages", totalPages);
-
-	    return "admin/product/admin-product";
-	}
+	
+//	@GetMapping("/admin")
+//	public String selectAllProducts(
+//	    Model model,
+//	    @RequestParam(defaultValue = "1") int page,
+//	    @RequestParam(defaultValue = "10") int pageSize
+//	) {
+//	    int totalCount = productService.getTotalProductCount();
+//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+//
+//	    // 페이지 번호를 범위 내로 제한
+//	    if (page < 1) {
+//	        page = 1;
+//	    } else if (page > totalPages) {
+//	        page = totalPages;
+//	    }
+//
+//	    int startRow = (page - 1) * pageSize + 1;
+//	    int endRow = startRow + pageSize - 1;
+//
+//	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
+//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//
+//	    model.addAttribute("products", products);
+//	    model.addAttribute("categories", categories);
+//
+//	    model.addAttribute("currentPage", page);
+//	    model.addAttribute("pageSize", pageSize);
+//	    model.addAttribute("totalCount", totalCount);
+//	    model.addAttribute("totalPages", totalPages);
+//
+//	    return "admin/product/admin-product";
+//	}
+//	
+//	@GetMapping("/admin/{page}")
+//	public String selectPageProducts(
+//	    @PathVariable int page,
+//	    @RequestParam(defaultValue = "10") int pageSize,
+//	    Model model
+//	) {
+//	    int totalCount = productService.getTotalProductCount();
+//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+//
+//	    // 페이지 번호를 범위 내로 제한
+//	    if (page < 1) {
+//	        page = 1;
+//	    } else if (page > totalPages) {
+//	        page = totalPages;
+//	    }
+//
+//	    int startRow = (page - 1) * pageSize + 1;
+//	    int endRow = startRow + pageSize - 1;
+//
+//	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
+//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//
+//	    model.addAttribute("products", products);
+//	    model.addAttribute("categories", categories);
+//
+//	    model.addAttribute("currentPage", page);
+//	    model.addAttribute("pageSize", pageSize);
+//	    model.addAttribute("totalCount", totalCount);
+//	    model.addAttribute("totalPages", totalPages);
+//
+//	    return "admin/product/admin-product";
+//	}
 	
 	
 	//상품 등록하기
 	@PostMapping("/admin")
-	public String registerProducts(Product product, Model model) {
+	public String registerProducts(Product product, Model model, @RequestPart MultipartFile file) {
 		productService.registerProducts(product);
+		System.out.println(file.getOriginalFilename());
+		System.out.println(product.getProductImageFirst());
 		model.addAttribute("message","상품이 등록되었습니다.");
 	    model.addAttribute("searchUrl","/product/admin");
 	    return "admin/product/message";
