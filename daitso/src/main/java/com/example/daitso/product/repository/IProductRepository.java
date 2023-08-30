@@ -16,6 +16,7 @@ public interface IProductRepository {
 	
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
+	
 	List<Product> selectAllProducts();
 	
 	Product selectProduct(@Param("productId") int productId);
@@ -29,4 +30,8 @@ public interface IProductRepository {
 	Product selectProductId(int productId);
 	
 	void updateProduct(Product product);
+	
+	
+	List<Product> selectPagedProducts(int startRow, int endRow);
+	int getTotalProductCount();
 }

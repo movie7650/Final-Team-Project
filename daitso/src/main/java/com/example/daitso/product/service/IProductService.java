@@ -10,6 +10,7 @@ public interface IProductService {
 	
 	int selectCountProductList(int categoryId);
 	
+	
 	List<Product> selectAllProducts();
 	
 	Product selectProduct(int productId);
@@ -20,4 +21,7 @@ public interface IProductService {
 	
 	Product selectProductId(int productId);
 	void updateProduct(Product product);
+	
+	List<Product> selectPagedProducts(int startRow, int endRow);
+	int getTotalProductCount();
 }
