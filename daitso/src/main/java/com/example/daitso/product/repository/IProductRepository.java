@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductOption;
 
 @Mapper
 @Repository
@@ -38,8 +39,10 @@ public interface IProductRepository {
 	
 	List<String> selectProductOptionThird(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
 
-	
 	List<Product> selectPagedProducts(int startRow, int endRow);
+	
 	int getTotalProductCount();
-
+	
+	Product selectOptionProduct(@Param("productNm") String productNm , @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond, @Param("productOptionThird") String productOptionThird);
+	
 }

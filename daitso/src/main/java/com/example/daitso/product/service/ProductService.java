@@ -85,5 +85,11 @@ public class ProductService implements IProductService {
 		return productRepository.getTotalProductCount();
 	}
 
+	@Override
+	public Product selectOptionProduct(String productNm, String productOptionFirst, String productOptionSecond,
+			String productOptionThird) {
+		return productRepository.selectOptionProduct(productNm, productOptionFirst, productOptionSecond, productOptionThird);
+	}
+
 
 }

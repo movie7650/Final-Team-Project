@@ -35,4 +35,5 @@ public interface IProductService {
 	
 	int getTotalProductCount();
 
+	Product selectOptionProduct(String productNm, String productOptionFirst, String productOptionSecond, String productOptionThird);
 }
