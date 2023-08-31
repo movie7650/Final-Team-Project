@@ -23,6 +23,7 @@
 	<result column="modifier"				property="modifier" />
 </resultMap>
 
+
 <select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
     SELECT product_id AS productId, 
 		category_id AS categoryId, 
@@ -218,43 +219,71 @@
 <select id="selectProductOptionFirst" parameterType="String" resultType="map">
 	SELECT nvl(product_option_first,0) AS optionFirst 
 	FROM product WHERE product_nm = #{productNm}
+	GROUP BY product_option_first
 </select>
 
-<select id="selectProductOptionSecond" parameterType="String" resultType="map">
+<select id="selectProductOptionSecond" resultType="map">
 	SELECT nvl(max(product_option_second),0) AS optionSecond
 	FROM product 
 	WHERE product_nm=#{productNm}
 	<choose>
-		<when test="product_option_first == '0'">
-			AND product_option_first is null;
+		<when test='productOptionFirst.equals("0")'>
 		</when>
 		<otherwise>
 			AND product_option_first = #{productOptionFirst}
 		</otherwise>
 	</choose>
+	GROUP BY product_option_second
 </select>
 
-<select id="selectProductOptionThird" parameterType="String" resultType="map">
+<select id="selectProductOptionThird" resultType="map">
 	SELECT nvl(max(product_option_third),0) AS optionThird
 	FROM product 
 	WHERE product_nm=#{productNm}
 	<choose>
-		<when test="product_option_first == '0'">
-			AND product_option_first is null
+		<when test='productOptionFirst.equals("0")'>
 		</when>
 		<otherwise>
 			AND product_option_first = #{productOptionFirst}
 		</otherwise>
 	</choose>
 	<choose>
-		<when test="product_option_second == '0'">
-			AND product_option_second is null;	
+		<when test='productOptionSecond.equals("0")'>
 		</when>
 		<otherwise>
 			AND product_option_second = #{productOptionSecond}
 		</otherwise>
 	</choose>
-	 
+	 GROUP BY product_option_third
+</select>
+
+<select id="selectOptionProduct" resultMap="productMap">
+	SELECT * FROM
+	(SELECT p.*, rownum as rnum FROM product p
+	WHERE product_nm = #{productNm}
+	<choose>
+		<when test='productOptionFirst.equals("0")'>
+		</when>
+		<otherwise>
+			AND product_option_first = #{productOptionFirst}
+		</otherwise>
+	</choose>
+	<choose>
+		<when test='productOptionSecond.equals("0")'>
+		</when>
+		<otherwise>
+			AND product_option_second = #{productOptionSecond}
+		</otherwise>
+	</choose>
+	<choose>
+		<when test='productOptionThird.equals("0")'>
+		</when>
+		<otherwise>
+				AND product_option_third = #{productOptionThrid}
+		</otherwise>
+	</choose>
+	ORDER BY product_price)
+	WHERE rnum = 1
 </select>
 
 </mapper>
