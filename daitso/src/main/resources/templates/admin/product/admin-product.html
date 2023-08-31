@@ -418,13 +418,6 @@ div.col-sm-10 {
                         subCategorySelect.appendChild(option);
                     });
                 });
-         // 상위 카테고리별로 필터된 페이지를 가져오는 부분
-            fetch(`/admin/product?categoryPrId=${selectedCategoryId}&page=1&pageSize=10`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("productTable").innerHTML = data;
-                });
-            
         } else {
             // 상위 카테고리가 선택되지 않았을 때의 처리
             const subCategorySelect = document.getElementById("subcategoryFilter");
