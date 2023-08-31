@@ -36,13 +36,12 @@ public class AdminController {
 		return "admin/login/admin-login";
 	}
 	
-	//상품 조회하기(페이징)
+	//상품 조회하기 (페이징)
 	@GetMapping("/product")
 	public String selectCategoryPagedProducts(Model model,
 	        @RequestParam(defaultValue = "1") int page,
 	        @RequestParam(defaultValue = "10") int pageSize,
-	        @RequestParam(required = false) Integer categoryId,
-	        @RequestParam(required = false) Integer subCategoryId) {
+	        @RequestParam(required = false) Integer categoryId) {
 	    int totalCount;
 	    if (categoryId == null) {
 	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
