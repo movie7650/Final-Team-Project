@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
@@ -40,17 +42,7 @@ public class ProductController {
 		return "/main/main";
 	}
 	
-//	//전체 상품 조회하기
-//	@GetMapping("/admin")
-//	public String selectAllProducts(Model model) {
-//		List<Product> products = productService.selectAllProducts();
-//		model.addAttribute("products",products);
-//		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-//		model.addAttribute("categories",categories);
-//		return "admin/product/admin-product";
-//	}
-	
-	
+	//전체 상품 조회하기
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model,
 			@RequestParam(defaultValue = "1") int page,
@@ -85,8 +77,10 @@ public class ProductController {
 	
 	//상품 등록하기
 	@PostMapping("/admin")
-	public String registerProducts(Product product, Model model) {
+	public String registerProducts(Product product, Model model, @RequestPart MultipartFile file) {
 		productService.registerProducts(product);
+		System.out.println(file.getOriginalFilename());
+		System.out.println(product.getProductImageFirst());
 		model.addAttribute("message","상품이 등록되었습니다.");
 	    model.addAttribute("searchUrl","/product/admin");
 	    return "admin/product/message";
