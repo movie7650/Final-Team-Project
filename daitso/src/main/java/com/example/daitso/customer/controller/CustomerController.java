@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,6 @@ import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
 import com.example.daitso.customer.service.ICustomerService;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 

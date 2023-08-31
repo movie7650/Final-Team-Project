@@ -55,8 +55,8 @@ div.col-sm-10 {
 </style>
 
 <body>
+<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 <div id ="productTable">
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="container" style="max-width: 1200px">
         <div class="row">
             <div class="col" style="z-index: 1">
@@ -237,22 +237,12 @@ div.col-sm-10 {
 							<input type="number" id="productStock" name="productStock" placeholder="* 필수 입력 항목입니다." required>
 						</div>
 					</div>
-
 					<div class="row mb-3">
-						<label for="productImageFirst" class="col-sm-2 col-form-label">상품
+						<label for="productImages" class="col-sm-2 col-form-label">상품
 							이미지</label>
 						<div class="col-sm-10">
-							<input type="text" id="productImageFirst"
-								name="productImageFirst" required>
-						</div>
-					</div>
-					
-					<div class="row mb-3">
-						<label for="productImageSeocnd" class="col-sm-2 col-form-label">상품
-							이미지</label>
-						<div class="col-sm-10">
-							<input type="file" id="file"
-								name="file" required>
+							<input type="file" id="files" 
+								name="files" multiple required>
 						</div>
 					</div>
 
