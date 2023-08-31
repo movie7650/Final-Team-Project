@@ -111,6 +111,7 @@
 
 
 .header-search-box {
+	display:flex;
 	width: 440px;
 	border-bottom: 3px solid #39594e; 
 }

@@ -1,5 +1,7 @@
 package com.example.daitso.point.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,15 @@ public class PointService implements IPointService {
 	}
 
 	@Override
-	public void selectPoint(int pointId) {
-		pointRepository.selectPoint(pointId);
+	public List<Point> selectPoint() {
+		// TODO Auto-generated method stub
+		return pointRepository.selectPoint();
 	}
+
+
+
+	
+
+
 
 }
