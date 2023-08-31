@@ -15,11 +15,6 @@ public class AdminService implements IAdminService{
 	@Autowired
 	IProductRepository productRepository;
 	
-	@Override
-	public List<Product> selectAllProducts(int page, int pageSize) {
-		return productRepository.selectAllProducts(page, pageSize);
-	}
-	
 	@Transactional
 	public void registerProducts(Product product) {
 		productRepository.registerProducts(product);
@@ -49,5 +44,25 @@ public class AdminService implements IAdminService{
 	@Override
 	public int getTotalProductCount() {
 		return productRepository.getTotalProductCount();
+	}
+
+	@Override
+	public List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow) {
+		return productRepository.selectCategoryPagedProducts(categoryId,startRow, endRow);
+	}
+
+	@Override
+	public int getCategoryTotalProductCount(int categoryId) {
+		return productRepository.getCategoryTotalProductCount(categoryId);
+	}
+
+	@Override
+	public List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow) {
+		return productRepository.selectTopCategoryPagedProducts(category_pr_id, startRow, endRow);
+	}
+
+	@Override
+	public int getTopCategoryTotalProductCount(int category_pr_id) {
+		return productRepository.getTopCategoryTotalProductCount(category_pr_id);
 	}
 }

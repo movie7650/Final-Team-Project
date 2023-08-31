@@ -5,9 +5,6 @@ import java.util.List;
 import com.example.daitso.product.model.Product;
 
 public interface IAdminService {
-
-//	List<Product> selectAllProducts();
-	List<Product> selectAllProducts(int page, int pageSize);
 	
 	void registerProducts(Product product);
 	
@@ -19,4 +16,10 @@ public interface IAdminService {
 	
 	List<Product> selectPagedProducts(int startRow, int endRow);
 	int getTotalProductCount();
+	
+	List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow);
+	int getCategoryTotalProductCount(int categoryId);
+	
+	List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow);
+	int getTopCategoryTotalProductCount(int category_pr_id);
 }

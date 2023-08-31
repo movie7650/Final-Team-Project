@@ -55,34 +55,38 @@ div.col-sm-10 {
 </style>
 
 <body>
+<div id ="productTable">
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="container" style="max-width: 1200px">
         <div class="row">
             <div class="col" style="z-index: 1">
-                <!-- 상품 등록 모달을 열기 위한 버튼 -->
-                <button class="btn btn-primary float-right" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">+등록</button>
+            
+            <!-- 상품 등록 모달을 열기 위한 버튼 -->
+            <button class="btn btn-primary float-right" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">+등록</button>
+            
+             <!-- 카테고리 선택 버튼 -->
+            <div class="row mt-3" style="width: 400px;">
+	            <div class="col-sm-3" style="padding-left: 0px;">
+					<label for="categoryFilter"></label> <select id="categoryFilter"
+						onchange="updateSubcategories(this.value)"
+						style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
+						<option value="">전체</option>
+						<option th:each="category : ${categories}"
+							th:value="${category.categoryId}" th:text="${category.categoryNm}"></option>
+					</select>
+				</div>
+				<div class="col-sm-3">
+					<label for="subcategoryFilter"></label> <select
+						id="subcategoryFilter" onchange="updateSubcategoryProducts(this.value)"
+						style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
+						<option value="">전체</option>
+					</select>
+				</div>
+			</div>
+            
             </div>
         </div>
-		
-     <div class="row mt-3">
-        <div class="col">
-            <label for="categoryFilter">카테고리</label>
-            <select id="categoryFilter" onchange="updateSubcategories(this.value)">
-                <option value="">전체</option>
-                <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.categoryNm}"></option>
-            </select>
-        </div>
-        <div class="col">
-            <label for="subcategoryFilter"></label>
-            <select id="subcategoryFilter" onchange="filterProductsBySubcategory(this.value)">
-                <option value="">전체</option>
-            </select>
-        </div>
-         <div class="col">
-        <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
-    	</div>
-   	 </div>
-		
+        
 		<hr class="my-4">
         <div>
             <table class="table">
@@ -125,28 +129,28 @@ div.col-sm-10 {
 				</tbody>
             </table>
         </div>
-</div>
 
-<!-- 페이지 링크 표시 -->
-<div th:if="${totalCount > 0}">
-<ul class="pagination">
-        <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
-            <a class="page-link" th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li th:each="page : ${#numbers.sequence(1, ((totalCount + pageSize - 1) / pageSize), 1)}" 
-            class="page-item" th:classappend="${page == currentPage} ? active">
-            <a class="page-link" th:href="@{/admin/product(page=${page}, pageSize=${pageSize})}" th:text="${page}"></a>
-        </li>
-        <li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
-            <a class="page-link" th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
-</ul>
-    
+
+	<!-- 페이지 링크 표시 -->
+	<div th:if="${totalCount > 0}">
+	<ul class="pagination">
+	        <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
+	            <a class="page-link" th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+	                <span aria-hidden="true">&laquo;</span>
+	            </a>
+	        </li>
+	        <li th:each="page : ${#numbers.sequence(1, ((totalCount + pageSize - 1) / pageSize), 1)}" 
+	            class="page-item" th:classappend="${page == currentPage} ? active">
+	            <a class="page-link" th:href="@{/admin/product(page=${page}, pageSize=${pageSize})}" th:text="${page}"></a>
+	        </li>
+	        <li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
+	            <a class="page-link" th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+	                <span aria-hidden="true">&raquo;</span>
+	            </a>
+	        </li>
+	    </ul>
+	</div>
+
 </div>
 
 
@@ -173,8 +177,7 @@ div.col-sm-10 {
 					</div>
 					
 					<div class="row mb-3">
-						<label form="subCategoryId" class="col-sm-2 col-form-label">하위
-							카테고리</label>
+						<label form="subCategoryId" class="col-sm-2 col-form-label">하위	카테고리</label>
 						<div class="col-sm-10">
 							<select id="subCategoryId" name="subCategoryId" required>
 								<option value="">전체</option>
@@ -323,11 +326,11 @@ div.col-sm-10 {
 		
 	</div>
 <div th:replace="~{/include/footer :: footer}"></div>
+</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script th:inline="javascript">
-    
-    // 하위 카테고리를 가져오는 함수
+    <script th:inline="javascript">   
+    // 상품 등록 시 하위 카테고리를 가져오는 함수
     function getSubCategories(categoryId) {
         var subCategorySelect = document.getElementById("subCategoryId");
         subCategorySelect.innerHTML = '<option value="">전체</option>';   
@@ -345,7 +348,7 @@ div.col-sm-10 {
         }
     }
     
-    //삭제 확인
+    //삭제 확인 메시지
     function deleteProduct(productId) {
         if (!confirm('정말로 삭제하시겠습니까?')) {
             return false;
@@ -362,7 +365,7 @@ div.col-sm-10 {
         }, 50) //대기시간
     }
     
-    //
+    //상품 수정 시 해당 상품 정보 가져오기
     function setProductInfo(productId) {
          fetch("/admin/update/" + productId)
             .then(response => response.json())
@@ -377,31 +380,77 @@ div.col-sm-10 {
             }); 
     }
     
-    function updateSubcategories(selectedCategoryId) {
-        const subCategorySelect = document.getElementById("subcategoryFilter");
-        subCategorySelect.innerHTML = '<option value="">전체</option>';
+	//★
+/*     function updateSubcategories(selectedCategoryId) {
+        // 상위 카테고리 선택 시 하위 카테고리를 가져오는 부분 추가
         if (selectedCategoryId !== "") {
-            fetch("/admin/sub-categories/" + selectedCategoryId)
+            fetch(`/admin/sub-categories/${selectedCategoryId}`)
                 .then(response => response.json())
-                .then(data => {
-                    data.forEach(subCategory => {
-                        var option = document.createElement("option");
+                .then(subCategories => {
+                    const subCategorySelect = document.getElementById("subcategoryFilter");
+                    subCategorySelect.innerHTML = '<option value="">전체</option>';
+                    subCategories.forEach(subCategory => {
+                        const option = document.createElement("option");
                         option.value = subCategory.categoryId;
                         option.textContent = subCategory.categoryNm;
                         subCategorySelect.appendChild(option);
                     });
                 });
+        } else {
+            // 상위 카테고리가 선택되지 않았을 때의 처리
+            const subCategorySelect = document.getElementById("subcategoryFilter");
+            subCategorySelect.innerHTML = '<option value="">전체</option>';
         }
-        filterProductsBySubcategory(""); // 하위 카테고리 선택을 초기화
-    }
+    } */
     
-    // 초기화 버튼 클릭 시 선택한 카테고리 초기화
-    function resetFilters() {
-        document.getElementById("categoryFilter").selectedIndex = 0;
-        document.getElementById("subcategoryFilter").selectedIndex = 0;
-        // 다른 필터를 초기화하는 코드 추가
-        // filterProductsBySubcategory(""); // 하위 카테고리 선택 초기화
+    function updateSubcategories(selectedCategoryId) {
+        // 상위 카테고리 선택 시 하위 카테고리를 가져오는 부분 추가
+        if (selectedCategoryId !== "") {
+            fetch(`/admin/sub-categories/${selectedCategoryId}`)
+                .then(response => response.json())
+                .then(subCategories => {
+                    const subCategorySelect = document.getElementById("subcategoryFilter");
+                    subCategorySelect.innerHTML = '<option value="">전체</option>';
+                    subCategories.forEach(subCategory => {
+                        const option = document.createElement("option");
+                        option.value = subCategory.categoryId;
+                        option.textContent = subCategory.categoryNm;
+                        subCategorySelect.appendChild(option);
+                    });
+                });
+         // 상위 카테고리별로 필터된 페이지를 가져오는 부분
+            fetch(`/admin/product?categoryPrId=${selectedCategoryId}&page=1&pageSize=10`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("productTable").innerHTML = data;
+                });
+            
+        } else {
+            // 상위 카테고리가 선택되지 않았을 때의 처리
+            const subCategorySelect = document.getElementById("subcategoryFilter");
+            subCategorySelect.innerHTML = '<option value="">전체</option>';
+        }
     }
+    // 하위 카테고리 선택 시 호출되는 함수
+    function updateSubcategoryProducts(subCategoryId) {
+        if (subCategoryId !== "") {
+            // 선택한 하위 카테고리의 categoryId 값을 서버로 전달하여 해당 카테고리의 상품을 조회
+            fetch(`/admin/product?categoryId=${subCategoryId}&page=1&pageSize=10`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("productTable").innerHTML = data;
+                });
+            updateSubcategories("");
+        } else {
+            // 하위 카테고리가 선택되지 않았을 때의 동작 (전체 상품 조회 등)
+            fetch(`/admin/product?page=1&pageSize=10`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("productTable").innerHTML = data;
+                });
+        }
+    }
+
     </script>
 </body>
 </html>
