@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
-import com.example.daitso.product.model.ProductEnroll;
 import com.example.daitso.product.service.IProductService;
 
 import jakarta.servlet.http.HttpSession;
@@ -40,81 +39,36 @@ public class ProductController {
 	
 	//전체 상품 조회하기
 	@GetMapping("/admin")
-	public String selectAllProducts(Model model) {
-		List<Product> products = productService.selectAllProducts();
-		model.addAttribute("products",products);
-		List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-		model.addAttribute("categories",categories);
-		return "admin/product/admin-product";
-	}
-	
-	
-//	@GetMapping("/admin")
-//	public String selectAllProducts(
-//	    Model model,
-//	    @RequestParam(defaultValue = "1") int page,
-//	    @RequestParam(defaultValue = "10") int pageSize
-//	) {
-//	    int totalCount = productService.getTotalProductCount();
-//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-//
-//	    // 페이지 번호를 범위 내로 제한
-//	    if (page < 1) {
-//	        page = 1;
-//	    } else if (page > totalPages) {
-//	        page = totalPages;
-//	    }
-//
-//	    int startRow = (page - 1) * pageSize + 1;
-//	    int endRow = startRow + pageSize - 1;
-//
-//	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
-//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-//
-//	    model.addAttribute("products", products);
-//	    model.addAttribute("categories", categories);
-//
-//	    model.addAttribute("currentPage", page);
-//	    model.addAttribute("pageSize", pageSize);
-//	    model.addAttribute("totalCount", totalCount);
-//	    model.addAttribute("totalPages", totalPages);
-//
-//	    return "admin/product/admin-product";
-//	}
-//	
-//	@GetMapping("/admin/{page}")
-//	public String selectPageProducts(
-//	    @PathVariable int page,
-//	    @RequestParam(defaultValue = "10") int pageSize,
-//	    Model model
-//	) {
-//	    int totalCount = productService.getTotalProductCount();
-//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-//
-//	    // 페이지 번호를 범위 내로 제한
-//	    if (page < 1) {
-//	        page = 1;
-//	    } else if (page > totalPages) {
-//	        page = totalPages;
-//	    }
-//
-//	    int startRow = (page - 1) * pageSize + 1;
-//	    int endRow = startRow + pageSize - 1;
-//
-//	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
-//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-//
-//	    model.addAttribute("products", products);
-//	    model.addAttribute("categories", categories);
-//
-//	    model.addAttribute("currentPage", page);
-//	    model.addAttribute("pageSize", pageSize);
-//	    model.addAttribute("totalCount", totalCount);
-//	    model.addAttribute("totalPages", totalPages);
-//
-//	    return "admin/product/admin-product";
-//	}
-	
+	public String selectAllProducts(Model model,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int pageSize
+	) {
+	    int totalCount = productService.getTotalProductCount();  //총 상품 갯수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    // 페이지 번호를 범위 내로 제한
+	    if (page < 1) {
+	        page = 1;
+	    } else if (page > totalPages) {
+	        page = totalPages;
+	    }
+
+	    int startRow = (page - 1) * pageSize + 1;
+	    int endRow = startRow + pageSize - 1;
+
+	    List<Product> products = productService.selectPagedProducts(startRow, endRow);
+	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+
+	    model.addAttribute("products", products);
+	    model.addAttribute("categories", categories);
+
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+
+	    return "admin/product/admin-product";
+	}	
 	
 	//상품 등록하기
 	@PostMapping("/admin")
