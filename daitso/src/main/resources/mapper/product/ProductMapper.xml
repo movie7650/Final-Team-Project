@@ -84,10 +84,34 @@
 <!-- 상품 등록 -->
 <insert id="registerProducts" parameterType="com.example.daitso.product.model.Product">
 <![CDATA[
-	INSERT INTO product (product_id, category_id, product_nm, product_content,product_image_first,
-	product_price, product_stock, product_option_first, product_option_second, product_option_third)
-	VALUES (product_seq.NEXTVAL, #{subCategoryId}, #{productNm}, #{productContent},#{productImageFirst},
-	#{productPrice}, #{productStock}, #{productOptionFirst}, #{productOptionSecond}, #{productOptionThird})
+	INSERT INTO product (
+	product_id, 
+	category_id, 
+	product_nm, 
+	product_content,
+	product_image_first,
+	product_image_second,
+	product_image_third,
+	product_price, 
+	product_stock, 
+	product_option_first, 
+	product_option_second, 
+	product_option_third
+	)
+	VALUES (
+	product_seq.NEXTVAL, 
+	#{subCategoryId}, 
+	#{productNm}, 
+	#{productContent},
+	#{productImageFirst},
+	#{productImageSecond},
+	#{productImageThird},
+	#{productPrice}, 
+	#{productStock}, 
+	#{productOptionFirst}, 
+	#{productOptionSecond}, 
+	#{productOptionThird}
+	)
 ]]>
 </insert>
 
