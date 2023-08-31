@@ -50,7 +50,6 @@ public class ProductController {
 //		return "admin/product/admin-product";
 //	}
 	
-	
 	//전체 상품 조회하기
 	@GetMapping("/admin")
 	public String selectAllProducts(Model model,

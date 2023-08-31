@@ -52,8 +52,8 @@ div.col-sm-10 {
     z-index: 3;
     border-color: #39594e;
 }
-
 </style>
+
 <body>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="container" style="max-width: 1200px">
@@ -63,6 +63,25 @@ div.col-sm-10 {
                 <button class="btn btn-primary float-right" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">+등록</button>
             </div>
         </div>
+		
+     <div class="row mt-3">
+        <div class="col">
+            <label for="categoryFilter">카테고리</label>
+            <select id="categoryFilter" onchange="updateSubcategories(this.value)">
+                <option value="">전체</option>
+                <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.categoryNm}"></option>
+            </select>
+        </div>
+        <div class="col">
+            <label for="subcategoryFilter"></label>
+            <select id="subcategoryFilter" onchange="filterProductsBySubcategory(this.value)">
+                <option value="">전체</option>
+            </select>
+        </div>
+         <div class="col">
+        <button class="btn btn-secondary" onclick="resetFilters()">초기화</button>
+    	</div>
+   	 </div>
 		
 		<hr class="my-4">
         <div>
@@ -347,6 +366,32 @@ div.col-sm-10 {
                 document.getElementById("updateProductPrice").value = product.productPrice;
                 document.getElementById("updateProductStock").value = product.productStock;
             }); 
+    }
+    
+    function updateSubcategories(selectedCategoryId) {
+        const subCategorySelect = document.getElementById("subcategoryFilter");
+        subCategorySelect.innerHTML = '<option value="">전체</option>';
+        if (selectedCategoryId !== "") {
+            fetch("/product/sub-categories/" + selectedCategoryId)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(subCategory => {
+                        var option = document.createElement("option");
+                        option.value = subCategory.categoryId;
+                        option.textContent = subCategory.categoryNm;
+                        subCategorySelect.appendChild(option);
+                    });
+                });
+        }
+        filterProductsBySubcategory(""); // 하위 카테고리 선택을 초기화
+    }
+    
+    // 초기화 버튼 클릭 시 선택한 카테고리 초기화
+    function resetFilters() {
+        document.getElementById("categoryFilter").selectedIndex = 0;
+        document.getElementById("subcategoryFilter").selectedIndex = 0;
+        // 다른 필터를 초기화하는 코드 추가
+        // filterProductsBySubcategory(""); // 하위 카테고리 선택 초기화
     }
     </script>
 </body>
