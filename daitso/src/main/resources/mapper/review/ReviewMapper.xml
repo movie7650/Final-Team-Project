@@ -1,3 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.review.ReviewMapper"></mapper>
+<mapper namespace="com.example.daitso.review.repository.IReviewRepository">
+
+<!-- 상품별 리뷰 조회 -->
+<select id="selectProductReview" parameterType="int" resultType="com.example.daitso.review.model.Review">
+	SELECT r.review_id AS reviewId,
+			r.product_id AS productId,
+			c.customer_nm AS customerNm,
+			r.review_content AS reviewContent,
+			r.review_star_point AS reviewStarPoint,
+			r.review_heart_count AS reviewHeartCount,
+			r.review_image_first AS reviewImageFirst,
+			r.review_image_second AS reviewImageSecond,
+			r.review_image_third AS reviewImageThird
+	FROM review r
+	LEFT JOIN customer c ON r.customer_id = c.customer_id
+	WHERE r.product_id = #{productId} and r.status = 'N'
+</select>
+
+<!-- 상품별 리뷰 평균 조회 -->
+<select id="selectProductReviewAvg" parameterType="int" resultType="int">
+	SELECT NVL(max(avg(review_star_point)) * 20, 0)
+	FROM review WHERE product_id = #{productId} AND status = 'N' GROUP BY product_id
+</select>
+</mapper>
