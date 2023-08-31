@@ -152,13 +152,12 @@ public class ProductController {
 		if(product.getProductOptionSecond() != null) {
 			pOptionSecond = product.getProductOptionSecond();
 		}
-		System.out.println(pOptionFirst);
-		System.out.println(pOptionSecond);
-		//List<String> oListSecond = productService.selectProductOptionSecond(product.getProductNm(), pOptionFirst);
-		//List<String> oListThird = productService.selectProductOptionThird(product.getProductNm(), pOptionFirst, pOptionSecond);
 		
-		//System.out.println(oListSecond);
-		//System.out.println(oListThird);
+		List<String> oListSecond = productService.selectProductOptionSecond(product.getProductNm(), pOptionFirst);
+		List<String> oListThird = productService.selectProductOptionThird(product.getProductNm(), pOptionFirst, pOptionSecond);
+		
+		System.out.println(oListSecond);
+		System.out.println(oListThird);
 		
 		model.addAttribute("product", product);
 		model.addAttribute("rList", rList);

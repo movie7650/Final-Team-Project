@@ -166,13 +166,13 @@
 	FROM product WHERE product_nm = #{productNm}
 </select>
 
-<select id="selectProductOptionSecond" parameterType="String" resultType="map">
+<select id="selectProductOptionSecond" resultType="map">
 	SELECT nvl(max(product_option_second),0) AS optionSecond
 	FROM product 
 	WHERE product_nm=#{productNm}
 	<choose>
-		<when test="product_option_first == '0'">
-			AND product_option_first is null;
+		<when test='productOptionFirst.equals("0")'>
+			AND product_option_first is null
 		</when>
 		<otherwise>
 			AND product_option_first = #{productOptionFirst}
@@ -180,12 +180,12 @@
 	</choose>
 </select>
 
-<select id="selectProductOptionThird" parameterType="String" resultType="map">
+<select id="selectProductOptionThird" resultType="map">
 	SELECT nvl(max(product_option_third),0) AS optionThird
 	FROM product 
 	WHERE product_nm=#{productNm}
 	<choose>
-		<when test="product_option_first == '0'">
+		<when test='productOptionFirst.equals("0")'>
 			AND product_option_first is null
 		</when>
 		<otherwise>
@@ -193,8 +193,8 @@
 		</otherwise>
 	</choose>
 	<choose>
-		<when test="product_option_second == '0'">
-			AND product_option_second is null;	
+		<when test='productOptionSecond.equals("0")'>
+			AND product_option_second is null
 		</when>
 		<otherwise>
 			AND product_option_second = #{productOptionSecond}
