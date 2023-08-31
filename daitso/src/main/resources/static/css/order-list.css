@@ -1,16 +1,16 @@
 @charset "UTF-8";
 .title-order-list{
 	padding-bottom:1%;
-	font-size:200%;
+	font-size:150%;
 	position:absolute;
-	margin-top:-45%;
+	margin-top:-38%;
 	margin-left:30%;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 .order-category{
 	position:absolute;
-	margin-top:-38%;
+	margin-top:-33%;
 	margin-left:30%;
 	width:auto;
 	
@@ -24,5 +24,67 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	border-collapse:collapse;
+	
+}
+.order-list-container{
+	border:solid 1.5px #cecece;
+	position:absolute;
+	margin-top:-28%;
+	margin-left:30%;
+	width:50%;
+	height:180px;
+	border-radius:10px;
+	
+}
+.shipping-status{
+	float:left;
+	font-family:Inter;
+	font-weight:bold;
+	font-size:100%;
+	margin-left:5%;
+	margin-top:1%;
+}
+.shipping-date{
+	
+	font-family:Inter;
+	
+	margin-top:1%;
+	font-size:100%;
+	color:#668663;
+}
+.purchase-img-001{
+	border:solid 1px blue;
+	width:100px;
+	height:100px;
+	float:left;
+	text-align:center;
+	padding-top:4%;
+	margin-left:5%;
+	margin-top:1%;
+}
+.purchase-inform-001{
+	float:left;
+	margin-left:2%;
+	margin-top:2%;
+}
+.detail-button-container{
+	border-left:solid 1.5px #cecece;
+	width:auto;
+	height:180px;
+	margin-left:70%;
+	margin-top:-4%;
+	padding-top:3%;
+}
+.detail-button{
+	color:#668663;
+	font-size:80%;
+	font-family:Inter;
+	width:130px;
+	height:40px;
+	text-align:center;
+	border:solid 1px #668663;
+	border-radius:10px;
+	padding-top:3.5%;
+	margin-bottom:2%;
+	margin-left:25%;
 }
