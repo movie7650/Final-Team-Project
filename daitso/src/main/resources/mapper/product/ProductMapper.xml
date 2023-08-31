@@ -23,6 +23,7 @@
 	<result column="modifier"				property="modifier" />
 </resultMap>
 
+
 <select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
     SELECT product_id AS productId, 
 		category_id AS categoryId, 
@@ -65,20 +66,6 @@
 <select id="selectProduct" parameterType="int" resultMap="productMap">
 	SELECT * FROM product
 	WHERE product_id = #{productId}
-</select>
-
-<select id="selectAllProducts" resultType="com.example.daitso.product.model.Product">
-<![CDATA[
-	SELECT product_id as "productId",
-		   product_code as "productCode",
-		   product_nm as "productNm",
-		   product_option_first as "productOptionFirst",
-		   product_option_second as "productOptionSecond",
-		   product_option_third as "productOptionThird",
-		   product_stock as "ProductStock"
-	FROM product
-	ORDER BY product_id DESC
-]]>
 </select>
 
 <!-- 상품 등록 -->
@@ -157,7 +144,7 @@
 ]]>
 </select>
 
-
+<!-- 총 상품 개수 가져오기 -->
 <select id="getTotalProductCount" parameterType="int">
 <![CDATA[
 	SELECT count(*)
@@ -165,6 +152,7 @@
 ]]>
 </select>
 
+<!-- 전체 상품 조회하기(페이징) -->
 <select id="selectPagedProducts" resultType="com.example.daitso.product.model.Product">
 <![CDATA[
 	SELECT product_id as "productId",
@@ -178,8 +166,75 @@
 	FROM (
         SELECT
             p.*,
-            ROW_NUMBER() OVER (ORDER BY product_id) AS rnum
+            ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
         FROM product p
+    ) paging
+    WHERE rnum BETWEEN #{startRow} AND #{endRow}
+]]>
+</select>
+
+<!-- 해당 카테고리 총 상품 개수 가져오기 -->
+<select id="getCategoryTotalProductCount" parameterType="int">
+<![CDATA[
+	SELECT count(*)
+	FROM product
+	WHERE category_id = #{categoryId}
+]]>
+</select>
+
+<!-- 해당 카테고리 전체 상품 조회하기(페이징) -->
+<select id="selectCategoryPagedProducts" resultType="com.example.daitso.product.model.Product">
+<![CDATA[
+	SELECT product_id as "productId",
+			   product_code as "productCode",
+			   product_nm as "productNm",
+			   product_option_first as "productOptionFirst",
+			   product_option_second as "productOptionSecond",
+			   product_option_third as "productOptionThird",
+			   product_stock as "productStock",
+	           rownum as rnum
+	FROM (
+        SELECT
+            p.*,
+            ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
+        FROM product p
+         WHERE category_id = #{categoryId}
+    ) paging
+    WHERE rnum BETWEEN #{startRow} AND #{endRow}
+]]>
+</select>
+
+<!-- 해당 상위 카테고리 총 상품 개수 가져오기 -->
+<select id="getTopCategoryTotalProductCount" parameterType="int">
+<![CDATA[
+	SELECT count(*)
+	FROM product p
+	JOIN category c
+	ON p.category_id = c.category_id
+	WHERE c.category_pr_id = #{categoryPrId}
+]]>
+</select>
+
+<!-- 해당 상위 카테고리 전체 상품 조회하기(페이징) -->
+<select id="selectTopCategoryPagedProducts" resultType="com.example.daitso.product.model.Product">
+<![CDATA[
+	SELECT  product_id as "productId",
+			   product_code as "productCode",
+			   product_nm as "productNm",
+			   product_option_first as "productOptionFirst",
+			   product_option_second as "productOptionSecond",
+			   product_option_third as "productOptionThird",
+			   product_stock as "productStock",
+               category_pr_id as "categoryPrId",
+	           rownum as rnum
+	FROM (
+        SELECT
+             p.*, c.category_pr_id,
+            ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
+        FROM product p
+        JOIN category c
+        ON  p.category_id = c.category_id
+        WHERE c.category_pr_id = #{categoryPrId}
     ) paging
     WHERE rnum BETWEEN #{startRow} AND #{endRow}
 ]]>
@@ -188,43 +243,71 @@
 <select id="selectProductOptionFirst" parameterType="String" resultType="map">
 	SELECT nvl(product_option_first,0) AS optionFirst 
 	FROM product WHERE product_nm = #{productNm}
+	GROUP BY product_option_first
 </select>
 
-<select id="selectProductOptionSecond" parameterType="String" resultType="map">
+<select id="selectProductOptionSecond" resultType="map">
 	SELECT nvl(max(product_option_second),0) AS optionSecond
 	FROM product 
 	WHERE product_nm=#{productNm}
 	<choose>
-		<when test="product_option_first == '0'">
-			AND product_option_first is null;
+		<when test='productOptionFirst.equals("0")'>
 		</when>
 		<otherwise>
 			AND product_option_first = #{productOptionFirst}
 		</otherwise>
 	</choose>
+	GROUP BY product_option_second
 </select>
 
-<select id="selectProductOptionThird" parameterType="String" resultType="map">
+<select id="selectProductOptionThird" resultType="map">
 	SELECT nvl(max(product_option_third),0) AS optionThird
 	FROM product 
 	WHERE product_nm=#{productNm}
 	<choose>
-		<when test="product_option_first == '0'">
-			AND product_option_first is null
+		<when test='productOptionFirst.equals("0")'>
 		</when>
 		<otherwise>
 			AND product_option_first = #{productOptionFirst}
 		</otherwise>
 	</choose>
 	<choose>
-		<when test="product_option_second == '0'">
-			AND product_option_second is null;	
+		<when test='productOptionSecond.equals("0")'>
 		</when>
 		<otherwise>
 			AND product_option_second = #{productOptionSecond}
 		</otherwise>
 	</choose>
-	 
+	 GROUP BY product_option_third
+</select>
+
+<select id="selectOptionProduct" resultMap="productMap">
+	SELECT * FROM
+	(SELECT p.*, rownum as rnum FROM product p
+	WHERE product_nm = #{productNm}
+	<choose>
+		<when test='productOptionFirst.equals("0")'>
+		</when>
+		<otherwise>
+			AND product_option_first = #{productOptionFirst}
+		</otherwise>
+	</choose>
+	<choose>
+		<when test='productOptionSecond.equals("0")'>
+		</when>
+		<otherwise>
+			AND product_option_second = #{productOptionSecond}
+		</otherwise>
+	</choose>
+	<choose>
+		<when test='productOptionThird.equals("0")'>
+		</when>
+		<otherwise>
+				AND product_option_third = #{productOptionThrid}
+		</otherwise>
+	</choose>
+	ORDER BY product_price)
+	WHERE rnum = 1
 </select>
 
 </mapper>

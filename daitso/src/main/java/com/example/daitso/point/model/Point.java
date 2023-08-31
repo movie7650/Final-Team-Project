@@ -11,7 +11,7 @@ public class Point {
 	private int customerId;
 	private int pointBefore;
 	private int pointAfter;
-	private String pointUpdateContent;
+	private String pointUpdatedContent;
 	private int pointUseDv;
 	private String status;
 	private Date createDt;

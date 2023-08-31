@@ -14,6 +14,7 @@
 			</div>
 			<div style="margin-left: 77px; width: 500px; height:440px">
 				<h3>[[${product.productNm}]]</h3>
+				<input class="hidden-product-id" type="hidden">
 				<div style="height:24px">
 				<div class="star-parent">
 					<div class="star-fill" th:style="'width: ' + ${reviewAvg} + '%;'">
@@ -25,18 +26,30 @@
 				</div>
 				</div>
 				<hr></hr>
-				<h5 class="total-price" style="color: red" data-th-text="${#numbers.formatInteger(product.productPrice,3,'COMMA')}+원"></h5>
+				<h5 class="total-price" style="color: red"></h5>
 				<p class="font-s-13">무료 배송(산간 지역은 별도)<p>
 				<div class="d-flex">
 					<span class="align-self-center">옵션</span>
-					<div class="d-flex" style="margin-left:10px">
-						<select name="size">
+					<div class="d-flex option-list" style="margin-left:10px">
+						<select class="option-size" name="size" th:if='!${oListFirst[0].OPTIONFIRST.equals("0")}' th:onchange="optionChange([[${product.productNm}]],1)">
 							<th:block th:each="option : ${oListFirst}">
 								<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}">[[${option.OPTIONFIRST}]]</option>
 							</th:block>
 						</select>
-						<div>색상</div>
-						<div>기타</div>
+						<div class="option-list-color">
+						<select class="option-color" name="color" th:if='!${oListSecond[0].OPTIONSECOND.equals("0")}' th:onchange="optionChange([[${product.productNm}]],2)">
+							<th:block  th:each="option : ${oListSecond}">
+								<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}">[[${option.OPTIONSECOND}]]</option>
+							</th:block>
+						</select>
+						</div>
+						<div class="option-list-other">
+						<select class="option-other" name="others" th:if='!${oListThird[0].OPTIONTHIRD.equals("0")}' th:onchange="optionChange([[${product.productNm}]],3)">
+							<th:block th:each="option : ${oListThird}">
+								<option>[[${option.OPTIONTHIRD}]]</option>
+							</th:block>
+						</select>
+						</div>
 					</div>
 				</div>
 				<div class="d-flex" style="margin-bottom:20px">
@@ -62,21 +75,27 @@
 </body>
 <script th:inline="javascript">
 	const cntInput = document.querySelector(".cnt-input");
-	/*<![CDATA[*/		
-	var pStock = /*[[${product.productStock}]]*/
-	/*]]>*/
-	pPrice = /*[[${product.productPrice}]]*/
+	const hiddenProductId = document.querySelector('.hidden-product-id');
+	const totalPrice = document.querySelector(".total-price");
+	let fPrice = 0;
+	product = /*[[${product}]]*/
+	hiddenProductId.value = product.productId;
+	fPrice = product.productPrice;
+	totalPrice.textContent = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+	totalPrice.value = fPrice;
+
+	
 	
 	function cntBtn(division){
-		const totalPrice = document.querySelector(".total-price");
 		if(division == 'plus'){
 			var num = cntInput.value;
-			if(num == pStock){
+			if(num == product.productStock){
 				window.alert("max holloway");
 			}else{
 				
-				var tPrice = (Number(num) + 1) * pPrice;
+				var tPrice = (Number(num) + 1) * fPrice
 				totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+				totalPrice.value = tPrice;
 				cntInput.value = Number(num) + 1;				
 			}
 		}
@@ -85,11 +104,88 @@
 			if(num == 1){
 				window.alert('1미만은 안됨')
 			}else{
-				var tPrice = (Number(num) - 1) * pPrice;
+				var tPrice = (Number(num) - 1) * fPrice;
 				totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
-				cntInput.value = Number(num) - 1;			
+				totalPrice.value = tPrice;
+				cntInput.value = Number(num) - 1;	
 			}
 		}
+	}
+	
+	function optionChange(productNm, num){
+		const optionList = document.querySelector(".option-list");
+		var optionSize = document.querySelector(".option-size");
+		var optionColor = document.querySelector(".option-color");
+		var optionOther = document.querySelector(".option-other");
+		var sColor = document.querySelector(".option-list-color");
+		var sOther = document.querySelector(".option-list-other");
+		var cColor = "";
+		if(optionSize == null){
+			optionSize = "0";
+		}
+		else{optionSize = optionSize.value}
+		if(optionColor == null){
+			optionColor = "0";
+		}
+		else{optionColor = optionColor.value}
+		if(optionOther == null){
+			optionOther = "0";
+		}
+		else{optionOther = optionOther.value}
+		var params = `?`;
+		if(num == 1){
+			params += `optionFirst=${optionSize}`;
+		}
+		else if(num == 2){
+			params += `optionFirst=${optionSize}&optionSecond=${optionColor}`;
+		}
+		else if(num == 3){
+			params += `optionFirst=${optionSize}&optionSecond=${optionColor}&optionThird=${optionOther}`;
+		}
+		
+        fetch("/product/change/" + productNm + params)
+        .then(response => response.json())
+        .then(data => {
+        	console.log(data);
+            const product = data;
+            const cPrice = product.productPrice;
+            totalPrice.textContent = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+        	totalPrice.value = cPrice;
+        	fPrice = cPrice;
+        	cColor = product.productOptionSecond;
+        	cntInput.value = 1;
+        }); 
+		
+		
+        fetch("/product/option/" + productNm + params)
+        .then(response => response.json())
+        .then(data => {
+        	if(data[0].length != 1 | data[0][0].OPTIONSECOND != 0){
+        		const select = `<select class="option-color" name="color" onchange="optionChange('${product.productNm}',2)"></select>`
+        		sColor.innerHTML = select;
+        		const s = document.querySelector(".option-color");
+        		data[0].forEach(option => {
+        			const selectOption = `<option>${option.OPTIONSECOND}</option>`
+	        		s.innerHTML += selectOption;
+                })
+                const len = s.options.length;
+                for(let i=0; i<len; i++){
+                	console.log(s.options[i].value, " + " , optionColor.value);
+                	if(s.options[i].value == cColor){
+                		s.options[i].selected = true;
+                	}
+                }
+        	}
+        	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != 0){
+        		const select = `<select class="option-other" name="other" onchange="optionChange('${product.productNm}',3)"></select>`
+        		sOther.innerHTML = select;
+        		const s = document.querySelector(".option-other");
+        		data[1].forEach(option => {
+        			const selectOption = `<option>${option.OPTIONTHIRD}</option>`
+        			s.innerHTML += selectOption;
+        		})
+        	}
+        });   
 	}
 </script>
 </html>

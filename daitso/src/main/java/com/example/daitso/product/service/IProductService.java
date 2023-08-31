@@ -18,4 +18,10 @@ public interface IProductService {
 	
 	List<String> selectProductOptionThird(String productNm, String productOptionFirst, String productOptionSecond);
 
+	List<Product> selectPagedProducts(int startRow, int endRow);
+	
+	int getTotalProductCount();
+
+	Product selectOptionProduct(String productNm, String productOptionFirst, String productOptionSecond, String productOptionThird);
+
 }

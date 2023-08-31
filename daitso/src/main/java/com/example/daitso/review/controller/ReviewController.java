@@ -19,9 +19,5 @@ public class ReviewController {
 		return "mypage/review";
 		
 	}
-	@RequestMapping("/orderlist")
-	public String OrderList() {
-		return "mypage/order-list";
-	}
 	
 }

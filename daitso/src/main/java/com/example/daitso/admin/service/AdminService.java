@@ -19,11 +19,6 @@ public class AdminService implements IAdminService{
 	@Autowired
 	S3Service s3Service;
 	
-	@Override
-	public List<Product> selectAllProducts(int page, int pageSize) {
-		return productRepository.selectAllProducts(page, pageSize);
-	}
-	
 	@Transactional
 	public void registerProducts(Product product, List<MultipartFile> files) {
 		List<String> imagePathList = s3Service.upload(files);
@@ -42,7 +37,6 @@ public class AdminService implements IAdminService{
 			product.setProductImageSecond(imagePathList.get(1));
 			product.setProductImageThird(imagePathList.get(2));
 		}
-
 
 		productRepository.registerProducts(product);
 		productRepository.changeProductCode();
@@ -71,5 +65,25 @@ public class AdminService implements IAdminService{
 	@Override
 	public int getTotalProductCount() {
 		return productRepository.getTotalProductCount();
+	}
+
+	@Override
+	public List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow) {
+		return productRepository.selectCategoryPagedProducts(categoryId,startRow, endRow);
+	}
+
+	@Override
+	public int getCategoryTotalProductCount(int categoryId) {
+		return productRepository.getCategoryTotalProductCount(categoryId);
+	}
+
+	@Override
+	public List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow) {
+		return productRepository.selectTopCategoryPagedProducts(category_pr_id, startRow, endRow);
+	}
+
+	@Override
+	public int getTopCategoryTotalProductCount(int category_pr_id) {
+		return productRepository.getTopCategoryTotalProductCount(category_pr_id);
 	}
 }

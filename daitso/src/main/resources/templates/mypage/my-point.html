@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div class="point-title">내 포인트</div>
+<div class="point-semi-title">현재포인트</div>
+<div class="my-own-point" th:text="${totalPoint}">0000P</div>
+
+<div class="point-rule-container">
+	<ul>
+		<li>&bull; 하루 한번 로그인시 100P 적립</li>
+		<li>&bull; 리뷰작성시 200P 적립</li>
+		<li>&bull; 상품구매시, 구매가격의 1% 적립</li>
+		<li>&bull; 1000P이상부터 사용가능</li>
+		<li>&bull; 구매가격의 최대 10%사용가능</li>
+	</ul>
+</div><!-- point-rule -->
+<div class="point-table-container">
+	<table>
+		<tr>
+			<th>상태</th>
+			<th>포인트</th>	
+			<th>내용</th>
+			<th>주문번호</th>
+			<th>작성일</th>
+		</tr>
+		<tr th:each="point : ${points}"> <!-- <tr th:each="이름 : ${메서드}"> -->
+			<td>[[${point.pointUseDv}]]</td>
+			<td>[[${point.pointAfter}]]</td>
+			<td>[[${point.pointUpdatedContent}]]</td>
+			<td></td>
+			<td>[[${point.createDt}]]</td>
+		</tr>
+	</table>
+</div><!-- point-table-container -->
+
+
+
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>
