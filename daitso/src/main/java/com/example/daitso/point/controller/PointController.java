@@ -19,6 +19,7 @@ public class PointController {
 	@Autowired
 	IPointService pointService;
 	
+	//포인트 리스트 출력 
 	@RequestMapping(value="/mypoint", method=RequestMethod.GET)
 	public String selectPoint(Model model) {
 		List<Point> points = pointService.selectPoint();
@@ -27,7 +28,11 @@ public class PointController {
 		for(Point point : points) {
 			totalPoint += point.getPointAfter();
 		}
+		if(totalPoint > 999) {
+			model.addAttribute("totalPoint", totalPoint/1000 + "," + totalPoint%1000 + "P");
+		}else {
 		model.addAttribute("totalPoint", totalPoint + "P");
+		}
 		return "mypage/my-point";
 	}
 
