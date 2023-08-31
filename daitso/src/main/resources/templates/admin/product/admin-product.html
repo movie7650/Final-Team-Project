@@ -131,16 +131,16 @@ div.col-sm-10 {
 <div th:if="${totalCount > 0}">
 <ul class="pagination">
         <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
-            <a class="page-link" th:href="@{/product/admin(page=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+            <a class="page-link" th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         <li th:each="page : ${#numbers.sequence(1, ((totalCount + pageSize - 1) / pageSize), 1)}" 
             class="page-item" th:classappend="${page == currentPage} ? active">
-            <a class="page-link" th:href="@{/product/admin(page=${page}, pageSize=${pageSize})}" th:text="${page}"></a>
+            <a class="page-link" th:href="@{/admin/product(page=${page}, pageSize=${pageSize})}" th:text="${page}"></a>
         </li>
         <li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
-            <a class="page-link" th:href="@{/product/admin(page=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+            <a class="page-link" th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
@@ -157,7 +157,7 @@ div.col-sm-10 {
 			<div class="modal-header">
 				<h5 class="modal-title">상품 등록</h5>
 			</div>
-			<form th:action method="post">
+			<form th:action method="post" enctype="multipart/form-data">
 				<div class="modal-body">
 					<div class="row mb-3">
 						<label for="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
@@ -239,8 +239,17 @@ div.col-sm-10 {
 						<label for="productImageFirst" class="col-sm-2 col-form-label">상품
 							이미지</label>
 						<div class="col-sm-10">
-							<input type="file" id="productImageFirst"
+							<input type="text" id="productImageFirst"
 								name="productImageFirst" required>
+						</div>
+					</div>
+					
+					<div class="row mb-3">
+						<label for="productImageSeocnd" class="col-sm-2 col-form-label">상품
+							이미지</label>
+						<div class="col-sm-10">
+							<input type="file" id="file"
+								name="file" required>
 						</div>
 					</div>
 
@@ -250,9 +259,9 @@ div.col-sm-10 {
 									<button type="submit" class="btn btn-primary">저장</button>
 						-->
 						<button class="btn btn-primary" style="background-color: #668663"
-							th:onclick="|location.href='@{/product/admin)}'|" type="submit">저장</button>
+							th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
 						<button class="btn btn-secondary"
-							th:onclick="|location.href='@{/product/admin}'|" type="button">닫기</button>
+							th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 					</div>
 
 				</div>
@@ -269,7 +278,7 @@ div.col-sm-10 {
 					<div class="modal-header">
 						<h5 class="modal-title">상품 수정</h5>
 					</div>
-					<form th:action="@{/product/admin/update}" method="post">
+					<form th:action="@{/admin/update}" method="post">
 					<input type="hidden" id="updateProductId" name="productId">
 					<div class="modal-body">
 						<div class="row mb-3">
@@ -305,7 +314,7 @@ div.col-sm-10 {
 							<button class="btn btn-primary" style="background-color: #668663"
 								type="submit">저장</button>
 							<button class="btn btn-secondary"
-							th:onclick="|location.href='@{/product/admin}'|" type="button">닫기</button>
+							th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 						</div>
 					</div>
 				 </form>
@@ -323,7 +332,7 @@ div.col-sm-10 {
         var subCategorySelect = document.getElementById("subCategoryId");
         subCategorySelect.innerHTML = '<option value="">전체</option>';   
         if (categoryId !== "") {
-            fetch("/product/sub-categories/" + categoryId)
+            fetch("/admin/sub-categories/" + categoryId)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(subCategory => {
@@ -342,7 +351,7 @@ div.col-sm-10 {
             return false;
         }
         const formHtml = `
-            <form id="deleteForm" action="/product/admin/delete?productId=${productId}" method="post">
+            <form id="deleteForm" action="/admin/delete?productId=${productId}" method="post">
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -355,7 +364,7 @@ div.col-sm-10 {
     
     //
     function setProductInfo(productId) {
-         fetch("/product/admin/update/" + productId)
+         fetch("/admin/update/" + productId)
             .then(response => response.json())
             .then(data => {
                 const product = data;
@@ -372,7 +381,7 @@ div.col-sm-10 {
         const subCategorySelect = document.getElementById("subcategoryFilter");
         subCategorySelect.innerHTML = '<option value="">전체</option>';
         if (selectedCategoryId !== "") {
-            fetch("/product/sub-categories/" + selectedCategoryId)
+            fetch("/admin/sub-categories/" + selectedCategoryId)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(subCategory => {

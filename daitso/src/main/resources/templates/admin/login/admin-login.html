@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/user-header :: userHeader}"></head>
+<body>
+	<div class="login-container">
+		<div class="login-logo">
+			<img class="login-logo-img"
+				th:src="@{/assets/header/daitso_logo_header.png}">
+		</div>
+		<div class="login-title-box">
+			<div class="login-title">관리자 로그인</div>
+		</div>
+		<div class="login-input-container">
+			<div class="login-input-boxes">
+				<div class="login-form">
+					<form th:action="@{/customer/login}" th:method="post">
+						<div>
+							<div class="login-input-box">
+								<div class="login-input-img-box">
+									<img class="login-input-img"
+										th:src="@{/assets/loginandsignup/email.svg}">
+								</div>
+								<input id="customerEmail" name="username" type="text" class="login-input-value"
+									placeholder="아이디" required>
+							</div>
+							<div id="emailConfirm"
+								style="font-size: 14px; margin: 10px 0 0 60px; color:red; display:none">
+							</div>
+							<div class="login-input-box">
+								<div class="login-input-img-box">
+									<img class="login-input-img"
+										th:src="@{/assets/loginandsignup/password.svg}">
+								</div>
+								<input id="customerPw" name="password" type="password" class="login-input-value"
+									placeholder="비밀번호" autocomplete="current-password" required>
+							</div>
+							<div style="display: flex; justify-content: space-between;">
+								<div class="login-find" style="display:flex;">
+									<input id="password-show-check-box" type="checkbox" style="accent-color: #39594E; width:15px; height:15px;">
+									<div style="margin:1.5px 0 0 5px;">비밀번호 표시</div>
+								</div>
+								<div class="login-find">
+									<div style="margin-top: 1.5px;">
+										문의: 010-8745-8992
+									</div>
+								</div>
+							</div>
+							<div th:if="${param.error}">
+								<div style="color:red; font-size:15px; margin-top:10px;">
+									이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.
+								</div>
+							</div>
+							<div>
+								<button class="login-btn" type="submit">로그인</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+	
+	// 비밀번호 표시
+	const passwordShowCheckBox = document.getElementById("password-show-check-box");
+	passwordShowCheckBox.onclick = (e) => {
+		const checked  = e.target.checked;
+		if(checked) {
+			document.getElementById("customerPw").type = 'text';
+			document.getElementById("customerPw").autocomplete = 'off';
+		} else {
+			document.getElementById("customerPw").type = 'password';
+			document.getElementById("customerPw").autocomplete = 'current-password';
+		}
+	}
+	
+</script>
+</html>
