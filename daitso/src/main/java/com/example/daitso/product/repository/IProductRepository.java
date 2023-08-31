@@ -16,8 +16,6 @@ public interface IProductRepository {
 	
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
-	List<Product> selectAllProducts(@Param("page") int page, @Param("pageSize") int pageSize);
-	
 	Product selectProduct(@Param("productId") int productId);
 
 	void registerProducts(Product product);
@@ -37,7 +35,12 @@ public interface IProductRepository {
 	List<String> selectProductOptionThird(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
 
 	List<Product> selectPagedProducts(int startRow, int endRow);
-	
 	int getTotalProductCount();
+	
+	List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow);
+	int getCategoryTotalProductCount(@Param("categoryId") int categoryId);
+	
+	List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow);
+	int getTopCategoryTotalProductCount(@Param("category_pr_id") int category_pr_id);
 
 }
