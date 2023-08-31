@@ -3,6 +3,7 @@
 <head th:replace="~{/include/header :: header}">
 </head>
 <body>
+<form th:action="@{/mypage/order-list}" method="post">
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 <div class="title-order-list">주문목록</div>
@@ -13,11 +14,22 @@
 	<div class="order-rectangle">배송중</div>
 	<div class="order-rectangle">배송완료</div>
 </div><!-- order-category -->
-<div class="order-list-container">
-	
+
+	<div class="order-list-container" >
+		<div class="shipping-status">배송완료</div>
+		<div class="shipping-date">8/2(금)도착</div>
+		<div class="purchase-img-001">이미지</div>
+		<div class="purchase-inform-001" th:text="${purchases.productName}">ProductName</div>
+	<div class="detail-button-container">
+		<div class="detail-button">주문상세보기</div>
+		<div class="detail-button">배송조회</div>
+		<div class="detail-button">리뷰남기기</div>
+	</div><!-- shipping-button-container -->	
+	</div><!-- order-list-container -->
+</form>
 
 
-</div><!-- order-list-container -->
+
 
 
 

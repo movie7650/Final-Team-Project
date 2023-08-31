@@ -1,3 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.purchase.PurchaseMapper"></mapper>
+<mapper namespace="com.example.daitso.purchase.repository.IPurchaseRepository">
+
+<!-- <insert id="insertPurchase" parameterType="com.example.daitso.purchase.model.Purchase">
+
+</insert> -->
+
+<select id="selectAllPurchase" resultType="com.example.daitso.purchase.model.PurchaseCheck">
+	<![CDATA[
+		SELECT	product_nm  AS	"productName"
+		From	product p,  purchase pur
+		WHERE	p.product_id=pur.product_id AND pur.customer_id=101
+	]]>
+</select>
+
+</mapper>

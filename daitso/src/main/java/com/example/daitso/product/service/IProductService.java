@@ -10,21 +10,8 @@ public interface IProductService {
 	
 	int selectCountProductList(int categoryId);
 	
-	
-//	List<Product> selectAllProducts();
-	List<Product> selectAllProducts(int page, int pageSize);
-	
 	Product selectProduct(int productId);
 	
-	void registerProducts(Product product);
-	
-	void deleteProduct(int productId);
-	
-	Product selectProductId(int productId);
-	
-	void updateProduct(Product product);
-	
-
 	List<String> selectProductOptionFirst(String productNm);
 	
 	List<String> selectProductOptionSecond(String productNm, String productOptionFirst);
@@ -36,4 +23,5 @@ public interface IProductService {
 	int getTotalProductCount();
 
 	Product selectOptionProduct(String productNm, String productOptionFirst, String productOptionSecond, String productOptionThird);
+
 }
