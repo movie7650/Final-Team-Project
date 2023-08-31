@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Body Header -->
+<div th:fragment="adminBodyHeader">
+	<div class="header-login-and-sign-up">
+		<div>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/sign-up}">회원가입</a></span>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/login}">로그인</a></span>
+			<span sec:authorize="isAuthenticated()"><a th:href="@{/customer/logout}">로그아웃</a></span>
+			<span sec:authorize="isAuthenticated()"><a id="customer-name"></a></span>
+		</div>
+	</div>
+</div>
+</html>
