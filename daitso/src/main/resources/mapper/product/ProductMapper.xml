@@ -55,11 +55,15 @@
 
 <select id="selectCountProductList" parameterType="int" resultType="int">
 	SELECT count(*)
-	FROM (select distinct product_nm from product 
-	WHERE category_id IN (
-		SELECT category_id 
-		FROM category START WITH category_id = #{categoryId} 
-		CONNECT BY PRIOR category_id = category_pr_id))
+	  FROM (
+	  		 SELECT distinct product_nm 
+	  		   FROM product 
+	 		  WHERE category_id IN (
+			 						 SELECT category_id 
+		 							   FROM category START WITH category_id = #{categoryId} 
+								    CONNECT BY PRIOR category_id = category_pr_id
+						   		   )
+	        )
 </select>
 
 
@@ -104,82 +108,71 @@
 
 <!-- 상품 코드 변경 -->
 <update id="changeProductCode">
-<![CDATA[
+
     UPDATE product
-    SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
-    WHERE product_id = (
-        SELECT product_id as "productId" FROM
-        (SELECT * FROM product ORDER BY product_id DESC)
-        WHERE ROWNUM= 1
-    )
-   ]]>
+       SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
+     WHERE product_id = ( 
+     					  <!-- #{productId} -->
+     					  
+           				  SELECT product_id as "productId" 
+          					FROM (SELECT * 
+          							FROM product ORDER BY product_id DESC)
+        				   WHERE ROWNUM= 1
+    					 )
 </update>
 
 <!-- 상품 삭제 -->
 <delete id="deleteProduct" parameterType="int">
-<![CDATA[
 	 DELETE FROM product WHERE product_id = #{productId}
-]]>
+
 </delete>
 
 <!-- 상품 수정 -->
 <update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
-<![CDATA[
 	UPDATE product
-	SET product_price = #{productPrice}, product_stock = #{productStock}
-	WHERE product_id = #{productId}
-]]>
+	   SET product_price = #{productPrice}, product_stock = #{productStock}
+	 WHERE product_id = #{productId}
 </update>
 
 <!-- 상품 수정을 위한 해당 상품 정보 가져오기 -->
 <select id="selectProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
-<![CDATA[
 	SELECT product_id as "productId",
 		   product_nm as "productNm",
 		   product_code as "productCode",
 		   product_price as "productPrice",
 		   product_stock as "productStock"
-	FROM product
-	WHERE product_id = #{productId}
-]]>
+	  FROM product
+	 WHERE product_id = #{productId}
 </select>
 
 <!-- 총 상품 개수 가져오기 -->
 <select id="getTotalProductCount" parameterType="int">
-<![CDATA[
-	SELECT count(*)
-	FROM product
-]]>
+    SELECT count(*)
+	  FROM product
 </select>
 
 <!-- 전체 상품 조회하기(페이징) -->
 <select id="selectPagedProducts" resultType="com.example.daitso.product.model.Product">
-<![CDATA[
 	SELECT product_id as "productId",
-			   product_code as "productCode",
-			   product_nm as "productNm",
-			   product_option_first as "productOptionFirst",
-			   product_option_second as "productOptionSecond",
-			   product_option_third as "productOptionThird",
-			   product_stock as "ProductStock",
-	           rownum as rnum
-	FROM (
-        SELECT
-            p.*,
-            ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
-        FROM product p
-    ) paging
-    WHERE rnum BETWEEN #{startRow} AND #{endRow}
-]]>
+		   product_code as "productCode",
+		   product_nm as "productNm",
+		   product_option_first as "productOptionFirst",
+		   product_option_second as "productOptionSecond",
+		   product_option_third as "productOptionThird",
+		   product_stock as "ProductStock",
+           rownum as rnum
+      FROM (
+      		 SELECT p.*, ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
+        	   FROM product p
+    		) paging
+     WHERE rnum BETWEEN #{startRow} AND #{endRow}
 </select>
 
 <!-- 해당 카테고리 총 상품 개수 가져오기 -->
 <select id="getCategoryTotalProductCount" parameterType="int">
-<![CDATA[
 	SELECT count(*)
 	FROM product
 	WHERE category_id = #{categoryId}
-]]>
 </select>
 
 <!-- 해당 카테고리 전체 상품 조회하기(페이징) -->
@@ -303,7 +296,7 @@
 		<when test='productOptionThird.equals("0")'>
 		</when>
 		<otherwise>
-				AND product_option_third = #{productOptionThrid}
+				AND product_option_third = #{productOptionThird}
 		</otherwise>
 	</choose>
 	ORDER BY product_price)

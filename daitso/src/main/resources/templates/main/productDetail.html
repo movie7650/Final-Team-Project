@@ -120,6 +120,7 @@
 		var sColor = document.querySelector(".option-list-color");
 		var sOther = document.querySelector(".option-list-other");
 		var cColor = "";
+		var cOther = "";
 		if(optionSize == null){
 			optionSize = "0";
 		}
@@ -152,7 +153,8 @@
             totalPrice.textContent = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
         	totalPrice.value = cPrice;
         	fPrice = cPrice;
-        	cColor = product.productOptionSecond;
+        	cColor = product.productOptionSecond
+        	cOther = product.productOptionThird
         	cntInput.value = 1;
         }); 
 		
@@ -184,6 +186,15 @@
         			const selectOption = `<option>${option.OPTIONTHIRD}</option>`
         			s.innerHTML += selectOption;
         		})
+        		const len = s.options.length;
+        		for(let i=0; i<len; i++){
+        			if(s.options[i].value == cOther){
+        				s.options[i].selected = true;
+        			}
+        		}
+        	}
+        	else{
+        		sOther.innerHTML = "";
         	}
         });   
 	}

@@ -2,54 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.category.repository.ICategoryRepository">
 
-<select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
-	SELECT category_id AS categoryId, 
-			category_pr_id AS categoryPrId,
-			category_nm AS categoryNm, 
-			level,
-			CONNECT_BY_ISLEAF AS isLeaf
-	FROM category 
-	WHERE CONNECT_BY_ROOT category_nm = 
-    	(SELECT 
-    	CONNECT_BY_ROOT category_nm as root
-    	FROM category 
-    	WHERE category_id = #{categoryId}
-    	START WITH category_pr_id = 0
-    	CONNECT BY PRIOR category_id = category_pr_id)
-    AND status = 'N' 
-	START WITH category_pr_id = 0
-	CONNECT BY PRIOR category_id = category_pr_id
-	ORDER SIBLINGS BY category_nm
-</select>
-
-<select id="selectCategoryPath" parameterType="int" resultType="String">
-	SELECT sys_connect_by_path(category_nm, ' > ') as path
-	FROM category 
-	WHERE category_id = #{categoryId}
-	START WITH category_pr_id = 0
-	CONNECT BY PRIOR category_id = category_pr_id	
-	ORDER SIBLINGS BY category_nm
-</select>
-
-
+	<select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
+				 SELECT category_id AS categoryId, 
+				   	    category_pr_id AS categoryPrId,
+					    category_nm AS categoryNm, 
+					    level,
+					    CONNECT_BY_ISLEAF AS isLeaf
+				   FROM category 
+				  WHERE CONNECT_BY_ROOT category_nm = 
+				      ( 
+							   	  SELECT CONNECT_BY_ROOT category_nm as root
+							        FROM category 
+								   WHERE category_id = #{categoryId}
+						      START WITH category_pr_id = 0
+					    CONNECT BY PRIOR category_id = category_pr_id
+			          )
+			        AND status = 'N' 
+			 START WITH category_pr_id = 0
+	   CONNECT BY PRIOR category_id = category_pr_id
+	  ORDER SIBLINGS BY category_nm
+	</select>
 	
-	<!-- 상위 카테고리(식품,도서,...) 고유번호와 이름 갖고오기 -->
+	<select id="selectCategoryPath" parameterType="int" resultType="String">
+				 SELECT sys_connect_by_path(category_nm, ' > ') as path
+				   FROM category 
+				  WHERE category_id = #{categoryId}
+		     START WITH category_pr_id = 0
+	   CONNECT BY PRIOR category_id = category_pr_id	
+	  ORDER SIBLINGS BY category_nm
+	</select>
+	
+	<!-- 
+		기능: 상위 카테고리(식품,도서,...) 고유번호와 이름 갖고오기 
+		담당자: 최준원
+	-->
 	<select id="getAllFirstCategoryIdAndName" resultType="com.example.daitso.category.model.Category">
-        <![CDATA[
-		select category_id AS "categoryId", category_nm AS "categoryNm"
-		from category 
-		where category_pr_id = 0
-		order by category_id
-		]]>
+		SELECT category_id AS "categoryId", 
+			   category_nm AS "categoryNm"
+		  FROM category 
+		 WHERE category_pr_id = 0
+		   AND status = 'Y'
+	  ORDER BY category_id
     </select>
     
-    <!-- 상위 카테고리(식품,도서,...) 고유번호로 부터 하위 카테고리 고유번호와 이름 갖고오기 -->
+    <!-- 
+    	기능: 상위 카테고리(식품,도서,...) 고유번호로 부터 하위 카테고리 고유번호와 이름 갖고오기
+    	담당자: 최준원
+     -->
 	<select id="getSecondCategoryIdAndNameByFirstCategoryId" parameterType="int" resultType="com.example.daitso.category.model.Category">
-        <![CDATA[
-		select category_id AS "categoryId", category_nm AS "categoryNm"
-		from category 
-		where category_pr_id = #{categoryId}
-		order by category_id
-		]]>
+		SELECT category_id AS "categoryId", 
+			   category_nm AS "categoryNm"
+		  FROM category 
+		 WHERE category_pr_id = #{categoryId}
+		   AND status = 'Y'
+	  ORDER BY category_id
     </select>
 </mapper>
