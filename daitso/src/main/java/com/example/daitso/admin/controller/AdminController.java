@@ -45,10 +45,8 @@ public class AdminController {
 	    int totalCount;
 	    if (categoryId == null) {
 	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
-	        System.out.println(totalCount);
 	    } else {
 	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
-	        System.out.println(totalCount);
 	    }
 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
