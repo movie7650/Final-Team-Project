@@ -279,7 +279,7 @@
 		<when test='productOptionThird.equals("0")'>
 		</when>
 		<otherwise>
-				AND product_option_third = #{productOptionThrid}
+				AND product_option_third = #{productOptionThird}
 		</otherwise>
 	</choose>
 	ORDER BY product_price)
