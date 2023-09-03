@@ -3,23 +3,21 @@
 <mapper namespace="com.example.daitso.category.repository.ICategoryRepository">
 
 <select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
-	SELECT category_id AS categoryId, 
-			category_pr_id AS categoryPrId,
-			category_nm AS categoryNm, 
-			level,
-			CONNECT_BY_ISLEAF AS isLeaf
-	FROM category 
-	WHERE CONNECT_BY_ROOT category_nm = 
-    	(SELECT 
-    	CONNECT_BY_ROOT category_nm as root
-    	FROM category 
-    	WHERE category_id = #{categoryId}
-    	START WITH category_pr_id = 0
-    	CONNECT BY PRIOR category_id = category_pr_id)
-    AND status = 'N' 
-	START WITH category_pr_id = 0
+	 SELECT category_id AS categoryId,
+	        category_pr_id AS categoryPrId,
+	        category_nm AS categoryNm,
+	        level,
+	        CONNECT_BY_ISLEAF AS isLeaf
+	   FROM category
+	  WHERE CONNECT_BY_ROOT category_nm = (SELECT CONNECT_BY_ROOT category_nm as root
+										    FROM category
+										   WHERE category_id = #{categoryId}
+										   START WITH category_pr_id = 0
+										 CONNECT BY PRIOR category_id = category_pr_id)
+        AND status = 'N'
+	  START WITH category_pr_id = 0
 	CONNECT BY PRIOR category_id = category_pr_id
-	ORDER SIBLINGS BY category_nm
+	  ORDER SIBLINGS BY category_nm
 </select>
 
 <select id="selectCategoryPath" parameterType="int" resultType="String">
