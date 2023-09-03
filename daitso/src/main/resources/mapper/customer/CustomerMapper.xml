@@ -4,11 +4,9 @@
 
 	<!-- 이메일 중복체크(중복되면 1, 중복되지 않으면 0 -->
 	<select id="checkEmailDuplicated" parameterType="String" resultType="int">
-        <![CDATA[
 		select count(*)
 		from customer
 		where customer_email = #{customerEmail}
-		]]>
     </select>
     
     <!-- 휴대폰번호 중복체크(중복되면 1, 중복되지 않으면 0 -->
@@ -33,12 +31,10 @@
     
     <!-- 로그인 -->
     <select id="findByCustomerEmail" parameterType="String" resultType="com.example.daitso.customer.model.CustomerSecurity">
-        <![CDATA[
-		select customer_id as customerId, customer_email as customerEmail, 
-		customer_pw as customerPw, customer_nm as customerNm, customer_telno as customerTelno
-		from customer
-		where customer_email = #{customerEmail}
-		]]>
+	    SELECT customer_id as customerId, customer_email as customerEmail, 
+			   customer_pw as customerPw, customer_nm as customerNm, customer_telno as customerTelno
+		  FROM customer
+		 WHERE customer_email = #{customerEmail}
     </select>
     
     <!-- 사용자 고유번호로부터 사용자 이름 갖고오기 -->
