@@ -39,17 +39,21 @@
     			product_price, rownum as rnum , row_number() over (partition by product_nm order by product_price) snum
     	FROM(
     		SELECT p.product_id		AS		product_id,
-				category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(avg(review_star_point)*20,0) AS review_star_point,
-            	count(review_star_point) AS review_count
-			FROM product p
-    			LEFT JOIN review r on p.product_id = r.product_id
+				   category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(avg(review_star_point)*20,0) AS review_star_point,
+            	   count(review_star_point) AS review_count
+			 FROM product p
+	         LEFT JOIN review r on p.product_id = r.product_id
     		WHERE category_id in (
-    				SELECT category_id from category c
-    				START WITH category_id = #{categoryId}
-    				CONNECT BY PRIOR category_id = category_pr_id)
-    				AND p.status = 'N'
-    				GROUP BY p.product_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first
-    				ORDER BY p.product_id))
+									SELECT category_id from category c
+									 START WITH category_id = #{categoryId}
+								   CONNECT BY PRIOR category_id = category_pr_id
+								  )
+			   AND p.status = 'N'
+			 GROUP BY p.product_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first
+			 ORDER BY p.product_id
+	  							  )
+
+					)
     WHERE rnum between #{start} and #{end} and snum = 1
 </select>
 
@@ -108,7 +112,6 @@
 
 <!-- 상품 코드 변경 -->
 <update id="changeProductCode">
-
     UPDATE product
        SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
      WHERE product_id = ( 
