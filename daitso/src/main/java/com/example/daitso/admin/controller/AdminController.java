@@ -84,16 +84,10 @@ public class AdminController {
 	//상품 등록하기
 	@PostMapping("/product")
 	public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
-		if(files.size() > 3) {
-			model.addAttribute("message","상품 이미지 적정 개수를 초과하였습니다!(최대 3개)");
-			model.addAttribute("searchUrl","/admin/product");
-			return "admin/product/message";
-		} else {
-			adminService.registerProducts(product, files);
-			model.addAttribute("message","상품이 등록되었습니다.");
-			model.addAttribute("searchUrl","/admin/product");
-			return "admin/product/message";
-		}	
+		adminService.registerProducts(product, files);
+		model.addAttribute("message","상품이 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
 	}
 
 	//하위 카테고리 불러오기

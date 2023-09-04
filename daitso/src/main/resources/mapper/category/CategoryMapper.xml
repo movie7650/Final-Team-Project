@@ -41,7 +41,6 @@
 			   category_nm AS "categoryNm"
 		  FROM category 
 		 WHERE category_pr_id = 0
-		   AND status = 'Y'
 	  ORDER BY category_id
     </select>
     

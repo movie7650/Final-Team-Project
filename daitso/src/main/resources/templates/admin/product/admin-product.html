@@ -3,271 +3,307 @@
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <link rel="stylesheet" th:href="@{/css/admin-product.css}">
 <body>
-<div id ="productTable">
-<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
-<div class="container" style="max-width: 1200px">
-        <div class="row">
-            <div class="col" style="z-index: 1">
-            
-            <!-- 상품 등록 모달을 열기 위한 버튼 -->
-            <button class="btn btn-primary float-right" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">+등록</button>
-            
-             <!-- 카테고리 선택 버튼 -->
-            <div class="row mt-3" style="width: 400px;">
-	            <div class="col-sm-3" style="padding-left: 0px;">
-					<label for="categoryFilter"></label> <select id="categoryFilter"
-						onchange="updateSubcategories(this.value)"
-						style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
-						<option value="">전체</option>
-						<option th:each="category : ${categories}"
-							th:value="${category.categoryId}" th:text="${category.categoryNm}"></option>
-					</select>
-				</div>
-				<div class="col-sm-3">
-					<label for="subcategoryFilter"></label> <select
-						id="subcategoryFilter" onchange="updateSubcategoryProducts(this.value)"
-						style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
-						<option value="">전체</option>
-					</select>
-				</div>
-			</div>
-            
-            </div>
-        </div>
-        
-		<hr class="my-4">
-        <div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>상품 코드</th>
-                        <th>상품명</th>
-                        <th>사이즈</th>
-                        <th>색상</th>
-                        <th>기타</th>
-                        <th>수량</th>
-                        <th>이미지</th>
-                        <th></th>
-                    </tr>
-                </thead>
-				<tbody>
-					<tr th:each="product : ${products}">
-						<td th:text="${product.productCode}"></td>
-						<td th:text="${product.productNm}"></td>
-						<td th:text="${product.productOptionFirst}"></td>
-						<td th:text="${product.productOptionSecond}"></td>
-						<td th:text="${product.productOptionThird}"></td>
-						<td th:text="${product.productStock}"></td>
-						<td><button name="plus" value="${product.prodcutId}" class="btn btn-xs"
-								style="background-color: #668663; color: #ffff">더보기</button></td>
-						<td>
-							<div class="btn-group">
-							    <!-- 상품 수정 모달을 열기 위한 버튼 -->
-								<button class="btn btn-xs" style="background-color: #39594e; color: #ffff"
-   								 data-bs-toggle="modal" data-bs-target="#updateModal"
-    							 type="button" th:onclick="setProductInfo([[${product.productId}]])">수정</button>
-    							 
-								<!-- <button class="btn btn-xs" style="background-color: red; color: #fff" 
-        						type="button" th:attr="onclick='deleteProduct(\'' + ${product.productId} + '\');'">삭제</button> -->
-        						<button class="btn btn-xs" style="background-color: red; color: #fff" 
-        						type="button" th:onclick="deleteProduct([[${product.productId}]])">삭제</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-            </table>
-        </div>
+	<div id="productTable">
+		<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+		<div class="container" style="max-width: 1200px">
+			<div class="row">
+				<div class="col" style="z-index: 1">
 
+					<!-- 상품 등록 모달을 열기 위한 버튼 -->
+					<button class="btn btn-primary float-right"
+						style="background-color: #39594e" data-bs-toggle="modal"
+						data-bs-target="#registerModal" type="button">+등록</button>
 
-	<!-- 페이지 링크 표시 -->
-	<div th:if="${totalCount > 0}">
-	<ul class="pagination">
-	        <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
-	            <a class="page-link" th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
-	                <span aria-hidden="true">&laquo;</span>
-	            </a>
-	        </li>
-	        <li th:each="page : ${#numbers.sequence(1, ((totalCount + pageSize - 1) / pageSize), 1)}" 
-	            class="page-item" th:classappend="${page == currentPage} ? active">
-	            <a class="page-link" th:href="@{/admin/product(page=${page}, pageSize=${pageSize})}" th:text="${page}"></a>
-	        </li>
-	        <li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
-	            <a class="page-link" th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
-	                <span aria-hidden="true">&raquo;</span>
-	            </a>
-	        </li>
-	    </ul>
-	</div>
-
-</div>
-
-
-<!-- 상품 등록 모달 -->
-<div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document" style="max-width: 800px;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">상품 등록</h5>
-			</div>
-			<form th:action method="post" enctype="multipart/form-data">
-				<div class="modal-body">
-					<div class="row mb-3">
-						<label for="categoryId" class="col-sm-2 col-form-label">상위 카테고리</label>
-						<div class="col-sm-10">
-							<select id="categoryId" name="categoryId" 
-								onchange="getSubCategories(this.value)" required>
+					<!-- 카테고리 선택 버튼 -->
+					<div class="row mt-3" style="width: 400px;">
+						<div class="col-sm-3" style="padding-left: 0px;">
+							<label for="categoryFilter"></label> <select id="categoryFilter"
+								onchange="updateSubcategories(this.value)"
+								style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
 								<option value="">전체</option>
 								<option th:each="category : ${categories}"
 									th:value="${category.categoryId}"
 									th:text="${category.categoryNm}"></option>
 							</select>
 						</div>
-					</div>
-					
-					<div class="row mb-3">
-						<label form="subCategoryId" class="col-sm-2 col-form-label">하위	카테고리</label>
-						<div class="col-sm-10">
-							<select id="subCategoryId" name="subCategoryId" required>
+						<div class="col-sm-3">
+							<label for="subcategoryFilter"></label> <select
+								id="subcategoryFilter"
+								onchange="updateSubcategoryProducts(this.value)"
+								style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
 								<option value="">전체</option>
 							</select>
 						</div>
 					</div>
 
-					<div class="row mb-3">
-						<label for="productNm" class="col-sm-2 col-form-label" style="color:red">* 상품명</label>
-						<div class="col-sm-10">
-							<input type="text" maxlength="20" id="productNm" name="productNm" placeholder="* 필수 입력 항목입니다." required>
-						</div>
-					</div>
+				</div>
+			</div>
 
-					<div class="row mb-3">
-						<label for="productContent" class="col-sm-2 col-form-label">상품 상세내용</label>
-						<div class="col-sm-10">
-							<textarea id="productContent" name="productContent"
-								style="height: 200px; width: 510px"></textarea>
-						</div>
-					</div>
+			<hr class="my-4">
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>상품 코드</th>
+							<th>상품명</th>
+							<th>사이즈</th>
+							<th>색상</th>
+							<th>기타</th>
+							<th>수량</th>
+							<th>이미지</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="product : ${products}">
+							<td th:text="${product.productCode}"></td>
+							<td th:text="${product.productNm}"></td>
+							<td th:text="${product.productOptionFirst}"></td>
+							<td th:text="${product.productOptionSecond}"></td>
+							<td th:text="${product.productOptionThird}"></td>
+							<td th:text="${product.productStock}"></td>
+							<td><button name="plus" value="${product.prodcutId}"
+									class="btn btn-xs"
+									style="background-color: #668663; color: #ffff">더보기</button></td>
+							<td>
+								<div class="btn-group">
+									<!-- 상품 수정 모달을 열기 위한 버튼 -->
+									<button class="btn btn-xs"
+										style="background-color: #39594e; color: #ffff"
+										data-bs-toggle="modal" data-bs-target="#updateModal"
+										type="button"
+										th:onclick="setProductInfo([[${product.productId}]])">수정</button>
 
-					<div class="row mb-3">
-						<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
-						<div class="col-sm-10">
-							 <input type="text" id="productOptionFirst" 
-							    name="productOptionFirst">
-						</div>
-					</div>
+									<!-- <button class="btn btn-xs" style="background-color: red; color: #fff" 
+        						type="button" th:attr="onclick='deleteProduct(\'' + ${product.productId} + '\');'">삭제</button> -->
+									<button class="btn btn-xs"
+										style="background-color: red; color: #fff" type="button"
+										th:onclick="deleteProduct([[${product.productId}]])">삭제</button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-					<div class="row mb-3">
-						<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
-						<div class="col-sm-10">
-							<input type="text" id="productOptionSecond"
-								name="productOptionSecond">
-						</div>
-					</div>
 
-					<div class="row mb-3">
-						<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
-						<div class="col-sm-10">
-							<input type="text" id="productOptionThird"
-								name="productOptionThird">
-						</div>
-					</div>
+			<!-- 페이지 링크 표시 -->
+			<div th:if="${totalCount > 0}">
+				<ul class="pagination">
+					<li class="page-item"
+						th:classappend="${currentPage == 1} ? disabled"><a
+						class="page-link"
+						th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize})}"
+						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a></li>
+					<li
+						th:each="page : ${#numbers.sequence(1, ((totalCount + pageSize - 1) / pageSize), 1)}"
+						class="page-item" th:classappend="${page == currentPage} ? active">
+						<a class="page-link"
+						th:href="@{/admin/product(page=${page}, pageSize=${pageSize})}"
+						th:text="${page}"></a>
+					</li>
+					<li class="page-item"
+						th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
+						<a class="page-link"
+						th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize})}"
+						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					</a>
+					</li>
+				</ul>
+			</div>
 
-					<div class="row mb-3">
-						<label for="productPrice" class="col-sm-2 col-form-label" style="color:red">* 가격</label>
-						<div class="col-sm-10">
-							<input type="text" maxlength="10" id="productPrice" name="productPrice" onkeyup="inputNumberFormat(this);" style="text-align:right;" required>
-						</div>
-					</div>
+		</div>
 
-					<div class="row mb-3">
-						<label for="productStock" class="col-sm-2 col-form-label" style="color:red">* 수량</label>
-						<div class="col-sm-10">
-							<input type="text" maxlength="8" id="productStock" name="productStock" onkeyup="inputOnlyNumberFormat(this);" placeholder="* 필수 입력 항목입니다." required>
-						</div>
-					</div>
-					<div class="row mb-3">
-						<label for="productImages" class="col-sm-2 col-form-label">상품
-							이미지</label>
-						<div class="col-sm-10">
-							<input type="file" id="files" 
-								name="files" multiple required>
-						</div>
-					</div>
 
-					<div class="modal-footer">
-						<!--
+		<!-- 상품 등록 모달 -->
+		<div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document" style="max-width: 800px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">상품 등록</h5>
+					</div>
+					<form th:action method="post" enctype="multipart/form-data">
+						<div class="modal-body">
+							<div class="row mb-3">
+								<label for="categoryId" class="col-sm-2 col-form-label">상위
+									카테고리</label>
+								<div class="col-sm-10">
+									<select id="categoryId" name="categoryId"
+										onchange="getSubCategories(this.value)" required>
+										<option value="">전체</option>
+										<option th:each="category : ${categories}"
+											th:value="${category.categoryId}"
+											th:text="${category.categoryNm}"></option>
+									</select>
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label form="subCategoryId" class="col-sm-2 col-form-label">하위
+									카테고리</label>
+								<div class="col-sm-10">
+									<select id="subCategoryId" name="subCategoryId" required>
+										<option value="">전체</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productNm" class="col-sm-2 col-form-label"
+									style="color: red">* 상품명</label>
+								<div class="col-sm-10">
+									<input type="text" maxlength="20" id="productNm"
+										name="productNm" placeholder="* 필수 입력 항목입니다." required>
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productContent" class="col-sm-2 col-form-label">상품
+									상세내용</label>
+								<div class="col-sm-10">
+									<textarea id="productContent" name="productContent"
+										style="height: 200px; width: 510px"></textarea>
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
+								<div class="col-sm-10">
+									<input type="text" id="productOptionFirst"
+										name="productOptionFirst">
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
+								<div class="col-sm-10">
+									<input type="text" id="productOptionSecond"
+										name="productOptionSecond">
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
+								<div class="col-sm-10">
+									<input type="text" id="productOptionThird"
+										name="productOptionThird">
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productPrice" class="col-sm-2 col-form-label"
+									style="color: red">* 가격</label>
+								<div class="col-sm-10">
+									<input type="text" maxlength="10" id="productPrice"
+										name="productPrice" onkeyup="inputNumberFormat(this);"
+										style="text-align: right;" required>
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productStock" class="col-sm-2 col-form-label"
+									style="color: red">* 수량</label>
+								<div class="col-sm-10">
+									<input type="text" maxlength="8" id="productStock"
+										name="productStock" onkeyup="inputOnlyNumberFormat(this);"
+										placeholder="* 필수 입력 항목입니다." required>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="productImages" class="col-sm-2 col-form-label">
+									상품 이미지(3개)
+								</label>
+								<div class="col-sm-10">
+									<input type="file" id="files" name="files"
+										accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
+										multiple required>
+									<div id="files-error"
+										style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
+								</div>
+							</div>
+
+							<div class="modal-footer">
+								<!--
 									<button type="button" class="btn btn-secondary"	data-dismiss="modal">닫기</button>
 									<button type="submit" class="btn btn-primary">저장</button>
 						-->
-						<button class="btn btn-primary" style="background-color: #668663"
-							th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
-						<button class="btn btn-secondary"
-							th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
-					</div>
+								<button id="product-enroll-btn" class="btn btn-primary"
+									style="background-color: #668663"
+									th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
+								<button class="btn btn-secondary"
+									th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+							</div>
 
+						</div>
+					</form>
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
-</div>
 
 
-<!-- 상품 수정 모달 -->
-<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
-		<div class="modal-dialog" role="document" style="max-width: 800px;">
-			<div class="modal-content">
+		<!-- 상품 수정 모달 -->
+		<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document" style="max-width: 800px;">
+				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">상품 수정</h5>
 					</div>
 					<form th:action="@{/admin/update}" method="post">
-					<input type="hidden" id="updateProductId" name="productId">
-					<div class="modal-body">
-						<div class="row mb-3">
-							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
-							<div class="col-sm-10">
-								<!-- <input type="text" id="updateProductNm" name="productNm" readonly="readonly"> -->
-								<span id="updateProductNm" th:text="${productNm}" style="font-weight: bold;"></span>
+						<input type="hidden" id="updateProductId" name="productId">
+						<div class="modal-body">
+							<div class="row mb-3">
+								<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
+								<div class="col-sm-10">
+									<!-- <input type="text" id="updateProductNm" name="productNm" readonly="readonly"> -->
+									<span id="updateProductNm" th:text="${productNm}"
+										style="font-weight: bold;"></span>
+								</div>
 							</div>
-						</div>
-						
-						<div class="row mb-3">
-							<label for="productCode" class="col-sm-2 col-form-label">상품 코드</label>
-							<div class="col-sm-10">
-								<!-- <input type="number" id="updateProductCode" name="productCode" readonly="readonly"> -->
-								<span id="updateProductCode" th:text="${productCode}" style="font-weight: bold;"></span>
-							</div>
-						</div>
-						<div class="row mb-3">
-							<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
-							<div class="col-sm-10">
-								<input type="number" id="updateProductPrice" name="productPrice" required>
-							</div>
-						</div>
 
-						<div class="row mb-3">
-							<label for="productStock" class="col-sm-2 col-form-label">수량</label>
-							<div class="col-sm-10">
-								<input type="number" id="updateProductStock" name="productStock" required>
+							<div class="row mb-3">
+								<label for="productCode" class="col-sm-2 col-form-label">상품
+									코드</label>
+								<div class="col-sm-10">
+									<!-- <input type="number" id="updateProductCode" name="productCode" readonly="readonly"> -->
+									<span id="updateProductCode" th:text="${productCode}"
+										style="font-weight: bold;"></span>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
+								<div class="col-sm-10">
+									<input type="number" id="updateProductPrice"
+										name="productPrice" required>
+								</div>
+							</div>
+
+							<div class="row mb-3">
+								<label for="productStock" class="col-sm-2 col-form-label">수량</label>
+								<div class="col-sm-10">
+									<input type="number" id="updateProductStock"
+										name="productStock" required>
+								</div>
+							</div>
+
+							<div class="modal-footer">
+								<button class="btn btn-primary"
+									style="background-color: #668663" type="submit">저장</button>
+								<button class="btn btn-secondary"
+									th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 							</div>
 						</div>
-						
-						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #668663"
-								type="submit">저장</button>
-							<button class="btn btn-secondary"
-							th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
-						</div>
-					</div>
-				 </form>
+					</form>
+				</div>
 			</div>
+
 		</div>
-		
+		<div th:replace="~{/include/footer :: footer}"></div>
 	</div>
-<div th:replace="~{/include/footer :: footer}"></div>
-</div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script th:inline="javascript">
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script th:inline="javascript">
     
     // 상품 등록 시 하위 카테고리를 가져오는 함수
     function getSubCategories(categoryId) {
@@ -405,6 +441,26 @@
 	    str = String(str);
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
 	}
+    
+    // 이미지 파일 개수 제한
+    function fileCheck() {
+    	var filesInput = document.getElementById("files");
+        var filesError = document.getElementById("files-error");
+        var filesEnrollBtn = document.getElementById("product-enroll-btn");
+        
+        if( filesInput.files.length < 3 ){
+        	filesError.style.display = 'block';
+        	filesError.innerText = '이미지 파일 3개를 업로드 해주세요';
+        	filesEnrollBtn.disabled = true;
+    	} else if(filesInput.files.length > 3) {
+    		filesError.style.display = 'block';
+        	filesError.innerText = '상품 이미지 적정 개수(3개)를 초과하였습니다!';
+        	filesEnrollBtn.disabled = true;
+    	} else {
+    		filesError.style.display = 'none';
+    		filesEnrollBtn.disabled = false;
+    	}
+    }
     
     </script>
 </body>
