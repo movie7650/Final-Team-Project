@@ -31,20 +31,20 @@
 			<div class="d-flex">
 				<span class="align-self-center">옵션</span>
 				<div class="d-flex option-list" style="margin-left:10px">
-					<select class="option-size" name="size" th:if='!${oListFirst[0].OPTIONFIRST.equals("0")}' th:onchange="optionChange([[${product.productNm}]],1)">
+					<select class="option-size" name="size" th:if='!${oListFirst[0].OPTIONFIRST.equals("0")}' th:onchange="optionChange([[${product.productGroupId}]],1)">
 						<th:block th:each="option : ${oListFirst}">
 							<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}">[[${option.OPTIONFIRST}]]</option>
 						</th:block>
 					</select>
 					<div class="option-list-color">
-						<select class="option-color" name="color" th:if='!${oListSecond[0].OPTIONSECOND.equals("0")}' th:onchange="optionChange([[${product.productNm}]],2)">
+						<select class="option-color" name="color" th:if='!${oListSecond[0].OPTIONSECOND.equals("0")}' th:onchange="optionChange([[${product.productGroupId}]],2)">
 							<th:block  th:each="option : ${oListSecond}">
 								<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}">[[${option.OPTIONSECOND}]]</option>
 							</th:block>
 						</select>
 					</div>
 					<div class="option-list-other">
-						<select class="option-other" name="others" th:if='!${oListThird[0].OPTIONTHIRD.equals("0")}' th:onchange="optionChange([[${product.productNm}]],3)">
+						<select class="option-other" name="others" th:if='!${oListThird[0].OPTIONTHIRD.equals("0")}' th:onchange="optionChange([[${product.productGroupId}]],3)">
 							<th:block th:each="option : ${oListThird}">
 								<option>[[${option.OPTIONTHIRD}]]</option>
 							</th:block>
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 			<div class="d-flex" style="height:40px">
-				<div class="add-cart-btn d-flex justify-content-center align-items-center width-50-per">
+				<div class="add-cart-btn d-flex justify-content-center align-items-center width-50-per" onclick="goToCart()">
 					<span>장바구니 담기</span>
 				</div>
 				<div class="direct-purchase-btn d-flex justify-content-center align-items-center width-50-per" >
@@ -112,7 +112,7 @@
 		}
 	}
 
-	function optionChange(productNm, num){
+	function optionChange(productGroupId, num){
 		const optionList = document.querySelector(".option-list");
 		var optionSize = document.querySelector(".option-size");
 		var optionColor = document.querySelector(".option-color");
@@ -144,59 +144,109 @@
 			params += `optionFirst=${optionSize}&optionSecond=${optionColor}&optionThird=${optionOther}`;
 		}
 
-        fetch("/product/change/" + productNm + params)
+        fetch("/product/change/" + productGroupId + params)
         .then(response => response.json())
         .then(data => {
-        	console.log(data);
             const product = data;
             const cPrice = product.productPrice;
             totalPrice.textContent = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
         	totalPrice.value = cPrice;
         	fPrice = cPrice;
-        	cColor = product.productOptionSecond
-        	cOther = product.productOptionThird
+        	hiddenProductId.value = product.productId;
+        	cColor = product.productOptionSecond;
+        	cOther = product.productOptionThird;
         	cntInput.value = 1;
-        });
-
-
-        fetch("/product/option/" + productNm + params)
-        .then(response => response.json())
-        .then(data => {
-        	if(data[0].length != 1 | data[0][0].OPTIONSECOND != 0){
-        		const select = `<select class="option-color" name="color" onchange="optionChange('${product.productNm}',2)"></select>`
-        		sColor.innerHTML = select;
-        		const s = document.querySelector(".option-color");
-        		data[0].forEach(option => {
-        			const selectOption = `<option>${option.OPTIONSECOND}</option>`
-	        		s.innerHTML += selectOption;
-                })
-                const len = s.options.length;
-                for(let i=0; i<len; i++){
-                	console.log(s.options[i].value, " + " , optionColor.value);
-                	if(s.options[i].value == cColor){
-                		s.options[i].selected = true;
+        	if(num == 1){
+        		params += `&optionSecond=${cColor}`;
+        	} 
+        	fetch("/product/option/" + productGroupId + params)
+            .then(response => response.json())
+            .then(data => {
+            	if(data.length == 1){
+            		if(data[0].length != 1 | data[0][0].OPTIONTHIRD != 0){
+                		const select = `<select class="option-other" name="other" onchange="optionChange('${product.productGroupId}',3)"></select>`
+                		sOther.innerHTML = select;
+                		const s = document.querySelector(".option-other");
+                		data[0].forEach(option => {
+                			const selectOption = `<option>${option.OPTIONTHIRD}</option>`
+                			s.innerHTML += selectOption;
+                		})
+                		const len = s.options.length;
+                		//console.log(s);
+                		//console.log("cold", cOther);
+                		for(let i=0; i<len; i++){
+                			if(s.options[i].value == cOther){
+                				s.options[i].selected = true;
+                			}
+                		}
                 	}
-                }
-        	}
-        	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != 0){
-        		const select = `<select class="option-other" name="other" onchange="optionChange('${product.productNm}',3)"></select>`
-        		sOther.innerHTML = select;
-        		const s = document.querySelector(".option-other");
-        		data[1].forEach(option => {
-        			const selectOption = `<option>${option.OPTIONTHIRD}</option>`
-        			s.innerHTML += selectOption;
-        		})
-        		const len = s.options.length;
-        		for(let i=0; i<len; i++){
-        			if(s.options[i].value == cOther){
-        				s.options[i].selected = true;
-        			}
-        		}
-        	}
-        	else{
-        		sOther.innerHTML = "";
-        	}
-        });   
+                	else{
+                		sOther.innerHTML = "";
+                	}
+            	}
+            	else{
+                	if(data[0].length != 1 | data[0][0].OPTIONSECOND != 0){
+                		const select = `<select class="option-color" name="color" onchange="optionChange('${product.productGroupId}',2)"></select>`
+                		sColor.innerHTML = select;
+                		const s = document.querySelector(".option-color");
+                		data[0].forEach(option => {
+                			const selectOption = `<option>${option.OPTIONSECOND}</option>`
+        	        		s.innerHTML += selectOption;
+                        })
+                        const len = s.options.length;
+                        for(let i=0; i<len; i++){
+                        	//console.log(s.options[i].value, " + " , optionColor.value);
+                        	if(s.options[i].value == cColor){
+                        		s.options[i].selected = true;
+                        	}
+                        }
+                	}
+                	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != 0){
+                		const select = `<select class="option-other" name="other" onchange="optionChange('${product.productGroupId}',3)"></select>`
+                		sOther.innerHTML = select;
+                		const s = document.querySelector(".option-other");
+                		data[1].forEach(option => {
+                			const selectOption = `<option>${option.OPTIONTHIRD}</option>`
+                			s.innerHTML += selectOption;
+                		})
+                		const len = s.options.length;
+                		//console.log(s);
+                		//console.log("cold", cOther);
+                		for(let i=0; i<len; i++){
+                			if(s.options[i].value == cOther){
+                				s.options[i].selected = true;
+                			}
+                		}
+                	}
+                	else{
+                		sOther.innerHTML = "";
+                	}
+            	}
+            });   
+        });
+	}
+	
+	function goToCart(){
+		console.log(cntInput.value);
+		console.log(hiddenProductId.value);
+		let tag = document.createElement('form');
+		
+		let objId = document.createElement('input');
+		objId.setAttribute('type', 'hidden');
+		objId.setAttribute('name', 'productId');
+		objId.setAttribute('value', hiddenProductId.value);
+		
+		let objCnt = document.createElement('input');
+		objCnt.setAttribute('type', 'hidden');
+		objCnt.setAttribute('name', 'productCnt');
+		objCnt.setAttribute('value', cntInput.value);
+		
+		tag.appendChild(objId);
+		tag.appendChild(objCnt);
+		tag.setAttribute('method', 'post');
+		tag.setAttribute('action', '/cart/insert');
+		document.body.appendChild(tag);
+		tag.submit();
 	}
 </script>
 </html>
