@@ -11,7 +11,9 @@ import com.example.daitso.cart.model.CartUpdate;
 @Repository
 @Mapper
 public interface ICartRepository {
+
 	void insertCart(int productId, int customerId, int productCnt);
+
 	// 사용자 고유번호로부터 사용자 장바구니 조회
 	List<CartCheck> getCartByCustomerId(int customerId);
 	
