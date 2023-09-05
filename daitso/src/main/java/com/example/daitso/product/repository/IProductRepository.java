@@ -28,7 +28,7 @@ public interface IProductRepository {
 	Product selectProductId(int productId);
 	
 	void updateProduct(Product product);
-	
+
 //	List<Product> selectAllProducts();
 	
 	List<Product> selectProducts(int firstCategoryId, int secondCategoryId);
@@ -38,7 +38,7 @@ public interface IProductRepository {
 	List<String> selectProductOptionSecond(@Param("productGroupId") int productGroupId, @Param("productOptionFirst") String productOptionFirst);
 	
 	List<String> selectProductOptionThird(@Param("productGroupId") int productGroupId, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
-	
+
 	Product selectOptionProduct(@Param("productGroupId") int productGroupId , @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond, @Param("productOptionThird") String productOptionThird);
 
 
