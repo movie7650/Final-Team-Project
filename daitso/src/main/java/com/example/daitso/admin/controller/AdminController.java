@@ -36,50 +36,50 @@ public class AdminController {
 		return "admin/login/admin-login";
 	}
 	
-	//상품 조회하기 (페이징)
-	@GetMapping("/product")
-	public String selectCategoryPagedProducts(Model model,
-	        @RequestParam(defaultValue = "1") int page,
-	        @RequestParam(defaultValue = "10") int pageSize,
-	        @RequestParam(required = false) Integer categoryId) {
-	    int totalCount;
-	    if (categoryId == null) {
-	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
-	    } else {
-	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
-	    }
-	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-
-	    // 페이지 번호를 범위 내로 제한
-	    if (page < 1) {
-	        page = 1;
-	    } else if (page > totalPages) {
-	        page = totalPages;
-	    }
-
-	    int startRow = (page - 1) * pageSize + 1;
-	    int endRow = startRow + pageSize - 1;
-
-	    List<Product> products;
-	    if (categoryId == null) {
-	        products = adminService.selectPagedProducts(startRow, endRow); // 전체 상품 조회
-	        
-	    } else {
-	        products = adminService.selectCategoryPagedProducts(categoryId, startRow, endRow); // 선택한 카테고리의 상품 조회
-	    }
-	    
-	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-
-	    model.addAttribute("products", products);
-	    model.addAttribute("categories", categories);
-
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("totalPages", totalPages);
-
-	    return "admin/product/admin-product";
-	}
+//	//상품 조회하기 (페이징)
+//	@GetMapping("/product")
+//	public String selectCategoryPagedProducts(Model model,
+//	        @RequestParam(defaultValue = "1") int page,
+//	        @RequestParam(defaultValue = "10") int pageSize,
+//	        @RequestParam(required = false) Integer categoryId) {
+//	    int totalCount;
+//	    if (categoryId == null) {
+//	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
+//	    } else {
+//	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
+//	    }
+//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+//
+//	    // 페이지 번호를 범위 내로 제한
+//	    if (page < 1) {
+//	        page = 1;
+//	    } else if (page > totalPages) {
+//	        page = totalPages;
+//	    }
+//
+//	    int startRow = (page - 1) * pageSize + 1;
+//	    int endRow = startRow + pageSize - 1;
+//
+//	    List<Product> products;
+//	    if (categoryId == null) {
+//	        products = adminService.selectPagedProducts(startRow, endRow); // 전체 상품 조회
+//	        
+//	    } else {
+//	        products = adminService.selectCategoryPagedProducts(categoryId, startRow, endRow); // 선택한 카테고리의 상품 조회
+//	    }
+//	    
+//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//
+//	    model.addAttribute("products", products);
+//	    model.addAttribute("categories", categories);
+//
+//	    model.addAttribute("currentPage", page);
+//	    model.addAttribute("pageSize", pageSize);
+//	    model.addAttribute("totalCount", totalCount);
+//	    model.addAttribute("totalPages", totalPages);
+//
+//	    return "admin/product/admin-product";
+//	}
 
 	//상품 등록하기
 	@PostMapping("/product")
