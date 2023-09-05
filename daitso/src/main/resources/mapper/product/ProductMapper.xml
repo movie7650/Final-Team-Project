@@ -135,28 +135,6 @@
 	 WHERE product_id = #{productId}
 </select>
 
-<!-- <select id="selectAllProducts" resultType="com.example.daitso.product.model.Product">
-	SELECT DISTINCT
-   		   p.product_id AS "productId",
-    	   p.product_group_id AS "productGroupId",
-           p.product_nm AS "productNm",
-		   p.product_code AS "productCode",
-		   p.product_option_first AS "productOptionFirst",
-		   p.product_option_second AS "productOptionSecond",
-		   p.product_option_third AS "productOptionThird",
-   	       p.product_image_first AS "productImageFirst",
-	       p.product_image_second AS "productImageSecond",
-		   p.product_image_third AS "productImageThird",
-		   p.product_price AS "productPrice",
-		   p.product_stock AS "productStock",
-		   c.category_pr_id AS "categoryPrId",
-		   c.category_id AS "categoryId",
-		   c.category_nm AS "categoryNm"
-      FROM product p
-	  JOIN category c 
-	    ON p.category_id = c.category_id
-</select> -->
-  
 <!-- 상품 조회 (카테고리별 필터링) -->
 <select id="selectProducts" resultType="com.example.daitso.product.model.Product">
     SELECT DISTINCT
@@ -196,7 +174,6 @@
 		        </otherwise>
 		    </choose>
 </select>
-
 
 <select id="selectProductOptionFirst" parameterType="int" resultType="map">
 	SELECT nvl(product_option_first,0) AS optionFirst 

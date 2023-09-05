@@ -82,11 +82,11 @@ public class AdminController {
 //	}
 
 	@GetMapping("/product")
+
 	public String selectProducts(
 	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
 	    @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
 	    Model model) {
-
 	    // 초기값 설정
 	    if (firstCategoryId == null) {
 	        firstCategoryId = 0; // 상위 카테고리의 초기값
