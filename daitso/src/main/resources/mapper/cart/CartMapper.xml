@@ -1,8 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.cart.repository.ICartRepository">
+
 <insert id="insertCart">
 	INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
 	VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId})
 </insert>
+
+
+	<!-- 
+		기능: 사용자 고유번호로부터 사용자 장바구니 조회
+		담당자: 최준원
+	-->
+	<select id="getCartByCustomerId" resultType="com.example.daitso.cart.model.CartCheck" parameterType="int">
+		SELECT c.cart_id AS "cartId",
+			   c.customer_id AS "customerId",
+			   c.product_id AS "productId",
+			   c.cart_count AS "cartCount",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.purchase_num)), '(\d{3})','\1,')), '^,','') AS "purchaseNum",
+			   p.product_nm AS "productNm",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productPrice",
+			   p.product_stock AS "productStock",
+			   p.product_option_first AS "productOptionFirst",
+			   p.product_option_second AS "productOptionSecond",
+			   p.product_option_third AS "productOptionThird",
+			   p.product_image_first AS "productImageFirst",
+			   p.category_id AS "categoryId"
+		  FROM cart c,
+		  	   product p
+		 WHERE c.customer_id =16
+           AND c.product_id = p.product_id
+		   AND c.status = 'Y'
+	  ORDER BY c.cart_id
+    </select>
+   
+    <!-- 
+		기능: 사용자 고유번호로부터 사용자 장바구니에 담긴 물건 개수 조회
+		담당자: 최준원
+	-->
+	<select id="getCartCountByCustomerId" resultType="int" parameterType="int">
+		SELECT count(*)
+		  FROM cart
+		 WHERE customer_id = #{customerId}
+		   AND status = 'Y'
+    </select>
+    
+    <!-- 
+		기능: 장바구니 개수 수정
+		담당자: 최준원
+	-->
+    <update id="updateCartCountByCartId" parameterType="com.example.daitso.cart.model.CartUpdate">
+    	UPDATE cart
+		   SET cart_count = #{cartCount},
+			   purchase_num = #{purchaseNum}
+		 WHERE cart_id = #{cartId}
+    </update>
+    
+     <!-- 
+		기능: 장바구니 삭제
+		담당자: 최준원
+	-->
+    <update id="deleteCartByCartId" parameterType="int">
+    	UPDATE cart
+		   SET status = 'N'
+		 WHERE cart_id = #{cartId}
+    </update>
+		   
 </mapper>

@@ -42,7 +42,7 @@
 					<img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}">
 					<div class="header-mydaitso-content">
 						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;">마이다있소</a>
-						<a sec:authorize="isAuthenticated()" th:href="@{/customer/cart}" style="color:black; text-decoration: none;">마이다있소</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/mypage}" style="color:black; text-decoration: none;">마이다있소</a>
 					</div>
 				</div>
 			</div>
@@ -51,7 +51,7 @@
 					<img class="header-cart-img" th:src="@{/assets/header/cart.svg}">
 					<div class="header-cart-content">
 						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;">장바구니</a>
-						<a sec:authorize="isAuthenticated()" th:href="@{/customer/cart}" style="color:black; text-decoration: none;">장바구니</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/cart}" style="color:black; text-decoration: none;">장바구니</a>
 					</div>
 				</div>
 			</div>				

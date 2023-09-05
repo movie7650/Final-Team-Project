@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div class="check-customer-inform">회원정보확인</div>
+
+<div class="update-table-container">
+	<table>
+		<tr>
+			<th>아이디(이메일)</th>
+			<th>비밀번호</th>
+		</tr>
+		
+		<tr>
+			<td>hong@naver.com</td>
+			<td><input type="password" id="update-password-input" placeholder="비밀번호 입력"></td>
+		</tr>
+		
+	</table>
+
+	<div class="update-button-container">
+		<button type="submit">확인</button>
+		<button id="update-cancle-button" type="reset">취소</button>
+	</div><!-- update-button-container -->
+
+
+</div><!-- update-table-container -->
+
+
+
+
+
+
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>

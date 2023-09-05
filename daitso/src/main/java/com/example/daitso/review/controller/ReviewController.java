@@ -1,5 +1,6 @@
 package com.example.daitso.review.controller;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ReviewController {
 	
 	@Autowired
 	IReviewService reviewService;
-	
+
 	//상품 리뷰 페이징
 	@GetMapping("/{productGroupId}/{page}")
 	@ResponseBody

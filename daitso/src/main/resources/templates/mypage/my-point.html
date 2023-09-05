@@ -20,14 +20,14 @@
 </div><!-- point-rule -->
 <div class="point-table-container">
 	<table>
-		<tr>
+		<tr class="point-table-tr01">
 			<th>상태</th>
 			<th>포인트</th>	
 			<th>내용</th>
 			<th>주문번호</th>
 			<th>작성일</th>
 		</tr>
-		<tr th:each="point : ${points}"> <!-- <tr th:each="이름 : ${메서드}"> -->
+		<tr class="point-table-tr02" th:each="point : ${points}"> <!-- <tr th:each="이름 : ${메서드}"> -->
 			<td>[[${point.pointUseDv}]]</td>
 			<td>[[${point.pointAfter}]]</td>
 			<td>[[${point.pointUpdatedContent}]]</td>

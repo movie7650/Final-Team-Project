@@ -1,6 +1,6 @@
 package com.example.daitso.purchase.controller;
 
-import java.util.List;
+//import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,14 +16,14 @@ import com.example.daitso.purchase.service.IPurchaseService;
 @RequestMapping("/purchase")
 public class PurchaseController {
 	
-	@Autowired
-	IPurchaseService purchaseService;
-	
-	@RequestMapping(value="/orderlist", method=RequestMethod.GET)
-	public String selectPurchase(Purchase purchase, Model model, PurchaseCheck purchasecheck) {
-		List<PurchaseCheck> purchases = purchaseService.selectAllPurchase();
-		model.addAttribute("purchases", purchases.get(0));
-		return "mypage/order-list";
-	}
+//	@Autowired
+//	IPurchaseService purchaseService;
+//	
+//	@RequestMapping(value="/orderlist", method=RequestMethod.GET)
+//	public String selectPurchase(Purchase purchase, Model model, PurchaseCheck purchasecheck) {
+//		List<PurchaseCheck> purchases = purchaseService.selectAllPurchase();
+//		model.addAttribute("purchases", purchases.get(0));
+//		return "mypage/order-list";
+//	}
 
 }
