@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.review.model.Review;
+import com.example.daitso.review.model.ReviewProductDetail;
 
 @Repository
 @Mapper
@@ -22,7 +23,9 @@ public interface IReviewRepository {
 	
 	void deleteReview(Review review);
 	
-	List<Review> selectProductReview(int productId);
+	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end);
+	
+	int selectProductReviewCount(int groupId);
 
-	int selectProductReviewAvg(int productId);
+	int selectProductReviewAvg(int groupId);
 }

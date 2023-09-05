@@ -3,6 +3,7 @@ package com.example.daitso.review.service;
 import java.util.List;
 
 import com.example.daitso.review.model.Review;
+import com.example.daitso.review.model.ReviewProductDetail;
 
 public interface IReviewService {
 	
@@ -16,7 +17,9 @@ public interface IReviewService {
 	
 	void deleteReview(Review review);
 
-	List<Review> selectProductReview(int productId);
+	List<ReviewProductDetail> selectProductReview(int groupId, int page);
 	
-	int selectProductReviewAvg(int productId);
+	int selectProductReviewCount(int groupId);
+	
+	int selectProductReviewAvg(int groupId);
 }

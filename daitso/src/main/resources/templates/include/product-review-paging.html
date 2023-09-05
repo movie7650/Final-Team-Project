@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="product-review-paging">
+<nav aria-label="Page navigation">
+<ul class="pagination1">
+	<li th:if="${nowPageBlock>1}">
+		<a th:href="@{/category/__${categoryId}__/__${startPage-1}__}" aria-label="Previous">◀</a>
+	</li>
+	
+	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:if="${i != 0}" th:classappend="${i==nowPage}?active">
+		<button class="btn btn-outline-primary" th:onclick="changeReviewPage([[${product.productGroupId}]], [[${i}]])">[[${i}]]</button>
+	</li>
+	
+	<li th:if="${nowPageBlock<totalPageBlock}">
+		<a th:href="@{/category/__${categoryId}__/__${endPage+1}__}" aria-label="Next">▶</a>
+	</li>
+</ul>
+</nav>
+</div>

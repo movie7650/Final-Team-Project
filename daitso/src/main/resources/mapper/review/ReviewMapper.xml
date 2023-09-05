@@ -3,24 +3,48 @@
 <mapper namespace="com.example.daitso.review.repository.IReviewRepository">
 
 <!-- 상품별 리뷰 조회 -->
-<select id="selectProductReview" parameterType="int" resultType="com.example.daitso.review.model.Review">
-	SELECT r.review_id AS reviewId,
-			r.product_id AS productId,
-			c.customer_nm AS customerNm,
-			r.review_content AS reviewContent,
-			r.review_star_point AS reviewStarPoint,
-			r.review_heart_count AS reviewHeartCount,
-			r.review_image_first AS reviewImageFirst,
-			r.review_image_second AS reviewImageSecond,
-			r.review_image_third AS reviewImageThird
-	FROM review r
-	LEFT JOIN customer c ON r.customer_id = c.customer_id
-	WHERE r.product_id = #{productId} and r.status = 'N'
+<select id="selectProductReview" resultType="com.example.daitso.review.model.ReviewProductDetail">
+	SELECT 
+       	review_id AS reviewId,
+		product_id AS productId,
+		product_nm AS productNm,
+		options AS options,
+        customer_nm AS customerNm,
+		review_title AS reviewTitle,
+		review_content AS reviewContent,
+		review_star_point * 20 AS reviewStarPoint,
+		create_dt as createDt,
+		review_heart_count AS reviewHeartCount,
+		review_image_first AS reviewImageFirst,
+		review_image_second AS reviewImageSecond,
+		review_image_third AS reviewImageThird,
+        rnum FROM (
+           			SELECT r.review_id, r.product_id, p.product_nm,
+					p.product_option_first || ' ' || p.product_option_second || ' ' || p.product_option_third AS options,
+					c.customer_nm, r.review_title, r.review_content, r.review_star_point, r.create_dt,
+					r.review_heart_count, r.review_image_first, r.review_image_second, r.review_image_third, rownum as rnum
+					FROM (
+						SELECT * FROM review ORDER BY review_star_point desc
+						  ) r
+						LEFT JOIN customer c ON r.customer_id = c.customer_id
+						LEFT JOIN product p ON r.product_id = p.product_id
+						WHERE p.product_group_id = #{groupId} and r.status = 'Y'
+				   )
+   		WHERE rnum between #{start} and #{end}
+</select>
+
+<!-- 상품별 리뷰 개수 조회 -->
+<select id="selectProductReviewCount" parameterType="int" resultType="int">
+	SELECT count(*) FROM review r
+	LEFT JOIN product p ON r.product_id = p.product_id
+	WHERE p.product_group_id = #{groupId}
 </select>
 
 <!-- 상품별 리뷰 평균 조회 -->
 <select id="selectProductReviewAvg" parameterType="int" resultType="int">
 	SELECT NVL(max(avg(review_star_point)) * 20, 0)
-	FROM review WHERE product_id = #{productId} AND status = 'N' GROUP BY product_id
+	FROM review r
+	LEFT JOIN product p ON r.product_id = p.product_id
+	WHERE p.product_group_id = #{groupId} AND r.status = 'Y' GROUP BY p.product_group_id
 </select>
 </mapper>
