@@ -59,16 +59,15 @@ public class AdminService implements IAdminService{
 	public Product selectProductId(int productId) {
 		return productRepository.selectProductId(productId);
 	}
-	
-	/*
-	 * @Override public List<Product> selectAllProducts() { return
-	 * productRepository.selectAllProducts(); }
-	 */
 
 	@Override
-	public List<Product> selectProducts(int firstCategoryId, int secondCategoryId) {
-	    return productRepository.selectProducts(firstCategoryId, secondCategoryId);
+	public List<Product> selectProducts(int firstCategoryId, int secondCategoryId, int offset, int pageSize) {
+		return productRepository.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
 	}
 
-	
+	@Override
+	public int selectCountProducts(int firstCategoryId, int secondCategoryId) {
+		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId);
+	}
+
 }
