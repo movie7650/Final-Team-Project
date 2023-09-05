@@ -36,7 +36,10 @@ public class CustomerSecurityService implements UserDetailsService{
 	    } else {
 	    	authorities.add(new SimpleGrantedAuthority(CustomerRole.USER.getValue()));
 	    }
-	    return new User(String.valueOf(customerSecurity.getCustomerId()), customerSecurity.getCustomerPw(), authorities);
+		
+		User user = new User(String.valueOf(customerSecurity.getCustomerId()), customerSecurity.getCustomerPw(), authorities);
+		
+	    return user;
 	}
 
 }

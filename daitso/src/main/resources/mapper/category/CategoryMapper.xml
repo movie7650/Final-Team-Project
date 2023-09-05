@@ -17,7 +17,7 @@
 						      START WITH category_pr_id = 0
 					    CONNECT BY PRIOR category_id = category_pr_id
 			          )
-			        AND status = 'N' 
+			        AND status = 'Y' 
 			 START WITH category_pr_id = 0
 	   CONNECT BY PRIOR category_id = category_pr_id
 	  ORDER SIBLINGS BY category_nm
@@ -41,6 +41,7 @@
 			   category_nm AS "categoryNm"
 		  FROM category 
 		 WHERE category_pr_id = 0
+		   AND status = 'Y'
 	  ORDER BY category_id
     </select>
     

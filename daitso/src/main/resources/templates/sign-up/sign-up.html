@@ -23,7 +23,7 @@
 								</div>
 								<input id="customerEmail" onchange="emailCheck()" type="email"
 									class="sign-up-input-value" placeholder="아이디(이메일)"
-									th:field="*{customerEmail}" required>
+									th:field="*{customerEmail}" required autocomplete="off">
 							</div>
 							<div id="emailConfirm"
 								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
@@ -76,7 +76,7 @@
 										th:src="@{/assets/loginandsignup/customer_gray.svg}">
 								</div>
 								<input type="text" class="sign-up-input-value" placeholder="이름"
-									th:field="*{customerNm}" required>
+									th:field="*{customerNm}" required autocomplete="off">
 							</div>
 							<div class="sign-up-input-box">
 								<div class="sign-up-input-img-box">
@@ -84,7 +84,7 @@
 										th:src="@{/assets/loginandsignup/phone.svg}">
 								</div>
 								<input id="customerTelno" type="text" class="sign-up-input-value"
-									placeholder="휴대폰 번호('01x-xxxx-xxxx')" th:field="*{customerTelno}" onchange="telnoCheck()" required>
+									placeholder="휴대폰 번호('01x-xxxx-xxxx')" th:field="*{customerTelno}" onchange="telnoCheck()" required autocomplete="off">
 							</div>
 							<div id="telnoConfirm"
 								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
