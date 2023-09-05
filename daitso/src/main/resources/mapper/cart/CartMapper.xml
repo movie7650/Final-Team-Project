@@ -2,11 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.cart.repository.ICartRepository">
 
-<insert id="insertCart">
-	INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
-	VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId})
-</insert>
-
+	<insert id="insertCart">
+		INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
+		VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId})
+	</insert>
 
 	<!-- 
 		기능: 사용자 고유번호로부터 사용자 장바구니 조회
