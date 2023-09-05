@@ -1,15 +1,14 @@
 package com.example.daitso.cart.service;
 
-
-public interface ICartService {
-	void insertCart(int productId, int customerId, int productCnt);
-
 import java.util.List;
 
 import com.example.daitso.cart.model.CartCheck;
 import com.example.daitso.cart.model.CartUpdate;
 
 public interface ICartService {
+	
+	// 장바구니 추가
+	void insertCart(int productId, int customerId, int productCnt);
 	
 	// 사용자 고유번호로부터 사용자 장바구니 조회
 	List<CartCheck> getCartByCustomerId(int customerId);
