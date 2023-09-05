@@ -7,11 +7,10 @@
 </insert> -->
 
 <select id="selectAllPurchase" resultType="com.example.daitso.purchase.model.PurchaseCheck">
-	<![CDATA[
-		SELECT	product_nm  AS	"productName"
-		From	product p,  purchase pur
-		WHERE	p.product_id=pur.product_id AND pur.customer_id=101
-	]]>
+	SELECT product_nm  AS	"productName"
+	  FROM product p,  purchase pur
+	 WHERE p.product_id=pur.product_id 
+	   AND pur.customer_id=101
 </select>
 
 </mapper>

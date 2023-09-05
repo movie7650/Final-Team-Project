@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+.check-customer-inform{
+	padding-bottom:0.5%;
+	font-size:150%;
+	position:absolute;
+	margin-top:-38%;
+	margin-left:30%;
+	width:855px;
+	border-bottom:solid 3px #668663;
+}
+.update-table-container{
+	position:absolute;
+	margin-top:-32%;
+	margin-left:30%;
+}
+
+.update-table-container tr{
+	border:solid 1px #e7e7e7;
+	display:block;
+	float:left;
+	
+}
+.update-table-container th{
+	display:block;
+	border:solid 1px #e7e7e7;
+	background-color:#668663;
+	color:white;
+	width:200px;
+	height:50px;
+	text-align:center;
+	padding-top:5%;
+	
+}
+.update-table-container td{
+	display:block;
+	border-top:solid 1px #e7e7e7;
+	border-right:solid 1px #e7e7e7;
+	border-bottom:solid 1px #e7e7e7;
+	width:655px;
+	height:50px;
+	padding-top:1.5%;
+	padding-left:2%;
+
+}
+.update-table-container input{
+	border:none;
+	outline:none;
+}
+.update-button-container{
+	width:855px;
+	padding-left:75%;
+}
+.update-button-container button{
+	margin-top:5%;
+	margin-left:1%;
+	width:100px;
+	background-color:#668663;
+	color:white;
+	border:none;
+}
+
+#update-cancle-button{
+	border:solid 1px #668663;
+	background-color:white;
+	color:black;
+}
+.update-button-container button:focus{
+	border:none;
+	outline:none;
+}
