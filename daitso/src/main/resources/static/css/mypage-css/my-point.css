@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .point-title{
-	padding-bottom:1%;
+	padding-bottom:0.5%;
 	font-size:150%;
 	position:absolute;
 	margin-top:-38%;
@@ -34,16 +34,16 @@
 	margin-left:31%;
 	margin-top:-15%;
 }
-table{
+.point-table-container > table{
 	text-align:center;
 }
-th{
+.point-table-tr01 > th{
 	width:10%;
 	padding-top:5px;
 	padding-bottom:5px;
 	border-top:2px solid #668663;
 	border-bottom:2px solid #668663;
 }
-td{
+.point-table-tr02 > td{
 	text-align:center;
 }

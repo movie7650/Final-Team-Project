@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div class="shipping-title">배송지관리</div>
+<div class="address-container">
+	<table>
+		<tr class="address-tr-01">
+			<td>홍길동</td>
+			<td>기본배송지</td>
+			<td>울산광역시 울주군 범서읍 구영리 점촌4길 65 현대아파트 302동 1305호</td>
+			<td>010-6237-7640</td>
+			<td>문앞에 놔주세요</td>
+			<td><a href="#">삭제</a></td>
+		</tr>
+	</table>
+</div><!-- address-container -->
+
+<div class="add-address-container">
+
+	<a  href="#">배송지 추가하기</a>
+
+</div><!-- add-address-container -->
+
+
+
+<div th:replace="~{/include/footer :: footer}"></div>
+
+</body>
+</html>
