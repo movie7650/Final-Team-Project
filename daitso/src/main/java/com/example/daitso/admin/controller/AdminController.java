@@ -45,10 +45,8 @@ public class AdminController {
 	    int totalCount;
 	    if (categoryId == null) {
 	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
-	        System.out.println(totalCount);
 	    } else {
 	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
-	        System.out.println(totalCount);
 	    }
 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
@@ -132,11 +130,6 @@ public class AdminController {
 		session.setAttribute("productNm", product.getProductNm());
 		session.setAttribute("productPrice", product.getProductPrice());
 		session.setAttribute("productStock", product.getProductStock());
-		System.out.println(product.getProductId());
-		System.out.println(product.getProductCode());
-		System.out.println(product.getProductNm());
-		System.out.println(product.getProductPrice());
-		System.out.println(product.getProductStock());
 		model.addAttribute("message","상품이 수정되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";

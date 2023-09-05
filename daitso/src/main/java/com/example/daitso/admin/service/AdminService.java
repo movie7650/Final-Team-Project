@@ -39,6 +39,9 @@ public class AdminService implements IAdminService{
 		}
 
 		productRepository.registerProducts(product);
+		
+		
+		product.getProductId();
 		productRepository.changeProductCode();
 	}
 
