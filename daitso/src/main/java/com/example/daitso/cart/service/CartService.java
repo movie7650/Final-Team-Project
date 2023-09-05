@@ -18,6 +18,7 @@ public class CartService implements ICartService{
 	@Override
 	public void insertCart(int productId, int customerId, int productCnt) {
 		cartRepository.insertCart(productId, customerId, productCnt);
+	}
 	
 	// 사용자 고유번호로부터 사용자 장바구니 조회
 	@Override
