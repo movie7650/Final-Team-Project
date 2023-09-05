@@ -9,6 +9,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class Product {
+	private int productGroupId;
 	private int productId;
 	private int categoryId;
 	private String productNm;

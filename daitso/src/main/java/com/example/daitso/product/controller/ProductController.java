@@ -44,7 +44,7 @@ public class ProductController {
 		Product product = productService.selectProduct(productId);
 		List<Review> rList = reviewService.selectProductReview(productId);
 		int reviewAvg = reviewService.selectProductReviewAvg(productId);
-		List<String> oListFirst = productService.selectProductOptionFirst(product.getProductNm());
+		List<String> oListFirst = productService.selectProductOptionFirst(product.getProductGroupId());
 		
 		String pOptionFirst = "0";
 		String pOptionSecond = "0";
@@ -55,8 +55,8 @@ public class ProductController {
 			pOptionSecond = product.getProductOptionSecond();
 		}
 		
-		List<String> oListSecond = productService.selectProductOptionSecond(product.getProductNm(), pOptionFirst);
-		List<String> oListThird = productService.selectProductOptionThird(product.getProductNm(), pOptionFirst, pOptionSecond);
+		List<String> oListSecond = productService.selectProductOptionSecond(product.getProductGroupId(), pOptionFirst);
+		List<String> oListThird = productService.selectProductOptionThird(product.getProductGroupId(), pOptionFirst, pOptionSecond);
 		
 		model.addAttribute("product", product);
 		model.addAttribute("rList", rList);
@@ -70,29 +70,29 @@ public class ProductController {
 	}
 	
 	//상품 옵션 변경하기
-	@GetMapping("/change/{productNm}")
+	@GetMapping("/change/{productGroupId}")
 	@ResponseBody
-	public Product selectChangeProduct(@PathVariable String productNm, @RequestParam(value="optionFirst", required = false, defaultValue="0") String optionFirst
+	public Product selectChangeProduct(@PathVariable int productGroupId, @RequestParam(value="optionFirst", required = false, defaultValue="0") String optionFirst
 			,@RequestParam(value="optionSecond", required = false, defaultValue="0") String optionSecond
 			,@RequestParam(value="optionThird", required = false, defaultValue="0") String optionThird) {
-		System.out.println(productNm + " "   + optionFirst +  " " + optionSecond + " " + optionThird);
-		return productService.selectOptionProduct(productNm, optionFirst, optionSecond, optionThird);
+		System.out.println("여기까진 넘어오나?" + productGroupId);
+		//System.out.println(productNm + " "   + optionFirst +  " " + optionSecond + " " + optionThird);
+		return productService.selectOptionProduct(productGroupId, optionFirst, optionSecond, optionThird);
 	}
 	
 	//옵션 리스트 변경하기
-	@GetMapping("/option/{productNm}")
+	@GetMapping("/option/{productGroupId}")
 	@ResponseBody
-	public List<List> selectChangeOption(@PathVariable String productNm, @RequestParam(value="optionFirst", required = false, defaultValue="0") String optionFirst
+	public List<List> selectChangeOption(@PathVariable int productGroupId, @RequestParam(value="optionFirst", required = false, defaultValue="0") String optionFirst
 			,@RequestParam(value="optionSecond", required = false, defaultValue="0") String optionSecond
 			,@RequestParam(value="optionThird", required = false, defaultValue="0") String optionThird){
-		//System.out.println(productNm + " "   + optionFirst +  " " + optionSecond + " " + optionThird);
-		List<String> oListSecond = productService.selectProductOptionSecond(productNm, optionFirst);
-		List<String> oListThird = productService.selectProductOptionThird(productNm, optionFirst, optionSecond);
-		
+		//System.out.println("im here" + productNm + " "   + optionFirst +  " " + optionSecond + " " + optionThird);
 		List<List> list = new ArrayList<>();
+		List<String> oListSecond = productService.selectProductOptionSecond(productGroupId, optionFirst);
+		List<String> oListThird = productService.selectProductOptionThird(productGroupId, optionFirst, optionSecond);
 		list.add(oListSecond);
 		list.add(oListThird);
-		System.out.println(list);
+		//System.out.println(list);
 		
 		return list;
 	}

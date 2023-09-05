@@ -5,37 +5,78 @@
 <body>
 	<div id="productTable">
 		<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+
+		<div id="wrapper">
+			<div class="topbar"
+				style="position: absolute; padding-top: 115px; padding-left: 15px;">
+
+				<!-- 왼쪽 서브 메뉴 -->
+				<div class="left_sub_menu">
+					<div class="sub_menu">
+						<h2>TITLE</h2>
+						<ul class="big_menu">
+							<li>MENU 1 <i class="arrow fas fa-angle-right"></i></li>
+							<ul class="small_menu">
+								<li><a href="#">소메뉴1-1</a></li>
+								<li><a href="#">소메뉴1-2</a></li>
+								<li><a href="">소메뉴1-3</a></li>
+								<li><a href="#">소메뉴1-4</a></li>
+							</ul>
+						</ul>
+						<ul class="big_menu">
+							<li>MENU 2 <i class="arrow fas fa-angle-right"></i></li>
+							<ul class="small_menu">
+								<li><a href="#">소메뉴2-1</a></li>
+								<li><a href="#"></a>소메뉴2-2</a></li>
+							</ul>
+						</ul>
+						<ul class="big_menu">
+							<li>MYPAGE</li>
+						</ul>
+					</div>
+				</div>
+				<div class="overlay"></div>
+			</div>
+		</div>
+
 		<div class="container" style="max-width: 1200px">
 			<div class="row">
 				<div class="col" style="z-index: 1">
+					<!-- 카테고리 선택 폼 -->
+					<form id="searchForm" th:action="@{/admin/product}" method="get"
+						onsubmit="return searchByCategory()">
+						<div class="row mt-3" style="width: 400px">
+							<div class="col-sm-3" style="padding-left: 0px;">
+								<label for="firstCategory"></label> <select id="firstCategory"
+									onchange="getSecondCategories(this.value)"
+									style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
+									<option value="">전체</option>
+									<option th:each="category : ${firstCategories}"
+										th:value="${category.categoryId}"
+										th:text="${category.categoryNm}"></option>
+								</select>
+							</div>
 
+							<div class="col-sm-3">
+								<label for="secondCategory"></label> <select id="secondCategory"
+									onchange="updateSubcategoryProducts(this.value)"
+									style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
+									<option value="">전체</option>
+								</select>
+							</div>
+
+							<div class="col-sm-3"
+								style="padding-top: 15px; padding-left: 100px; white-space: nowrap">
+								<button class="btn btn-primary"
+									style="background-color: #E8C369; border-color: #E8C369"
+									type="submit">조회</button>
+							</div>
+						</div>
+					</form>
 					<!-- 상품 등록 모달을 열기 위한 버튼 -->
 					<button class="btn btn-primary float-right"
 						style="background-color: #39594e" data-bs-toggle="modal"
 						data-bs-target="#registerModal" type="button">+등록</button>
-
-					<!-- 카테고리 선택 버튼 -->
-					<div class="row mt-3" style="width: 400px;">
-						<div class="col-sm-3" style="padding-left: 0px;">
-							<label for="categoryFilter"></label> <select id="categoryFilter"
-								onchange="updateSubcategories(this.value)"
-								style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
-								<option value="">전체</option>
-								<option th:each="category : ${categories}"
-									th:value="${category.categoryId}"
-									th:text="${category.categoryNm}"></option>
-							</select>
-						</div>
-						<div class="col-sm-3">
-							<label for="subcategoryFilter"></label> <select
-								id="subcategoryFilter"
-								onchange="updateSubcategoryProducts(this.value)"
-								style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
-								<option value="">전체</option>
-							</select>
-						</div>
-					</div>
-
 				</div>
 			</div>
 
@@ -44,27 +85,23 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>상품 코드</th>
+							<th>순번</th>
+							<!-- 순번을 표시할 새로운 열 -->
+							<th>그룹 ID</th>
 							<th>상품명</th>
-							<th>사이즈</th>
-							<th>색상</th>
-							<th>기타</th>
-							<th>수량</th>
-							<th>이미지</th>
+							<th>상품 코드</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="product : ${products}">
-							<td th:text="${product.productCode}"></td>
+						<tr th:each="product, iterStat : ${products}">
+							<td th:text="${iterStat.index + 1}"></td>
+							<!-- 순번을 출력 -->
+							<td th:text="${product.productGroupId}"></td>
 							<td th:text="${product.productNm}"></td>
-							<td th:text="${product.productOptionFirst}"></td>
-							<td th:text="${product.productOptionSecond}"></td>
-							<td th:text="${product.productOptionThird}"></td>
-							<td th:text="${product.productStock}"></td>
-							<td><button name="plus" value="${product.prodcutId}"
-									class="btn btn-xs"
-									style="background-color: #668663; color: #ffff">더보기</button></td>
+							<td th:text="${product.productCode}"></td>
+							<!-- <td><button name="plus" value="${product.prodcutId}" class="btn btn-xs"
+								style="background-color: #668663; color: #ffff">더보기</button></td> -->
 							<td>
 								<div class="btn-group">
 									<!-- 상품 수정 모달을 열기 위한 버튼 -->
@@ -74,8 +111,6 @@
 										type="button"
 										th:onclick="setProductInfo([[${product.productId}]])">수정</button>
 
-									<!-- <button class="btn btn-xs" style="background-color: red; color: #fff" 
-        						type="button" th:attr="onclick='deleteProduct(\'' + ${product.productId} + '\');'">삭제</button> -->
 									<button class="btn btn-xs"
 										style="background-color: red; color: #fff" type="button"
 										th:onclick="deleteProduct([[${product.productId}]])">삭제</button>
@@ -86,27 +121,30 @@
 				</table>
 			</div>
 
-
 			<!-- 페이지 링크 표시 -->
 			<div th:if="${totalCount > 0}">
 				<ul class="pagination">
+					<!-- Previous Page Link -->
 					<li class="page-item"
 						th:classappend="${currentPage == 1} ? disabled"><a
 						class="page-link"
-						th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize})}"
+						th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId})}"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
-					<li
-						th:each="page : ${#numbers.sequence(1, ((totalCount + pageSize - 1) / pageSize), 1)}"
+
+					<!-- Page Links -->
+					<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}"
 						class="page-item" th:classappend="${page == currentPage} ? active">
 						<a class="page-link"
-						th:href="@{/admin/product(page=${page}, pageSize=${pageSize})}"
+						th:href="@{/admin/product(page=${page}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId})}"
 						th:text="${page}"></a>
 					</li>
+
+					<!-- Next Page Link -->
 					<li class="page-item"
 						th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
 						<a class="page-link"
-						th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize})}"
+						th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId})}"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a>
 					</li>
@@ -114,7 +152,6 @@
 			</div>
 
 		</div>
-
 
 		<!-- 상품 등록 모달 -->
 		<div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
@@ -212,8 +249,7 @@
 							</div>
 							<div class="row mb-3">
 								<label for="productImages" class="col-sm-2 col-form-label">
-									상품 이미지(3개)
-								</label>
+									상품 이미지(3개) </label>
 								<div class="col-sm-10">
 									<input type="file" id="files" name="files"
 										accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
@@ -228,7 +264,7 @@
 									<button type="button" class="btn btn-secondary"	data-dismiss="modal">닫기</button>
 									<button type="submit" class="btn btn-primary">저장</button>
 						-->
-								<button id="product-enroll-btn" class="btn btn-primary"
+								<button class="btn btn-primary"
 									style="background-color: #668663"
 									th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
 								<button class="btn btn-secondary"
@@ -305,25 +341,56 @@
 
 	<script th:inline="javascript">
     
-    // 상품 등록 시 하위 카테고리를 가져오는 함수
-    function getSubCategories(categoryId) {
-        var subCategorySelect = document.getElementById("subCategoryId");
-        subCategorySelect.innerHTML = '<option value="">전체</option>';   
-        if (categoryId !== "") {
-            fetch("/admin/sub-categories/" + categoryId)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(subCategory => {
-                        var option = document.createElement("option");
-                        option.value = subCategory.categoryId;
-                        option.textContent = subCategory.categoryNm;
-                        subCategorySelect.appendChild(option);
-                    });
-                });
+    function getSecondCategories(firstCategoryId) {
+        var secondCategory = $("#secondCategory");
+        
+        // 기존 옵션을 모두 지우고 기본 "전체" 옵션을 추가
+        secondCategory.empty();
+        secondCategory.append('<option value="">전체</option>');
+
+        // 상위 카테고리가 "전체"로 선택된 경우, 더 이상 처리하지 않음
+        if (firstCategoryId === "") {
+            return;
         }
+        $.ajax({
+            type: "GET",
+            url: "/admin/product/" + firstCategoryId,
+            success: function (data) {
+                // 선택된 상위 카테고리의 하위 카테고리 목록을 추가
+                for (var i = 0; i < data.length; i++) {
+                    secondCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');
+                }
+            }
+        });
     }
     
-    //삭제 확인 메시지
+    function searchByCategory() {
+        var firstCategoryId = $("#firstCategory").val();
+        var secondCategoryId = $("#secondCategory").val();
+        
+        // 기본값 설정
+        if (!firstCategoryId) {
+            firstCategoryId = 0;
+        }
+        if (!secondCategoryId) {
+            secondCategoryId = 0;
+        }
+
+        // URL 생성
+        var newUrl = "/admin/product";
+        if (firstCategoryId !== 0 || secondCategoryId !== 0) {
+            newUrl += "?firstCategoryId=" + firstCategoryId;
+            if (secondCategoryId !== 0) {
+                newUrl += "&secondCategoryId=" + secondCategoryId;
+            }
+        }
+
+        // 페이지 리다이렉트
+        window.location.href = newUrl;
+        return false; // 폼 제출 중지
+    }
+    
+  //삭제 확인 메시지
     function deleteProduct(productId) {
         if (!confirm('정말로 삭제하시겠습니까?')) {
             return false;
@@ -355,75 +422,12 @@
             }); 
     }
     
-	//★
-/*     function updateSubcategories(selectedCategoryId) {
-        // 상위 카테고리 선택 시 하위 카테고리를 가져오는 부분 추가
-        if (selectedCategoryId !== "") {
-            fetch(`/admin/sub-categories/${selectedCategoryId}`)
-                .then(response => response.json())
-                .then(subCategories => {
-                    const subCategorySelect = document.getElementById("subcategoryFilter");
-                    subCategorySelect.innerHTML = '<option value="">전체</option>';
-                    subCategories.forEach(subCategory => {
-                        const option = document.createElement("option");
-                        option.value = subCategory.categoryId;
-                        option.textContent = subCategory.categoryNm;
-                        subCategorySelect.appendChild(option);
-                    });
-                });
-        } else {
-            // 상위 카테고리가 선택되지 않았을 때의 처리
-            const subCategorySelect = document.getElementById("subcategoryFilter");
-            subCategorySelect.innerHTML = '<option value="">전체</option>';
-        }
-    } */
-    
-    function updateSubcategories(selectedCategoryId) {
-        // 상위 카테고리 선택 시 하위 카테고리를 가져오는 부분 추가
-        if (selectedCategoryId !== "") {
-            fetch(`/admin/sub-categories/${selectedCategoryId}`)
-                .then(response => response.json())
-                .then(subCategories => {
-                    const subCategorySelect = document.getElementById("subcategoryFilter");
-                    subCategorySelect.innerHTML = '<option value="">전체</option>';
-                    subCategories.forEach(subCategory => {
-                        const option = document.createElement("option");
-                        option.value = subCategory.categoryId;
-                        option.textContent = subCategory.categoryNm;
-                        subCategorySelect.appendChild(option);
-                    });
-                });
-        } else {
-            // 상위 카테고리가 선택되지 않았을 때의 처리
-            const subCategorySelect = document.getElementById("subcategoryFilter");
-            subCategorySelect.innerHTML = '<option value="">전체</option>';
-        }
-    }
-    
-    // 하위 카테고리 선택 시 호출되는 함수
-    function updateSubcategoryProducts(subCategoryId) {
-        if (subCategoryId !== "") {
-            // 선택한 하위 카테고리의 categoryId 값을 서버로 전달하여 해당 카테고리의 상품을 조회
-            fetch(`/admin/product?categoryId=${subCategoryId}&page=1&pageSize=10`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("productTable").innerHTML = data;
-                });
-            updateSubcategories("");
-        } else {
-            // 하위 카테고리가 선택되지 않았을 때의 동작 (전체 상품 조회 등)
-            fetch(`/admin/product?page=1&pageSize=10`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("productTable").innerHTML = data;
-                });
-        }
-    }
-    
     // 천 단위로 comma찍기
     function inputNumberFormat(obj) {
         obj.value = comma(uncomma(obj.value));
     }
+
+  
     function comma(str) {
         str = String(str);
         return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
@@ -437,6 +441,7 @@
     function inputOnlyNumberFormat(obj) {
         obj.value = onlynumber(uncomma(obj.value));
     }
+
     function onlynumber(str) {
 	    str = String(str);
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
@@ -461,7 +466,7 @@
     		filesEnrollBtn.disabled = false;
     	}
     }
-    
+
     </script>
 </body>
 </html>

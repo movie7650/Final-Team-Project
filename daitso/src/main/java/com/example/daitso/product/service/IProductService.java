@@ -12,16 +12,12 @@ public interface IProductService {
 	
 	Product selectProduct(int productId);
 	
-	List<String> selectProductOptionFirst(String productNm);
+	List<String> selectProductOptionFirst(int productGroupId);
 	
-	List<String> selectProductOptionSecond(String productNm, String productOptionFirst);
+	List<String> selectProductOptionSecond(int productGroupId, String productOptionFirst);
 	
-	List<String> selectProductOptionThird(String productNm, String productOptionFirst, String productOptionSecond);
+	List<String> selectProductOptionThird(int productGroupId, String productOptionFirst, String productOptionSecond);
 
-	List<Product> selectPagedProducts(int startRow, int endRow);
-	
-	int getTotalProductCount();
-
-	Product selectOptionProduct(String productNm, String productOptionFirst, String productOptionSecond, String productOptionThird);
+	Product selectOptionProduct(int productGroupId, String productOptionFirst, String productOptionSecond, String productOptionThird);
 
 }

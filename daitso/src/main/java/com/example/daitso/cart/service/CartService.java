@@ -12,7 +12,6 @@ import com.example.daitso.cart.repository.ICartRepository;
 
 @Service
 public class CartService implements ICartService{
-
 	@Autowired
 	ICartRepository cartRepository;
 	
@@ -39,5 +38,4 @@ public class CartService implements ICartService{
 	public void deleteCartByCartId(int cartId) {
 		cartRepository.deleteCartByCartId(cartId);
 	}
-
 }

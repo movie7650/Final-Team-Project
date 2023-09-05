@@ -2,19 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.point.repository.IPointRepository">
 	<select id="selectPoint" resultType="com.example.daitso.point.model.Point">
-		<![CDATA[
-			SELECT 
-				point_after					AS		"pointAfter",
-				point_updated_content		AS		"pointUpdatedContent",
-				create_dt					AS		"createDt",
-				point_use_dv				AS		"pointUseDv",
-				point_before				AS		"pointBefore"
-				
-			FROM
-				point
-			WHERE
-				customer_id = 101
-		]]>
+	    SELECT point_after					AS		"pointAfter",
+			   point_updated_content		AS		"pointUpdatedContent",
+			   create_dt					AS		"createDt",
+			   point_use_dv				AS		"pointUseDv",
+			   point_before				AS		"pointBefore"
+		  FROM point
+		 WHERE customer_id = 101
 	</select>
 
 </mapper>
