@@ -47,21 +47,10 @@ public class ProductService implements IProductService {
 		return productRepository.selectProductOptionThird(productGroupId, productOptionFirst, productOptionSecond);
 	}
 
-	 public List<Product> selectPagedProducts(int startRow, int endRow) {
-        return productRepository.selectPagedProducts(startRow, endRow);
-    }
-
-	@Override
-	public int getTotalProductCount() {
-		return productRepository.getTotalProductCount();
-	}
-
 	@Override
 	public Product selectOptionProduct(int productGroupId, String productOptionFirst, String productOptionSecond,
 			String productOptionThird) {
 		return productRepository.selectOptionProduct(productGroupId, productOptionFirst, productOptionSecond, productOptionThird);
 	}
-
-
 
 }

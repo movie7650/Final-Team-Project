@@ -36,51 +36,92 @@ public class AdminController {
 		return "admin/login/admin-login";
 	}
 	
-	//상품 조회하기 (페이징)
+//	//상품 조회하기 (페이징)
+//	@GetMapping("/product")
+//	public String selectCategoryPagedProducts(Model model,
+//	        @RequestParam(defaultValue = "1") int page,
+//	        @RequestParam(defaultValue = "10") int pageSize,
+//	        @RequestParam(required = false) Integer categoryId) {
+//	    int totalCount;
+//	    if (categoryId == null) {
+//	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
+//	    } else {
+//	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
+//	    }
+//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+//
+//	    // 페이지 번호를 범위 내로 제한
+//	    if (page < 1) {
+//	        page = 1;
+//	    } else if (page > totalPages) {
+//	        page = totalPages;
+//	    }
+//
+//	    int startRow = (page - 1) * pageSize + 1;
+//	    int endRow = startRow + pageSize - 1;
+//
+//	    List<Product> products;
+//	    if (categoryId == null) {
+//	        products = adminService.selectPagedProducts(startRow, endRow); // 전체 상품 조회
+//	        
+//	    } else {
+//	        products = adminService.selectCategoryPagedProducts(categoryId, startRow, endRow); // 선택한 카테고리의 상품 조회
+//	    }
+//	    
+//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
+//
+//	    model.addAttribute("products", products);
+//	    model.addAttribute("categories", categories);
+//
+//	    model.addAttribute("currentPage", page);
+//	    model.addAttribute("pageSize", pageSize);
+//	    model.addAttribute("totalCount", totalCount);
+//	    model.addAttribute("totalPages", totalPages);
+//
+//	    return "admin/product/admin-product";
+//	}
+
 	@GetMapping("/product")
-	public String selectCategoryPagedProducts(Model model,
-	        @RequestParam(defaultValue = "1") int page,
-	        @RequestParam(defaultValue = "10") int pageSize,
-	        @RequestParam(required = false) Integer categoryId) {
-	    int totalCount;
-	    if (categoryId == null) {
-	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
-	    } else {
-	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
-	    }
-	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	public String selectProducts(
+	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
+	    @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+	    Model model) {
 
-	    // 페이지 번호를 범위 내로 제한
-	    if (page < 1) {
-	        page = 1;
-	    } else if (page > totalPages) {
-	        page = totalPages;
+	    // 초기값 설정
+	    if (firstCategoryId == null) {
+	        firstCategoryId = 0; // 상위 카테고리의 초기값
+	    }
+	    if (secondCategoryId == null) {
+	        secondCategoryId = 0; // 하위 카테고리의 초기값
 	    }
 
-	    int startRow = (page - 1) * pageSize + 1;
-	    int endRow = startRow + pageSize - 1;
+	    // 매퍼 메서드 호출
+	    List<Product> products = adminService.selectProducts(firstCategoryId, secondCategoryId);
 
-	    List<Product> products;
-	    if (categoryId == null) {
-	        products = adminService.selectPagedProducts(startRow, endRow); // 전체 상품 조회
-	        
-	    } else {
-	        products = adminService.selectCategoryPagedProducts(categoryId, startRow, endRow); // 선택한 카테고리의 상품 조회
-	    }
-	    
-	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-
+	    // 결과를 모델에 추가
 	    model.addAttribute("products", products);
-	    model.addAttribute("categories", categories);
 
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("totalPages", totalPages);
+	    // 첫 번째 카테고리 불러오기
+	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+	    model.addAttribute("firstCategories", firstCategories);
 
+	    // 선택한 카테고리 정보 전달
+	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
+	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
+
+	    // 이후 뷰 이름을 반환
 	    return "admin/product/admin-product";
 	}
-
+	
+	//두 번째 카테고리 불러오기
+		@GetMapping("/product/{categoryId}")
+		@ResponseBody
+		public List<Category> getSecondCategories(@PathVariable int categoryId,Model model) {
+			List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+			model.addAttribute("secondCategories",secondCategories);
+			return secondCategories;
+		}
+	
 	//상품 등록하기
 	@PostMapping("/product")
 	public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
@@ -96,13 +137,6 @@ public class AdminController {
 		}	
 	}
 
-	//하위 카테고리 불러오기
-	@GetMapping("/sub-categories/{categoryId}")
-	@ResponseBody
-	public List<Category> getSubCategories(@PathVariable int categoryId) {
-		List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
-		return subCategories;
-	}
 
 	//상품 삭제하기
 	@PostMapping("/delete")

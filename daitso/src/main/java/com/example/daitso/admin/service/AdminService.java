@@ -60,33 +60,15 @@ public class AdminService implements IAdminService{
 		return productRepository.selectProductId(productId);
 	}
 	
-	@Override
-	public List<Product> selectPagedProducts(int startRow, int endRow) {
-		return productRepository.selectPagedProducts(startRow, endRow);
-	}
+	/*
+	 * @Override public List<Product> selectAllProducts() { return
+	 * productRepository.selectAllProducts(); }
+	 */
 
 	@Override
-	public int getTotalProductCount() {
-		return productRepository.getTotalProductCount();
+	public List<Product> selectProducts(int firstCategoryId, int secondCategoryId) {
+	    return productRepository.selectProducts(firstCategoryId, secondCategoryId);
 	}
 
-	@Override
-	public List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow) {
-		return productRepository.selectCategoryPagedProducts(categoryId,startRow, endRow);
-	}
-
-	@Override
-	public int getCategoryTotalProductCount(int categoryId) {
-		return productRepository.getCategoryTotalProductCount(categoryId);
-	}
-
-	@Override
-	public List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow) {
-		return productRepository.selectTopCategoryPagedProducts(category_pr_id, startRow, endRow);
-	}
-
-	@Override
-	public int getTopCategoryTotalProductCount(int category_pr_id) {
-		return productRepository.getTopCategoryTotalProductCount(category_pr_id);
-	}
+	
 }
