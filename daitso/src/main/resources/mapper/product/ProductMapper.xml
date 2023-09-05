@@ -136,7 +136,6 @@
 </select>
 
 <select id="selectAllProducts" resultType="com.example.daitso.product.model.Product">
-<![CDATA[
 	SELECT DISTINCT
    		   p.product_id AS "productId",
     	   p.product_group_id AS "productGroupId",
@@ -157,7 +156,6 @@
 	  JOIN category c 
 	    ON p.category_id = c.category_id
 </select>
-]]>
   
 <!-- 상품 조회 (카테고리별 필터링) -->
 <select id="selectProducts" resultType="com.example.daitso.product.model.Product">
