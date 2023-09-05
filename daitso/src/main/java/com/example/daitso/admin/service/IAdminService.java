@@ -16,12 +16,7 @@ public interface IAdminService {
 	
 	void updateProduct(Product product);
 	
-	List<Product> selectPagedProducts(int startRow, int endRow);
-	int getTotalProductCount();
-	
-	List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow);
-	int getCategoryTotalProductCount(int categoryId);
-	
-	List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow);
-	int getTopCategoryTotalProductCount(int category_pr_id);
+//	List<Product> selectAllProducts();
+
+	List<Product> selectProducts(int firstCategoryId, int secondCategoryId);
 }

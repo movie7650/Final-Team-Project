@@ -29,24 +29,18 @@ public interface IProductRepository {
 	
 	void updateProduct(Product product);
 	
-	List<String> selectProductOptionFirst(String productNm);
+//	List<Product> selectAllProducts();
 	
-	List<String> selectProductOptionSecond(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst);
+	List<Product> selectProducts(int firstCategoryId, int secondCategoryId);
 	
-	List<String> selectProductOptionThird(@Param("productNm") String productNm, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
+	List<String> selectProductOptionFirst(int productGroupId);
+	
+	List<String> selectProductOptionSecond(@Param("productGroupId") int productGroupId, @Param("productOptionFirst") String productOptionFirst);
+	
+	List<String> selectProductOptionThird(@Param("productGroupId") int productGroupId, @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond);
+	
+	Product selectOptionProduct(@Param("productGroupId") int productGroupId , @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond, @Param("productOptionThird") String productOptionThird);
 
-	List<Product> selectPagedProducts(int startRow, int endRow);
-	
-	int getTotalProductCount();
-	
-
-	Product selectOptionProduct(@Param("productNm") String productNm , @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond, @Param("productOptionThird") String productOptionThird);
-
-	List<Product> selectCategoryPagedProducts(int categoryId, int startRow, int endRow);
-	int getCategoryTotalProductCount(@Param("categoryId") int categoryId);
-	
-	List<Product> selectTopCategoryPagedProducts(int category_pr_id, int startRow, int endRow);
-	int getTopCategoryTotalProductCount(@Param("category_pr_id") int category_pr_id);
 
 }
 

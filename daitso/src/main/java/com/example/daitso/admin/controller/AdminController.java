@@ -81,6 +81,47 @@ public class AdminController {
 //	    return "admin/product/admin-product";
 //	}
 
+	@GetMapping("/product")
+	public String selectProducts(
+	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
+	    @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+	    Model model) {
+
+	    // 초기값 설정
+	    if (firstCategoryId == null) {
+	        firstCategoryId = 0; // 상위 카테고리의 초기값
+	    }
+	    if (secondCategoryId == null) {
+	        secondCategoryId = 0; // 하위 카테고리의 초기값
+	    }
+
+	    // 매퍼 메서드 호출
+	    List<Product> products = adminService.selectProducts(firstCategoryId, secondCategoryId);
+
+	    // 결과를 모델에 추가
+	    model.addAttribute("products", products);
+
+	    // 첫 번째 카테고리 불러오기
+	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+	    model.addAttribute("firstCategories", firstCategories);
+
+	    // 선택한 카테고리 정보 전달
+	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
+	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
+
+	    // 이후 뷰 이름을 반환
+	    return "admin/product/admin-product";
+	}
+	
+	//두 번째 카테고리 불러오기
+		@GetMapping("/product/{categoryId}")
+		@ResponseBody
+		public List<Category> getSecondCategories(@PathVariable int categoryId,Model model) {
+			List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+			model.addAttribute("secondCategories",secondCategories);
+			return secondCategories;
+		}
+	
 	//상품 등록하기
 	@PostMapping("/product")
 	public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
@@ -96,13 +137,6 @@ public class AdminController {
 		}	
 	}
 
-	//하위 카테고리 불러오기
-	@GetMapping("/sub-categories/{categoryId}")
-	@ResponseBody
-	public List<Category> getSubCategories(@PathVariable int categoryId) {
-		List<Category> subCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
-		return subCategories;
-	}
 
 	//상품 삭제하기
 	@PostMapping("/delete")

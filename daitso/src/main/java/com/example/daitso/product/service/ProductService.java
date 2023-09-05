@@ -32,36 +32,25 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public List<String> selectProductOptionFirst(String productNm) {
-		return productRepository.selectProductOptionFirst(productNm);
+	public List<String> selectProductOptionFirst(int productGroupId) {
+		return productRepository.selectProductOptionFirst(productGroupId);
 	}
 
 	@Override
-	public List<String> selectProductOptionSecond(String productNm, String productOptionFirst) {
-		return productRepository.selectProductOptionSecond(productNm, productOptionFirst);
+	public List<String> selectProductOptionSecond(int productGroupId, String productOptionFirst) {
+		return productRepository.selectProductOptionSecond(productGroupId, productOptionFirst);
 	}
 
 	@Override
-	public List<String> selectProductOptionThird(String productNm, String productOptionFirst,
+	public List<String> selectProductOptionThird(int productGroupId, String productOptionFirst,
 			String productOptionSecond) {
-		return productRepository.selectProductOptionThird(productNm, productOptionFirst, productOptionSecond);
-	}
-
-	 public List<Product> selectPagedProducts(int startRow, int endRow) {
-        return productRepository.selectPagedProducts(startRow, endRow);
-    }
-
-	@Override
-	public int getTotalProductCount() {
-		return productRepository.getTotalProductCount();
+		return productRepository.selectProductOptionThird(productGroupId, productOptionFirst, productOptionSecond);
 	}
 
 	@Override
-	public Product selectOptionProduct(String productNm, String productOptionFirst, String productOptionSecond,
+	public Product selectOptionProduct(int productGroupId, String productOptionFirst, String productOptionSecond,
 			String productOptionThird) {
-		return productRepository.selectOptionProduct(productNm, productOptionFirst, productOptionSecond, productOptionThird);
+		return productRepository.selectOptionProduct(productGroupId, productOptionFirst, productOptionSecond, productOptionThird);
 	}
-
-
 
 }
