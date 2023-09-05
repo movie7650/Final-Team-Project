@@ -3,8 +3,13 @@
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <link rel="stylesheet" th:href="@{/css/admin-product.css}">
 <body>
+<<<<<<< HEAD
 <div id ="productTable">
 <div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+=======
+<div id ="productTable">
+<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+>>>>>>> branch 'hyeonung' of https://github.com/SamssoAfterwards/Daitso.git
 <div class="container" style="max-width: 1200px">
         <div class="row">
             <div class="col" style="z-index: 1">
@@ -358,6 +363,7 @@
     function inputNumberFormat(obj) {
         obj.value = comma(uncomma(obj.value));
     }
+
   
     function comma(str) {
         str = String(str);
@@ -371,12 +377,15 @@
     // 숫자만 입력받기
     function inputOnlyNumberFormat(obj) {
         obj.value = onlynumber(uncomma(obj.value));
+
     }
 
     function onlynumber(str) {
 	    str = String(str);
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
 	}
+
+    
     </script>
 </body>
 </html>
