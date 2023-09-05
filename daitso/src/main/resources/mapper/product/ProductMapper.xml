@@ -3,6 +3,7 @@
 <mapper namespace="com.example.daitso.product.repository.IProductRepository">
 
 <resultMap type="com.example.daitso.product.model.Product" id="productMap">
+	<result column="product_group_id" property="productGroupId" />
 	<result column="product_id"		property="productId" />
 	<result column="category_id"	property="categoryId" />
 	<result column="product_nm"		property="productNm" />
@@ -36,10 +37,10 @@
 		product_price AS productPrice
 	FROM(
     	SELECT product_id, category_id, product_image_first, product_nm, review_star_point, review_count, product_content, product_stock, 
-    			product_price, rownum as rnum , row_number() over (partition by product_nm order by product_price) snum
+    			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
     	FROM(
     		SELECT p.product_id		AS		product_id,
-				   category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(avg(review_star_point)*20,0) AS review_star_point,
+				   product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(avg(review_star_point)*20,0) AS review_star_point,
             	   count(review_star_point) AS review_count
 			 FROM product p
 	         LEFT JOIN review r on p.product_id = r.product_id
@@ -48,8 +49,8 @@
 									 START WITH category_id = #{categoryId}
 								   CONNECT BY PRIOR category_id = category_pr_id
 								  )
-			   AND p.status = 'N'
-			 GROUP BY p.product_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first
+			   AND p.status = 'Y'
+			 GROUP BY p.product_id, product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first
 			 ORDER BY p.product_id
 	  							  )
 
@@ -59,11 +60,15 @@
 
 <select id="selectCountProductList" parameterType="int" resultType="int">
 	SELECT count(*)
-	FROM (select distinct product_nm from product 
-	WHERE category_id IN (
-		SELECT category_id 
-		FROM category START WITH category_id = #{categoryId} 
-		CONNECT BY PRIOR category_id = category_pr_id))
+	  FROM (
+	  		 SELECT distinct product_group_id 
+	  		   FROM product 
+	 		  WHERE category_id IN (
+			 						 SELECT category_id 
+		 							   FROM category START WITH category_id = #{categoryId} 
+								    CONNECT BY PRIOR category_id = category_pr_id
+						   		   )
+	        )
 </select>
 
 
@@ -108,83 +113,70 @@
 
 <!-- 상품 코드 변경 -->
 <update id="changeProductCode">
-
     UPDATE product
-    SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
-    WHERE product_id = (
-		#{productId}
-        <!--SELECT product_id as "productId" FROM
-        (SELECT * FROM product ORDER BY product_id DESC)
-        WHERE ROWNUM= 1-->
-    )
-
+       SET product_code = CONCAT(product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3') )
+     WHERE product_id = ( 
+     					  <!-- #{productId} -->
+     					  
+           				  SELECT product_id as "productId" 
+          					FROM (SELECT * 
+          							FROM product ORDER BY product_id DESC)
+        				   WHERE ROWNUM= 1
+    					 )
 </update>
 
 <!-- 상품 삭제 -->
 <delete id="deleteProduct" parameterType="int">
-<![CDATA[
 	 DELETE FROM product WHERE product_id = #{productId}
-]]>
+
 </delete>
 
 <!-- 상품 수정 -->
 <update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
-<![CDATA[
 	UPDATE product
-	SET product_price = #{productPrice}, product_stock = #{productStock}
-	WHERE product_id = #{productId}
-]]>
+	   SET product_price = #{productPrice}, product_stock = #{productStock}
+	 WHERE product_id = #{productId}
 </update>
 
 <!-- 상품 수정을 위한 해당 상품 정보 가져오기 -->
 <select id="selectProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
-<![CDATA[
 	SELECT product_id as "productId",
 		   product_nm as "productNm",
 		   product_code as "productCode",
 		   product_price as "productPrice",
 		   product_stock as "productStock"
-	FROM product
-	WHERE product_id = #{productId}
-]]>
+	  FROM product
+	 WHERE product_id = #{productId}
 </select>
 
 <!-- 총 상품 개수 가져오기 -->
 <select id="getTotalProductCount" parameterType="int">
-<![CDATA[
-	SELECT count(*)
-	FROM product
-]]>
+    SELECT count(*)
+	  FROM product
 </select>
 
 <!-- 전체 상품 조회하기(페이징) -->
 <select id="selectPagedProducts" resultType="com.example.daitso.product.model.Product">
-<![CDATA[
 	SELECT product_id as "productId",
-			   product_code as "productCode",
-			   product_nm as "productNm",
-			   product_option_first as "productOptionFirst",
-			   product_option_second as "productOptionSecond",
-			   product_option_third as "productOptionThird",
-			   product_stock as "ProductStock",
-	           rownum as rnum
-	FROM (
-        SELECT
-            p.*,
-            ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
-        FROM product p
-    ) paging
-    WHERE rnum BETWEEN #{startRow} AND #{endRow}
-]]>
+		   product_code as "productCode",
+		   product_nm as "productNm",
+		   product_option_first as "productOptionFirst",
+		   product_option_second as "productOptionSecond",
+		   product_option_third as "productOptionThird",
+		   product_stock as "ProductStock",
+           rownum as rnum
+      FROM (
+      		 SELECT p.*, ROW_NUMBER() OVER (ORDER BY product_id DESC) AS rnum
+        	   FROM product p
+    		) paging
+     WHERE rnum BETWEEN #{startRow} AND #{endRow}
 </select>
 
 <!-- 해당 카테고리 총 상품 개수 가져오기 -->
 <select id="getCategoryTotalProductCount" parameterType="int">
-<![CDATA[
 	SELECT count(*)
 	FROM product
 	WHERE category_id = #{categoryId}
-]]>
 </select>
 
 <!-- 해당 카테고리 전체 상품 조회하기(페이징) -->
@@ -245,16 +237,16 @@
 ]]>
 </select>
 
-<select id="selectProductOptionFirst" parameterType="String" resultType="map">
+<select id="selectProductOptionFirst" parameterType="int" resultType="map">
 	SELECT nvl(product_option_first,0) AS optionFirst 
-	FROM product WHERE product_nm = #{productNm}
+	FROM product WHERE product_group_id = #{productGroupId}
 	GROUP BY product_option_first
 </select>
 
 <select id="selectProductOptionSecond" resultType="map">
 	SELECT nvl(max(product_option_second),0) AS optionSecond
 	FROM product 
-	WHERE product_nm=#{productNm}
+	WHERE product_group_id=#{productGroupId}
 	<choose>
 		<when test='productOptionFirst.equals("0")'>
 		</when>
@@ -268,7 +260,7 @@
 <select id="selectProductOptionThird" resultType="map">
 	SELECT nvl(max(product_option_third),0) AS optionThird
 	FROM product 
-	WHERE product_nm=#{productNm}
+	WHERE product_group_id=#{productGroupId}
 	<choose>
 		<when test='productOptionFirst.equals("0")'>
 		</when>
@@ -289,7 +281,7 @@
 <select id="selectOptionProduct" resultMap="productMap">
 	SELECT * FROM
 	(SELECT p.*, rownum as rnum FROM product p
-	WHERE product_nm = #{productNm}
+	WHERE product_group_id = #{productGroupId}
 	<choose>
 		<when test='productOptionFirst.equals("0")'>
 		</when>
