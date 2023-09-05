@@ -194,13 +194,16 @@
 						</div>
 					</div>
 					<div class="row mb-3">
-						<label for="productImages" class="col-sm-2 col-form-label">상품
-							이미지</label>
-						<div class="col-sm-10">
-							<input type="file" id="files" 
-								name="files" multiple required>
-						</div>
-					</div>
+								<label for="productImages" class="col-sm-2 col-form-label">
+									상품 이미지(3개) </label>
+								<div class="col-sm-10">
+									<input type="file" id="files" name="files"
+										accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
+										multiple required>
+									<div id="files-error"
+										style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
+								</div>
+							</div>
 
 					<div class="modal-footer">
 						<!--
@@ -382,6 +385,25 @@
 	    str = String(str);
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
 	}
+// 이미지 파일 개수 제한
+    function fileCheck() {
+    	var filesInput = document.getElementById("files");
+        var filesError = document.getElementById("files-error");
+        var filesEnrollBtn = document.getElementById("product-enroll-btn");
+        
+        if( filesInput.files.length < 3 ){
+        	filesError.style.display = 'block';
+        	filesError.innerText = '이미지 파일 3개를 업로드 해주세요';
+        	filesEnrollBtn.disabled = true;
+    	} else if(filesInput.files.length > 3) {
+    		filesError.style.display = 'block';
+        	filesError.innerText = '상품 이미지 적정 개수(3개)를 초과하였습니다!';
+        	filesEnrollBtn.disabled = true;
+    	} else {
+    		filesError.style.display = 'none';
+    		filesEnrollBtn.disabled = false;
+    	}
+    }
 
     
     </script>

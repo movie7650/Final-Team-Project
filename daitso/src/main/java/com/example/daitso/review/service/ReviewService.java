@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.daitso.review.model.Review;
+import com.example.daitso.review.model.ReviewProductDetail;
 import com.example.daitso.review.repository.IReviewRepository;
 
 @Service
@@ -41,13 +42,19 @@ public class ReviewService implements IReviewService{
 	}
 
 	@Override
-	public List<Review> selectProductReview(int productId) {
-		return reviewRepository.selectProductReview(productId);
+	public List<ReviewProductDetail> selectProductReview(int groupId, int page) {
+		int start = (page-1)*2 + 1; 
+		return reviewRepository.selectProductReview(groupId, start, start+1);
 	}
 
 	@Override
-	public int selectProductReviewAvg(int productId) {
-		return reviewRepository.selectProductReviewAvg(productId);
+	public int selectProductReviewAvg(int groupId) {
+		return reviewRepository.selectProductReviewAvg(groupId);
+	}
+
+	@Override
+	public int selectProductReviewCount(int groupId) {
+		return reviewRepository.selectProductReviewCount(groupId);
 	}
 
 }

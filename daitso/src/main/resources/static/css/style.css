@@ -43,7 +43,7 @@
 .star-base{
 	position:absolute;
 	z-index:0;
-
+	width: 150px;
 }
 
 .star-parent{

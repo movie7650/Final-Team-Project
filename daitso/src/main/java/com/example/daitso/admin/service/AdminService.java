@@ -22,27 +22,21 @@ public class AdminService implements IAdminService{
 	@Transactional
 	public void registerProducts(Product product, List<MultipartFile> files) {
 		List<String> imagePathList = s3Service.upload(files);
+		product.setProductImageFirst(imagePathList.get(0));
+		product.setProductImageSecond(imagePathList.get(1));
+		product.setProductImageThird(imagePathList.get(2));
 		
-		// 이거는 일단 이렇게 함...
-		if(imagePathList.size() == 1) {
-			product.setProductImageFirst(imagePathList.get(0));
-			product.setProductImageSecond("0");
-			product.setProductImageThird("0");
-		} else if(imagePathList.size() == 2) {
-			product.setProductImageFirst(imagePathList.get(0));
-			product.setProductImageSecond(imagePathList.get(1));
-			product.setProductImageThird("0");
-		} else {
-			product.setProductImageFirst(imagePathList.get(0));
-			product.setProductImageSecond(imagePathList.get(1));
-			product.setProductImageThird(imagePathList.get(2));
+		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+		try {
+			productRepository.registerProducts(product);
+			product.getProductId();
+			productRepository.changeProductCode();
+		} catch(Exception e) {
+			e.printStackTrace();
+			imagePathList.forEach((url) -> {
+				s3Service.deleteImage(url);	
+			});
 		}
-
-		productRepository.registerProducts(product);
-		
-		
-		product.getProductId();
-		productRepository.changeProductCode();
 	}
 
 	@Override

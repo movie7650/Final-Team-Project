@@ -92,53 +92,45 @@ public class AdminController {
 			return secondCategories;
 		}
 		
-	
-		//상품 등록하기
-		@PostMapping("/product")
-		public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
-			if(files.size() > 3) {
-				model.addAttribute("message","상품 이미지 적정 개수를 초과하였습니다!(최대 3개)");
-				model.addAttribute("searchUrl","/admin/product");
-				return "admin/product/message";
-			} else {
-				adminService.registerProducts(product, files);
-				model.addAttribute("message","상품이 등록되었습니다.");
-				model.addAttribute("searchUrl","/admin/product");
-				return "admin/product/message";
-			}	
-		}
-	
-	
-		//상품 삭제하기
-		@PostMapping("/delete")
-		public String deleteProduct(@RequestParam int productId, Model model) {
-			adminService.deleteProduct(productId);
-			model.addAttribute("message","상품이 삭제되었습니다.");
-			model.addAttribute("searchUrl","/admin/product");
-			return "admin/product/message";
-		}
-	
-		
-		//상품 수정을 위해 해당 상품 정보 불러오기
-		@GetMapping("/update/{productId}")
-		@ResponseBody
-		public Product selectProductId(@PathVariable int productId, Model model) {
-			return adminService.selectProductId(productId);
-		}
-	
-		
-		//상품 수정하기
-		@PostMapping("/update")
-		public String updateProduct(Product product, Model model, HttpSession session) {
-			adminService.updateProduct(product);
-			model.addAttribute("product", product);
-			session.setAttribute("productId", product.getProductId());
-			session.setAttribute("productCode", product.getProductCode());
-			session.setAttribute("productNm", product.getProductNm());
-			session.setAttribute("productPrice", product.getProductPrice());
-			session.setAttribute("productStock", product.getProductStock());
-			model.addAttribute("message","상품이 수정되었습니다.");
-			model.addAttribute("searchUrl","/admin/product");
-			return "admin/product/message";
-		}
+	//상품 등록하기
+	@PostMapping("/product")
+	public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
+		adminService.registerProducts(product, files);
+		model.addAttribute("message","상품이 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}
+
+
+	//상품 삭제하기
+	@PostMapping("/delete")
+	public String deleteProduct(@RequestParam int productId, Model model) {
+		adminService.deleteProduct(productId);
+		model.addAttribute("message","상품이 삭제되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}
+
+	//상품 수정을 위해 해당 상품 정보 불러오기
+	@GetMapping("/update/{productId}")
+	@ResponseBody
+	public Product selectProductId(@PathVariable int productId, Model model) {
+		return adminService.selectProductId(productId);
+	}
+
+	//상품 수정하기
+	@PostMapping("/update")
+	public String updateProduct(Product product, Model model, HttpSession session) {
+		adminService.updateProduct(product);
+		model.addAttribute("product", product);
+		session.setAttribute("productId", product.getProductId());
+		session.setAttribute("productCode", product.getProductCode());
+		session.setAttribute("productNm", product.getProductNm());
+		session.setAttribute("productPrice", product.getProductPrice());
+		session.setAttribute("productStock", product.getProductStock());
+		model.addAttribute("message","상품이 수정되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}
+
 }
