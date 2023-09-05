@@ -29,64 +29,26 @@ public class AdminController {
 	IAdminService adminService;
 	@Autowired
 	ICategoryService categoryService;
-	
+
 	// 로그인
 	@GetMapping("/login")
 	public String login() {
 		return "admin/login/admin-login";
 	}
-	
-//	//상품 조회하기 (페이징)
-//	@GetMapping("/product")
-//	public String selectCategoryPagedProducts(Model model,
-//	        @RequestParam(defaultValue = "1") int page,
-//	        @RequestParam(defaultValue = "10") int pageSize,
-//	        @RequestParam(required = false) Integer categoryId) {
-//	    int totalCount;
-//	    if (categoryId == null) {
-//	        totalCount = adminService.getTotalProductCount(); // 전체 상품 갯수
-//	    } else {
-//	        totalCount = adminService.getCategoryTotalProductCount(categoryId); // 선택한 카테고리의 상품 갯수
-//	    }
-//	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-//
-//	    // 페이지 번호를 범위 내로 제한
-//	    if (page < 1) {
-//	        page = 1;
-//	    } else if (page > totalPages) {
-//	        page = totalPages;
-//	    }
-//
-//	    int startRow = (page - 1) * pageSize + 1;
-//	    int endRow = startRow + pageSize - 1;
-//
-//	    List<Product> products;
-//	    if (categoryId == null) {
-//	        products = adminService.selectPagedProducts(startRow, endRow); // 전체 상품 조회
-//	        
-//	    } else {
-//	        products = adminService.selectCategoryPagedProducts(categoryId, startRow, endRow); // 선택한 카테고리의 상품 조회
-//	    }
-//	    
-//	    List<Category> categories = categoryService.getAllFirstCategoryIdAndName();
-//
-//	    model.addAttribute("products", products);
-//	    model.addAttribute("categories", categories);
-//
-//	    model.addAttribute("currentPage", page);
-//	    model.addAttribute("pageSize", pageSize);
-//	    model.addAttribute("totalCount", totalCount);
-//	    model.addAttribute("totalPages", totalPages);
-//
-//	    return "admin/product/admin-product";
-//	}
 
+
+	//상품 전체, 카테고리별 조회(페이징)
 	@GetMapping("/product")
-
 	public String selectProducts(
 	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
 	    @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+	    @RequestParam(name = "page", defaultValue = "1") int page,
+	    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
 	    Model model) {
+	    
+	    // 페이지 번호와 페이지 크기를 이용해 페이징 정보 계산
+	    int offset = (page - 1) * pageSize;
+	    
 	    // 초기값 설정
 	    if (firstCategoryId == null) {
 	        firstCategoryId = 0; // 상위 카테고리의 초기값
@@ -96,9 +58,7 @@ public class AdminController {
 	    }
 
 	    // 매퍼 메서드 호출
-	    List<Product> products = adminService.selectProducts(firstCategoryId, secondCategoryId);
-
-	    // 결과를 모델에 추가
+	    List<Product> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
 	    model.addAttribute("products", products);
 
 	    // 첫 번째 카테고리 불러오기
@@ -108,12 +68,22 @@ public class AdminController {
 	    // 선택한 카테고리 정보 전달
 	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
 	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
+	    
+	    // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
 
-	    // 이후 뷰 이름을 반환
+	    // 총 페이지 수 계산
+	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId);
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+
 	    return "admin/product/admin-product";
 	}
+
 	
-	//두 번째 카테고리 불러오기
+		//두 번째 카테고리 불러오기
 		@GetMapping("/product/{categoryId}")
 		@ResponseBody
 		public List<Category> getSecondCategories(@PathVariable int categoryId,Model model) {
@@ -121,7 +91,7 @@ public class AdminController {
 			model.addAttribute("secondCategories",secondCategories);
 			return secondCategories;
 		}
-	
+		
 	//상품 등록하기
 	@PostMapping("/product")
 	public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
@@ -162,4 +132,5 @@ public class AdminController {
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
 	}
+
 }
