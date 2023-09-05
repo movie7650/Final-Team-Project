@@ -48,26 +48,35 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>상품 코드</th>
+                        <!-- <th>상품 코드</th>
                         <th>상품명</th>
                         <th>사이즈</th>
                         <th>색상</th>
                         <th>기타</th>
                         <th>수량</th>
                         <th>이미지</th>
+                        <th></th> -->
+                        <th>그룹 ID</th>
+                        <th>상품명</th>
+                        <th>상품 코드</th>
                         <th></th>
                     </tr>
                 </thead>
 				<tbody>
 					<tr th:each="product : ${products}">
-						<td th:text="${product.productCode}"></td>
+						<!-- <td th:text="${product.productCode}"></td>
 						<td th:text="${product.productNm}"></td>
 						<td th:text="${product.productOptionFirst}"></td>
 						<td th:text="${product.productOptionSecond}"></td>
 						<td th:text="${product.productOptionThird}"></td>
 						<td th:text="${product.productStock}"></td>
 						<td><button name="plus" value="${product.prodcutId}" class="btn btn-xs"
-								style="background-color: #668663; color: #ffff">더보기</button></td>
+								style="background-color: #668663; color: #ffff">더보기</button></td> -->
+						<td th:text="${product.productGroupId}"></td>
+						<td th:text="${product.productNm}"></td>
+						<td th:text="${product.productCode}"></td>
+						<!-- <td><button name="plus" value="${product.prodcutId}" class="btn btn-xs"
+								style="background-color: #668663; color: #ffff">더보기</button></td> -->
 						<td>
 							<div class="btn-group">
 							    <!-- 상품 수정 모달을 열기 위한 버튼 -->
