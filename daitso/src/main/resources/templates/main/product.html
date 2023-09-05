@@ -42,7 +42,7 @@
 			<div style="width:77%;">
 				<div class="product-large-box">
 					<th:block th:each="list : ${productList}">
-						<div style="width: 212px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]])">
+						<div style="width: 212px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]], [[${list.productGroupId}]])">
 							<div style="width: 212px; height: 212px;">
 								<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
 							</div>
@@ -80,11 +80,11 @@
     /*]]>*/
 	
 
-	function goProductDetail(id){
+	function goProductDetail(id, groupId){
 		let tag = document.createElement('form');
 		
 		tag.setAttribute('method', 'get');
-		tag.setAttribute('action', `/product/${id}`);
+		tag.setAttribute('action', `/product/${id}/${groupId}`);
 		document.body.appendChild(tag);
 		tag.submit(); 
 	}

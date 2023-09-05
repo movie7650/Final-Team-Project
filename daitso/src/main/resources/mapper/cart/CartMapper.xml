@@ -3,6 +3,6 @@
 <mapper namespace="com.example.daitso.cart.repository.ICartRepository">
 <insert id="insertCart">
 	INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
-	VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId}  
+	VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId})
 </insert>
 </mapper>

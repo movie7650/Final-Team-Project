@@ -23,8 +23,10 @@ public class CartController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails)principal;
 		
-		String customerId = userDetails.getUsername();
+		int customerId = Integer.parseInt(userDetails.getUsername());
+		
 		System.out.println("im here" + productId + " " + productCnt + " " + customerId);
+		cartService.insertCart(productId, customerId, productCnt);
 		return "redirect:/category/1";
 	}
 }

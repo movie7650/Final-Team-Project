@@ -27,6 +27,7 @@
 
 <select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
     SELECT product_id AS productId, 
+    	product_group_id AS productGroupId,
 		category_id AS categoryId, 
 		product_image_first AS productImageFirst, 
 		product_nm AS productNm, 
@@ -36,7 +37,7 @@
 		product_stock AS productStock, 
 		product_price AS productPrice
 	FROM(
-    	SELECT product_id, category_id, product_image_first, product_nm, review_star_point, review_count, product_content, product_stock, 
+    	SELECT product_id, product_group_id, category_id, product_image_first, product_nm, review_star_point, review_count, product_content, product_stock, 
     			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
     	FROM(
     		SELECT p.product_id		AS		product_id,

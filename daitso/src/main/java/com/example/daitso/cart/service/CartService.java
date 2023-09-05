@@ -10,4 +10,10 @@ public class CartService implements ICartService{
 	
 	@Autowired
 	ICartRepository cartRepository;
+
+	@Override
+	public void insertCart(int productId, int customerId, int productCnt) {
+		cartRepository.insertCart(productId, customerId, productCnt);
+		
+	}
 }
