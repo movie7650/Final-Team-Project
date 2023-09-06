@@ -86,7 +86,7 @@ public class AdminController {
 		//두 번째 카테고리 불러오기
 		@GetMapping("/product/{categoryId}")
 		@ResponseBody
-		public List<Category> getSecondCategories(@PathVariable int categoryId,Model model) {
+		public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
 			List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
 			model.addAttribute("secondCategories",secondCategories);
 			return secondCategories;
