@@ -121,5 +121,20 @@ public class ProductController {
 		
 		return list;
 	}
-
+	
+	//문의하기 상품 옵션 변경하기
+	@GetMapping("/inquiry/option")
+	@ResponseBody
+	public List<List> selectInquiryProductChangeOption(@RequestParam(value="productGroupId") int productGroupId, @RequestParam(value="optionFirst") String optionFirst
+			,@RequestParam(value="optionSecond", required = false, defaultValue="0") String optionSecond
+			,@RequestParam(value="optionThird", required = false, defaultValue="0") String optionThird){
+		List<List> list = new ArrayList<>();
+		if(optionSecond.equals("0")) {
+			list.add(productService.selectProductOptionSecond(productGroupId, optionFirst));
+			list.add(productService.selectProductOptionThird(productGroupId, optionFirst, optionSecond));			
+		}else {
+			list.add(productService.selectProductOptionThird(productGroupId, optionFirst, optionSecond));						
+		}
+		return list;
+	}
 }
