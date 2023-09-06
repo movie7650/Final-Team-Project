@@ -5,8 +5,46 @@
 <body>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div class="update-customer-title">회원정보확인</div>
 
-
+<div class="update-table-container-01">
+	<table>
+		<tr>
+			<th>아이디(이메일)</th>
+			<th>이름</th>
+			<th>휴대폰번호</th>
+			<th>현재 비밀번호 </th>
+			<th>새 비밀번호</th>
+			<th>새 비밀번호 확인</th> 
+		</tr>
+		
+		<tr>
+			<td>hong@naver.com
+				<input type="text" id="change-email-input" hidden><button type="submit" hidden>확인</button>
+				<button id="change-email" onclick="popUp()" type="button">이메일변경</button>
+			</td>
+			<td>홍길동
+			<input type="text" id="change-name-input" hidden><button type="submit" hidden>확인</button>
+			<button  id="change-name" onclick="popUp()" type="button">이름변경</button>
+			</td>
+			<td>010-1234-1234
+			<input type="text" id="change-phonenumber-input" hidden><button type="submit" hidden>확인</button>
+			<button  id="change-phonenumber" onclick="popUp()" type="button">번호변경</button>
+			</td>
+			<td><input type="password"></td>
+			<td><input type="password"></td>
+			<td><input type="password"><button type="button">변경확인</button></td>
+		</tr>
+	</table>
+			<script>
+				function popUp(){
+					document.getElementById("change-email-input").removeAttribute("hidden");
+					document.getElementById("change-name-input").removeAttribute("hidden");
+					document.getElementById("change-phonenumber-input").removeAttribute("hidden");
+				}
+			</script>
+	<button type="submit" id="update-user-quit">취소하기</button>
+</div><!-- update-table-container -->
 
 
 
