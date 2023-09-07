@@ -18,6 +18,7 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductShow;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -36,8 +37,7 @@ public class AdminController {
 		return "admin/login/admin-login";
 	}
 
-
-	//상품 전체, 카테고리별 조회(페이징)
+	//상품 전체 조회, 카테고리별 조회(페이징)
 	@GetMapping("/product")
 	public String selectProducts(
 	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
@@ -57,14 +57,13 @@ public class AdminController {
 	        secondCategoryId = 0; // 하위 카테고리의 초기값
 	    }
 
-	    // 매퍼 메서드 호출
-	    List<Product> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
+	    List<ProductShow> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
 	    model.addAttribute("products", products);
-
-	    // 첫 번째 카테고리 불러오기
+	   	    
+	    // 첫 번째 카테고리 불러오기(필터)
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
-
+	    
 	    // 선택한 카테고리 정보 전달
 	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
 	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
@@ -81,38 +80,49 @@ public class AdminController {
 
 	    return "admin/product/admin-product";
 	}
-
 	
-		//두 번째 카테고리 불러오기
-		@GetMapping("/product/{categoryId}")
-		@ResponseBody
-		public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
-			List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
-			model.addAttribute("secondCategories",secondCategories);
-			return secondCategories;
-		}
-		
-	//상품 등록하기
-	@PostMapping("/product")
-	public String registerProducts(Product product, Model model, @RequestPart List<MultipartFile> files) {
-		adminService.registerProducts(product, files);
-		model.addAttribute("message","상품이 등록되었습니다.");
-		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
+	//두 번째 카테고리 불러오기(필터)
+	@GetMapping("/product/{categoryId}")
+	@ResponseBody
+	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
+		List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+		model.addAttribute("secondCategories",secondCategories);
+		return secondCategories;
 	}
-
 
 	//상품 삭제하기
 	@PostMapping("/delete")
-	public String deleteProduct(@RequestParam int productId, Model model) {
-		adminService.deleteProduct(productId);
+	public String deleteProduct(@RequestParam int productGroupId, Model model) {
+		adminService.deleteProduct(productGroupId);
 		model.addAttribute("message","상품이 삭제되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
 	}
+	
+	//그룹별 상품 정보 불러오기
+	@GetMapping("/search/{productGroupId}")
+	@ResponseBody
+	public List<Product> product (@PathVariable int productGroupId, Model model) {
+		return adminService.selectProductsByGroupId(productGroupId);
+	}
+	
+	
+	
+	
+	
+	
 
+	//기존 상품 등록하기
+	@PostMapping("/product")
+	public String registerExistingProducts(ProductShow product, Model model, @RequestPart List<MultipartFile> files) {
+		adminService.registerExistingProducts(product, files);
+		model.addAttribute("message","상품이 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}
+	
 	//상품 수정을 위해 해당 상품 정보 불러오기
-	@GetMapping("/update/{productId}")
+	@GetMapping("/update/{productGroupId}")
 	@ResponseBody
 	public Product selectProductId(@PathVariable int productId, Model model) {
 		return adminService.selectProductId(productId);

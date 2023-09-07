@@ -67,6 +67,12 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
 	
+	// 에러 처리
+ 	const error = [[${error}]];
+	if(error != null){
+		alert(error);	
+	}
+	
 	// 회원가입 페이지 이동
 	function moveSignUpPage(){
 		window.location.href = 'http://localhost:8080/customer/sign-up';
