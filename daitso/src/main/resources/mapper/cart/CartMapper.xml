@@ -13,22 +13,26 @@
 	-->
 	<select id="getCartByCustomerId" resultType="com.example.daitso.cart.model.CartCheck" parameterType="int">
 		SELECT c.cart_id AS "cartId",
-			   c.customer_id AS "customerId",
 			   c.product_id AS "productId",
 			   c.cart_count AS "cartCount",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.purchase_num)), '(\d{3})','\1,')), '^,','') AS "purchaseNum",
+			   c.checked AS "checked",
 			   p.product_nm AS "productNm",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productPrice",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.cart_price)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
 			   p.product_stock AS "productStock",
 			   p.product_option_first AS "productOptionFirst",
 			   p.product_option_second AS "productOptionSecond",
 			   p.product_option_third AS "productOptionThird",
 			   p.product_image_first AS "productImageFirst",
-			   p.category_id AS "categoryId"
+			   p.category_id AS "categoryId",
+			   a.category_pr_id AS "categoryPrId",
+			   p.status AS "productStatus"
 		  FROM cart c,
-		  	   product p
-		 WHERE c.customer_id =16
+		  	   product p,
+               category a
+		 WHERE c.customer_id = #{customerId}
            AND c.product_id = p.product_id
+           AND a.category_id = p.category_id
 		   AND c.status = 'Y'
 	  ORDER BY c.cart_id
     </select>
@@ -51,7 +55,9 @@
     <update id="updateCartCountByCartId" parameterType="com.example.daitso.cart.model.CartUpdate">
     	UPDATE cart
 		   SET cart_count = #{cartCount},
-			   purchase_num = #{purchaseNum}
+			   cart_price = #{cartPrice},
+			   modify_dt = SYSDATE,
+			   modifier = #{customerId}
 		 WHERE cart_id = #{cartId}
     </update>
     
@@ -59,10 +65,30 @@
 		기능: 장바구니 삭제
 		담당자: 최준원
 	-->
-    <update id="deleteCartByCartId" parameterType="int">
+    <update id="deleteCartByCartId" parameterType="Map">
     	UPDATE cart
-		   SET status = 'N'
-		 WHERE cart_id = #{cartId}
+		   SET status = 'N',
+		       modify_dt = SYSDATE,
+		       modifier = #{customerId}
+		 WHERE cart_id IN
+		 	   <foreach collection="cartIdList" item="cartId" open="(" close=")" separator=",">
+				 	#{cartId}
+		       </foreach>
+    </update>
+    
+    <!-- 
+		기능: 장바구니 체크박스 상태 변경
+		담당자: 최준원
+	-->
+    <update id="updateCheckedByCartId" parameterType="Map">
+    	UPDATE cart
+		   SET checked = #{checked},
+		       modify_dt = SYSDATE,
+		       modifier = #{customerId}
+		 WHERE cart_id IN 
+		 		<foreach collection="cartIdList" item="cartId" open="(" close=")" separator=",">
+				 	#{cartId}
+				</foreach>
     </update>
 		   
 </mapper>

@@ -47,9 +47,17 @@
 							</div>
 							<div th:if="${!cartList.isEmpty()}">
 								<div class="cart-table-body" th:each="cart : ${cartList}">
-									<div class="cart-table-td-1">
-										<input type="checkbox" class="cart-check"
+									<!-- 재고가 있을 경우 -->
+									<div th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" class="cart-table-td-1">
+										<input type="checkbox" 
+											th:class="cart-check + ' ' + ${cart.checked}"
 											th:value="${cart.cartId}"> <img
+											th:src="${cart.productImageFirst}">
+									</div>
+									<!-- 재고가 없을 경우 및 품절,판매중지 -->
+									<div th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'" class="cart-table-td-1">
+										<input type="checkbox" class="none"
+											th:value="${cart.cartId}" style="visibility: hidden;"> <img
 											th:src="${cart.productImageFirst}">
 									</div>
 									<div class="cart-table-td-2">
@@ -65,6 +73,18 @@
 												th:if="${cart.productOptionThird != '-'}"
 												th:text="${cart.productOptionThird}"></span> <span>,</span>
 											<span><span th:text="${cart.cartCount}"></span>개</span>
+											<span
+												th:if="${cart.productStock < 10 && cart.productStock > 0}" 
+												style="margin-left: 10px; font-size: 16px; font-weight:bold; color:red;">품절임박</span>
+											<span
+												th:if="${cart.productStock < 10 && cart.productStock > 0}" 
+												style="font-size: 14px; font-weight: 600; margin-left: 3px;">(남은 재고: <span th:text="${cart.productStock}"></span>개)</span>
+											<span
+												th:if="${cart.productStock <= 0}" 
+												style="margin-left: 10px; font-size: 16px; font-weight:bold; color:red;">품절</span>
+												<span
+												th:if="${cart.productStatus} != 'Y'" 
+												style="margin-left: 10px; font-size: 16px; font-weight:bold; color:red;">판매중지</span>
 										</div>
 										<div style="display: flex; justify-content: space-between;">
 											<div>
@@ -76,32 +96,48 @@
 											</div>
 											<div>
 												<div>
-													<span><span th:text="${cart.purchaseNum}"></span>원</span> <select
-														class="select-list" style="margin-left: 10px;"
+													<span>
+													<span 
+														th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'"
+														th:text="${cart.cartPrice}"></span>
+													<span 
+														th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'">0</span>원	
+													</span> 
+													<select
+														th:if="${cart.productStock >= 10} and ${cart.productStatus} == 'Y'"
+														class="select-list" style="margin-left: 10px; width:45px;"
 														th:name="${cart.cartCount}"
-														th:onchange="changeProductCount(this,[[${cart.cartId}]],[[${cart.productPrice}]])">
-														<option id="one">1</option>
-														<option id="two">2</option>
-														<option id="three">3</option>
-														<option id="four">4</option>
-														<option id="five">5</option>
-														<option id="siz">6</option>
-														<option id="seven">7</option>
-														<option id="eight">8</option>
-														<option id="nine">9</option>
-														<option id="ten">10</option>
+														th:onchange="changeProductCount(this,[[${cart.cartId}]],[[${cart.productPrice}]],[[${customerId}]])">
+														<option 
+															th:each="num : ${#numbers.sequence(1,10)}"
+															th:text="${num}"
+															>
+														</option>
+													</select>
+													<select
+														th:if="${cart.productStock < 10 && cart.productStock > 0} and ${cart.productStatus} == 'Y'"
+														class="select-list" style="margin-left: 10px; width:45px;"
+														th:name="${cart.cartCount}"
+														th:with="end = ${cart.productStock}"
+														th:onchange="changeProductCount(this,[[${cart.cartId}]],[[${cart.productPrice}]],[[${customerId}]])">
+														<option 
+															th:each="num : ${#numbers.sequence(1,end)}"
+															th:text="${num}"
+															>
+														</option>
 													</select>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="cart-table-td-3" style="line-height: 140px">
-										<span th:text="${cart.purchaseNum}" class="product-price"></span>원
+										<span th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" th:text="${cart.cartPrice}" th:class="'product-price-' + ${cart.cartId}" ></span>
+										<span th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'" th:class="'product-price-' + ${cart.cartId}">0</span>원
 									</div>
 									<div class="cart-table-td-4" style="line-height: 140px">무료</div>
 								</div>
 							</div>
-							<div th:if="${!cartList.isEmpty()}" class="cart-table-tail">
+							<div th:if="${!cartList.isEmpty()}" class="cart-table-tail" id="cart-table-tail-total-price">
 								<div style="float: right; margin-right: 20px;">
 									<span class="cart-table-tail-key">상품가격</span> <span
 										class="cart-table-tail-value"></span> <span
@@ -117,8 +153,8 @@
 							</div>
 						</div>
 						<div th:if="${!cartList.isEmpty()}" class="cart-delete">
-							<div style="cursor: pointer" onclick="chooseDelete()">선택삭제</div>
-							<div style="cursor: pointer">품절/판매종료상품 전체삭제</div>
+							<div style="cursor: pointer" th:onclick="chooseDelete([[${customerId}]])" id="choose-delete">선택삭제</div>
+							<div style="cursor: pointer" th:onclick="soldOutAndStopDelete([[${customerId}]])">품절/판매종료상품 전체삭제</div>
 						</div>
 						<div th:if="${!cartList.isEmpty()}" class="cart-discount">
 							<div class="cart-discount-title">할인쿠폰 적용</div>
@@ -126,7 +162,7 @@
 								<div class="cart-discount-content">
 									<div style="font-weight: bold;">
 										<input type="checkbox"> <span
-											style="margin-left: 10px;">10,000원</span>
+											style="margin-left: 10px;" >10,000원</span>
 									</div>
 									<div style="margin-left: 50px">첫 구매 할인쿠폰 (6 일 8 시간 남음)</div>
 								</div>
@@ -135,16 +171,16 @@
 						<div th:if="${!cartList.isEmpty()}" class="cart-total">
 							<div>
 								<span class="cart-total-key">총 상품가격</span> <span
-									class="cart-total-value" id="product-total-price">123,600</span>
+									class="cart-total-value" id="product-total-price">0</span>
 								<span class="cart-total-key">원</span> <span
 									class="cart-total-plus">-</span> <span class="cart-total-key">총
-									할인</span> <span class="cart-total-sp-value">10,000</span> <span
+									할인</span> <span class="cart-total-sp-value">0</span> <span
 									class="cart-total-key">원</span> <span class="cart-total-plus">+</span>
 								<span class="cart-total-key">총 배송비</span> <span
 									class="cart-total-value">0</span> <span class="cart-total-key">원</span>
 								<span class="cart-total-plus">=</span> <span
 									class="cart-total-key">총 주문가격</span> <span
-									class="cart-total-sp-value">123,600</span> <span
+									class="cart-total-sp-value">0</span> <span
 									class="cart-total-key">원</span>
 							</div>
 						</div>
@@ -180,35 +216,15 @@
 	</div>
 </body>
 <script type="text/javascript" th:inline="javascript">	
-
-	// 장바구니에 담긴 물건의 총 가격 구하기
-	const tableValue = document.getElementById("cart-table-tail-value");
-	const productPrices = document.querySelectorAll(".product-price");
-	var productTotalPrices = 0;
-	
-	productPrices.forEach((item) => {
-		var productPrice = '';
-		item.innerText.split(',').forEach((item) => {
-			productPrice += item;
-		})
-		productTotalPrices += Number(productPrice);
-	})
-	
-	document.querySelectorAll(".cart-table-tail-value").forEach((item) => {
-		item.innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	})
-	
-	const productTotalPrice = document.getElementById("product-total-price");
-	productTotalPrice.innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	
 	// 장바구니 담긴 물건 각 개수 -> select 태그 업로드
 	document.querySelectorAll(".select-list").forEach((item)=> {
 		item.options[item.name - 1].selected = true;
 	});
 	
-	function changeProductCount(target, cartId, productPrice) {
+	function changeProductCount(target, cartId, productPrice, customerId) {
 		const cartCount = target.value;
-		const purchaseNum = (parseInt(productPrice.replace(/,/g , ''))) * cartCount;
+		const cartPrice = (parseInt(productPrice.replace(/,/g , ''))) * cartCount;
 		
  		fetch("http://localhost:8080/cart/update", {
 		    method: "PATCH",
@@ -218,7 +234,8 @@
 		    body: JSON.stringify({
 		        cartId: cartId,
 		        cartCount: cartCount,
-		        purchaseNum: purchaseNum,
+		        cartPrice: cartPrice,
+		        customerId: customerId
 		    }),
 		})
 		.then((res) => res.json())
@@ -228,17 +245,59 @@
 		}); 
 	}
 	
-	// 전체선택 
+	// 체크박스 로직 및 장바구니에 담긴 물건의 총 가격 구하기
 	const checkAll = document.getElementById("check-all");
 	const checks = document.querySelectorAll(".cart-check");
+	const customerId = [[${customerId}]];
+	var cartTotalCount = [[${cartTotalCount}]];
 	var checkNum = 0;
+	var productTotalPrices = 0;
 	
-	var checkStatusList = {}
+	var checkStatusList = {};
+	var cartIdList = [];
 	
-	checks.forEach((item) => {
-		checkStatusList[item.value] = false;
+	var soldOutAndStopList = [];
+	document.querySelectorAll(".none").forEach((item) => {
+		soldOutAndStopList.push(item.value);
 	})
 
+	
+	const trueChecks = document.querySelectorAll(".true");
+	trueChecks.forEach((item) => {
+		checkStatusList[item.value] = true;
+		item.checked = true;
+	})
+	
+	const falseChecks = document.querySelectorAll(".false");
+	falseChecks.forEach((item) => {
+		checkStatusList[item.value] = false;
+		item.checked = false;
+	})
+	
+	for(var key in checkStatusList) {
+		if(checkStatusList[key]){
+			checkNum += 1;
+			var className = '.product-price-' + key;
+			var checkedProductPrice = parseInt(document.querySelector(className).innerText.replace(/,/g , ''));
+			productTotalPrices += checkedProductPrice;
+		} 
+	}
+		
+	document.querySelectorAll(".cart-table-tail-value").forEach((item) => {
+		item.innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	})
+	
+	const productTotalPrice = document.getElementById("product-total-price");
+	productTotalPrice.innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	
+	console.log('checkStatusList:' + Object.keys(checkStatusList).length);
+	console.log('checkNum:' + checkNum)
+	
+	/*모두 체크되어있으면 전체선택 체크박스도 체크로 표시*/
+	if(checkNum == Object.keys(checkStatusList).length && checkNum !=0 && checkNum == Object.keys(checkStatusList).length != 0) {
+		checkAll.checked = true;
+		document.getElementById("choose-delete").innerText = '전체삭제';
+	}
 	
 	/* '모두 동의' 체크박스가 체크가 되면 모든 체크박스의  체크를 하고, '모두 동의'
 	체크박스가 해제되면 모든 체크 박스의 체크상태를 해제 */
@@ -246,8 +305,10 @@
 	    const checked  = e.target.checked;
 	    if (checked) {
 	        checks.forEach((item) => {
-	            item.checked = true; 
-	            checkStatusList[item.value] = true;
+	        	if(!item.checked){
+	        		item.checked = true; 
+		            checkStatusList[item.value] = true;
+	        	}
 	        });
 	        checkNum = checks.length;
 	    } else {
@@ -257,21 +318,36 @@
 	        });
 	        checkNum = 0;
 	    }
+	    
+	    checks.forEach((item) => {
+	    	cartIdList.push(item.value);
+	    	for(let i = 0; i < soldOutAndStopList.length; i++) {
+	    	    if (soldOutAndStopList[i] === item.value) {
+	    	    	cartIdList.splice(i, 1);
+	    	    }
+	    	}	
+	    })
+	    
+	    changeChecked(cartIdList, customerId, checked);
 	});
 	
 	checks.forEach((item) => item.addEventListener('input', toggleCheckbox));
 
+	/*각 체크박스 클릭 시 이벤트*/
 	function toggleCheckbox(e) {
 	    const { checked , value } = e.target;
 	    checkStatusList[value] = checked;
 	    if(checked) {
 	    	checkNum += 1;
+	    	cartIdList.push(value);
 	    } else {
 	    	checkNum -= 1;
+	    	cartIdList.push(value);
 	    }
+	    
 	    checkAllStatus(checkNum);
+	    changeChecked(cartIdList,customerId,checked);
 	}
-	
 	
 	function checkAllStatus(checkNum) {
 	    if(checkNum == checks.length) {
@@ -281,31 +357,71 @@
 	    }
 	}
 	
+	/*장바구니 체크박스 상태 변경 -> 비동기 처리*/
+	function changeChecked(cartIdList, customerId, checked){
+		 fetch("http://localhost:8080/cart/update/checkbox/" + customerId, {
+			    method: "PATCH",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        checked: checked,
+			        cartIdList: cartIdList
+			    }),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+				// 새로고침
+				location.reload();
+			});  
+	}
+	
 	// 선택삭제
-	function chooseDelete() {
-		var falseStatus = 0;
-		for(var key in checkStatusList) {
-			if(checkStatusList[key] == true) {
-				fetch("http://localhost:8080/cart/delete/" + key , {
-				    method: "PATCH",
-				    headers: { 
-				        "Content-Type": "application/json",
-				    },
-				})
-				.then((res) => res.json())
-				.then((data) => {
-					// 새로고침
-					location.reload();
-				}); 
-			} else {
-				falseStatus += 1;
-			}
-		}
+	function chooseDelete(customerId) {
+		document.querySelectorAll('.true').forEach((item) => {
+			cartIdList.push(item.value);
+		})
 		
-		if(falseStatus == 2) {
-			alert('삭제할 상품을 선택해주세요');
+		if(cartIdList.length == 0){
+			alert("삭제할 상품을 선택해주세요.")
+		} else {
+			fetch("http://localhost:8080/cart/delete/" + customerId , {
+			    method: "PATCH",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        itemList: cartIdList
+			    }),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+				// 새로고침
+				location.reload();
+			}); 	
 		}
 	}
 	
+	// 품절 및 판매중지 삭제
+	function soldOutAndStopDelete(customerId) {
+		if(soldOutAndStopList.length == 0){
+			alert("품절/판매종료상품이 없습니다.")
+		} else {
+			fetch("http://localhost:8080/cart/delete/" + customerId , {
+			    method: "PATCH",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        itemList: soldOutAndStopList
+			    }),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+				// 새로고침
+				location.reload();
+			}); 	
+		}	
+	}
 </script>
 </html>
