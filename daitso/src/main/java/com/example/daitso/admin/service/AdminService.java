@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.product.model.Product;
-import com.example.daitso.product.model.ProductAdmin;
+import com.example.daitso.product.model.ProductShow;
 import com.example.daitso.product.repository.IProductRepository;
 
 @Service
@@ -26,7 +26,7 @@ public class AdminService implements IAdminService{
 	S3Service s3Service;
 	
 	@Transactional
-	public void registerProducts(Product product, List<MultipartFile> files) {
+	public void registerExistingProducts(ProductShow product, List<MultipartFile> files) {
 		List<String> imagePathList = s3Service.upload(files);
 		product.setProductImageFirst(imagePathList.get(0));
 		product.setProductImageSecond(imagePathList.get(1));
@@ -34,7 +34,7 @@ public class AdminService implements IAdminService{
 		
 		// 상품 등록 실패시 s3에 등록된 이미지 삭제
 		try {
-			productRepository.registerProducts(product);
+			productRepository.registerExistingProducts(product);
 			product.getProductId();
 			productRepository.changeProductCode();
 		} catch(Exception e) {
@@ -44,11 +44,29 @@ public class AdminService implements IAdminService{
 			});
 		}
 	}
+	
+	@Override
+	public List<ProductShow> selectProducts(int firstCategoryId, int secondCategoryId, int offset, int pageSize) {
+		return productRepository.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
+	}
+
+	@Override
+	public int selectCountProducts(int firstCategoryId, int secondCategoryId) {
+		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId);
+	}
 
 	@Override
 	public void deleteProduct(int productGroupId) {
 		productRepository.deleteProduct(productGroupId);
 	}
+	
+	@Override
+	public List<Product> selectProductsByGroupId(int productGroupId) {
+		return productRepository.selectProductsByGroupId(productGroupId);
+	}
+	
+	
+	
 
 	@Override
 	public void updateProduct(Product product) {
@@ -61,13 +79,12 @@ public class AdminService implements IAdminService{
 	}
 
 	@Override
-	public List<ProductAdmin> selectProducts(int firstCategoryId, int secondCategoryId, int offset, int pageSize) {
-		return productRepository.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
+	public List<Product> selectProductDetails(int productGroupId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	@Override
-	public int selectCountProducts(int firstCategoryId, int secondCategoryId) {
-		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId);
-	}
+
+
 
 }
