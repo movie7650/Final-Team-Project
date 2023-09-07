@@ -311,45 +311,31 @@
 					</div>
 					
 					<form th:action="@{/admin/search}" method="get">
-						<input type="hidden" id="searchProductGroupId" name="productId">
 						<div class="modal-body">
 						
 						<table class="table">
 							<thead>
 								<tr>
 									<th>그룹 ID</th>
-									<th>카테고리명</th>
+									<th>상품코드</th>
 									<th>상품명</th>
+									<th>사이즈</th>
+									<th>색상</th>
+									<th>기타</th>
+									<th>가격</th>
+									<th>재고</th>
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="product : ${products}">
-									<td th:text="${product.productGroupId}"></td>
-									<td th:text="${product.categoryNm}"></td>
-									<td th:text="${product.productNm}"></td>
-									<td>
-										<div class="btn-group">
-											<button class="btn btn-xs"
-												style="background-color: #aac8b2; color: #ffff"
-												data-bs-toggle="modal" data-bs-target="#searchModal"
-												type="button"
-												th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">조회</button>
-
-											<button class="btn btn-xs"
-												style="background-color: #39594e; color: #ffff"
-												data-bs-toggle="modal" data-bs-target="#registerModal"
-												type="button"
-												th:onclick="setProductInfo([[${product.productId}]])">추가</button>
-
-											<button class="btn btn-xs"
-												style="background-color: red; color: #fff" type="button"
-												th:onclick="deleteProduct([[${product.productGroupId}]])">삭제</button>
-
-
-										</div>
-									</td>
-								</tr>
+								<td><span type="type" id="searchProductGroupId" name="productId"></span></td>
+								<td><span type="type" id="searchProductCode" name="productCode"></span></td>
+								<td><span type="type" id="searchProductNm" name="productNm"></span></td>
+								<td><span type="type" id="searchproductOptionFirst" name="productOptionFirst"></span></td>
+								<td><span type="type" id="searchproductOptionSecond" name="productOptionSecond"></span></td>
+								<td><span type="type" id="searchproductOptionThird" name="productOptionThird"></span></td>
+								<td><span type="type" id="searchProductPrice" name="productPrice"></span></td>
+								<td><span type="type" id="searchProductStock" name="productStock"></span></td>
 							</tbody>
 						</table>
 						
@@ -478,15 +464,14 @@
             .then(data => {
                 const product = data;
                 console.log(product);
-                document.getElementById("searchProductGroupId").textContent = product.productGroupId;
-                document.getElementById("searchProductCode").textContent = product.productCode;
-                document.getElementById("searchProductNm").textContent = product.productNm;
-                document.getElementById("searchproductOptionFirst").textContent = product.productOptionFirst;
-                document.getElementById("searchproductOptionSecond").textContent = product.productOptionSecond;
-                document.getElementById("searchproductOptionThird").textContent = product.productOptionThird;
-                document.getElementById("searchProductPrice").textContent = product.productPrice;
-                document.getElementById("searchProductStock").textContent = product.productStock;
-
+                document.getElementById("searchProductGroupId").textContent = product[0].productGroupId;
+                document.getElementById("searchProductCode").textContent = product[0].productCode;
+                document.getElementById("searchProductNm").textContent = product[0].productNm;
+                document.getElementById("searchproductOptionFirst").textContent = product[0].productOptionFirst;
+                document.getElementById("searchproductOptionSecond").textContent = product[0].productOptionSecond;
+                document.getElementById("searchproductOptionThird").textContent = product[0].productOptionThird;
+                document.getElementById("searchProductPrice").textContent = product[0].productPrice;
+                document.getElementById("searchProductStock").textContent = product[0].productStock;
             }); 
     }
   	
