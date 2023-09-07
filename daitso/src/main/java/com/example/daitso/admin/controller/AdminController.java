@@ -18,6 +18,7 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductAdmin;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -35,7 +36,6 @@ public class AdminController {
 	public String login() {
 		return "admin/login/admin-login";
 	}
-
 
 	//상품 전체, 카테고리별 조회(페이징)
 	@GetMapping("/product")
@@ -57,14 +57,13 @@ public class AdminController {
 	        secondCategoryId = 0; // 하위 카테고리의 초기값
 	    }
 
-	    // 매퍼 메서드 호출
-	    List<Product> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
+	    List<ProductAdmin> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
 	    model.addAttribute("products", products);
-
-	    // 첫 번째 카테고리 불러오기
+	   	    
+	    // 첫 번째 카테고리 불러오기(필터)
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
-
+	    
 	    // 선택한 카테고리 정보 전달
 	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
 	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
@@ -83,14 +82,14 @@ public class AdminController {
 	}
 
 	
-		//두 번째 카테고리 불러오기
-		@GetMapping("/product/{categoryId}")
-		@ResponseBody
-		public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
-			List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
-			model.addAttribute("secondCategories",secondCategories);
-			return secondCategories;
-		}
+	//두 번째 카테고리 불러오기(필터)
+	@GetMapping("/product/{categoryId}")
+	@ResponseBody
+	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
+		List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+		model.addAttribute("secondCategories",secondCategories);
+		return secondCategories;
+	}
 		
 	//상품 등록하기
 	@PostMapping("/product")
@@ -100,7 +99,6 @@ public class AdminController {
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
 	}
-
 
 	//상품 삭제하기
 	@PostMapping("/delete")

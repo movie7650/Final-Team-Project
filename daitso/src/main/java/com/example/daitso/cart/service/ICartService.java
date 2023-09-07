@@ -20,6 +20,9 @@ public interface ICartService {
 	void updateCartCountByCartId(CartUpdate cartUpdate);
 	
 	// 장바구니 삭제
-	void deleteCartByCartId(int cartId);
- }
+	void deleteCartByCartId(List<Integer> cartIdList, int customerId);
+	
+	// 장바구니 체크박스 상태 변경
+	void updateCheckedByCartId(List<Integer> cartIdList, int customerId, String checked);
+}
 

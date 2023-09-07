@@ -5,7 +5,7 @@
 <body>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
-<div class="update-customer-title">회원정보확인</div>
+<div class="update-customer-title">회원정보수정</div>
 
 <div class="update-table-container-01">
 	<table>
@@ -21,15 +21,15 @@
 		<tr>
 			<td>hong@naver.com
 				<input type="text" id="change-email-input" hidden><button type="submit" hidden>확인</button>
-				<button id="change-email" onclick="popUp()" type="button">이메일변경</button>
+				<button id="change-email" onclick="showEmailInput()" type="button">이메일변경</button>
 			</td>
 			<td>홍길동
 			<input type="text" id="change-name-input" hidden><button type="submit" hidden>확인</button>
-			<button  id="change-name" onclick="popUp()" type="button">이름변경</button>
+			<button  id="change-name" onclick="showNameInput()" type="button">이름변경</button>
 			</td>
 			<td>010-1234-1234
 			<input type="text" id="change-phonenumber-input" hidden><button type="submit" hidden>확인</button>
-			<button  id="change-phonenumber" onclick="popUp()" type="button">번호변경</button>
+			<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
 			</td>
 			<td><input type="password"></td>
 			<td><input type="password"></td>
@@ -37,24 +37,21 @@
 		</tr>
 	</table>
 			<script>
-				function popUp(){
+				function showEmailInput(){
 					document.getElementById("change-email-input").removeAttribute("hidden");
+				}
+				function showNameInput(){
 					document.getElementById("change-name-input").removeAttribute("hidden");
+				}
+				function showPhoneNumberInput(){
 					document.getElementById("change-phonenumber-input").removeAttribute("hidden");
 				}
 			</script>
-	<button type="submit" id="update-user-quit">취소하기</button>
+	<div class="update-user-button-container">
+		<button type="submit" id="update-user-bottom-button">저장하기</button>
+		<button type="submit" id="update-user-bottom-button">취소하기</button>
+	</div><!--update-user-button-container  -->
 </div><!-- update-table-container -->
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -50,15 +50,18 @@ table  button{
 table input{
 	margin-left:3%;
 }
-#update-user-quit{
+.update-user-button-container{
+	width:auto;
+	padding-left:25%;
+}
+#update-user-bottom-button{
 	border:none;
 	background-color:#668663;
 	color:white;
-	width:250px;
+	width:200px;
 	height:40px;
 	margin-top:3%;
-	margin-left:35%;
 }
-#update-user-quit:focus{
+#update-user-bottom-button:focus{
 	outline:none;
 }

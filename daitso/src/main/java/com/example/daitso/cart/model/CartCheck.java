@@ -12,10 +12,14 @@ public class CartCheck {
 	private String purchaseNum;
 	private String productNm;
 	private String productPrice;
+	private String cartPrice;
 	private int productStock;
 	private String productOptionFirst;
 	private String productOptionSecond;
 	private String productOptionThird;
 	private String productImageFirst;	
 	private int categoryId;
+	private String checked;
+	private char productStatus; 
+	private int categoryPrId;
 }
