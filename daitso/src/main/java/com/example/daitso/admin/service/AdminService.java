@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.daitso.category.model.Category;
+import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductAdmin;
 import com.example.daitso.product.repository.IProductRepository;
 
 @Service
@@ -15,6 +18,9 @@ public class AdminService implements IAdminService{
 	
 	@Autowired
 	IProductRepository productRepository;
+	
+	@Autowired
+	ICategoryRepository categoryRepository;
 	
 	@Autowired
 	S3Service s3Service;
@@ -40,8 +46,8 @@ public class AdminService implements IAdminService{
 	}
 
 	@Override
-	public void deleteProduct(int productId) {
-		productRepository.deleteProduct(productId);
+	public void deleteProduct(int productGroupId) {
+		productRepository.deleteProduct(productGroupId);
 	}
 
 	@Override
@@ -53,16 +59,15 @@ public class AdminService implements IAdminService{
 	public Product selectProductId(int productId) {
 		return productRepository.selectProductId(productId);
 	}
-	
-	/*
-	 * @Override public List<Product> selectAllProducts() { return
-	 * productRepository.selectAllProducts(); }
-	 */
 
 	@Override
-	public List<Product> selectProducts(int firstCategoryId, int secondCategoryId) {
-	    return productRepository.selectProducts(firstCategoryId, secondCategoryId);
+	public List<ProductAdmin> selectProducts(int firstCategoryId, int secondCategoryId, int offset, int pageSize) {
+		return productRepository.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
 	}
 
-	
+	@Override
+	public int selectCountProducts(int firstCategoryId, int secondCategoryId) {
+		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId);
+	}
+
 }

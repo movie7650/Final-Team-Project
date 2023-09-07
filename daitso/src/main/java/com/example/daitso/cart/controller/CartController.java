@@ -16,8 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -150,5 +152,19 @@ public class CartController {
 		} else {
 			return Tomorrow.builder().mad(mad).dof(dof).build();
 		}
+	}
+	
+	//장바구니 추가
+	@PostMapping("/insert")
+	public String insertCart(@RequestParam("productId") int productId, @RequestParam("productCnt") int productCnt) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails)principal;
+
+		int customerId = Integer.parseInt(userDetails.getUsername());
+		
+		cartService.insertCart(productId, customerId, productCnt);
+		
+		return "redirect:/cart";
 	}
 }

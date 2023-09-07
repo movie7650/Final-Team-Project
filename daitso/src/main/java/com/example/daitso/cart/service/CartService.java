@@ -15,6 +15,7 @@ public class CartService implements ICartService{
 	@Autowired
 	ICartRepository cartRepository;
 
+	// 장바구니 추가
 	@Override
 	public void insertCart(int productId, int customerId, int productCnt) {
 		cartRepository.insertCart(productId, customerId, productCnt);
