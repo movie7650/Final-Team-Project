@@ -3,6 +3,7 @@ package com.example.daitso.cart.repository;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.cart.model.CartCheck;
@@ -24,5 +25,8 @@ public interface ICartRepository {
 	void updateCartCountByCartId(CartUpdate cartUpdate);
 	
 	// 장바구니 삭제
-	void deleteCartByCartId(int cartId);
+	void deleteCartByCartId(@Param("cartIdList") List<Integer> cartIdList, @Param("customerId") int customerId);
+	
+	// 장바구니 체크박스 상태 변경
+	void updateCheckedByCartId(@Param("cartIdList") List<Integer> cartIdList, @Param("customerId") int customerId, @Param("checked") String checked);
 }
