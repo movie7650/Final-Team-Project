@@ -40,7 +40,14 @@ public class CartService implements ICartService{
 
 	// 장바구니 삭제
 	@Transactional
-	public void deleteCartByCartId(int cartId) {
-		cartRepository.deleteCartByCartId(cartId);
+	public void deleteCartByCartId(List<Integer> cartIdList, int customerId) {
+		cartRepository.deleteCartByCartId(cartIdList, customerId);
+	}
+
+	// 장바구니 체크박스 상태 변경
+	@Override
+	public void updateCheckedByCartId(List<Integer> cartIdList, int customerId, String checked) {
+		cartRepository.updateCheckedByCartId(cartIdList, customerId, checked);
+		
 	}
 }
