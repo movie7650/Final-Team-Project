@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/header :: header}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
 <form th:action="@{/mypage/order-list}" method="post">
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+
+
 <div class="title-order-list">주문목록</div>
 	
 <div class="order-category">
-	<div class="order-rectangle">전체</div>
-	<div class="order-rectangle">입금/결제</div>
+	<div class="order-rectangle">전체주문조회</div>
+	<div class="order-rectangle">결제취소</div>
 	<div class="order-rectangle">배송중</div>
 	<div class="order-rectangle">배송완료</div>
 </div><!-- order-category -->
