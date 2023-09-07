@@ -15,7 +15,7 @@
 				 <div class="col" style="z-index: 1; display: flex; justify-content: space-between;">
 					
 					<!-- 카테고리 선택 폼 -->
-					<form id="searchForm" action="/admin/product" method="get" onsubmit="return searchByCategory()" style="display: flex;align-items: flex-end; justify-content: space-between; width: -webkit-fill-available;">
+					<form id="searchForm" action="/admin/product" method="get" onsubmit="searchByCategory()" style="display: flex;align-items: flex-end; justify-content: space-between; width: -webkit-fill-available;">
 						
 						<!-- 첫 번째 카테고리 선택 -->
 						<div class="col-sm-5" style="display: inline-flex; align-items: flex-end; padding-left: 0px;">
@@ -69,16 +69,23 @@
 						<td th:text="${product.productNm}"></td>
 						<td>
 							<div class="btn-group">
-								<!-- 상품 수정 모달을 열기 위한 버튼 -->
+								<button class="btn btn-xs"
+									style="background-color: #aac8b2; color: #ffff"
+									data-bs-toggle="modal" data-bs-target="#searchModal"
+									type="button"
+									th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">조회</button>
+									
 								<button class="btn btn-xs"
 									style="background-color: #39594e; color: #ffff"
-									data-bs-toggle="modal" data-bs-target="registerModal"
+									data-bs-toggle="modal" data-bs-target="#registerModal"
 									type="button"
 									th:onclick="setProductInfo([[${product.productId}]])">추가</button>
 
 								<button class="btn btn-xs"
 									style="background-color: red; color: #fff" type="button"
 									th:onclick="deleteProduct([[${product.productGroupId}]])">삭제</button>
+									
+								
 							</div>
 						</td>
 					</tr>
@@ -292,9 +299,69 @@
 						</div>
 					</form>
 				</div>
-			</div>
-
+			</div>	
 		</div>
+		
+		
+		<!-- 상품 조회 모달 -->
+		<div id="searchModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document" style="max-width: 1200px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">상품 조회</h5>
+					</div>
+					
+					<form th:action="@{/admin/search}" method="get">
+						<input type="hidden" id="searchProductGroupId" name="productId">
+						<div class="modal-body">
+						
+						<table class="table">
+							<thead>
+								<tr>
+									<th>그룹 ID</th>
+									<th>카테고리명</th>
+									<th>상품명</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="product : ${products}">
+									<td th:text="${product.productGroupId}"></td>
+									<td th:text="${product.categoryNm}"></td>
+									<td th:text="${product.productNm}"></td>
+									<td>
+										<div class="btn-group">
+											<button class="btn btn-xs"
+												style="background-color: #aac8b2; color: #ffff"
+												data-bs-toggle="modal" data-bs-target="#searchModal"
+												type="button"
+												th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">조회</button>
+
+											<button class="btn btn-xs"
+												style="background-color: #39594e; color: #ffff"
+												data-bs-toggle="modal" data-bs-target="#registerModal"
+												type="button"
+												th:onclick="setProductInfo([[${product.productId}]])">추가</button>
+
+											<button class="btn btn-xs"
+												style="background-color: red; color: #fff" type="button"
+												th:onclick="deleteProduct([[${product.productGroupId}]])">삭제</button>
+
+
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						
+						</div>
+					</form>
+				</div>
+			</div>	
+		</div>
+		
+		
+		
 	</div>
 	
 	<div th:replace="~{/include/footer :: footer}"></div>
@@ -337,6 +404,7 @@
 	});
 
 	
+	//하위 카테고리 불러오기
 	function getSecondCategories(firstCategoryId) {
 	    var secondCategory = $("#secondCategory");
 
@@ -360,7 +428,7 @@
 	    });
 	}
 
-    
+    //조회하기 버튼
     function searchByCategory() {
         var firstCategoryId = $("#firstCategory").val();
         var secondCategoryId = $("#secondCategory").val();
@@ -388,12 +456,12 @@
     }
     
   	//삭제 확인 메시지
-    function deleteProduct(productId) {
+    function deleteProduct(productGroupId) {
         if (!confirm('정말로 삭제하시겠습니까?')) {
             return false;
         }
         const formHtml = `
-            <form id="deleteForm" action="/admin/delete?productId=${productId}" method="post">
+            <form id="deleteForm" action="/admin/delete?productGroupId=${productGroupId}" method="post">
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -403,6 +471,26 @@
             document.getElementById('deleteForm').submit();
         }, 50) //대기시간
     }
+  	
+    //그룹별 상품 조회하기
+    function selectProductsByGroupId(productGroupId) {
+         fetch("/admin/search/" + productGroupId)
+            .then(response => response.json())
+            .then(data => {
+                const product = data;
+                console.log(product);
+                document.getElementById("searchProductGroupId").textContent = product.productGroupId;
+                document.getElementById("searchProductCode").textContent = product.productCode;
+                document.getElementById("searchProductNm").textContent = product.productNm;
+                document.getElementById("searchproductOptionFirst").textContent = product.productOptionFirst;
+                document.getElementById("searchproductOptionSecond").textContent = product.productOptionSecond;
+                document.getElementById("searchproductOptionThird").textContent = product.productOptionThird;
+                document.getElementById("searchProductPrice").textContent = product.productPrice;
+                document.getElementById("searchProductStock").textContent = product.productStock;
+
+            }); 
+    }
+  	
     
     //상품 수정 시 해당 상품 정보 가져오기
     function setProductInfo(productId) {
@@ -411,7 +499,7 @@
             .then(data => {
                 const product = data;
                 console.log(product);
-                document.getElementById("updateProductId").value = product.productId; //value는 input에 사용
+                document.getElementById("updateProductGroupId").value = product.productGroupId; //value는 input에 사용
                 document.getElementById("updateProductNm").textContent = product.productNm; //span 사용하려면 
                 document.getElementById("updateProductCode").textContent = product.productCode;
                 document.getElementById("updateProductPrice").value = product.productPrice;

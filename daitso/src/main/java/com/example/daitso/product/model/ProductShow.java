@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ProductAdmin {
+public class ProductShow {
 	private int productGroupId;
 	private int productId;
 	private int categoryId;
@@ -14,7 +14,6 @@ public class ProductAdmin {
 	private String productContent;
 	private int productPrice;
 	private int productStock;
-	private int productSalesCount;
 	private String productOptionFirst;
 	private String productOptionSecond;
 	private String productOptionThird;
@@ -27,8 +26,6 @@ public class ProductAdmin {
 	private Date modifyDt;
 	private String modifier;
 	private String productCode;
-	private float reviewStarPoint;
-	private int reviewCount;
 	private int subCategoryId;
 	private int categoryPrId;
 	private int rn;
