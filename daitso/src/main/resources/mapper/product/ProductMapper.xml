@@ -177,7 +177,7 @@
     ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 </select> -->
 
-<select id="selectProducts" resultType="com.example.daitso.product.model.Product">
+<select id="selectProducts" resultType="com.example.daitso.product.model.ProductAdmin">
     SELECT *
     FROM (
 	          SELECT
