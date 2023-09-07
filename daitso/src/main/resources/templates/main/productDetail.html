@@ -73,49 +73,83 @@
 </div>
 <div class="review-frame d-flex flex-column justify-content-center align-items-center">
 	<div style="width:1100px">
-		<h4 style="margin-bottom:30px;">상품리뷰([[${rCnt}]])</h4>
-		<div class="review-body" style="min-height: 600px;">
-		<th:block th:each="review : ${rList}">
-			<div>
-				<div>
-					<p class="margin-b-0">[[${review.customerNm}]]</p>
-					<div style="height:24px">
-						<div class="star-parent">
-							<div class="star-fill" th:style="'width: ' + ${review.reviewStarPoint} + '%;'">
-								<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+		<div>
+			<div class="modal-body">
+				<h4 style="margin-bottom:30px;">상품리뷰([[${rCnt}]])</h4>
+				<div class="review-body" style="min-height: 600px;" th:if="${rCnt != 0}">
+					<th:block th:each="review : ${rList}">
+						<div>
+							<div>
+								<p class="margin-b-0">[[${review.customerNm}]]</p>
+								<div style="height:24px">
+									<div class="star-parent">
+										<div class="star-fill" th:style="'width: ' + ${review.reviewStarPoint} + '%;'">
+											<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+										</div>
+										<div class="star-base">
+											<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span style="font-size:10px">[[${review.createDt}]]</span>
+										</div>
+									</div>
+								</div>
+								<p style="color:gray">[[${review.productNm}]] [[${review.options}]]</p>
 							</div>
-							<div class="star-base">
-								<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span style="font-size:10px">[[${review.createDt}]]</span>
+							<div class="d-flex" style="height:100px; margin-bottom:10px">
+								<!-- 나중에 th:each로 이미지 가져오자. 지금은 없으니 sample image로 대체 -->
+								<img style="width: 100px; height: 100%" th:src="@{/images/mainImages.png}">
+							</div>
+							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
+							<p>[[${review.reviewContent}]]</p>
+							<hr></hr>
+						</div>
+					</th:block>
+				</div>
+				<div class="review-none d-flex justify-content-center align-items-center" style="border: 2px solid #e6e6e6; min-height: 600px;" th:if="${rCnt == 0}">
+					<div style="font-size: 25px; font-weight: bold">해당 상품은 아직 리뷰가 없습니다ㅠ.ㅠ</div>
+				</div>
+				<div class="d-block">
+					<div class="d-flex justify-content-center mb-4">
+						<div th:replace="~{/include/product-review-paging :: product-review-paging}"></div>			
+					</div>
+				</div>		
+			</div>
+		</div>
+		<div style="border: 2px solid #e6e6e6">
+			<div class="modal-body">
+				<div class="d-flex justify-content-between">
+					<h4 style="align-self:center">상품 문의</h4>
+					<button class="inquiry-btn" onclick="openModal()">문의하기</button>
+				</div>
+				<div>
+					<p class="margin-b-0">● 구매한 상품의 <span style="font-weight:bold">취소/반품은 마이쿠팡 구매내역에서 신청</span> 가능합니다.</p>
+					<p class="margin-b-0">● 상품문의 및 리뷰를 통해 취소나 환불, 반품 등은 처리되지 않습니다.</p>
+					<p class="margin-b-0">● <span style="font-weight:bold">가격,판매자,교환/환불 및 배송 등 해당 상품 자체와 관련 없는 문의는 고객센터 내 1:1 문의하기</span>를 이용해주세요.</p>
+					<p class="margin-b-0">● <span style="font-weight:bold">"해당 상품 자체"와 관계없는 글, 양도, 광고성, 욕설, 비방, 도배 등의 글은 예고 없이 이동, 노출제한, 삭제 등의 조치가 취해질 수 있습니다.</span>
+					<p class="margin-b-0">● 공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.
+				</div>
+				<hr style="border: 1px solid"></hr>	
+				<th:block th:each="inquiry : ${inquiryList}">
+					<div class="d-flex">
+						<div class="d-flex justify-content-center align-items-center" style="flex: 1">
+							<div class="text-center" style="width:35px; height:20px; background-color:black; color:white; font-size:12px">
+								질문
 							</div>
 						</div>
+						<div class="d-flex flex-column" style="flex: 10">
+							<div class="d-flex justify-content-between">
+								<span>
+									<span class="font-s-13">옵션 :</span>
+									<span class="font-s-13" th:if="${inquiry.productOptionFirst != '0'}">[[${inquiry.productOptionFirst}]]</span>
+									<span class="font-s-13" th:if="${inquiry.productOptionSecond != '0'}">| [[${inquiry.productOptionSecond}]]</span>
+									<span class="font-s-13" th:if="${inquiry.productOptionThird != '0'}">| [[${inquiry.productOptionThird}]]</span>
+								</span>
+								<span style="font-size:12px">[[${inquiry.createDt}]]</span>
+							</div>
+							<div>[[${inquiry.inquiryContent}]]</div>
+						</div>
 					</div>
-					<p style="color:gray">[[${review.productNm}]] [[${review.options}]]</p>
-				</div>
-				<div class="d-flex" style="height:100px; margin-bottom:10px">
-					<!-- 나중에 th:each로 이미지 가져오자. 지금은 없으니 sample image로 대체 -->
-					<img style="width: 100px; height: 100%" th:src="@{/images/mainImages.png}">
-				</div>
-				<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
-				<p>[[${review.reviewContent}]]</p>
-				<hr></hr>
+					<hr>
+				</th:block>			
 			</div>
-		</th:block>
-		</div>
-		<div class="d-block">
-			<div class="d-flex justify-content-center mb-4">
-				<div th:replace="~{/include/product-review-paging :: product-review-paging}"></div>			
-			</div>
-		</div>
-		<div class="d-flex justify-content-between">
-			<h4 style="align-self:center">상품 문의</h4>
-			<button class="inquiry-btn" onclick="openModal()">문의하기</button>
-		</div>
-		<div>
-			<p class="margin-b-0">● 구매한 상품의 <span style="font-weight:bold">취소/반품은 마이쿠팡 구매내역에서 신청</span> 가능합니다.</p>
-			<p class="margin-b-0">● 상품문의 및 리뷰를 통해 취소나 환불, 반품 등은 처리되지 않습니다.</p>
-			<p class="margin-b-0">● <span style="font-weight:bold">가격,판매자,교환/환불 및 배송 등 해당 상품 자체와 관련 없는 문의는 고객센터 내 1:1 문의하기</span>를 이용해주세요.</p>
-			<p class="margin-b-0">● <span style="font-weight:bold">"해당 상품 자체"와 관계없는 글, 양도, 광고성, 욕설, 비방, 도배 등의 글은 예고 없이 이동, 노출제한, 삭제 등의 조치가 취해질 수 있습니다.</span>
-			<p class="margin-b-0">● 공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.
 		</div>
 	</div>
 </div>
@@ -134,8 +168,8 @@
 			    	<div class="d-flex justify-content-center align-items-center" style="flex:1; border-right: 1px solid;">
 			    		<p>상품옵션</p>
 			    	</div>
-			    	<div class="d-flex flex-column justify-content-center align-items-center" style="flex:6;">
-			    		
+			    	<div class="d-flex flex-column justify-content-center align-items-center" style="flex:6;">			    		
+			    			<input type="hidden" name="productId" th:value="${product.productId}">
 			    			<input type="hidden" name="productGroupId" th:value="${product.productGroupId}">
 				    		<div class="d-flex flex-column" style="width:450px;">
 					    		<select class="inquiry-product-size margin-b-10" name="size" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],1)">
@@ -379,8 +413,14 @@
 		objCnt.setAttribute('name', 'productCnt');
 		objCnt.setAttribute('value', cntInput.value);
 		
+		let objPrice = document.createElement('input');
+		objPrice.setAttribute('type','hidden');
+		objPrice.setAttribute('name', 'totalPrice');
+		objPrice.setAttribute('value', totalPrice.value);
+		
 		tag.appendChild(objId);
 		tag.appendChild(objCnt);
+		tag.appendChild(objPrice);
 		tag.setAttribute('method', 'post');
 		tag.setAttribute('action', '/cart/insert');
 		document.body.appendChild(tag);
@@ -389,38 +429,45 @@
 
 	function changeReviewPage(productGroupId, page){
 		const reviewBody = document.querySelector(".review-body");
-		reviewBody.innerHTML = "";
+		const reviewNone = document.querySelector(".review-none");
+		
+		
 		fetch("/review/" + productGroupId +"/" + page)
 		.then(response => response.json())
 		.then(data => {
-			data.forEach(review => {
-				const rElement = `
-					<div>
-					<p style="margin-bottom:0px">${review.customerNm}</p>
-					<div style="height:24px">
-						<div class="star-parent">
-							<div class="star-fill" style="width: ${review.reviewStarPoint}%;">
-								<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-							</div>
-							<div class="star-base">
-								<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span style="font-size:10px">${review.createDt}</span>
+			if(data.length == 0){
+			}
+			else{
+				reviewBody.innerHTML = "";
+				data.forEach(review => {
+					const rElement = `
+						<div>
+						<p style="margin-bottom:0px">${review.customerNm}</p>
+						<div style="height:24px">
+							<div class="star-parent">
+								<div class="star-fill" style="width: ${review.reviewStarPoint}%;">
+									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+								</div>
+								<div class="star-base">
+									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span style="font-size:10px">${review.createDt}</span>
+								</div>
 							</div>
 						</div>
+						<p style="color:gray">${review.productNm} ${review.options}</p>
 					</div>
-					<p style="color:gray">${review.productNm} ${review.options}</p>
-				</div>
-				<div class="d-flex" style="height:100px; margin-bottom:10px">
-					<!-- 나중에 th:each로 이미지 가져오자. 지금은 없으니 sample image로 대체 -->
-					<img style="width: 100px; height: 100%" th:src="@{/images/mainImages.png}">
-				</div>
-				<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
-				<p>${review.reviewContent}</p>
-				<hr></hr>
-				`
-				reviewBody.innerHTML += rElement;
-			})
+					<div class="d-flex" style="height:100px; margin-bottom:10px">
+						<!-- 나중에 th:each로 이미지 가져오자. 지금은 없으니 sample image로 대체 -->
+						<img style="width: 100px; height: 100%" th:src="@{/images/mainImages.png}">
+					</div>
+					<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
+					<p>${review.reviewContent}</p>
+					<hr></hr>
+					`
+					reviewBody.innerHTML += rElement;
+				})
+			}
 		})
-		document.querySelector(".header").scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+		document.querySelector(".direct-purchase-btn").scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 	}
 	
 	//문의하기 팝업창 열기
@@ -442,7 +489,6 @@
     });
 	
 	function insertInquiry(){
-		console.log("진짜 대박이다");
 		document.querySelector(".inquiry-form").submit();
 	}
 </script>
