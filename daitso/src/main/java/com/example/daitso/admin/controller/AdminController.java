@@ -107,10 +107,6 @@ public class AdminController {
 	}
 	
 	
-	
-	
-	
-	
 
 	//기존 상품 등록하기
 	@PostMapping("/product")
