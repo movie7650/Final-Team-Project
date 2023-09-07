@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.category.sevice.ICategoryService;
+import com.example.daitso.inquiry.model.InquiryProduct;
+import com.example.daitso.inquiry.service.IInquiryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductOption;
 import com.example.daitso.product.service.IProductService;
@@ -33,6 +35,9 @@ public class ProductController {
 	
 	@Autowired
 	IReviewService reviewService;
+	
+	@Autowired
+	IInquiryService inquiryService;
 	
 	@GetMapping("")
 	public String main() {
@@ -78,6 +83,9 @@ public class ProductController {
 		List<String> oListSecond = productService.selectProductOptionSecond(product.getProductGroupId(), pOptionFirst);
 		List<String> oListThird = productService.selectProductOptionThird(product.getProductGroupId(), pOptionFirst, pOptionSecond);
 		
+		List<InquiryProduct> inquiryList = inquiryService.selectProductInquiry(groupId);
+		
+		
 		model.addAttribute("totalPageCount", totalPage);
 		model.addAttribute("nowPage", 1);
 		model.addAttribute("totalPageBlock", totalPageBlock);
@@ -91,6 +99,7 @@ public class ProductController {
 		model.addAttribute("oListFirst", oListFirst);
 		model.addAttribute("oListSecond", oListSecond);
 		model.addAttribute("oListThird", oListThird);
+		model.addAttribute("inquiryList", inquiryList);
 		
 		return "/main/productDetail";
 	}

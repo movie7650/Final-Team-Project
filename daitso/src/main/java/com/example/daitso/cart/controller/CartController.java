@@ -156,14 +156,14 @@ public class CartController {
 	
 	//장바구니 추가
 	@PostMapping("/insert")
-	public String insertCart(@RequestParam("productId") int productId, @RequestParam("productCnt") int productCnt) {
+	public String insertCart(int productId, int productCnt, int totalPrice) {
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails)principal;
 
 		int customerId = Integer.parseInt(userDetails.getUsername());
 		
-		cartService.insertCart(productId, customerId, productCnt);
+		cartService.insertCart(productId, customerId, productCnt, totalPrice);
 		
 		return "redirect:/cart";
 	}
