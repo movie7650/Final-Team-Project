@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+<div class="mypage-coupon-title">쿠폰등록하기</div>
+
+<div class="coupon-container">
+	<div class="coupon-number-container">
+		<div class="coupon-insert-title">쿠폰번호입력</div>
+		
+		<div class="coupon-number-input-container">
+			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<button type="submit">등록하기</button>
+		</div><!-- coupon-number-input-container -->
+		
+	</div><!-- coupon-number-container -->
+	
+	<!-- 4자리만 입력가능하게 하는 JS -->
+	<script>
+	function maxNum(el, maxlength) {
+		  if(el.value.length > maxlength)  {
+		    el.value 
+		      = el.value.substr(0, maxlength);
+		  }
+		}
+	</script>
+	
+	<div class="coupon-table-container">
+	
+	
+		<div class="coupon-status-container">
+			<div class="coupon-ban-usable">사용가능</div>
+			<div class="coupon-ban-used">사용완료/기간만료</div>
+		</div><!--coupon-status-container  -->
+		
+		<table>
+			<tr>
+				<th>쿠폰명</th>
+				<th>할인율</th>
+				<th>유효기간</th>
+				<th>상태</th>
+			</tr>
+				<td>10%할인쿠폰</td>
+				<td>10%</td>
+				<td>24.08.01</td>
+				<td>사용완료</td>
+			<tr>
+			
+			</tr>
+		</table>
+		
+		
+		
+	</div><!-- coupon-table-container -->
+	
+	
+
+
+</div><!-- coupon-container -->
+
+<div class="empty"></div>
+
+
+<div th:replace="~{/include/footer :: footer}"></div>
+
+</body>
+</html>
