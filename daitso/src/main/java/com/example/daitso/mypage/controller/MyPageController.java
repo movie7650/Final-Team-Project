@@ -46,20 +46,20 @@ public class MyPageController {
 	//마이페이지-주문목록 컨트롤러
 	@RequestMapping(value="/orderlist", method=RequestMethod.GET)
 	public String selectPurchase(Purchase purchase, Model model, PurchaseCheck purchasecheck) {
-		List<PurchaseCheck> purchases = purchaseService.selectAllPurchase();
-		model.addAttribute("purchases", purchases.get(0));
+//		List<PurchaseCheck> purchases = purchaseService.selectAllPurchase();
+//		model.addAttribute("purchases", purchases.get(0));
 		
 		//소유포인트 상단바에 띄우기
-		List<Point> points = pointService.selectPoint();
-		int totalPoint = 0;
-		for(Point point : points) {
-			totalPoint += point.getPointAfter();
-		}
-		if(totalPoint > 999) {
-			model.addAttribute("totalPoint", totalPoint/1000 + "," + totalPoint%1000 + "P");
-		}else {
-		model.addAttribute("totalPoint", totalPoint + "P");
-		}
+//		List<Point> points = pointService.selectPoint();
+//		int totalPoint = 0;
+//		for(Point point : points) {
+//			totalPoint += point.getPointAfter();
+//		}
+//		if(totalPoint > 999) {
+//			model.addAttribute("totalPoint", totalPoint/1000 + "," + totalPoint%1000 + "P");
+//		}else {
+//		model.addAttribute("totalPoint", totalPoint + "P");
+//		}
 		return "mypage/order-list";
 	}
 	
@@ -106,7 +106,7 @@ public class MyPageController {
 	
 	//마이페이지-회원정보확인 컨트롤러
 	@RequestMapping("/checkuser")
-	public String updateMe() {
+	public String checkIform() {
 		
 		
 		return "mypage/check-user-inform";
@@ -116,6 +116,17 @@ public class MyPageController {
 	@RequestMapping("/updateuser")
 	public String updateUser() {
 		return "mypage/update-user-inform";
+	}
+	
+	//마이페이지-쿠폰등록 컨트롤러
+	@RequestMapping("/mycoupon")
+	public String insertCoupon() {
+		return "mypage/insert-coupon";
+	}
+	//마이페이지-쿠폰등록-쿠폰사용완료페이지
+	@RequestMapping("/mycoupon-used")
+	public String usedCoupon() {
+		return "mypage/mycoupon-used";
 	}
 
 }

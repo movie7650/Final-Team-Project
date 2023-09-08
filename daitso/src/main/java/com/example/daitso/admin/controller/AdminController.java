@@ -51,10 +51,10 @@ public class AdminController {
 	    
 	    // 초기값 설정
 	    if (firstCategoryId == null) {
-	        firstCategoryId = 0; // 상위 카테고리의 초기값
+	        firstCategoryId = 0; // 첫 번째 카테고리의 초기값
 	    }
 	    if (secondCategoryId == null) {
-	        secondCategoryId = 0; // 하위 카테고리의 초기값
+	        secondCategoryId = 0; // 두 번째 카테고리의 초기값
 	    }
 
 	    List<ProductShow> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
@@ -105,12 +105,6 @@ public class AdminController {
 	public List<Product> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
-	
-	
-	
-	
-	
-	
 
 	//기존 상품 등록하기
 	@PostMapping("/product")
