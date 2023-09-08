@@ -128,5 +128,23 @@ public class MyPageController {
 	public String usedCoupon() {
 		return "mypage/mycoupon-used";
 	}
+	
+	//마이페이지-주문조회-결제취소
+	@RequestMapping("/canclepay")
+	public String canclePay() {
+		return "mypage/cancle-pay";
+	}
+	
+	//마이페이지-주문주회-배송중
+	@RequestMapping("/searchshipping")
+	public String searchShipping() {
+		return "mypage/mypage-search-shipping";
+	}
+	
+	//마이페이지-주문주회-배송완료
+	@RequestMapping("/shippingcomplete")
+	public String shippingComplete() {
+		return "mypage/mypage-shipping-complete";
+	}
 
 }
