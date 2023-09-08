@@ -81,7 +81,7 @@
 
 
 <!-- 
-	기능: 전체, 상위 카테고리별, 하위 카테고리별 상품 조회하기
+	기능: 전체, 상위 카테고리, 하위 카테고리별 상품 조회하기
 	담당자: 이세인
 -->
 <select id="selectProducts" resultType="com.example.daitso.product.model.ProductShow">
@@ -95,7 +95,8 @@
 	                c.category_nm AS "categoryNm",
 	                ROW_NUMBER() OVER (ORDER BY p.product_group_id DESC) AS "rn"
 	           FROM product p
-	           JOIN category c ON p.category_id = c.category_id
+	           JOIN category c
+				 ON p.category_id = c.category_id
 	       GROUP BY p.product_group_id, p.product_nm, c.category_pr_id, c.category_id, c.category_nm
 	         HAVING 1=1
         <choose>
