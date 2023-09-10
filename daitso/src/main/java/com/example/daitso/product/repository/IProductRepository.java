@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.product.model.Product;
-import com.example.daitso.product.model.ProductShow;
+import com.example.daitso.product.model.ProductCheck;
 
 @Mapper
 @Repository
@@ -20,19 +20,25 @@ public interface IProductRepository {
 	Product selectProduct(@Param("productId") int productId);
 
 
-	
-    List<ProductShow> selectProducts(int firstCategoryId, int secondCategoryId, int offset, int pageSize);
+	//카테고리별 상품 조회하기
+    List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
     
-    int selectCountProducts(int firstCategoryId, int secondCategoryId);
+    //카테고리별 상품 개수 조회하기
+    int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId);
     
-    void deleteProduct(int productGroupId);
+    //그룹 상품 삭제하기
+    void deleteGroupProduct(int productGroupId);
     
+    //그룹별 상품 조회하기
     List<Product> selectProductsByGroupId(int productGroupId);
     
-	void registerExistingProducts(ProductShow product);
+    
+	void updateProduct(ProductCheck product);
+	ProductCheck selectProductId(int productId);
+    
+    
+	void registerExistingProducts(ProductCheck product);
 	void changeProductCode();
-	void updateProduct(Product product);
-	Product selectProductId(int productId);
     
 	
 	
