@@ -13,12 +13,14 @@ public interface IAdminService {
     
     int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId);
    
+    
 	void deleteGroupProduct(int productGroupId);
     
 	List<Product> selectProductsByGroupId(int productGroupId);
     
-	ProductCheck selectProductId(int productId);
-	void updateProduct(ProductCheck product);
+	Product selectProductId(int productId);
+	
+	void updateProduct(Product product);
 	
 	
 	void registerExistingProducts(ProductCheck product, List<MultipartFile> files);
