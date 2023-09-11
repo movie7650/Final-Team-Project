@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+.detail-order-main{
+	display: flex;
+	justify-content: center;
+}
+.detail-order-title{
+	position:absolute;
+	padding-bottom:0.5%;
+	font-size:150%;
+	margin-left:165px;
+	margin-top:-640px;
+	width:855px;
+	border-bottom:solid 3px #668663;
+}
+.detail-order-product-container{
+	border:solid 1px red;
+	width:700px;
+	height:200px;
+	margin-top:-550px;
+	margin-left:160px;
+	padding-right:-100px;
+}
+.detail-order-product01{
+	border:solid 1px black; 
+	width:200px;
+	height:200px;
+	float:right;
+}
+.detail-order-product02{
+	border:solid 1px blue;
+	width:500px;
+	height:200px;
+	
+}

@@ -2,11 +2,14 @@ package com.example.daitso.cart.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.daitso.cart.model.CartCheck;
+import com.example.daitso.cart.model.CartCoupon;
+import com.example.daitso.cart.model.CartCouponApply;
 import com.example.daitso.cart.model.CartUpdate;
 import com.example.daitso.cart.repository.ICartRepository;
 
@@ -50,5 +53,17 @@ public class CartService implements ICartService{
 	public void updateCheckedByCartId(List<Integer> cartIdList, int customerId, String checked) {
 		cartRepository.updateCheckedByCartId(cartIdList, customerId, checked);
 		
+	}
+
+	// 쿠폰 적용 대상 상품들 조회
+	@Override
+	public List<CartCoupon> getCouponProductByCustomerId(int customerId) {
+		return cartRepository.getCouponProductByCustomerId(customerId);
+	}
+
+	// 적용가능한 쿠폰 조회
+	@Override
+	public List<CartCouponApply> getCouponsByCustomerId(List<Integer> categoryIdList, int customerId) {
+		return cartRepository.getCouponsByCustomerId(categoryIdList, customerId);
 	}
 }
