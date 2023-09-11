@@ -57,6 +57,7 @@ public class AdminService implements IAdminService{
 		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
 	}
 
+	
 	@Override
 	public void deleteGroupProduct(int productGroupId) {
 		productRepository.deleteGroupProduct(productGroupId);
@@ -66,21 +67,15 @@ public class AdminService implements IAdminService{
 	public List<Product> selectProductsByGroupId(int productGroupId) {
 		return productRepository.selectProductsByGroupId(productGroupId);
 	}
-	
-	
-	
-	
 
 	@Override
-	public void updateProduct(ProductCheck product) {
+	public void updateProduct(Product product) {
 		productRepository.updateProduct(product);
 	}
 
 	@Override
-	public ProductCheck selectProductId(int productId) {
+	public Product selectProductId(int productId) {
 		return productRepository.selectProductId(productId);
 	}
-
-
 
 }
