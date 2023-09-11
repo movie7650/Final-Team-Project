@@ -8,10 +8,11 @@ import com.example.daitso.cart.model.CartCouponApply;
 import com.example.daitso.cart.model.CartUpdate;
 
 public interface ICartService {
-	
+
 	// 장바구니 추가
 	void insertCart(int productId, int customerId, int productCnt, int totalPrice);
 	
+
 	// 사용자 고유번호로부터 사용자 장바구니 조회
 	List<CartCheck> getCartByCustomerId(int customerId);
 	
@@ -33,3 +34,4 @@ public interface ICartService {
     // 적용가능한 쿠폰 조회
  	List<CartCouponApply> getCouponsByCustomerId(List<Integer> categoryIdList, int customerId);
 }
+

@@ -28,6 +28,13 @@
     <link rel="stylesheet" th:href="@{/css/mypage-css/check-user-inform.css}">
     <link rel="stylesheet" th:href="@{/css/mypage-css/update-user-inform.css}">
     <link rel="stylesheet" th:href="@{/css/cart-coupon.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-coupon.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mycoupon-used.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/cancle-pay.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-search-shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-shipping-complete.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-inquiry.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/detail-order.css}">
     
     <!-- BootStrap -->    
     <link href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -71,7 +78,7 @@
     	        		a.style.color = 'black';
     	        		a.style.fontWeight = 'bold';
     	        		a.style.fontSize = '18px';
-    	        		a.setAttribute('href', '#');
+    	        		a.setAttribute('href', '/category/'+data.categoryId);
     	        		a.setAttribute('id', 'a');		
     	        	
     	        		a.addEventListener('mouseover', () => {
@@ -111,7 +118,7 @@
     		    	        		a.style.textDecoration = 'none';
     		    	        		a.style.color = 'black';
     		    	        		a.style.fontSize = '14px';
-    		    	        		a.setAttribute('href', '#');
+    		    	        		a.setAttribute('href', '/category/'+data.categoryId);
     		    	        		a.setAttribute('id', 'a');
     		    	        		
     		    	        		a.addEventListener('mouseover', () => {

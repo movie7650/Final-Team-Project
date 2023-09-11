@@ -18,7 +18,7 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
-import com.example.daitso.product.model.ProductShow;
+import com.example.daitso.product.model.ProductCheck;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -28,6 +28,7 @@ public class AdminController {
 
 	@Autowired
 	IAdminService adminService;
+	
 	@Autowired
 	ICategoryService categoryService;
 
@@ -37,11 +38,12 @@ public class AdminController {
 		return "admin/login/admin-login";
 	}
 
-	//상품 전체 조회, 카테고리별 조회(페이징)
+	//카테고리별 상품 조회하기(페이징)
 	@GetMapping("/product")
-	public String selectProducts(
+	public String selectProductsByCategory(
 	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
 	    @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+	    @RequestParam(name = "thirdCategoryId", required = false) Integer thirdCategoryId,
 	    @RequestParam(name = "page", defaultValue = "1") int page,
 	    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
 	    Model model) {
@@ -51,13 +53,16 @@ public class AdminController {
 	    
 	    // 초기값 설정
 	    if (firstCategoryId == null) {
-	        firstCategoryId = 0; // 상위 카테고리의 초기값
+	        firstCategoryId = 0; 
 	    }
 	    if (secondCategoryId == null) {
-	        secondCategoryId = 0; // 하위 카테고리의 초기값
+	        secondCategoryId = 0; 
+	    }
+	    if (thirdCategoryId == null) {
+	    	thirdCategoryId = 0;
 	    }
 
-	    List<ProductShow> products = adminService.selectProducts(firstCategoryId, secondCategoryId, offset, pageSize);
+	    List<ProductCheck> products = adminService.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
 	    model.addAttribute("products", products);
 	   	    
 	    // 첫 번째 카테고리 불러오기(필터)
@@ -67,13 +72,18 @@ public class AdminController {
 	    // 선택한 카테고리 정보 전달
 	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
 	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
+	    model.addAttribute("selectedThirdCategoryId", thirdCategoryId);
+
+	    System.out.println(firstCategoryId);
+	    System.out.println(secondCategoryId);
+	    System.out.println(thirdCategoryId);
 	    
 	    // 페이징 정보 전달
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("pageSize", pageSize);
 
 	    // 총 페이지 수 계산
-	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId);
+	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 	    model.addAttribute("totalCount", totalCount);
 	    model.addAttribute("totalPages", totalPages);
@@ -82,18 +92,27 @@ public class AdminController {
 	}
 	
 	//두 번째 카테고리 불러오기(필터)
-	@GetMapping("/product/{categoryId}")
+	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
 	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
 		List<Category> secondCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
 		model.addAttribute("secondCategories",secondCategories);
 		return secondCategories;
 	}
+		
+	//세 번째 카테고리 불러오기(필터)
+	@GetMapping("/product/third/{categoryId}")
+	@ResponseBody
+	public List<Category> getThirdCategories(@PathVariable int categoryId, Model model) {
+		List<Category> thirdCategories = categoryService.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
+		model.addAttribute("thirdCategories",thirdCategories);
+		return thirdCategories;
+	}
 
-	//상품 삭제하기
+	//그룹 상품 삭제하기
 	@PostMapping("/delete")
-	public String deleteProduct(@RequestParam int productGroupId, Model model) {
-		adminService.deleteProduct(productGroupId);
+	public String deleteGroupProduct(@RequestParam int productGroupId, Model model) {
+		adminService.deleteGroupProduct(productGroupId);
 		model.addAttribute("message","상품이 삭제되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
@@ -105,12 +124,12 @@ public class AdminController {
 	public List<Product> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
-	
-	
 
+	
+	
 	//기존 상품 등록하기
 	@PostMapping("/product")
-	public String registerExistingProducts(ProductShow product, Model model, @RequestPart List<MultipartFile> files) {
+	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
 		adminService.registerExistingProducts(product, files);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
@@ -120,18 +139,23 @@ public class AdminController {
 	//상품 수정을 위해 해당 상품 정보 불러오기
 	@GetMapping("/update/{productGroupId}")
 	@ResponseBody
-	public Product selectProductId(@PathVariable int productId, Model model) {
+	public ProductCheck selectProductId(@PathVariable int productId, Model model) {
 		return adminService.selectProductId(productId);
 	}
 
 	//상품 수정하기
 	@PostMapping("/update")
-	public String updateProduct(Product product, Model model, HttpSession session) {
+	public String updateProduct(ProductCheck product, Model model, HttpSession session) {
 		adminService.updateProduct(product);
 		model.addAttribute("product", product);
-		session.setAttribute("productId", product.getProductId());
+		session.setAttribute("productGroupId", product.getProductGroupId());
+		session.setAttribute("categoryNm", product.getCategoryNm());
 		session.setAttribute("productCode", product.getProductCode());
+		session.setAttribute("productId", product.getProductId());
 		session.setAttribute("productNm", product.getProductNm());
+		session.setAttribute("productOptionFirst", product.getProductOptionFirst());
+		session.setAttribute("productOptionSecond", product.getProductOptionSecond());
+		session.setAttribute("productOptionThird", product.getProductOptionThird());
 		session.setAttribute("productPrice", product.getProductPrice());
 		session.setAttribute("productStock", product.getProductStock());
 		model.addAttribute("message","상품이 수정되었습니다.");

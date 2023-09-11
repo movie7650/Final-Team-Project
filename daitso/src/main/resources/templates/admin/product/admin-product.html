@@ -12,45 +12,51 @@
 		<hr class="my-3">
 		<div class="row" style="padding-bottom: 10px;">
 				 <div class="col" style="z-index: 1; display: flex; justify-content: space-between;">
-					
-					<!-- 카테고리 선택 폼 -->
-					<form id="searchForm" action="/admin/product" method="get" onsubmit="searchByCategory()" style="display: flex;align-items: flex-end; justify-content: space-between; width: -webkit-fill-available;">
-						
-						<!-- 첫 번째 카테고리 선택 -->
+				 			
 						<div class="col-sm-5" style="display: inline-flex; align-items: flex-end; padding-left: 0px;">
-							<div class="col-sm-3" style="padding-left: 0px;">
+							<!-- 첫 번째 카테고리 선택 -->
+							<div class="col-sm-3" style="padding-left: 0px; padding-right: 0px;">
 								<label for="firstCategory"></label> <select id="firstCategory" onchange="getSecondCategories(this.value)" style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
 								<option value="">전체</option>
                                 <option th:each="category : ${firstCategories}"
                                         th:value="${category.categoryId}" th:text="${category.categoryNm}"th:selected="${category.categoryId == selectedFirstCategoryId}"></option>
 								</select>
+							</div>                       
+							<!-- 두 번째 카테고리 선택 -->
+							<div class="col-sm-5">
+								<label for="secondCategory"></label> 
+								<select id="secondCategory" name="secondCategory" onchange="getThirdCategories(this.value)" style="border-radius: 8px; padding-left: 5px; padding-right: 5px; width: 167px;">
+								    <option value="">전체</option>
+								   <!-- <input type="hidden" id="selectedSecondCategoryId" th:value="${selectedSecondCategoryId}"/> -->
+								</select>
 							</div>
-                            
-							
-						<!-- 두 번째 카테고리 선택 -->
-						<div class="col-sm-3">
-							<label for="secondCategory"></label> 
-							<select id="secondCategory" name="secondCategory" onchange="updateSubcategoryProducts(this.value)" style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
-							    <option value="">전체</option>
-							</select>
-						</div>	
-						
-						<!-- "조회" 버튼 -->
-						<div class="col-sm-6" style="text-align: end;">
-								<button class="btn btn-primary" style="background-color: #E8C369; border-color: #E8C369" type="submit">조회</button>
-						</div>
-						</div>
-						
-							<!-- "+등록" 버튼 -->
-							<div class="col-sm-3 text-right">
-								<button class="btn btn-primary" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">+등록</button>
+							<!-- 세 번째 카테고리 선택 -->
+							 <div class="col-sm-5" style="text-align:center; padding-left: 0px;">
+								<label for="thirdCategory"></label> 
+								<select id="thirdCategory" name="thirdCategory" style="border-radius: 8px; padding-left: 10px; padding-right: 5px;">
+								    <option value="">전체</option>
+ 								    <input type="hidden" id="selectedThirdCategoryId" th:value="${selectedThirdCategoryId}"/>
+								</select>
 							</div>
-					</form>
-				</div>
-			</div>
+						</div>				
 
+						<div class="col-sm-3" style="display: inline-flex;align-items: flex-end;padding-left: 0px;justify-content: flex-end;">
+							<!-- "조회" 버튼 -->
+							<div class="col-sm-5" style="text-align: end;padding-right: 0px;">
+									<button class="btn btn-primary" onclick = "searchByCategory()" style="background-color: #E8C369; border-color: #E8C369" type="submit">조회</button>
+							</div>		
+							<!-- "신규등록" 버튼 -->
+							<div class="col-sm-6" style="text-align: end;padding-left: 0px;">
+									<button class="btn btn-primary" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">신규등록</button>
+							</div>
+					  </div>
+					  
+				</div>
+		</div>
+
+ 		<!-- 상품 조회하기 -->
 		<div style="height:690px;">
-			<table class="table">
+			<table class="table" style="text-align: center;">
 				<thead>
 					<tr>
 						<th>순번</th>
@@ -82,7 +88,7 @@
 
 								<button class="btn btn-xs"
 									style="background-color: red; color: #fff" type="button"
-									th:onclick="deleteProduct([[${product.productGroupId}]])">삭제</button>
+									th:onclick="deleteGroupProduct([[${product.productGroupId}]])">삭제</button>
 									
 								
 							</div>
@@ -138,7 +144,7 @@
 									카테고리</label>
 								<div class="col-sm-10">
 									<select id="categoryId" name="categoryId"
-										onchange="getSubCategories(this.value)" required>
+										onchange="getSecondCategories(this.value)" required>
 										<option value="">전체</option>
 										<option th:each="category : ${firstCategories}"
 											th:value="${category.categoryId}"
@@ -327,15 +333,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
-								<td><span type="type" id="searchProductGroupId" name="productId"></span></td>
-								<td><span type="type" id="searchProductCode" name="productCode"></span></td>
-								<td><span type="type" id="searchProductNm" name="productNm"></span></td>
-								<td><span type="type" id="searchproductOptionFirst" name="productOptionFirst"></span></td>
-								<td><span type="type" id="searchproductOptionSecond" name="productOptionSecond"></span></td>
-								<td><span type="type" id="searchproductOptionThird" name="productOptionThird"></span></td>
-								<td><span type="type" id="searchProductPrice" name="productPrice"></span></td>
-								<td><span type="type" id="searchProductStock" name="productStock"></span></td>
+							 <tbody id="productTableBody">
 							</tbody>
 						</table>
 						
@@ -344,8 +342,6 @@
 				</div>
 			</div>	
 		</div>
-		
-		
 		
 	</div>
 	
@@ -357,17 +353,23 @@
 	    // 페이지 로드 시 선택된 값들을 가져와서 설정
 	    var selectedFirstCategoryId = $("#firstCategory").val();
 	    var selectedSecondCategoryId = $("#secondCategory").val();
+	    var selectedThirdCategoryId = $("#thirdCategory").val();
 
-	    // 상위 카테고리 변경 시 이벤트 처리
+	    // 첫 번째 카테고리 변경 시 이벤트 처리
 	    $("#firstCategory").change(function() {
 	        selectedFirstCategoryId = $(this).val();
 	    });
 
-	    // 하위 카테고리 변경 시 이벤트 처리
+	    // 두 번째 카테고리 변경 시 이벤트 처리
 	    $("#secondCategory").change(function() {
 	        selectedSecondCategoryId = $(this).val();
 	    });
-
+	    
+	 	// 세 번째 카테고리 변경 시 이벤트 처리
+	    $("#thirdCategory").change(function() {
+	    	selectedThirdCategoryId = $(this).val();
+	    });
+		console.log(selectedThirdCategoryId);
 	    // 조회 버튼 클릭 시 이벤트 처리
 	    $("#searchForm").submit(function() {
 	        // 선택된 값들을 쿼리 매개변수로 추가하여 페이지 리로딩
@@ -376,6 +378,9 @@
 	            newUrl += "?firstCategoryId=" + selectedFirstCategoryId;
 	            if (selectedSecondCategoryId !== "") {
 	                newUrl += "&secondCategoryId=" + selectedSecondCategoryId;
+	                if (selectedThirdCategoryId !== "") {
+		                newUrl += "&thirdCategory=" + selectedThirdCategoryId;
+		            }
 	            }
 	        }
 	        window.location.href = newUrl;
@@ -384,47 +389,98 @@
 
 	    // 페이지 로딩 시 선택된 값들을 설정
 	    $("#firstCategory").val(selectedFirstCategoryId);
-	    getSecondCategories(selectedFirstCategoryId);
+	    // 두 번째 카테고리 업데이트
+	    getSecondCategories(selectedFirstCategoryId);    
+	    // 두 번째 카테고리 선택
 	    $("#secondCategory").val(selectedSecondCategoryId);
-	});
+	    // 세 번째 카테고리 업데이트
+	    getThirdCategories(selectedSecondCategoryId);
+	    // 세 번째 카테고리 선택
+	    $("#thirdCategory").val(selectedThirdCategoryId);
+	}); 
 
-	
-	//하위 카테고리 불러오기
+	const secondCategoryNum = [[${selectedSecondCategoryId}]];
+  	
+	//두 번째 카테고리 불러오기
 	function getSecondCategories(firstCategoryId) {
 	    var secondCategory = $("#secondCategory");
-
 	    // 기존 옵션을 지우기 전에 "전체" 옵션을 추가합니다.
 	    secondCategory.empty();
 	    secondCategory.append('<option value="">전체</option>');
-
-	    // 상위 카테고리가 "전체"로 선택된 경우 처리를 종료합니다.
+	    
+	    // 첫 번째 카테고리가 "전체"로 선택된 경우 처리를 종료합니다.
 	    if (firstCategoryId === "") {
 	        return;
 	    }
 	    $.ajax({
 	        type: "GET",
-	        url: "/admin/product/" + firstCategoryId,
+	        url: "/admin/product/second/" + firstCategoryId,
 	        success: function (data) {
-	            // 선택된 상위 카테고리의 하위 카테고리 목록을 추가합니다.
+	            // 선택된 첫 번째 카테고리의 하위 카테고리 목록을 추가합니다.
 	            for (var i = 0; i < data.length; i++) {
-	                secondCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');
+	            	if (secondCategoryNum == data[i].categoryId){
+	            		// 선택된 항목인 경우 selected 속성을 추가한 옵션을 생성하여 추가
+	            		secondCategory.append('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
+	            	} else {
+	            		// 선택되지 않은 항목인 경우 옵션을 생성하여 추가
+	            		secondCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+	            	}
 	            }
 	        }
 	    });
 	}
-
-    //조회하기 버튼
+  	
+	const thirdCategoryNum = [[${selectedThirdCategoryId}]];
+	//세 번째 카테고리 불러오기
+	function getThirdCategories(secondCategoryId) {
+		console.log("두 번째 카테고리 값:", secondCategoryId); // 두 번째 카테고리 값 로깅
+		    
+	    var thirdCategory = $("#thirdCategory");
+	    // 기존 옵션을 지우기 전에 "전체" 옵션을 추가합니다.
+	    thirdCategory.empty();
+	    thirdCategory.append('<option value="">전체</option>');
+	    
+		 // 두 번째 카테고리가 "전체"로 선택된 경우 처리를 종료합니다.
+	    if (secondCategoryId === "") {
+	        return;
+	    }
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/product/third/" + secondCategoryId,
+	        success: function (data) {
+	            // 선택된 두 번째 카테고리의 하위 카테고리 목록을 추가합니다.
+	            for (var i = 0; i < data.length; i++) {
+	                if (thirdCategoryNum == data[i].categoryId) {
+	                    // 선택된 항목인 경우 selected 속성을 추가한 옵션을 생성하여 추가
+	                    var option = $('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
+	                } else {
+	                    // 선택되지 않은 항목인 경우 옵션을 생성하여 추가
+	                    var option = $('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');
+	                }
+	                thirdCategory.append(option);
+	            }
+	        }
+	    });
+	}
+  	
+	//조회하기 버튼
     function searchByCategory() {
         var firstCategoryId = $("#firstCategory").val();
         var secondCategoryId = $("#secondCategory").val();
+        var thirdCategoryId = $("#thirdCategory").val();
+        /* console.log(secondCategoryId); */
         
+        console.log("세 번째 카테고리 값:", thirdCategoryId); 
         // 기본값 설정
         if (!firstCategoryId) {
             firstCategoryId = 0;
         }
         if (!secondCategoryId) {
-            secondCategoryId = 0;
-        }
+        	secondCategoryId = 0;
+        }  
+        if (!thirdCategoryId) {
+        	thirdCategoryId = 0;
+        } 
 
         // URL 생성
         var newUrl = "/admin/product";
@@ -432,6 +488,9 @@
             newUrl += "?firstCategoryId=" + firstCategoryId;
             if (secondCategoryId !== 0) {
                 newUrl += "&secondCategoryId=" + secondCategoryId;
+                if (thirdCategoryId !== 0) {
+                    newUrl += "&thirdCategoryId=" + thirdCategoryId;
+                }
             }
         }
 
@@ -441,7 +500,7 @@
     }
     
   	//삭제 확인 메시지
-    function deleteProduct(productGroupId) {
+    function deleteGroupProduct(productGroupId) {
         if (!confirm('정말로 삭제하시겠습니까?')) {
             return false;
         }
@@ -457,23 +516,38 @@
         }, 50) //대기시간
     }
   	
-    //그룹별 상품 조회하기
+  	//조회하기
     function selectProductsByGroupId(productGroupId) {
          fetch("/admin/search/" + productGroupId)
-            .then(response => response.json())
-            .then(data => {
-                const product = data;
-                console.log(product);
-                document.getElementById("searchProductGroupId").textContent = product[0].productGroupId;
-                document.getElementById("searchProductCode").textContent = product[0].productCode;
-                document.getElementById("searchProductNm").textContent = product[0].productNm;
-                document.getElementById("searchproductOptionFirst").textContent = product[0].productOptionFirst;
-                document.getElementById("searchproductOptionSecond").textContent = product[0].productOptionSecond;
-                document.getElementById("searchproductOptionThird").textContent = product[0].productOptionThird;
-                document.getElementById("searchProductPrice").textContent = product[0].productPrice;
-                document.getElementById("searchProductStock").textContent = product[0].productStock;
-            }); 
-    }
+             .then(response => response.json())
+             .then(data => {
+                 const productTableBody = document.getElementById("productTableBody");
+                 // 이전에 테이블 내용을 초기화
+                 productTableBody.innerHTML = "";
+                 // 데이터를 반복해서 테이블에 추가
+                 data.forEach(product => {
+                     const row = document.createElement("tr");
+                     row.innerHTML = `
+                          <td>${product.productGroupId}</td>
+                          <td>${product.productCode}</td>
+                          <td>${product.productNm}</td>
+                          <td>${product.productOptionFirst}</td>
+                          <td>${product.productOptionSecond}</td>
+                          <td>${product.productOptionThird}</td>
+                          <td>${product.productPrice}</td>
+                          <td>${product.productStock}</td>
+                          <td>
+		    				<div class="btn-group">
+		  						<button class="btn btn-xs" style="background-color: #aac8b2; color: #ffff">이미지</button>
+		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" style="background-color: #39594e; color: #ffff" type="button">수정</button>
+		  						<button class="btn btn-xs" style="background-color: red; color: #fff" type="button">삭제</button>
+		    				</div>
+		    			  </td>
+                         `;
+                      productTableBody.appendChild(row);
+                  });
+              });
+      }
   	
     
     //상품 수정 시 해당 상품 정보 가져오기
