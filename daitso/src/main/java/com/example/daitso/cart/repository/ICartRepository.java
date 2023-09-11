@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.cart.model.CartCheck;
+import com.example.daitso.cart.model.CartCoupon;
+import com.example.daitso.cart.model.CartCouponApply;
 import com.example.daitso.cart.model.CartUpdate;
 
 @Repository
@@ -29,4 +31,10 @@ public interface ICartRepository {
 	
 	// 장바구니 체크박스 상태 변경
 	void updateCheckedByCartId(@Param("cartIdList") List<Integer> cartIdList, @Param("customerId") int customerId, @Param("checked") String checked);
+	
+	// 쿠폰 적용 대상 상품들 조회
+	List<CartCoupon> getCouponProductByCustomerId(int customerId);
+	
+	// 적용가능한 쿠폰 조회
+	List<CartCouponApply> getCouponsByCustomerId(@Param("categoryIdList") List<Integer> categoryIdList,@Param("customerId") int customerId);
 }

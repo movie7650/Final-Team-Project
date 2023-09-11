@@ -3,6 +3,8 @@ package com.example.daitso.cart.service;
 import java.util.List;
 
 import com.example.daitso.cart.model.CartCheck;
+import com.example.daitso.cart.model.CartCoupon;
+import com.example.daitso.cart.model.CartCouponApply;
 import com.example.daitso.cart.model.CartUpdate;
 
 public interface ICartService {
@@ -24,4 +26,10 @@ public interface ICartService {
 	
 	// 장바구니 체크박스 상태 변경
 	void updateCheckedByCartId(List<Integer> cartIdList, int customerId, String checked);
+	
+	// 쿠폰 적용 대상 상품들 조회
+    List<CartCoupon> getCouponProductByCustomerId(int customerId);
+    
+    // 적용가능한 쿠폰 조회
+ 	List<CartCouponApply> getCouponsByCustomerId(List<Integer> categoryIdList, int customerId);
 }
