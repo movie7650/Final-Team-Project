@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<body>
+	<div>
+		<div style="width: 100vw; display: flex; justify-content: center; position: absolute; z-index: 1;">
+			<div style="width: 94%;">
+				<div class="cart-coupon-title">COUPON</div>
+				<div class="cart-coupon-thead">
+					<div>상품명</div> 
+					<div>판매가</div> 
+					<div>쿠폰 선택</div> 
+					<div>할인금액</div>
+				</div>
+				<div th:each="cartCouponProduct : ${cartCouponProducts}" class="cart-coupon-tbody">
+					<div id="cart-coupon-1" style="display: flex; align-items:center;">
+						<img src="image.jpg" style="width:100px; height:100px;">
+						<div style="width: 250px; display: flex; flex-direction: column; justify-content: center;">
+							<div class="cart-coupon-product-name" style="margin-left:10px; height: 20px; font-weight: 500;" th:text="${cartCouponProduct.productNm}"></div>
+							<div
+								th:if="${cartCouponProduct.productOptionFirst} != '-' 
+									or ${cartCouponProduct.productOptionSecond} != '-' 
+									or ${cartCouponProduct.productOptionThird} != '-'" 
+								style="margin-left:10px; margin-top:5px; height: 20px;">
+								<span
+									th:if="${cartCouponProduct.productOptionFirst} != '-'"
+									th:text="${cartCouponProduct.productOptionFirst}" 
+									style="margin-right:5px; font-size: 14px; font-weight: 400;">
+								</span>
+								<span
+									th:if="${cartCouponProduct.productOptionSecond} != '-'" 
+									th:text="${cartCouponProduct.productOptionSecond}" 
+									style="margin-right:5px; font-size: 14px; font-weight: 400;">
+								</span>
+								<span
+									th:if="${cartCouponProduct.productOptionThird} != '-'"  
+									th:text="${cartCouponProduct.productOptionThird}" 
+									style="margin-right:px; font-size: 14px; font-weight: 400;">
+								</span>
+							</div>
+						</div>
+					</div> 
+					<div id="cart-coupon-2">
+						<span><span th:text="${cartCouponProduct.productPrice}"></span>원</span>
+						<span style="margin: 0 7px 0 7px;">X</span>
+						<span><span th:text="${cartCouponProduct.cartCount}"></span>개</span>
+						<span style="margin: 0 7px 0 7px;">=</span>
+						<span><span th:text="${cartCouponProduct.cartPrice}"></span>원</span>
+					</div> 
+					<div id="cart-coupon-3">
+						<div
+							th:if="${cartCouponProduct.couponUseCount} != 0"
+							th:id="'cart-coupon-choose-btn-' + ${cartCouponProduct.productId}" 
+							th:onclick="chooseCoupon([[${customerId}]], [[${cartCouponProduct}]])">쿠폰 선택</div>
+						<div
+							style="display:none;"
+							th:id="'cart-coupon-cancel-btn-' + ${cartCouponProduct.productId}"
+							th:onclick="cancelCoupon([[${cartCouponProduct.productId}]])">취소</div>
+						<div
+						th:unless="${cartCouponProduct.couponUseCount} != 0"
+						th:id="'cart-coupon-choose-btn-' + ${cartCouponProduct.productId}" 
+						style="color:#777777; background-color: #FAFAFA;">불 가</div>
+					</div> 
+					<div id="cart-coupon-4">
+						<span><span th:id="'cart-coupon-apply-price-' + ${cartCouponProduct.productId}">0</span>원</span>
+					</div>
+				</div>
+				<div class="cart-coupon-warn">
+					<div>- 쿠폰 적용 시 한 주문, 한 상품에 한해서만 적용됩니다. (복수발급 쿠폰 제외)</div>
+					<div>- 각 쿠폰은 사용기한이 정해져 있습니다.</div>
+					<div>- 주문 후 반품/환불/취소의 경우 사용하신 쿠폰은 소멸됩니다.</div>
+					<div>- 쿠폰 적용품목이 한정된 쿠폰은 해당 품목에서만 사용가능 합니다.</div>
+					<div>- 할인/적립(%) 쿠폰은 적립금할인 등을 제외한 실제 결제금액에 적용됩니다.</div>
+					<div>- 해당 상품에 대한 쿠폰은 해당 상품만 구매시 적용이 가능합니다.</div>
+				</div>
+				<div class="cart-coupon-complete-btn">
+					<div onclick="cartCouponComplete()">쿠폰 적용</div>
+				</div>
+			</div>
+		</div>
+		<div 
+			id="cart-coupon-background"
+			style="position: absolute; z-index: 2; background-color: rgba(0, 0, 0, 0.4); width:100vw; height: 100vh;  display: none;"></div>
+		<div id="cart-coupon-apply" style="position: absolute; z-index: 3; width:100vw; height: 100vh; display:flex; justify-content: center; align-items: center; display: none;">
+			<div id="cart-coupon-apply-box">
+				<div class="cart-coupon-apply-title">
+					<div>적용 가능 쿠폰 리스트</div>
+					<div style="font-weight: 400; color:#777777; cursor: pointer" onclick="exitCouponPage()">X</div>
+				</div>
+				<div class="cart-coupon-apply-sub-title">해당 상품에 적용 가능한 쿠폰 입니다. 쿠폰을 선택해주세요.</div>
+				<div class="cart-coupon-apply-thead">
+					<div>쿠폰명</div> 
+					<div>적용 가능 수량</div> 
+					<div>할인율</div> 
+					<div>할인금액</div>
+				</div>
+				<div id="cart-coupon-apply-tbodys"></div>
+				<div id="cart-coupon-apply-btn">
+					<!-- <div style="display: flex; justify-content: center;">
+						<div onclick="exitCouponPage()">취소</div>
+						<div onclick="chooseApplyCoupon()">쿠폰 선택</div>
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+	
+	var couponTotalApplyPrice = 0;
+	var couponCheckStatusList = {};
+	var couponCheckPriceList = {};
+	var couponCheckApplyPriceList = {};
+	var couponDuplicatedCheck = {};
+	
+	function isDuplicated(customerCouponId){
+		for(key in couponDuplicatedCheck){
+			if(couponDuplicatedCheck[key] == customerCouponId) {
+				return true;
+			}
+		}
+	}
+	
+	// 쿠폰 선택 클릭 시(1번째)
+	function chooseCoupon(customerId, cartCouponProduct) {
+		couponCheckPriceList = {};
+		document.getElementById("cart-coupon-background").style.display = 'block';
+		document.getElementById("cart-coupon-apply").style.display = 'flex';
+		const applyBodys = document.getElementById("cart-coupon-apply-tbodys");
+		const applyBtn = document.getElementById("cart-coupon-apply-btn");
+		
+	 	fetch('http://localhost:8080/cart/coupon-apply/' + customerId + "/" + cartCouponProduct.categoryId + "/" + cartCouponProduct.categoryPrId + "/" + cartCouponProduct.categoryPrPrId)
+  		.then((res) => {
+        	return res.json(); 
+    	})
+    	.then((json) => {
+    		let datas = json;
+   			datas.forEach((item) => {
+   				if(!isDuplicated(item.customerCouponId)){
+   					var salePrice = (parseInt(cartCouponProduct.cartPrice.replace(/,/g , '')) * (item.couponDscntRate / 100))
+						.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					const div1 = document.createElement('div');
+					div1.setAttribute('class', 'cart-coupon-apply-tbody');
+					
+					const div2 = document.createElement('div');
+					div2.setAttribute('id', 'cart-coupon-apply-tbody-1');
+					const div2_1 = document.createElement('div');
+					const div2_2 = document.createElement('input');
+					div2_2.type = 'checkbox';
+					div2_2.setAttribute('value', item.customerCouponId);
+					div2_2.setAttribute('class', 'cart-coupon-apply-checkbox');
+					const textnode2 = document.createTextNode(item.couponNm);
+					div2_1.appendChild(textnode2);
+					div2.appendChild(div2_2);
+					div2.appendChild(div2_1);
+					div1.appendChild(div2);
+					
+					const div3 = document.createElement('div');
+					div3.setAttribute('id', 'cart-coupon-apply-tbody-2');
+					const textnode3 = document.createTextNode('1개');
+					div3.appendChild(textnode3);
+					div1.appendChild(div3);
+					
+					const div4 = document.createElement('div');
+					div4.setAttribute('id', 'cart-coupon-apply-tbody-3');
+					const textnode4 = document.createTextNode(item.couponDscntRate + '%');
+					div4.appendChild(textnode4);
+					div1.appendChild(div4);
+				
+					const div5 = document.createElement('div');
+					div5.setAttribute('id', 'cart-coupon-apply-tbody-4');
+					const textnode5 = document.createTextNode(salePrice + '원');
+					div5.appendChild(textnode5);
+					div5.style.color = '#256B04';
+					div5.style.fontWeight = '500';
+					div1.appendChild(div5);
+				
+					applyBodys.appendChild(div1);
+					couponCheckPriceList[item.customerCouponId] = salePrice;	
+   				}
+       		})
+       		
+       		// 쿠폰 선택 버튼 만들기
+       		const btn1 = document.createElement('div');
+   			btn1.setAttribute('id', 'cart-coupon-apply-btn-cancel-and-select');
+   			btn1.style.display = 'flex';
+   			btn1.style.justifyContent = 'center';
+   			
+   			const btn2 = document.createElement('div');
+   			const textnode6 = document.createTextNode('취소');
+   			btn2.appendChild(textnode6);
+   			btn2.onclick = exitCouponPage; 
+   			btn1.appendChild(btn2);
+   			
+   			const btn3 = document.createElement('div');
+   			const textnode7 = document.createTextNode('쿠폰 선택');
+   			btn3.appendChild(textnode7);
+   			btn3.onclick = function () {
+   				chooseApplyCoupon(cartCouponProduct.productId);
+   			}
+   			btn1.appendChild(btn3);
+       		
+   			applyBtn.appendChild(btn1);
+       		
+       		// 쿠폰 선택 상태 처리
+       		couponCheckStatusList = {}
+   			var couponCheckBox = document.querySelectorAll(".cart-coupon-apply-checkbox");
+   			couponCheckBox.forEach((item) => {
+   				couponCheckStatusList[item.value] = false;
+   				item.addEventListener('input', toggleCheckbox);
+   			})
+   			
+   			function toggleCheckbox(e) {
+			    const { checked , value } = e.target;
+			    couponCheckStatusList[value] = checked;
+			    
+			    if(checked) {
+			    	couponCheckApplyPriceList[cartCouponProduct.productId] = couponCheckPriceList[value];
+			    	couponCheckBox.forEach((item) => {
+			    		if(item.value != value) {
+			    			couponCheckStatusList[item.value] = false;
+			    			item.checked = false;
+			    		}
+			    	})
+			    } 
+			}
+    	})
+    	.catch(function(error) {
+    	      console.log(error);
+    	}); 
+	}
+	
+	// 쿠폰 선택 시(2번째)
+	function chooseApplyCoupon(productId) {		
+		var falseCount = 0;
+		for(key in couponCheckStatusList) {
+			if(!couponCheckStatusList[key]){
+				falseCount += 1; 
+			} else {
+				couponDuplicatedCheck[productId] = key;
+			}
+		}
+		
+		if(falseCount == Object.keys(couponCheckStatusList).length) {
+			alert("쿠폰을 선택해주세요");
+		} else {
+			const cartCouponApplyPrice = document.getElementById("cart-coupon-apply-price-" + productId);
+			const cartCouponApplyBtn = document.getElementById("cart-coupon-choose-btn-" + productId);
+			const cartCouponCancleBtn = document.getElementById("cart-coupon-cancel-btn-" + productId);
+			cartCouponApplyPrice.innerText = couponCheckApplyPriceList[productId];
+			cartCouponApplyPrice.style.color = '#256B04';
+			cartCouponApplyPrice.style.fontWeight = '600';
+			cartCouponCancleBtn.style.display = 'block';
+			cartCouponApplyBtn.style.display = 'none';
+			exitCouponPage();
+		}
+	}
+	
+	// 쿠폰 선택 및 적용 페이지 나가기
+	function exitCouponPage() {
+		document.getElementById("cart-coupon-background").style.display = 'none';
+		document.getElementById("cart-coupon-apply").style.display = 'none';
+		document.querySelectorAll(".cart-coupon-apply-tbody").forEach((item) => {
+			item.remove();
+		});
+		document.getElementById("cart-coupon-apply-btn-cancel-and-select").remove();
+	}
+	
+	// 쿠폰 취소
+	function cancelCoupon(productId) {
+		const cartCouponApplyPrice = document.getElementById("cart-coupon-apply-price-" + productId);
+		const cartCouponApplyBtn = document.getElementById("cart-coupon-choose-btn-" + productId);
+		const cartCouponCancleBtn = document.getElementById("cart-coupon-cancel-btn-" + productId);
+		cartCouponCancleBtn.style.display = 'none';
+		cartCouponApplyBtn.style.display = 'block';
+		couponDuplicatedCheck[productId] = '0';
+		couponCheckApplyPriceList[productId] = '0';
+		cartCouponApplyPrice.innerText = '0';
+		cartCouponApplyPrice.style.color = 'black';
+		cartCouponApplyPrice.style.fontWeight = '400';
+	}
+	
+	// 쿠폰 적용
+	function cartCouponComplete(){
+		couponTotalApplyPrice = 0;
+		
+		if(confirm("쿠폰을 적용하시겠습니까?")){
+			for(key in couponCheckApplyPriceList){
+				couponTotalApplyPrice += parseInt(couponCheckApplyPriceList[key].replace(/,/g , ''));
+			}
+			localStorage.setItem('couponTotalApplyPrice', couponTotalApplyPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+			opener.location.reload();
+			window.close();
+		}
+		
+	}
+	
+</script>
+</html>

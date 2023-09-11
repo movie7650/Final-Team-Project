@@ -46,7 +46,7 @@
 								<div class="cart-table-td-4" style="text-align: center">배송비</div>
 							</div>
 							<div th:if="${!cartList.isEmpty()}">
-								<div class="cart-table-body" th:each="cart : ${cartList}">
+								<div class="cart-table-body" th:id="'cart-table-body-' + ${cart.cartId}" th:each="cart : ${cartList}">
 									<!-- 재고가 있을 경우 -->
 									<div th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" class="cart-table-td-1">
 										<input type="checkbox" 
@@ -99,7 +99,9 @@
 													<span>
 													<span 
 														th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'"
-														th:text="${cart.cartPrice}"></span>
+														th:text="${cart.cartPrice}"
+														th:class="'product-price-' + ${cart.cartId}"
+														></span>
 													<span 
 														th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'">0</span>원	
 													</span> 
@@ -131,7 +133,7 @@
 										</div>
 									</div>
 									<div class="cart-table-td-3" style="line-height: 140px">
-										<span th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" th:text="${cart.cartPrice}" th:class="'product-price-' + ${cart.cartId}" ></span>
+										<span th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" th:text="${cart.cartPrice}" th:class="'product-price-' + ${cart.cartId}"></span>
 										<span th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'" th:class="'product-price-' + ${cart.cartId}">0</span>원
 									</div>
 									<div class="cart-table-td-4" style="line-height: 140px">무료</div>
@@ -157,14 +159,18 @@
 							<div style="cursor: pointer" th:onclick="soldOutAndStopDelete([[${customerId}]])">품절/판매종료상품 전체삭제</div>
 						</div>
 						<div th:if="${!cartList.isEmpty()}" class="cart-discount">
-							<div class="cart-discount-title">할인쿠폰 적용</div>
-							<div class="cart-discount-contents">
-								<div class="cart-discount-content">
-									<div style="font-weight: bold;">
-										<input type="checkbox"> <span
-											style="margin-left: 10px;" >10,000원</span>
-									</div>
-									<div style="margin-left: 50px">첫 구매 할인쿠폰 (6 일 8 시간 남음)</div>
+							<div class="cart-discount-title" style="display: flex; align-items: center; justify-content: space-between;">
+								<div style="display: flex; align-items: center">
+									<div>쿠폰 할인</div>
+									<div class="cart-discount_btn" onclick="openDiscountPopUp()">쿠폰 조회 및 적용</div>
+								</div>
+								<div style="font-size: 15px; margin-right: 20px; font-weight: 500;">
+									<span style="margin-right: 10px;">총 할인금액</span>
+									<span>
+										<span 
+											id="cart-discount-total-price"
+											style="color: red; font-size: 19px; margin-right: 5px;">0</span>원
+									</span>
 								</div>
 							</div>
 						</div>
@@ -174,13 +180,13 @@
 									class="cart-total-value" id="product-total-price">0</span>
 								<span class="cart-total-key">원</span> <span
 									class="cart-total-plus">-</span> <span class="cart-total-key">총
-									할인</span> <span class="cart-total-sp-value">0</span> <span
+									할인</span> <span class="cart-total-sp-value" id="cart-discount-total-price-2">0</span> <span
 									class="cart-total-key">원</span> <span class="cart-total-plus">+</span>
 								<span class="cart-total-key">총 배송비</span> <span
 									class="cart-total-value">0</span> <span class="cart-total-key">원</span>
 								<span class="cart-total-plus">=</span> <span
 									class="cart-total-key">총 주문가격</span> <span
-									class="cart-total-sp-value">0</span> <span
+									class="cart-total-sp-value" id="product-total-price-final">0</span> <span
 									class="cart-total-key">원</span>
 							</div>
 						</div>
@@ -217,12 +223,46 @@
 </body>
 <script type="text/javascript" th:inline="javascript">	
 	
+	const cartDiscountTotalPrice = document.getElementById("cart-discount-total-price");
+	
+	function resetCartDiscountTotalPrice() {
+		cartDiscountTotalPrice.innerText = '0';
+		document.getElementById("cart-discount-total-price-2").innerText = '0';
+		localStorage.setItem('couponTotalApplyPrice', '0');
+	}
+	
+	const checkAll = document.getElementById("check-all");
+	const checks = document.querySelectorAll(".cart-check");
+	const customerId = [[${customerId}]];
+	var cartTotalCount = [[${cartTotalCount}]];
+	var checkNum = 0;
+	var productTotalPrices = 0;
+	
+	var checkStatusList = {};
+	var cartIdList = [];
+	
+	var soldOutAndStopList = [];
+	
+	// 총 상품가격 업데이트
+	function updateTotalProductPrice(productTotalPrices) {
+		document.querySelectorAll('.cart-table-tail-value').forEach((item) => {
+			item.innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		})
+		
+		document.getElementById('product-total-price').innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		document.getElementById('product-total-price-final').innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	
 	// 장바구니 담긴 물건 각 개수 -> select 태그 업로드
 	document.querySelectorAll(".select-list").forEach((item)=> {
 		item.options[item.name - 1].selected = true;
 	});
 	
+	// select option(상품개수) 클릭 시 가격 변경하기
 	function changeProductCount(target, cartId, productPrice, customerId) {
+		
+		resetCartDiscountTotalPrice();
+		
 		const cartCount = target.value;
 		const cartPrice = (parseInt(productPrice.replace(/,/g , ''))) * cartCount;
 		
@@ -241,27 +281,32 @@
 		.then((res) => res.json())
 		.then((data) => {
 			// 새로고침
-			location.reload();
+			/* location.reload(); */
+			document.querySelectorAll('.product-price-' + cartId).forEach((item) => {
+				item.innerText = cartPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			})
+			
+			if(checkStatusList[cartId] == true) {
+				productTotalPrices = cartPrice;
+				
+				Object.keys(checkStatusList).forEach((item) => {
+					if(item != cartId && checkStatusList[item] == true && document.querySelector('.product-price-' + item) != null) {
+						productTotalPrices += parseInt(document.querySelector('.product-price-' + item).innerText.replace(/,/g , ''));
+					} 
+				})
+				
+				updateTotalProductPrice(productTotalPrices)
+			}
 		}); 
 	}
 	
 	// 체크박스 로직 및 장바구니에 담긴 물건의 총 가격 구하기
-	const checkAll = document.getElementById("check-all");
-	const checks = document.querySelectorAll(".cart-check");
-	const customerId = [[${customerId}]];
-	var cartTotalCount = [[${cartTotalCount}]];
-	var checkNum = 0;
-	var productTotalPrices = 0;
-	
-	var checkStatusList = {};
-	var cartIdList = [];
-	
-	var soldOutAndStopList = [];
 	document.querySelectorAll(".none").forEach((item) => {
 		soldOutAndStopList.push(item.value);
+		checkStatusList[item.value] = false;
 	})
 
-	
+	// 체크 상태 확인해서 true면 checked를 true, false면 false로!
 	const trueChecks = document.querySelectorAll(".true");
 	trueChecks.forEach((item) => {
 		checkStatusList[item.value] = true;
@@ -274,6 +319,7 @@
 		item.checked = false;
 	})
 	
+	// 총 상품가격 구하기
 	for(var key in checkStatusList) {
 		if(checkStatusList[key]){
 			checkNum += 1;
@@ -288,53 +334,24 @@
 	})
 	
 	const productTotalPrice = document.getElementById("product-total-price");
-	productTotalPrice.innerText = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	const productTotalPriceFinal = document.getElementById("product-total-price-final");
+	const productTotalPriceString = productTotalPrices.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	productTotalPrice.innerText = productTotalPriceString;
+	productTotalPriceFinal.innerText = productTotalPriceString;
 	
-	console.log('checkStatusList:' + Object.keys(checkStatusList).length);
-	console.log('checkNum:' + checkNum)
-	
-	/*모두 체크되어있으면 전체선택 체크박스도 체크로 표시*/
-	if(checkNum == Object.keys(checkStatusList).length && checkNum !=0 && checkNum == Object.keys(checkStatusList).length != 0) {
+	// 모두 체크되어있으면 전체선택 체크박스도 체크로 표시
+ 	if(checkNum == (Object.keys(checkStatusList).length - soldOutAndStopList.length) && checkNum !=0 && Object.keys(checkStatusList).length != 0) {
 		checkAll.checked = true;
 		document.getElementById("choose-delete").innerText = '전체삭제';
-	}
-	
-	/* '모두 동의' 체크박스가 체크가 되면 모든 체크박스의  체크를 하고, '모두 동의'
-	체크박스가 해제되면 모든 체크 박스의 체크상태를 해제 */
-	checkAll.addEventListener('click', (e) => {
-	    const checked  = e.target.checked;
-	    if (checked) {
-	        checks.forEach((item) => {
-	        	if(!item.checked){
-	        		item.checked = true; 
-		            checkStatusList[item.value] = true;
-	        	}
-	        });
-	        checkNum = checks.length;
-	    } else {
-	        checks.forEach((item) => {
-	            item.checked = false;
-	            checkStatusList[item.value] = false;
-	        });
-	        checkNum = 0;
-	    }
-	    
-	    checks.forEach((item) => {
-	    	cartIdList.push(item.value);
-	    	for(let i = 0; i < soldOutAndStopList.length; i++) {
-	    	    if (soldOutAndStopList[i] === item.value) {
-	    	    	cartIdList.splice(i, 1);
-	    	    }
-	    	}	
-	    })
-	    
-	    changeChecked(cartIdList, customerId, checked);
-	});
-	
+	} 
+		
+	// 각 체크박스 클릭 시 이벤트
 	checks.forEach((item) => item.addEventListener('input', toggleCheckbox));
 
-	/*각 체크박스 클릭 시 이벤트*/
 	function toggleCheckbox(e) {
+		
+		resetCartDiscountTotalPrice();
+		
 	    const { checked , value } = e.target;
 	    checkStatusList[value] = checked;
 	    if(checked) {
@@ -347,17 +364,51 @@
 	    
 	    checkAllStatus(checkNum);
 	    changeChecked(cartIdList,customerId,checked);
+	    cartIdList = [];
 	}
 	
 	function checkAllStatus(checkNum) {
 	    if(checkNum == checks.length) {
 	    	checkAll.checked = true;
+	    	document.getElementById("choose-delete").innerText = '전체삭제';
 	    } else {
 	    	checkAll.checked = false;
+	    	document.getElementById("choose-delete").innerText = '선택삭제';
 	    }
 	}
 	
-	/*장바구니 체크박스 상태 변경 -> 비동기 처리*/
+	/* '모두 동의' 체크박스가 체크가 되면 모든 체크박스의  체크를 하고, '모두 동의'
+	체크박스가 해제되면 모든 체크 박스의 체크상태를 해제 */
+	checkAll.addEventListener('click', (e) => {
+		
+		resetCartDiscountTotalPrice();
+		
+	    const checked  = e.target.checked;
+	    if (checked) {
+	        checks.forEach((item) => {
+	        	if(!item.checked){
+	        		item.checked = true; 
+		            checkStatusList[item.value] = true;
+		            cartIdList.push(item.value);
+	        	}
+	        });
+	        checkNum = checks.length;
+	        document.getElementById("choose-delete").innerText = '전체삭제';
+	    } else {
+	        checks.forEach((item) => {
+	            item.checked = false;
+	            checkStatusList[item.value] = false;
+	            cartIdList.push(item.value);
+	        });
+	        checkNum = 0;
+	        document.getElementById("choose-delete").innerText = '선택삭제';
+	    }
+	    
+	    changeChecked(cartIdList, customerId, checked);
+	    cartIdList = [];
+	});
+	
+	// 장바구니 체크박스 상태 변경 -> 비동기 처리
 	function changeChecked(cartIdList, customerId, checked){
 		 fetch("http://localhost:8080/cart/update/checkbox/" + customerId, {
 			    method: "PATCH",
@@ -372,34 +423,49 @@
 			.then((res) => res.json())
 			.then((data) => {
 				// 새로고침
-				location.reload();
+				/* location.reload();  */
+				if(checked) {
+					cartIdList.forEach((item) => {
+						productTotalPrices += (parseInt(document.querySelector('.product-price-' + item).innerText.replace(/,/g , '')));
+					})
+				} else {
+					cartIdList.forEach((item) => {
+						productTotalPrices -= (parseInt(document.querySelector('.product-price-' + item).innerText.replace(/,/g , '')));
+					})
+				}
+				
+				updateTotalProductPrice(productTotalPrices);
 			});  
 	}
 	
-	// 선택삭제
+	// 선택삭제 및 전체삭제
 	function chooseDelete(customerId) {
-		document.querySelectorAll('.true').forEach((item) => {
-			cartIdList.push(item.value);
-		})
+		
+		for(var key in checkStatusList) {
+ 	       if (checkStatusList[key]) {
+ 	           cartIdList.push(key);
+ 	       }
+ 	 	}
 		
 		if(cartIdList.length == 0){
 			alert("삭제할 상품을 선택해주세요.")
 		} else {
-			fetch("http://localhost:8080/cart/delete/" + customerId , {
-			    method: "PATCH",
-			    headers: { 
-			        "Content-Type": "application/json",
-			    },
-			    body: JSON.stringify({
-			        itemList: cartIdList
-			    }),
-			})
-			.then((res) => res.json())
-			.then((data) => {
-				// 새로고침
-				location.reload();
-			}); 	
-		}
+			if (confirm("선택한 상품을 삭제하시겠습니까?")) {
+				fetch("http://localhost:8080/cart/delete/" + customerId , {
+				    method: "PATCH",
+				    headers: { 
+				        "Content-Type": "application/json",
+				    },
+				    body: JSON.stringify({
+				        itemList: cartIdList
+				    }),
+				})
+				.then((res) => res.json())
+				.then((data) => {
+					location.reload();
+				}); 	
+			} 
+		} 
 	}
 	
 	// 품절 및 판매중지 삭제
@@ -423,5 +489,32 @@
 			}); 	
 		}	
 	}
+	
+	// 쿠폰 조회 및 적용 선택 클릭 시
+	function openDiscountPopUp() {
+		
+		for(var key in checkStatusList) {
+ 	       if (checkStatusList[key]) {
+ 	           cartIdList.push(key);
+ 	       }
+	 	}
+		
+		if(cartIdList.length == 0) {
+			alert("상품을 선택한 후 쿠폰조회 및 적용을 해주세요.");
+		} else {
+			window.open('http://localhost:8080/cart/coupon/' + customerId, '쿠폰 조회 및 적용', 'width=870px,height=600px,scrollbars=yes');
+			cartIdList = [];
+		}
+	}
+	
+	// 상품 총 할인가격
+	if(localStorage.getItem('couponTotalApplyPrice')) {
+		cartDiscountTotalPrice.innerText = localStorage.getItem('couponTotalApplyPrice');
+		document.getElementById("cart-discount-total-price-2").innerText = localStorage.getItem('couponTotalApplyPrice');
+		document.getElementById('product-total-price-final').innerText =
+		(productTotalPrices - parseInt(localStorage.getItem('couponTotalApplyPrice').replace(/,/g , ''))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	
+	console.log(checkStatusList);
 </script>
 </html>
