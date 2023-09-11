@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+<div class="detail-order-main">
+	<div class="detail-order-title">상세주문정보</div>
+	
+	<div class="detail-order-product-container">
+		<div class="detail-order-product01">
+			<button type="submit">리뷰남기기</button>
+		</div><!-- detail-order-product01 -->
+		
+		<div class="detail-order-product02">
+			<div class="detail-product-name">productName</div>
+			<div class="detail-product-cost">productCost</div>
+			<div class="detail-order-img">
+				<img th:src="@{/assets/mypage/request.JPG}" width="80px">
+			</div><!-- detail-order-img -->
+			
+		</div><!-- detail-order-product02 -->
+	</div><!-- detail-order-product-container -->
+	
+	
+	
+	
+	
+	
+	
+	
+</div><!-- detail-order-main -->
+<div th:replace="~{/include/footer :: footer}"></div>
+
+</body>
+</html>

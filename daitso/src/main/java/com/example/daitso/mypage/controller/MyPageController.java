@@ -146,5 +146,18 @@ public class MyPageController {
 	public String shippingComplete() {
 		return "mypage/mypage-shipping-complete";
 	}
+	
+	//마이페이지-내문의관리 
+	@RequestMapping("/myinquiry")
+	public String myInquiry() {
+		return "mypage/mypage-inquiry";
+	}
+	
+	//마이페이지-상세주문
+	@RequestMapping("/mydetailorder")
+	public String detaiOrder() {
+		return "mypage/detail-order";
+	}
+	
 
 }

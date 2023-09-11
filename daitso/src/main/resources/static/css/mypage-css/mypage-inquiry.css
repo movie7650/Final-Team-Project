@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+.mypage-inquiry-main{
+	display: flex;
+	justify-content: center;
+}
+.mypage-inquiry-title{
+	position:absolute;
+	padding-bottom:0.5%;
+	font-size:150%;
+	margin-left:165px;
+	margin-top:-640px;
+	width:855px;
+	border-bottom:solid 3px #668663;
+}
+.mypage-inquiry-table-container{
+	position:absolute;
+	margin-top:-500px;
+	margin-left:170px;
+}
+.mypage-inquiry-table{
+	text-align:center;
+}
+.mypage-inquiry-table th{
+	width:214px;
+	padding-top:5px;
+	padding-bottom:5px;
+	border-top:2px solid #668663;
+	border-bottom:2px solid #668663;
+}
+.mypage-inquiry-table td{
+	vertical-align: middle;
+	padding-bottom:5px;
+	border-bottom:solid 1.5px #e7e7e7;
+}
+.mypage-inquiry-table button{
+	border:solid 1px #668663;
+	width:70px;
+	background-color:white;
+	color:#668663;
+}
