@@ -70,11 +70,11 @@
 	font-size:100%;
 	color:#fff;
 }
-.left-menu-container01{
+.left-menu-container{
 	display: flex;
 	justify-content:center;
 }
-.left-menu-container{
+.left-menu-container01{
 	width:180px;
 	height:auto;
 	margin-right:920px;
