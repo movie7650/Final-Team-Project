@@ -1,0 +1,140 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<link rel="stylesheet" th:href="@{/css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+
+<style>
+.my-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;
+}
+.menu-box {
+  border: 1px solid #a1a1a1;
+  margin-left: 36px;
+  padding: 10px;
+}
+.menu-box ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.menu-box ul.menu-list li {
+  display: block;
+  border: 1px solid rgb(128, 0, 255);
+  background: #fff;
+}
+.menu-box ul.menu-list > li a {
+  background: #fff;
+  display: block;
+  font-size: 14px;
+  color: red;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.menu-box ul.menu-list > li a:hover {
+  cursor: move;
+}
+.menu-box ul.menu-list ul {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+.menu-box ul.menu-list ul li a {
+  color: blue;
+}
+.menu-box li.menu-highlight {
+  border: 1px dashed red !important;
+  background: #f5f5f5;
+}
+</style>
+<body>
+	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+	
+	<div class="menu-box">
+      <ul class="menu-list sortable">
+        <!-- <li><a>menu 1</a></li>
+        <li><a>menu 2</a>
+          <ul class="submenu-list">
+            <li><a>submenu 2.1</a>
+            	<ul class="submenu-list">
+	            	<li><a>subsubmenu 2.1</a> 
+	            		<ul class="submenu-list">
+	            			<li><a>subsubsubmenu 2.1</a>        	
+            			</ul>
+	            	</li>       	
+            	</ul>
+            </li>
+            <li><a>submenu 2.2</a></li>
+          </ul>
+        </li>
+        <li><a>menu 3</a></li> -->
+      </ul>
+    </div>
+
+</body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://ilikenwf.github.io/jquery.mjs.nestedSortable.js"></script>
+<script th:inline="javascript">
+const sortableBox = document.querySelector('.sortable');
+
+/*<![CDATA[*/
+const categoryList = /*[[${categoryList}]]*/
+/*]]>*/
+
+
+categoryList.map((data,idx) => {
+	if(data.lv == 1){
+		const elements = `<li class="li${data.categoryId}"><a>${data.categoryNm}</a></li>`
+		sortableBox.innerHTML += elements;
+	}
+	else{
+		if(data.lv > categoryList[idx-1].lv){
+			const elements = `<ul class="ul${data.categoryPrId}"><li class="li${data.categoryId}"><a>${data.categoryNm}</a></li></ul>`
+			const parent = document.querySelector(`.li${data.categoryPrId}`)
+			parent.innerHTML += elements;
+		}
+		else if(data.lv == categoryList[idx-1].lv){
+			const elements = `<li class="li${data.categoryId}"><a>${data.categoryNm}</a></li>`
+			const parent = document.querySelector(`.ul${data.categoryPrId}`)
+			parent.innerHTML += elements;			
+		}
+	}
+}) 
+/* categoryList.map((data,idx) => {
+	if(idx==0){
+		const elements = `<li><a>${data.categoryNm}`
+		sortableBox.innerHTML += elements;
+	}
+	else{
+ 		if(data.lv > categoryList[idx-1].lv){
+ 			const elements = `<ul><li><a>${data.categoryNm}</li>`
+ 			sortableBox.innerHTML += elements;
+		}
+		else if(data.lv < categoryList[idx-1].lv){
+			const elements = `</ul><li><a>${data.categoryNm}</li>`
+			sortableBox.innerHTML += elements;
+		}
+		else if(data.lv == categoryList[idx-1].lv){
+			const elements = `</li><li><a>${data.categoryNm}`	
+			sortableBox.innerHTML += elements;
+		} 
+	}
+})  */
+
+$(document).ready(function() {
+	$('.sortable').nestedSortable({
+		forcePlaceholderSize: true,
+		items: 'li',
+		handle: 'a',
+		placeholder: 'menu-highlight',
+		listType: 'ul',
+		maxLevels: 7,
+		opacity: .6,
+	});
+});
+
+
+
+</script>
+</html>

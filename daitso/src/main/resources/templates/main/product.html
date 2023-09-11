@@ -23,13 +23,13 @@
 					<div style="border: solid 2px #dedede">
 					<ul>
 						<th:block th:each="list : ${categoryList}">
-							<p style="text-align:center; border-bottom: solid 2px #dedede" th:if="${list.level == 1}">[[${list.categoryNm}]]</p>
-							<li th:class="list+${list.categoryId} + ' ' + font-s-13 + ' ' + margin-b-5"  th:if="${list.level == 2}">
+							<p style="text-align:center; border-bottom: solid 2px #dedede" th:if="${list.lv == 1}">[[${list.categoryNm}]]</p>
+							<li th:class="list+${list.categoryId} + ' ' + font-s-13 + ' ' + margin-b-5"  th:if="${list.lv == 2}">
 								<a class="text-dark" th:href="@{/category/{id}(id=${list.categoryId})}">[[${list.categoryNm}]] 
-									<a th:class="show-btn+${list.categoryId}"  th:onclick="showDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
+									<a th:class="show-btn+${list.categoryId}"  th:onclick="showDownCategory([[${list.categoryId}]], [[${list.lv}]])" th:if="${list.isLeaf == 0}">
 										<img style="width:10px" th:src="@{/assets/common/angle-down-solid.svg}"></img>
 									</a>
-									<a th:class="hidden-btn+${list.categoryId}"  style="display:none" th:onclick="hideDownCategory([[${list.categoryId}]], [[${list.level}]])" th:if="${list.isLeaf == 0}">
+									<a th:class="hidden-btn+${list.categoryId}"  style="display:none" th:onclick="hideDownCategory([[${list.categoryId}]], [[${list.lv}]])" th:if="${list.isLeaf == 0}">
 										<img style="width:10px" th:src="@{/assets/common/angle-up-solid.svg}"></img>
 									</a>
 								</a>
@@ -89,16 +89,16 @@
 		tag.submit(); 
 	}
 	
-	function showDownCategory(categoryId, level){
+	function showDownCategory(categoryId, lv){
 		
 		var showBtn = document.querySelector(`.show-btn${categoryId}`);
 		var hiddenBtn = document.querySelector(`.hidden-btn${categoryId}`);
 		var lbody = document.querySelector(`.list${categoryId}`);
 		showBtn.style.display = "none";
 		hiddenBtn.style.display = "inline";
-		var frame = `<ul class="down-ul${categoryId}-level${level}"></ul>`;
+		var frame = `<ul class="down-ul${categoryId}-lv${lv}"></ul>`;
 		lbody.innerHTML += frame;
-		var mbody = document.querySelector(`.down-ul${categoryId}-level${level}`);
+		var mbody = document.querySelector(`.down-ul${categoryId}-lv${lv}`);
 		
 		
 		cList.forEach(list => {
@@ -108,10 +108,10 @@
 						<li class="list${list.categoryId} font-s-13">
 							<a class="text-dark" href="/category/${list.categoryId}">${list.categoryNm}
 								${list.isLeaf == 0 ?  
-									`<a class="show-btn${list.categoryId} text-secondary-emphasis" onclick="showDownCategory(${list.categoryId}, ${list.level})"> 
+									`<a class="show-btn${list.categoryId} text-secondary-emphasis" onclick="showDownCategory(${list.categoryId}, ${list.lv})"> 
 									 	<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
 									 </a>
-									 <a class="hidden-btn${list.categoryId}" style="display:none" onclick="hideDownCategory(${list.categoryId}, ${list.level})">
+									 <a class="hidden-btn${list.categoryId}" style="display:none" onclick="hideDownCategory(${list.categoryId}, ${list.lv})">
 										<img style="width:10px" src="/assets/common/angle-up-solid.svg"></img>
 									</a>
 									 `
@@ -122,7 +122,7 @@
 						</li> 
 				`
 				mbody.innerHTML += category;
-				for (let j=0; j<list.level-1; j++){
+				for (let j=0; j<list.lv-1; j++){
 					span.innerHTML += '&nbsp';
 				}
 				const tag = document.querySelector(`.list${list.categoryId}`);		
@@ -133,10 +133,10 @@
 		
 	}
 	
-	function hideDownCategory(categoryId, level){
+	function hideDownCategory(categoryId, lv){
 		var showBtn = document.querySelector(`.show-btn${categoryId}`);
 		var hiddenBtn = document.querySelector(`.hidden-btn${categoryId}`);
-		var downUl = document.querySelector(`.down-ul${categoryId}-level${level}`);
+		var downUl = document.querySelector(`.down-ul${categoryId}-lv${lv}`);
 		showBtn.style.display = "inline";
 		hiddenBtn.style.display = "none";
 		downUl.innerHTML = "";
