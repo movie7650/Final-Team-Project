@@ -162,5 +162,15 @@ public class AdminController {
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
 	}
+	
+	//카테고리 수정하기
+	@GetMapping("/category/update")
+	public String updateCategory(Model model) {
+		List<Category> list = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", list);
+		return "admin/category/category-update";
+	}
+	
+	
 
 }

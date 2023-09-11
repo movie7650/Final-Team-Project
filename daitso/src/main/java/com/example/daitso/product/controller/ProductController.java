@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +49,18 @@ public class ProductController {
 	//상품 정보 조회하기(리뷰, 문의글 포함)
 	@GetMapping("/{productId}/{groupId}")
 	public String selectProduct(@PathVariable int productId, @PathVariable int groupId, Model model) {
+
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			
+			String customerId = userDetails.getUsername();		
+			model.addAttribute("customerId", customerId);
+		}catch(Exception e) {
+			model.addAttribute("customerId", "whotheFisthatguy");			
+		}
+		
+		
 		Product product = productService.selectProduct(productId);
 		
 		List<ReviewProductDetail> rList = reviewService.selectProductReview(groupId, 1);
