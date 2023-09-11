@@ -13,10 +13,10 @@
 <div class="title-order-list">주문목록</div>
 	
 <div class="order-category">
-	<div class="order-rectangle01">전체주문조회</div>
-	<div class="order-rectangle02">결제취소</div>
-	<div class="order-rectangle03">배송중</div>
-	<div class="order-rectangle04">배송완료</div>
+	<div class="order-rectangle01"><a th:href="@{/mypage/orderlist}">전체주문조회</a></div>
+	<div class="order-rectangle02"><a th:href="@{/mypage/canclepay}">결제취소</a></div>
+	<div class="order-rectangle03"><a th:href="@{/mypage/searchshipping}">배송중</a></div>
+	<div class="order-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
 </div><!-- order-category -->
 
 	<div class="order-list-container" >

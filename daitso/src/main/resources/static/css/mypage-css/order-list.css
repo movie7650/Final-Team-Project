@@ -28,6 +28,13 @@
 	background-color:#668663;
 	
 }
+.order-rectangle01 > a{
+	text-decoration-line: none;
+	color:white;
+}
+.order-rectangle01 > a:hover{
+	color:black;
+}
 .order-rectangle02{
 	float:left;
 	border-top:solid 1.5px #668663;
@@ -40,6 +47,13 @@
 	font-family:Inter;
 	
 }
+.order-rectangle02 > a{
+	text-decoration-line:none;
+	color:black;
+}
+.order-rectangle02 > a:hover{
+	color:#668663;
+}
 .order-rectangle03{
 	float:left;
 	border-top:solid 1.5px #668663;
@@ -50,7 +64,13 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	
+}
+.order-rectangle03 a{
+	text-decoration-line:none;
+	color:black;
+}
+.order-rectangle03 a:hover{
+	color:#668663;
 }
 .order-rectangle04{
 	float:left;
@@ -62,7 +82,13 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	
+}
+.order-rectangle04 a{
+	text-decoration-line:none;
+	color:black;
+}
+.order-rectangle04 a:hover{
+	color:#668663;
 }
 .order-list-container{
 	border:solid 1.5px #cecece;
