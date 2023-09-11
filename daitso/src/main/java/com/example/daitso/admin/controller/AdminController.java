@@ -48,7 +48,7 @@ public class AdminController {
 	    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
 	    Model model) {
 	    
-	    // 페이지 번호와 페이지 크기를 이용해 페이징 정보 계산
+		//가져 올 
 	    int offset = (page - 1) * pageSize;
 	    
 	    // 초기값 설정
@@ -74,10 +74,6 @@ public class AdminController {
 	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
 	    model.addAttribute("selectedThirdCategoryId", thirdCategoryId);
 
-	    System.out.println(firstCategoryId);
-	    System.out.println(secondCategoryId);
-	    System.out.println(thirdCategoryId);
-	    
 	    // 페이징 정보 전달
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("pageSize", pageSize);
@@ -124,32 +120,21 @@ public class AdminController {
 	public List<Product> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
-
 	
 	
-	//기존 상품 등록하기
-	@PostMapping("/product")
-	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-		adminService.registerExistingProducts(product, files);
-		model.addAttribute("message","상품이 등록되었습니다.");
-		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
-	}
-	
-	//상품 수정을 위해 해당 상품 정보 불러오기
-	@GetMapping("/update/{productGroupId}")
+	//해당 상품 정보 불러오기
+	@GetMapping("/update/{productId}")
 	@ResponseBody
-	public ProductCheck selectProductId(@PathVariable int productId, Model model) {
+	public Product selectProductId(@PathVariable int productId, Model model) {
 		return adminService.selectProductId(productId);
 	}
 
 	//상품 수정하기
 	@PostMapping("/update")
-	public String updateProduct(ProductCheck product, Model model, HttpSession session) {
+	public String updateProduct(Product product, Model model, HttpSession session) {
+	    
 		adminService.updateProduct(product);
 		model.addAttribute("product", product);
-		session.setAttribute("productGroupId", product.getProductGroupId());
-		session.setAttribute("categoryNm", product.getCategoryNm());
 		session.setAttribute("productCode", product.getProductCode());
 		session.setAttribute("productId", product.getProductId());
 		session.setAttribute("productNm", product.getProductNm());
@@ -171,6 +156,14 @@ public class AdminController {
 		return "admin/category/category-update";
 	}
 	
+	//기존 상품 등록하기
+	@PostMapping("/product")
+	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+		adminService.registerExistingProducts(product, files);
+		model.addAttribute("message","상품이 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}
 	
 
 }

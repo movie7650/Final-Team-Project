@@ -26,17 +26,19 @@ public interface IProductRepository {
     //카테고리별 상품 개수 조회하기
     int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId);
     
+    
     //그룹 상품 삭제하기
     void deleteGroupProduct(int productGroupId);
     
     //그룹별 상품 조회하기
     List<Product> selectProductsByGroupId(int productGroupId);
     
-    
-	void updateProduct(ProductCheck product);
-	ProductCheck selectProductId(int productId);
-    
-    
+    //해당 상품 수정하기
+	void updateProduct(Product product);
+	
+	Product selectProductId(int productId);
+	
+	
 	void registerExistingProducts(ProductCheck product);
 	void changeProductCode();
     

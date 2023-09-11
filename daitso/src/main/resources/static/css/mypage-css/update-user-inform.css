@@ -40,14 +40,14 @@
 	padding-top:1.5%;
 	padding-left:2%;
 }
-table  button{
+.update-table  button{
 	margin-left:2%;
 	border:none;
 	background-color:#668663;
 	color:white;
 	border-radius:10px;
 }
-table input{
+.update-table input{
 	margin-left:3%;
 }
 .update-user-button-container{

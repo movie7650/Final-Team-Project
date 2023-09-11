@@ -68,6 +68,7 @@
     <update id="deleteCartByCartId" parameterType="Map">
     	UPDATE cart
 		   SET status = 'N',
+		   	   checked = 'true',
 		       modify_dt = SYSDATE,
 		       modifier = #{customerId}
 		 WHERE cart_id IN
@@ -90,5 +91,57 @@
 				 	#{cartId}
 				</foreach>
     </update>
-		   
+    
+    <!-- 
+		기능: 쿠폰 적용 대상 상품들 조회
+		담당자: 최준원
+	-->
+	<select id="getCouponProductByCustomerId" parameterType="int" resultType="com.example.daitso.cart.model.CartCoupon">
+		SELECT p.product_id AS "productId",
+       		   p.product_image_first AS "productImageFirst",
+       		   p.product_nm AS "productNm",
+               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productPrice",
+               c.cart_count AS "cartCount",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.cart_price)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
+			   p.category_id AS "categoryId",
+       		   cg.category_pr_id AS "categoryPrId",
+       		   DECODE((SELECT category_pr_id FROM category WHERE category_id = cg.category_pr_id), null, 0, 0) AS "categoryPrPrId",
+       		   p.product_option_first AS "productOptionFirst",
+       		   p.product_option_second AS "productOptionSecond",
+               p.product_option_third AS "productOptionThird",
+               (SELECT COUNT(*) 
+                  FROM coupon c, customer_coupon cc 
+                 WHERE c.coupon_id = cc.coupon_id
+                   AND cc.customer_id = #{customerId}
+                   AND cc.coupon_use_dv = 203
+                   AND category_id IN (p.category_id ,cg.category_pr_id)) AS "couponUseCount"
+		 FROM  cart c,
+     		   product p,
+     		   category cg
+		WHERE  c.product_id = p.product_id
+		  AND  cg.category_id = p.category_id
+		  AND  c.customer_id = #{customerId}
+		  AND  c.checked = 'true'
+		  AND  c.status = 'Y'
+	</select>
+	
+	 <!-- 
+		기능: 적용가능한 쿠폰 조회
+		담당자: 최준원
+	-->
+	<select id="getCouponsByCustomerId" parameterType="int" resultType="com.example.daitso.cart.model.CartCouponApply">
+		SELECT cc.customer_coupon_id AS "customerCouponId",
+		       c.coupon_id AS "couponId",
+		       c.coupon_nm AS "couponNm",
+		       c.coupon_dscnt_rate AS "couponDscntRate"
+		  FROM coupon c,
+     		   customer_coupon cc
+		 WHERE cc.coupon_id = c.coupon_id	
+		   AND cc.coupon_use_dv = 203
+		   AND cc.customer_id = #{customerId}
+		   AND c.category_id IN 
+		   		<foreach collection="categoryIdList" item="categoryId" open="(" close=")" separator=",">
+				 	#{categoryId}
+				</foreach>
+	</select>      
 </mapper>
