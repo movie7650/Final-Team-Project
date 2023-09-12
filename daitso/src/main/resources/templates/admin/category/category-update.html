@@ -10,7 +10,6 @@
 }
 .menu-box {
   border: 1px solid #a1a1a1;
-  margin-left: 36px;
   padding: 10px;
 }
 .menu-box ul {
@@ -20,16 +19,14 @@
 }
 .menu-box ul.menu-list li {
   display: block;
-  border: 1px solid rgb(128, 0, 255);
+  /* border: 1px solid rgb(128, 0, 255); */
   background: #fff;
 }
 .menu-box ul.menu-list > li a {
   background: #fff;
   display: block;
   font-size: 14px;
-  color: red;
-  text-transform: uppercase;
-  text-decoration: none;
+  color: black;
 }
 .menu-box ul.menu-list > li a:hover {
   cursor: move;
@@ -39,102 +36,126 @@
   margin-top: 5px;
 }
 .menu-box ul.menu-list ul li a {
-  color: blue;
+	color: gray;
 }
 .menu-box li.menu-highlight {
-  border: 1px dashed red !important;
+  border: 1px dashed black !important;
   background: #f5f5f5;
 }
 </style>
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-	
-	<div class="menu-box">
-      <ul class="menu-list sortable">
-        <!-- <li><a>menu 1</a></li>
-        <li><a>menu 2</a>
-          <ul class="submenu-list">
-            <li><a>submenu 2.1</a>
-            	<ul class="submenu-list">
-	            	<li><a>subsubmenu 2.1</a> 
-	            		<ul class="submenu-list">
-	            			<li><a>subsubsubmenu 2.1</a>        	
-            			</ul>
-	            	</li>       	
-            	</ul>
-            </li>
-            <li><a>submenu 2.2</a></li>
-          </ul>
-        </li>
-        <li><a>menu 3</a></li> -->
-      </ul>
-    </div>
-
-</body>
+	<!-- 오른쪽 컨텐츠 -->
+	<div id="productTable">
+		<div style="width:950px">
+			<hr style="border: 1px solid;"></hr>
+		</div>
+		<h3>카테고리 관리</h3>	
+		<div style="width:950px">
+			<hr style="border: 1px solid; "></hr>	
+		</div>
+		<div class="menu-box" style="width:950px">
+      		<ul class="menu-list sortable ul0"  value="root" style="width:100%"></ul>	
+   		</div>	
+	</div>
+    <!-- <button style="width:100px; height:100px" onclick="test()">발 사~~~~~</button> -->
+	</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://ilikenwf.github.io/jquery.mjs.nestedSortable.js"></script>
-<script th:inline="javascript">
-const sortableBox = document.querySelector('.sortable');
-
-/*<![CDATA[*/
-const categoryList = /*[[${categoryList}]]*/
-/*]]>*/
-
-
-categoryList.map((data,idx) => {
-	if(data.lv == 1){
-		const elements = `<li class="li${data.categoryId}"><a>${data.categoryNm}</a></li>`
-		sortableBox.innerHTML += elements;
-	}
-	else{
-		if(data.lv > categoryList[idx-1].lv){
-			const elements = `<ul class="ul${data.categoryPrId}"><li class="li${data.categoryId}"><a>${data.categoryNm}</a></li></ul>`
-			const parent = document.querySelector(`.li${data.categoryPrId}`)
-			parent.innerHTML += elements;
+	<script th:inline="javascript">
+	const sortableBox = document.querySelector('.sortable');
+	var el = '';
+	/*<![CDATA[*/
+	const categoryList = /*[[${categoryList}]]*/
+	/*]]>*/
+	
+	
+	function test(){
+		var child = '';
+		var parent = '';
+		if(el.parentElement.className == ''){
+			console.log(el.parentElement.parentElement);	
+			child = el.className.substring(2);
+			parent = el.parentElement.parentElement.className.substring(2);
+		}else{
+			child = el.className.substring(2);
+			console.log(el.parentElement);	
+			console.log(el.parentElement);	
+			if(el.parentElement.className.substring(0,4) == "menu"){
+				console.log("왜 일로오는데")
+				parent = 0;		
+			}
+			else{
+				parent = el.parentElement.className.substring(2);
+			}
 		}
-		else if(data.lv == categoryList[idx-1].lv){
-			const elements = `<li class="li${data.categoryId}"><a>${data.categoryNm}</a></li>`
-			const parent = document.querySelector(`.ul${data.categoryPrId}`)
-			parent.innerHTML += elements;			
-		}
+		console.log(child);
+		console.log(parent);
+	  	let tag = document.createElement('form');
+		
+		let pEle = document.createElement('input');
+		pEle.setAttribute('type','hidden');
+		pEle.setAttribute('name', 'parentCategoryId');
+		pEle.setAttribute('value', parent);
+	
+		let cEle = document.createElement('input');
+		cEle.setAttribute('type','hidden');
+		cEle.setAttribute('name', 'categoryId');
+		cEle.setAttribute('value', child);
+		
+		tag.appendChild(pEle);
+		tag.appendChild(cEle);
+		tag.setAttribute('method', 'post');
+		tag.setAttribute('action', '/admin/category/update');
+		document.body.appendChild(tag);
+		tag.submit();   
 	}
-}) 
-/* categoryList.map((data,idx) => {
-	if(idx==0){
-		const elements = `<li><a>${data.categoryNm}`
-		sortableBox.innerHTML += elements;
-	}
-	else{
- 		if(data.lv > categoryList[idx-1].lv){
- 			const elements = `<ul><li><a>${data.categoryNm}</li>`
- 			sortableBox.innerHTML += elements;
-		}
-		else if(data.lv < categoryList[idx-1].lv){
-			const elements = `</ul><li><a>${data.categoryNm}</li>`
+	
+	categoryList.map((data,idx) => {
+		if(data.lv == 1){
+			const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f">└${data.categoryNm}</a></li>`
 			sortableBox.innerHTML += elements;
 		}
-		else if(data.lv == categoryList[idx-1].lv){
-			const elements = `</li><li><a>${data.categoryNm}`	
-			sortableBox.innerHTML += elements;
-		} 
+		else{
+			if(data.lv > categoryList[idx-1].lv){
+				const elements = `<ul class="ul${data.categoryPrId}"><li class="li${data.categoryId}"><a onmouseup="drag(event)" style="font-size:20px; border:1px solid ">└${data.categoryNm}</a></li></ul>`
+				const parent = document.querySelector(`.li${data.categoryPrId}`)
+				parent.innerHTML += elements;
+			}
+			else if(data.lv == categoryList[idx-1].lv){
+				const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="font-size:20px; border:1px solid">└${data.categoryNm}</a></li>`
+				const parent = document.querySelector(`.ul${data.categoryPrId}`)
+				parent.innerHTML += elements;			
+			}
+		}
+	}) 
+	
+	
+	function drag(event){
+		console.log(event);
+		const cName = event.target.parentElement.className.split(' ');
+		const data = document.querySelector(`.${cName[0]}`);
+		el = data;
 	}
-})  */
-
-$(document).ready(function() {
-	$('.sortable').nestedSortable({
-		forcePlaceholderSize: true,
-		items: 'li',
-		handle: 'a',
-		placeholder: 'menu-highlight',
-		listType: 'ul',
-		maxLevels: 7,
-		opacity: .6,
-	});
-});
-
+	
+	
+	$(document).ready(function() {
+		$('.sortable').nestedSortable({
+			forcePlaceholderSize: true,
+			items: 'li',
+			handle: 'a',
+			placeholder: 'menu-highlight',
+			listType: 'ul',
+			maxLevels: 100,
+			opacity: .6,
+		});
+	}); 
 
 
 </script>
+</body>
 </html>
