@@ -24,5 +24,8 @@ public interface ICategoryRepository {
 	
 	// 전체 카테고리를 계층형으로 갖고오기
 	List<Category> selectAllCategory();
+	
+	// 카테고리 계층 업데이트
+	void updateCategory(@Param("categoryId") int categoryId, @Param("parentCategoryId") int parentCategoryId);
 }
 

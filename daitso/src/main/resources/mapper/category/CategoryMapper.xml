@@ -81,4 +81,8 @@
 		CONNECT BY PRIOR category_id=category_pr_id
 		ORDER SIBLINGS BY category_nm
     </select>
+    
+    <update id="updateCategory">
+    	UPDATE category SET category_pr_id = #{parentCategoryId} where category_id = #{categoryId}
+    </update>
 </mapper>

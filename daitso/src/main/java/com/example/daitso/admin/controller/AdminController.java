@@ -153,6 +153,7 @@ public class AdminController {
 	public String updateCategory(Model model) {
 		List<Category> list = categoryService.selectAllCategory();
 		model.addAttribute("categoryList", list);
+		System.out.println(list);
 		return "admin/category/category-update";
 	}
 	
@@ -163,6 +164,13 @@ public class AdminController {
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
+	}
+	
+	//카테고리 수정하기
+	@PostMapping("/category/update")
+	public String updateCategory(Model model, int parentCategoryId, int categoryId) {
+		categoryService.updateCategory(categoryId, parentCategoryId);
+		return updateCategory(model);
 	}
 	
 
