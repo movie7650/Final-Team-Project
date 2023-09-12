@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.cancle-pay-main{
+	display: flex;
+	justify-content: center;
+}
 .cancle-rectangle01{
 	float:left;
 	border:solid 1.5px #668663;

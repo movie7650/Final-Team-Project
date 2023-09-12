@@ -1,17 +1,22 @@
 @charset "UTF-8";
+.review-main{
+	display: flex;
+	justify-content: center;
+	
+}
 .title-review{
+	position:absolute;
 	padding-bottom:0.5%;
 	font-size:150%;
-	position:absolute;
-	margin-top:-38%;
-	margin-left:30%;
+	margin-left:165px;
+	margin-top:-660px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 .rivew-menu-container{
 	position:absolute;
-	margin-top:-33%;
-	margin-left:31%;
+	margin-top:-580px;
+	margin-left:165px;
 	width:auto;
 	height:auto;
 }
@@ -28,8 +33,8 @@
 	position:absolute;
 	border-top: solid 3px #668663;
 	border-bottom:solid 3px #668663;
-	margin-top:-28%;
-	margin-left:30%;
+	margin-top:-500px;
+	margin-left:165px;
 	padding-bottom:1%;
 	padding-top:1%;
 	width:855px;
@@ -47,8 +52,8 @@
 }
 .review-detail-container{
 	position:absolute;
-	margin-top:-21%;
-	margin-left:33%;
+	margin-top:-400px;
+	margin-left:165px;
 	
 	
 }
@@ -65,11 +70,12 @@
 	
 }
 .review-photo-container{
+	position:absolute;
 	border-top: solid 3px #668663;
 	border-bottom:solid 3px #668663;
 	width:855px;
 	height:80px;
-	margin-left:30%;
+	margin-left:165px;
 	padding-top:1%;
 	margin-top:2%;
 }
@@ -91,16 +97,14 @@
 	margin-left:50px;
 	margin-top:1.5%
 }
-.button-container{
-	
+
+.button-container-01{
+	position:absolute;
 	width:855px;
 	height:100px;
-	margin-left:30%;
-}
-.button-container-01{
+	margin-left:600px;
+	margin-top:150px;
 	
-	margin-left:25%;
-	margin-top:5%;
 }
 .save-button{
 	background-color:#39594e;
