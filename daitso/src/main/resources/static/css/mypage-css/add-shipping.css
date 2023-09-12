@@ -1,9 +1,13 @@
 @charset "UTF-8";
 
+.add-shipping-main{
+	display: flex;
+	justify-content: center;
+}
 .post-inform-container{
 	position:absolute;
-	margin-left:30%;
-	margin-top:-40%;
+	margin-left:165px;
+	margin-top:-650px;
 }
 
 /* 받는사람이름 입력 */

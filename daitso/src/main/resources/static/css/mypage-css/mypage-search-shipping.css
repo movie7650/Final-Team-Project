@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
-@charset "UTF-8";
+.search-shipping-main{
+	display: flex;
+	justify-content: center;
+}
+
 .search-shipping-rectangle01{
 	float:left;
 	border:solid 1.5px #668663;

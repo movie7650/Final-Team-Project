@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.daitso.point.model.Point;
+import com.example.daitso.point.model.TotalPoint;
 import com.example.daitso.point.repository.IPointRepository;
 
 @Service
@@ -29,6 +30,11 @@ public class PointService implements IPointService {
 	public List<Point> selectPoint() {
 		// TODO Auto-generated method stub
 		return pointRepository.selectPoint();
+	}
+
+	@Override
+	public int selectTotalPoint() {
+		return pointRepository.selectTotalPoint();
 	}
 
 
