@@ -38,7 +38,7 @@ public class AdminController {
 		return "admin/login/admin-login";
 	}
 
-	//카테고리별 상품 조회하기(페이징)
+	// 카테고리별 상품 조회하기(페이징)
 	@GetMapping("/product")
 	public String selectProductsByCategory(
 	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
@@ -48,7 +48,7 @@ public class AdminController {
 	    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
 	    Model model) {
 	    
-		//가져 올 
+		// 해당 페이지에 보여질 상품들 번호 가져오는 것 ex)3 페이지면 offset=20으로 매퍼에서 21(offset+1)번부터 30(offset+pageSize)번까지 보여준다.
 	    int offset = (page - 1) * pageSize;
 	    
 	    // 초기값 설정
@@ -65,7 +65,7 @@ public class AdminController {
 	    List<ProductCheck> products = adminService.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
 	    model.addAttribute("products", products);
 	   	    
-	    // 첫 번째 카테고리 불러오기(필터)
+	    // 첫 번째 카테고리 불러오기
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
 	    
@@ -78,16 +78,19 @@ public class AdminController {
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("pageSize", pageSize);
 
-	    // 총 페이지 수 계산
+	    // 총 상품 개수
 	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
+	    
+	    // 총 페이지 수
 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
 	    model.addAttribute("totalCount", totalCount);
 	    model.addAttribute("totalPages", totalPages);
 
 	    return "admin/product/admin-product";
 	}
 	
-	//두 번째 카테고리 불러오기(필터)
+	// 두 번째 카테고리 불러오기
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
 	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
@@ -96,7 +99,7 @@ public class AdminController {
 		return secondCategories;
 	}
 		
-	//세 번째 카테고리 불러오기(필터)
+	// 세 번째 카테고리 불러오기
 	@GetMapping("/product/third/{categoryId}")
 	@ResponseBody
 	public List<Category> getThirdCategories(@PathVariable int categoryId, Model model) {
@@ -105,8 +108,8 @@ public class AdminController {
 		return thirdCategories;
 	}
 
-	//그룹 상품 삭제하기
-	@PostMapping("/delete")
+	// 그룹 상품 삭제하기
+	@PostMapping("/delete-group")
 	public String deleteGroupProduct(@RequestParam int productGroupId, Model model) {
 		adminService.deleteGroupProduct(productGroupId);
 		model.addAttribute("message","상품이 삭제되었습니다.");
@@ -114,25 +117,23 @@ public class AdminController {
 		return "admin/product/message";
 	}
 	
-	//그룹별 상품 정보 불러오기
+	// 그룹별 상품 조회하기
 	@GetMapping("/search/{productGroupId}")
 	@ResponseBody
 	public List<Product> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
 	
-	
-	//해당 상품 정보 불러오기
+	// 해당 상품 불러오기
 	@GetMapping("/update/{productId}")
 	@ResponseBody
 	public Product selectProductId(@PathVariable int productId, Model model) {
 		return adminService.selectProductId(productId);
 	}
 
-	//상품 수정하기
+	// 해당 상품 수정하기
 	@PostMapping("/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
-	    
 		adminService.updateProduct(product);
 		model.addAttribute("product", product);
 		session.setAttribute("productCode", product.getProductCode());
@@ -147,6 +148,16 @@ public class AdminController {
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
 	}
+
+	// 해당 상품 삭제하기
+	@PostMapping("/delete")
+	public String deleteProduct(@RequestParam int productId, Model model) {
+		adminService.deleteProduct(productId);
+		model.addAttribute("message","상품이 삭제되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}
+	
 	
 	//기존 상품 등록하기
 	@PostMapping("/product")

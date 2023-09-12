@@ -45,37 +45,47 @@ public class AdminService implements IAdminService{
 		}
 	}
 	
-	
-	
+	// 카테고리별 상품 조회하기
 	@Override
 	public List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize) {
 		return productRepository.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
 	}
 
+	// 카테고리별 상품 개수 조회하기
 	@Override
 	public int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId) {
 		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
 	}
-
 	
+	// 그룹 상품 삭제하기
 	@Override
 	public void deleteGroupProduct(int productGroupId) {
 		productRepository.deleteGroupProduct(productGroupId);
 	}
 	
+	// 그룹별 상품 조회하기
 	@Override
 	public List<Product> selectProductsByGroupId(int productGroupId) {
 		return productRepository.selectProductsByGroupId(productGroupId);
 	}
 
+	// 해당 상품 불러오기
+	@Override
+	public Product selectProductId(int productId) {
+		return productRepository.selectProductId(productId);
+	}
+	
+	// 해당 상품 수정하기
 	@Override
 	public void updateProduct(Product product) {
 		productRepository.updateProduct(product);
 	}
 
+	// 해당 상품 삭제하기
 	@Override
-	public Product selectProductId(int productId) {
-		return productRepository.selectProductId(productId);
+	public void deleteProduct(int productId) {
+		productRepository.deleteProduct(productId);
+		
 	}
 
 }
