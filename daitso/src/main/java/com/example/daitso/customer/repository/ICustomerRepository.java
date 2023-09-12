@@ -27,4 +27,7 @@ public interface ICustomerRepository {
 	
 	// 사용자 고유번호로부터 사용자 이름 갖고오기
 	CustomerName getCustomerNmByCustomerId(int customerId);
+	
+	//사용자 아이디(이메일) 가져오기
+	public String selectCustomerEmail();
 }
