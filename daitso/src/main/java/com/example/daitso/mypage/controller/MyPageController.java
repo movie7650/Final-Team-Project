@@ -36,7 +36,7 @@ public class MyPageController {
 		List<Point> points = pointService.selectPoint();
 		int point = pointService.selectTotalPoint();
 		model.addAttribute("points",points);
-		model.addAttribute("totalPoint", point + "P");
+		model.addAttribute("totalPoint", point + "P"); 
 		
 		return "mypage/my-point";
 	}
