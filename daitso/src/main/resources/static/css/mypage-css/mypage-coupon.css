@@ -1,20 +1,23 @@
 @charset "UTF-8";
-
+.mypage-coupon-main{
+	display: flex;
+	justify-content: center;
+	
+}
 .mypage-coupon-title{
 	position:absolute;
 	padding-bottom:0.5%;
 	font-size:150%;
-	position:absolute;
-	margin-top:-38%;
-	margin-left:30%;
+	margin-left:165px;
+	margin-top:-660px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 
 .coupon-container{
 	position:absolute;
-	margin-left:30%;
-	margin-top:-33%;
+	margin-left:165px;
+	margin-top:-600px;
 }
 
 .coupon-number-container{
