@@ -2,34 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.category.repository.ICategoryRepository">
 
-	<select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
-				 SELECT category_id AS categoryId, 
-				   	    category_pr_id AS categoryPrId,
-					    category_nm AS categoryNm, 
-					    level,
-					    CONNECT_BY_ISLEAF AS isLeaf
-				   FROM category 
-				  WHERE CONNECT_BY_ROOT category_nm = 
-				      ( 
+	<!-- 
+		기능 : 선택한 카테고리를 포함한 하위 경로 계층형으로 가져오기
+		담당자 : 나현웅
+	-->
+    <select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
+	SELECT category_id AS categoryId, 
+ 	    	category_pr_id AS categoryPrId,
+		    category_nm AS categoryNm, 
+		    level AS lv,
+		    CONNECT_BY_ISLEAF AS isLeaf
+	FROM category 
+	WHERE CONNECT_BY_ROOT category_nm = 
+							      ( 
 							   	  SELECT CONNECT_BY_ROOT category_nm as root
-							        FROM category 
-								   WHERE category_id = #{categoryId}
-						      START WITH category_pr_id = 0
-					    CONNECT BY PRIOR category_id = category_pr_id
-			          )
-			        AND status = 'Y' 
-			 START WITH category_pr_id = 0
-	   CONNECT BY PRIOR category_id = category_pr_id
-	  ORDER SIBLINGS BY category_nm
+							      FROM category 
+								  WHERE category_id = #{categoryId}
+						          START WITH category_pr_id = 0
+					    		  CONNECT BY PRIOR category_id = category_pr_id
+			          			  )
+	AND status = 'Y' 
+	START WITH category_pr_id = 0
+	CONNECT BY PRIOR category_id = category_pr_id
+	ORDER SIBLINGS BY category_nm
 	</select>
 	
+	<!-- 
+		기능 : 카테고리 경로 가져오기 ex) 식품->과자->초콜릿
+		담당자 : 나현웅
+	 -->
 	<select id="selectCategoryPath" parameterType="int" resultType="String">
-				 SELECT sys_connect_by_path(category_nm, ' > ') as path
-				   FROM category 
-				  WHERE category_id = #{categoryId}
-		     START WITH category_pr_id = 0
-	   CONNECT BY PRIOR category_id = category_pr_id	
-	  ORDER SIBLINGS BY category_nm
+	SELECT sys_connect_by_path(category_nm, ' > ') as path
+    FROM category 
+    WHERE category_id = #{categoryId}
+    START WITH category_pr_id = 0
+    CONNECT BY PRIOR category_id = category_pr_id	
+    ORDER SIBLINGS BY category_nm
 	</select>
 	
 	<!-- 
@@ -56,5 +64,21 @@
 		 WHERE category_pr_id = #{categoryId}
 		   AND status = 'Y'
 	  ORDER BY category_id
+    </select>
+    
+    <!-- 
+    	기능: 전체 카테고리 계층형으로 가져오기
+    	담당자: 나현웅
+     -->
+    <select id="selectAllCategory" resultType="com.example.daitso.category.model.Category">
+    	SELECT category_id AS categoryId, 
+    		   category_pr_id AS categoryPrId,
+    		   category_nm AS categoryNm,
+    		   level - 1 AS lv
+		FROM category
+		WHERE category_id != 0
+		START WITH category_id = 0
+		CONNECT BY PRIOR category_id=category_pr_id
+		ORDER SIBLINGS BY category_nm
     </select>
 </mapper>

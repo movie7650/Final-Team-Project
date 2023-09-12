@@ -26,14 +26,22 @@ public class CategoryService implements ICategoryService{
 		return categoryRepository.getSecondCategoryIdAndNameByFirstCategoryId(categoryId);
 	}
 	
+	// 선택된 카테고리를 기준으로 하위 카테고리들을 계층형으로 갖고오기
 	@Override
 	public List<Category> selectCategoryList(int categoryid) {
 		return categoryRepository.selectCategoryList(categoryid);
 	}
 
+	// 전체 카테고리를 계층형으로 갖고오기
 	@Override
 	public String selectCategoryPath(int categoryId) {
 		return categoryRepository.selectCategoryPath(categoryId);
+	}
+
+	// 전체 카테고리를 계층형으로 갖고오기
+	@Override
+	public List<Category> selectAllCategory() {
+		return categoryRepository.selectAllCategory();
 	}
 
 }

@@ -159,6 +159,14 @@ public class AdminController {
 	}
 	
 	
+	//카테고리 수정하기
+	@GetMapping("/category/update")
+	public String updateCategory(Model model) {
+		List<Category> list = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", list);
+		return "admin/category/category-update";
+	}
+	
 	//기존 상품 등록하기
 	@PostMapping("/product")
 	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
