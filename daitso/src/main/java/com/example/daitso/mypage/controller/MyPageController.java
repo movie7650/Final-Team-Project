@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.daitso.point.model.Point;
-import com.example.daitso.point.model.TotalPoint;
 import com.example.daitso.point.service.IPointService;
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
@@ -44,11 +43,73 @@ public class MyPageController {
 	//마이페이지-주문목록 컨트롤러
 	@RequestMapping(value="/orderlist", method=RequestMethod.GET)
 	public String selectPurchase(Model model) {
+		//상단에 잔여 포인트 출력 
 		int point = pointService.selectTotalPoint();
 		model.addAttribute("totalPoint",point + "P");
+		
+		//구매 목록 출력
+		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
+		model.addAttribute("purchaseList",purchaseList);
+		
+		//구매상품이름출력
+		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
+		model.addAttribute("purchaseCheckList",purchasecheckList);
+	
+		
 		return "mypage/order-list";
 	}
 	
+	//마이페이지-주문조회-결제취소
+	@RequestMapping("/canclepay")
+	public String canclePay(Model model) {
+		//상단 잔여포인트 출력
+		int point = pointService.selectTotalPoint();
+		model.addAttribute("totalPoint", point + "P");
+		
+		//구매 목록 출력
+		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
+		model.addAttribute("purchaseList",purchaseList);
+		
+		//구매상품이름출력
+		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
+		model.addAttribute("purchaseCheckList",purchasecheckList);
+		
+		return "mypage/cancle-pay";
+	}
+	//마이페이지-주문조회-배송중
+	@RequestMapping("/searchshipping")
+	public String searchShipping(Model model) {
+		//상단 잔여포인트 출력
+		int point = pointService.selectTotalPoint();
+		model.addAttribute("totalPoint", point + "P");
+		
+		//구매 목록 출력
+		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
+		model.addAttribute("purchaseList",purchaseList);
+		
+		//구매상품이름출력
+		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
+		model.addAttribute("purchaseCheckList",purchasecheckList);
+
+		return "mypage/mypage-search-shipping";
+	}
+	//마이페이지-주문주회-배송완료
+	@RequestMapping("/shippingcomplete")
+	public String shippingComplete(Model model) {
+		//상단 잔여포인트
+		int point = pointService.selectTotalPoint();
+		model.addAttribute("totalPoint", point + "P");
+		
+		//구매 목록 출력
+		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
+		model.addAttribute("purchaseList",purchaseList);
+		
+		//구매상품이름출력
+		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
+		model.addAttribute("purchaseCheckList",purchasecheckList);
+
+		return "mypage/mypage-shipping-complete";
+	}
 	//마이페이지-리뷰관리 컨트롤러
 	 //리뷰 페이지 불러오기
 	@RequestMapping("/review")
@@ -108,29 +169,8 @@ public class MyPageController {
 		return "mypage/mycoupon-used";
 	}
 	
-	//마이페이지-주문조회-결제취소
-	@RequestMapping("/canclepay")
-	public String canclePay(Model model) {
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		return "mypage/cancle-pay";
-	}
 	
-	//마이페이지-주문주회-배송중
-	@RequestMapping("/searchshipping")
-	public String searchShipping(Model model) {
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		return "mypage/mypage-search-shipping";
-	}
 	
-	//마이페이지-주문주회-배송완료
-	@RequestMapping("/shippingcomplete")
-	public String shippingComplete(Model model) {
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		return "mypage/mypage-shipping-complete";
-	}
 	
 	//마이페이지-내문의관리 
 	@RequestMapping("/myinquiry")
