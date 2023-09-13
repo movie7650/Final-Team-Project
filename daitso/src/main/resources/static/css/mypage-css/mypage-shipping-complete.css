@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.shipping-complete-main{
+	display: flex;
+	justify-content: center;
+}
 .shipping-complete-rectangle01{
 	float:left;
 	border:solid 1.5px #668663;

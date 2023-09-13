@@ -2,139 +2,147 @@
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <link rel="stylesheet" th:href="@{/css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<link rel="stylesheet" th:href="@{/css/category-update.css}">
 
-<style>
-.my-handle {
-    cursor: move;
-    cursor: -webkit-grabbing;
-}
-.menu-box {
-  border: 1px solid #a1a1a1;
-  margin-left: 36px;
-  padding: 10px;
-}
-.menu-box ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.menu-box ul.menu-list li {
-  display: block;
-  border: 1px solid rgb(128, 0, 255);
-  background: #fff;
-}
-.menu-box ul.menu-list > li a {
-  background: #fff;
-  display: block;
-  font-size: 14px;
-  color: red;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-.menu-box ul.menu-list > li a:hover {
-  cursor: move;
-}
-.menu-box ul.menu-list ul {
-  margin-left: 20px;
-  margin-top: 5px;
-}
-.menu-box ul.menu-list ul li a {
-  color: blue;
-}
-.menu-box li.menu-highlight {
-  border: 1px dashed red !important;
-  background: #f5f5f5;
-}
-</style>
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-	
-	<div class="menu-box">
-      <ul class="menu-list sortable">
-        <!-- <li><a>menu 1</a></li>
-        <li><a>menu 2</a>
-          <ul class="submenu-list">
-            <li><a>submenu 2.1</a>
-            	<ul class="submenu-list">
-	            	<li><a>subsubmenu 2.1</a> 
-	            		<ul class="submenu-list">
-	            			<li><a>subsubsubmenu 2.1</a>        	
-            			</ul>
-	            	</li>       	
-            	</ul>
-            </li>
-            <li><a>submenu 2.2</a></li>
-          </ul>
-        </li>
-        <li><a>menu 3</a></li> -->
-      </ul>
-    </div>
+	<!-- 오른쪽 컨텐츠 -->
+	<div id="productTable">
+		<div style="width:950px">
+			<hr style="border: 1px solid;"></hr>
+		</div>
+		<h3>카테고리 관리</h3>	
+		<div style="width:950px">
+			<hr style="border: 1px solid; "></hr>	
+		</div>
+		<div class="menu-box" style="width:950px">
+      		<ul class="menu-list sortable ul0"  value="root" style="width:100%"></ul>	
+   		</div>	
+	</div>
+	</div>
+	</div>
+	<div class="check-modal">
+			<div class="check-modal-frame d-flex flex-column justify-content-center align-items-center">
+				<div>
+					<p style="margin:0 10px 10px 10px" class="modal-text"></p>
+				</div>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width:100px; height:30px; background-color:#39594e; color:white; margin-right: 5px; cursor: pointer" onclick="updateCategory()">변경</div>
+					<div style="width:100px; height:30px; border:1px solid; cursor: pointer" onclick="reload()">취소</div>		
+				</div>
+			</div>
+		</div>
 
-</body>
+	<div th:replace="~{/include/footer :: footer}"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://ilikenwf.github.io/jquery.mjs.nestedSortable.js"></script>
-<script th:inline="javascript">
-const sortableBox = document.querySelector('.sortable');
-
-/*<![CDATA[*/
-const categoryList = /*[[${categoryList}]]*/
-/*]]>*/
-
-
-categoryList.map((data,idx) => {
-	if(data.lv == 1){
-		const elements = `<li class="li${data.categoryId}"><a>${data.categoryNm}</a></li>`
-		sortableBox.innerHTML += elements;
-	}
-	else{
-		if(data.lv > categoryList[idx-1].lv){
-			const elements = `<ul class="ul${data.categoryPrId}"><li class="li${data.categoryId}"><a>${data.categoryNm}</a></li></ul>`
-			const parent = document.querySelector(`.li${data.categoryPrId}`)
-			parent.innerHTML += elements;
+	<script th:inline="javascript">
+	
+	const checkModal = document.querySelector('.check-modal');
+	const sortableBox = document.querySelector('.sortable');
+	var el = '';
+	/*<![CDATA[*/
+	const categoryList = /*[[${categoryList}]]*/
+	/*]]>*/
+	
+	
+	function updateCategory(){
+		var child = '';
+		var parent = '';
+		if(el.parentElement.className == ''){
+			console.log(el.parentElement.parentElement);	
+			child = el.className.substring(2);
+			parent = el.parentElement.parentElement.className.substring(2);
+		}else{
+			child = el.className.substring(2);
+			console.log(el.parentElement);	
+			console.log(el.parentElement);	
+			if(el.parentElement.className.substring(0,4) == "menu"){
+				parent = 0;		
+			}
+			else{
+				parent = el.parentElement.className.substring(2);
+			}
 		}
-		else if(data.lv == categoryList[idx-1].lv){
-			const elements = `<li class="li${data.categoryId}"><a>${data.categoryNm}</a></li>`
-			const parent = document.querySelector(`.ul${data.categoryPrId}`)
-			parent.innerHTML += elements;			
-		}
+	  	let tag = document.createElement('form');
+		
+		let pEle = document.createElement('input');
+		pEle.setAttribute('type','hidden');
+		pEle.setAttribute('name', 'parentCategoryId');
+		pEle.setAttribute('value', parent);
+	
+		let cEle = document.createElement('input');
+		cEle.setAttribute('type','hidden');
+		cEle.setAttribute('name', 'categoryId');
+		cEle.setAttribute('value', child);
+		
+		tag.appendChild(pEle);
+		tag.appendChild(cEle);
+		tag.setAttribute('method', 'post');
+		tag.setAttribute('action', '/admin/category/update');
+		document.body.appendChild(tag);
+		tag.submit();   
 	}
-}) 
-/* categoryList.map((data,idx) => {
-	if(idx==0){
-		const elements = `<li><a>${data.categoryNm}`
-		sortableBox.innerHTML += elements;
-	}
-	else{
- 		if(data.lv > categoryList[idx-1].lv){
- 			const elements = `<ul><li><a>${data.categoryNm}</li>`
- 			sortableBox.innerHTML += elements;
-		}
-		else if(data.lv < categoryList[idx-1].lv){
-			const elements = `</ul><li><a>${data.categoryNm}</li>`
+	
+	categoryList.map((data,idx) => {
+		if(data.lv == 1){
+			const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f"><img style="width:50px; height:35px" src="/assets/common/folder-open-solid.svg">${data.categoryNm}</a></li>`
 			sortableBox.innerHTML += elements;
 		}
-		else if(data.lv == categoryList[idx-1].lv){
-			const elements = `</li><li><a>${data.categoryNm}`	
-			sortableBox.innerHTML += elements;
-		} 
+		else{
+			if(data.lv > categoryList[idx-1].lv){
+				const elements = `<ul class="ul${data.categoryPrId}"><li class="li${data.categoryId}"><a onmouseup="drag(event)" style="font-size:20px; border:1px solid ">└${data.categoryNm}</a></li></ul>`
+				const parent = document.querySelector(`.li${data.categoryPrId}`)
+				parent.innerHTML += elements;
+			}
+			else if(data.lv == categoryList[idx-1].lv){
+				const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="font-size:20px; border:1px solid">└${data.categoryNm}</a></li>`
+				const parent = document.querySelector(`.ul${data.categoryPrId}`)
+				parent.innerHTML += elements;			
+			}
+		}
+	}) 
+	
+	
+	function drag(event){
+		const text = event.target.textContent;
+		const cName = event.target.parentElement.className.split(' ');
+		const data = document.querySelector(`.${cName[0]}`);
+		el = data;
+		text.charAt(0) == '└' ? openModal(text.substring(1)) : openModal(text);
 	}
-})  */
-
-$(document).ready(function() {
-	$('.sortable').nestedSortable({
-		forcePlaceholderSize: true,
-		items: 'li',
-		handle: 'a',
-		placeholder: 'menu-highlight',
-		listType: 'ul',
-		maxLevels: 7,
-		opacity: .6,
-	});
-});
-
-
+	
+	
+	$(document).ready(function() {
+		$('.sortable').nestedSortable({
+			forcePlaceholderSize: true,
+			items: 'li',
+			handle: 'a',
+			placeholder: 'menu-highlight',
+			listType: 'ul',
+			maxLevels: 100,
+			opacity: .6,
+		});
+	}); 
+	
+	//팝업창 열기
+	function openModal(text){
+		const modalText = document.querySelector('.modal-text');
+		modalText.textContent = text + " 카테고리 위치를 수정하시겠습니까?";
+		//offsetHeight=> 모달창 뒤 흑백 배경 크기를 맞추기 위해 html태그가 가지고 있는 offsetHeight를 가져온 후 modal의 height속성에 삽입
+		var offsetHeight = document.querySelector('html').offsetHeight;
+		checkModal.style.height = offsetHeight;
+		//show 클래스 toggle(여기서는 modal 클래스에 show가 없으니 추가됨)
+		checkModal.classList.toggle('show');
+	}
+	
+	//화면 리로딩
+	function reload(){
+		window.location.href = '/admin/category/update';
+	}
 
 </script>
+</body>
 </html>

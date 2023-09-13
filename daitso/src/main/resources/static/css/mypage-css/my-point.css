@@ -1,10 +1,15 @@
 @charset "UTF-8";
+
+.mypoint-main{
+	display: flex;
+	justify-content: center;
+}
 .point-title{
+	position:absolute;
 	padding-bottom:0.5%;
 	font-size:150%;
-	position:absolute;
-	margin-top:-38%;
-	margin-left:30%;
+	margin-left:165px;
+	margin-top:-660px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
@@ -13,26 +18,26 @@
 	font-family:Inter;
 	font-weight:bold;
 	font-size:110%;
-	margin-top:-33%;
-	margin-left:31%;
+	margin-top:-580px;
+	margin-right:540px;
 }
 .my-own-point{
 	float:left;
 	position:absolute;
-	margin-top:-31.5%;
-	margin-left:31%;
+	margin-top:-550px;
+	margin-right:500px;
 	font-size:400%;
 }
 .point-rule-container{
 	position:absolute;
-	margin-top:-25%;
-	margin-left:31%;
+	margin-top:-430px;
+	margin-right:400px;
 	color:#ABABAB;
 }
 .point-table-container{
 	position:absolute;
-	margin-left:31%;
-	margin-top:-15%;
+	margin-left:165px;
+	margin-top:-250px;
 }
 .point-table-container > table{
 	text-align:center;

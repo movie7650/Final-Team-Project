@@ -1,10 +1,15 @@
 @charset "UTF-8";
+
+.shipping-main{
+	display: flex;
+	justify-content: center;
+}
 .shipping-title{
+	position:absolute;
 	padding-bottom:0.5%;
 	font-size:150%;
-	position:absolute;
-	margin-top:-38%;
-	margin-left:30%;
+	margin-left:165px;
+	margin-top:-660px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
@@ -39,8 +44,8 @@
 }
 .address-container{
 	position:absolute;
-	margin-left:30%;
-	margin-top:-33%;
+	margin-left:165px;
+	margin-top:-600px;
 	border:solid 1.5px #668663;
 	width:855px;
 	border-radius:10px;
@@ -53,8 +58,8 @@
 	width:855px;
 	border:solid 1.5px #668663;
 	position:absolute;
-	margin-left:30%;
-	margin-top:-20%;
+	margin-left:165px;
+	margin-top:-350px;
 	padding-top:0.5%;
  	box-shadow: 2px 2px 2px 2px gray;
 }

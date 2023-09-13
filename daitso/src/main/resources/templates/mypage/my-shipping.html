@@ -5,6 +5,8 @@
 <body>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+<div class="shipping-main">
 <div class="shipping-title">배송지관리</div>
 <div class="address-container">
 	<table>
@@ -21,11 +23,11 @@
 
 <div class="add-address-container">
 
-	<a  href="#">배송지 추가하기</a>
+	<a  th:href="@{/mypage/addshipping}">배송지 추가하기</a>
 
 </div><!-- add-address-container -->
 
-
+</div><!--shipping-main  -->
 
 <div th:replace="~{/include/footer :: footer}"></div>
 

@@ -5,29 +5,30 @@
 </head>
 <body>
 <form th:action="@{/mypage/order-list}" method="post">
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
 
-
-<div class="title-order-list">주문목록</div>
-	
-<div class="order-category">
-	<div class="cancle-rectangle01"><a th:href="@{/mypage/orderlist}">전체주문조회</a></div>
-	<div class="cancle-rectangle02"><a th:href="@{/mypage/canclepay}">결제취소</a></div>
-	<div class="cancle-rectangle03"><a th:href="@{/mypage/searchshipping}">배송중</a></div>
-	<div class="cancle-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
-</div><!-- order-category -->
-
-	<div class="order-list-container" >
-		<div class="shipping-status">배송완료</div>
-		<div class="shipping-date">8/2(금)도착</div>
-		<div class="purchase-img-001">이미지</div>
-		<div class="purchase-inform-001" >ProductName</div>
-	<div class="detail-button-container">
-		<div class="cancle-pay-button">주문취소</div>
-	</div><!-- shipping-button-container -->	
-	</div><!-- order-list-container -->
+	<div class="cancle-pay-main">
+		<div class="title-order-list">주문목록</div>
+			
+		<div class="order-category">
+			<div class="cancle-rectangle01"><a th:href="@{/mypage/orderlist}">전체주문조회</a></div>
+			<div class="cancle-rectangle02"><a th:href="@{/mypage/canclepay}">결제취소</a></div>
+			<div class="cancle-rectangle03"><a th:href="@{/mypage/searchshipping}">배송중</a></div>
+			<div class="cancle-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
+		</div><!-- order-category -->
+		
+			<div class="order-list-container" >
+				<div class="shipping-status">배송완료</div>
+				<div class="shipping-date">8/2(금)도착</div>
+				<div class="purchase-img-001">이미지</div>
+				<div class="purchase-inform-001" >ProductName</div>
+			<div class="detail-button-container">
+				<div class="cancle-pay-button">주문취소</div>
+			</div><!-- shipping-button-container -->	
+			</div><!-- order-list-container -->
+	</div><!-- cancle-pay-main -->
 </form>
 
 
