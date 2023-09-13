@@ -25,26 +25,33 @@ public class AdminService implements IAdminService{
 	@Autowired
 	S3Service s3Service;
 	
-	@Transactional
-	public void registerExistingProducts(ProductCheck product, List<MultipartFile> files) {
-		List<String> imagePathList = s3Service.upload(files);
-		product.setProductImageFirst(imagePathList.get(0));
-		product.setProductImageSecond(imagePathList.get(1));
-		product.setProductImageThird(imagePathList.get(2));
-		
-		// 상품 등록 실패시 s3에 등록된 이미지 삭제
-		try {
-			productRepository.registerExistingProducts(product);
-			product.getProductId();
-			productRepository.changeProductCode();
-		} catch(Exception e) {
-			e.printStackTrace();
-			imagePathList.forEach((url) -> {
-				s3Service.deleteImage(url);	
-			});
-		}
-	}
+	//기존 상품 등록하기
+//	@Transactional
+//	public void registerExistingProducts(ProductCheck product, List<MultipartFile> files) {
+//		List<String> imagePathList = s3Service.upload(files);
+//		product.setProductImageFirst(imagePathList.get(0));
+//		product.setProductImageSecond(imagePathList.get(1));
+//		product.setProductImageThird(imagePathList.get(2));
+//		
+//		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+//		try {
+//			productRepository.registerExistingProducts(product);
+//			product.getProductId();
+//			productRepository.changeProductCode();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			imagePathList.forEach((url) -> {
+//				s3Service.deleteImage(url);	
+//			});
+//		}
+//	}
 	
+	//기존 상품 등록하기
+	@Override
+	public void registerExistingProducts(ProductCheck product) {
+		productRepository.registerExistingProducts(product);
+		
+	}
 	// 카테고리별 상품 조회하기
 	@Override
 	public List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize) {
@@ -65,7 +72,7 @@ public class AdminService implements IAdminService{
 	
 	// 그룹별 상품 조회하기
 	@Override
-	public List<Product> selectProductsByGroupId(int productGroupId) {
+	public List<ProductCheck> selectProductsByGroupId(int productGroupId) {
 		return productRepository.selectProductsByGroupId(productGroupId);
 	}
 
