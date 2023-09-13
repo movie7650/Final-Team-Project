@@ -19,7 +19,7 @@ public interface IAdminService {
 	void deleteGroupProduct(int productGroupId);
     
 	// 그룹별 상품 조회하기
-	List<Product> selectProductsByGroupId(int productGroupId);
+	List<ProductCheck> selectProductsByGroupId(int productGroupId);
     
 	// 해당 상품 불러오기
 	Product selectProductId(int productId);
@@ -30,7 +30,9 @@ public interface IAdminService {
 	// 해당 상품 삭제하기
 	void deleteProduct(int productId);
 	
+	//기존 상품 등록하기
+//	void registerExistingProducts(ProductCheck product, List<MultipartFile> files);
 	
-	void registerExistingProducts(ProductCheck product, List<MultipartFile> files);
-	
+	//기존 상품 등록하기
+	void registerExistingProducts(ProductCheck product);
 }

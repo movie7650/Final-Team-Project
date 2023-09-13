@@ -120,7 +120,7 @@ public class AdminController {
 	// 그룹별 상품 조회하기
 	@GetMapping("/search/{productGroupId}")
 	@ResponseBody
-	public List<Product> product (@PathVariable int productGroupId, Model model) {
+	public List<ProductCheck> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
 	
@@ -158,7 +158,6 @@ public class AdminController {
 		return "admin/product/message";
 	}
 	
-	
 	//카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {
@@ -169,9 +168,18 @@ public class AdminController {
 	}
 	
 	//기존 상품 등록하기
+//	@PostMapping("/product")
+//	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+//		adminService.registerExistingProducts(product, files);
+//		model.addAttribute("message","상품이 등록되었습니다.");
+//		model.addAttribute("searchUrl","/admin/product");
+//		return "admin/product/message";
+//	}
+	
+	//기존 상품 등록하기
 	@PostMapping("/product")
-	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-		adminService.registerExistingProducts(product, files);
+	public String registerExistingProducts(ProductCheck product, Model model) {
+		adminService.registerExistingProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";

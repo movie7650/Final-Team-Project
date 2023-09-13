@@ -191,18 +191,21 @@
 	기능: 그룹별 상품 조회하기
 	담당자: 이세인
 -->
-<select id="selectProductsByGroupId" resultType="com.example.daitso.product.model.Product">
-    SELECT product_id            AS "productId",
-	       product_group_id      AS "productGroupId",
-	       product_code          AS "productCode",
-           product_nm            AS "productNm",
-	       product_option_first  AS "productOptionFirst",		       
-	       product_option_second AS "productOptionSecond",
-	       product_option_third  AS "productOptionThird",
-	       product_price         AS "productPrice",
- 	       product_stock         AS "productStock"
-	 FROM  product
-    WHERE product_group_id = #{productGroupId}
+<select id="selectProductsByGroupId" resultType="com.example.daitso.product.model.ProductCheck">
+    SELECT p.product_id            AS "productId",
+           c.category_nm           AS "categoryNm",
+	       p.product_group_id      AS "productGroupId",
+	       p.product_code          AS "productCode",
+           p.product_nm            AS "productNm",
+	       p.product_option_first  AS "productOptionFirst",		       
+	       p.product_option_second AS "productOptionSecond",
+	       p.product_option_third  AS "productOptionThird",
+	       p.product_price         AS "productPrice",
+ 	       p.product_stock         AS "productStock"
+	FROM product p 
+	JOIN category c 
+	  ON p.category_id = c.category_id
+    WHERE p.product_group_id = #{productGroupId}
 </select>
 
 
@@ -251,11 +254,9 @@
 </delete>
 
 
-
-
 <!-- 기존 상품 등록 -->
 <insert id="registerExistingProducts" parameterType="com.example.daitso.product.model.ProductCheck">
-<![CDATA[
+<!-- <![CDATA[
     INSERT INTO product ( product_group_id,
     					  product_id, 
 						  category_id, 
@@ -269,20 +270,42 @@
 						  product_option_first, 
 						  product_option_second, 
 						  product_option_third )
-    VALUES ( #{productGroupId},
-    		 product_seq.NEXTVAL, 
-			 #{SecondCategoryId}, 
-			 #{productNm}, 
-			 #{productContent},
-			 #{productImageFirst},
-			 #{productImageSecond},
-			 #{productImageThird},
-			 #{productPrice}, 
-			 #{productStock}, 
-			 #{productOptionFirst}, 
-			 #{productOptionSecond}, 
-			 #{productOptionThird} )
-]]>
+	    VALUES ( #{productGroupId},
+	    		 product_seq.NEXTVAL, 
+				 #{categoryId}, 
+				 #{productNm}, 
+				 #{productContent},
+				 #{productImageFirst},
+				 #{productImageSecond},
+				 #{productImageThird},
+				 #{registerProductPrice}, 
+				 #{productStock}, 
+				 #{productOptionFirst}, 
+				 #{productOptionSecond}, 
+				 #{productOptionThird} )
+]]> -->
+ INSERT INTO product ( 	  product_group_id,
+    					  product_id, 
+						  category_id, 
+						  product_nm, 
+						  product_content,
+						  product_image_first,
+						  product_price, 
+						  product_stock, 
+						  product_option_first, 
+						  product_option_second, 
+						  product_option_third )
+	    VALUES ( #{productGroupId},
+	    		 product_seq.NEXTVAL, 
+				 #{categoryId}, 
+				 #{productNm}, 
+				 #{productContent},
+				 #{productImageFirst},
+				 #{productPrice}, 
+				 #{productStock}, 
+				 #{productOptionFirst}, 
+				 #{productOptionSecond}, 
+				 #{productOptionThird} )
 </insert>
 
 
