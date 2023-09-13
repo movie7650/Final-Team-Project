@@ -2,47 +2,8 @@
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <link rel="stylesheet" th:href="@{/css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<link rel="stylesheet" th:href="@{/css/category-update.css}">
 
-<style>
-.my-handle {
-    cursor: move;
-    cursor: -webkit-grabbing;
-}
-.menu-box {
-  border: 1px solid #a1a1a1;
-  padding: 10px;
-}
-.menu-box ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.menu-box ul.menu-list li {
-  display: block;
-  /* border: 1px solid rgb(128, 0, 255); */
-  background: #fff;
-}
-.menu-box ul.menu-list > li a {
-  background: #fff;
-  display: block;
-  font-size: 14px;
-  color: black;
-}
-.menu-box ul.menu-list > li a:hover {
-  cursor: move;
-}
-.menu-box ul.menu-list ul {
-  margin-left: 20px;
-  margin-top: 5px;
-}
-.menu-box ul.menu-list ul li a {
-	color: gray;
-}
-.menu-box li.menu-highlight {
-  border: 1px dashed black !important;
-  background: #f5f5f5;
-}
-</style>
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
@@ -59,14 +20,27 @@
       		<ul class="menu-list sortable ul0"  value="root" style="width:100%"></ul>	
    		</div>	
 	</div>
-    <!-- <button style="width:100px; height:100px" onclick="test()">발 사~~~~~</button> -->
 	</div>
 	</div>
+	<div class="check-modal">
+			<div class="check-modal-frame d-flex flex-column justify-content-center align-items-center">
+				<div>
+					<p style="margin:0 10px 10px 10px" class="modal-text"></p>
+				</div>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width:100px; height:30px; background-color:#39594e; color:white; margin-right: 5px; cursor: pointer" onclick="updateCategory()">변경</div>
+					<div style="width:100px; height:30px; border:1px solid; cursor: pointer" onclick="reload()">취소</div>		
+				</div>
+			</div>
+		</div>
+
 	<div th:replace="~{/include/footer :: footer}"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://ilikenwf.github.io/jquery.mjs.nestedSortable.js"></script>
 	<script th:inline="javascript">
+	
+	const checkModal = document.querySelector('.check-modal');
 	const sortableBox = document.querySelector('.sortable');
 	var el = '';
 	/*<![CDATA[*/
@@ -74,7 +48,7 @@
 	/*]]>*/
 	
 	
-	function test(){
+	function updateCategory(){
 		var child = '';
 		var parent = '';
 		if(el.parentElement.className == ''){
@@ -86,15 +60,12 @@
 			console.log(el.parentElement);	
 			console.log(el.parentElement);	
 			if(el.parentElement.className.substring(0,4) == "menu"){
-				console.log("왜 일로오는데")
 				parent = 0;		
 			}
 			else{
 				parent = el.parentElement.className.substring(2);
 			}
 		}
-		console.log(child);
-		console.log(parent);
 	  	let tag = document.createElement('form');
 		
 		let pEle = document.createElement('input');
@@ -117,7 +88,7 @@
 	
 	categoryList.map((data,idx) => {
 		if(data.lv == 1){
-			const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f">└${data.categoryNm}</a></li>`
+			const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f"><img style="width:50px; height:35px" src="/assets/common/folder-open-solid.svg">${data.categoryNm}</a></li>`
 			sortableBox.innerHTML += elements;
 		}
 		else{
@@ -136,10 +107,11 @@
 	
 	
 	function drag(event){
-		console.log(event);
+		const text = event.target.textContent;
 		const cName = event.target.parentElement.className.split(' ');
 		const data = document.querySelector(`.${cName[0]}`);
 		el = data;
+		text.charAt(0) == '└' ? openModal(text.substring(1)) : openModal(text);
 	}
 	
 	
@@ -154,7 +126,22 @@
 			opacity: .6,
 		});
 	}); 
-
+	
+	//팝업창 열기
+	function openModal(text){
+		const modalText = document.querySelector('.modal-text');
+		modalText.textContent = text + " 카테고리 위치를 수정하시겠습니까?";
+		//offsetHeight=> 모달창 뒤 흑백 배경 크기를 맞추기 위해 html태그가 가지고 있는 offsetHeight를 가져온 후 modal의 height속성에 삽입
+		var offsetHeight = document.querySelector('html').offsetHeight;
+		checkModal.style.height = offsetHeight;
+		//show 클래스 toggle(여기서는 modal 클래스에 show가 없으니 추가됨)
+		checkModal.classList.toggle('show');
+	}
+	
+	//화면 리로딩
+	function reload(){
+		window.location.href = '/admin/category/update';
+	}
 
 </script>
 </body>
