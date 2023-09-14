@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<body>
+	<div style="position: relative;">
+		<div style="position: absolute;">
+			<div class="ship-title">배송지 수정</div>
+			<div style="padding: 35px;">
+				<form th:action="@{/shipping/{customerId}/update/{shippingId}(shippingId = ${shippingId}, customerId = ${customerId})}" th:object="${shippingAdd}" th:method="post">
+					<div style="display: flex; width: 100%; height: 55px;">
+						<div style="width:10%; text-align: center; line-height: 50px; background-color: #FAFAFA; border: 1px solid #CECECE;">
+							<img 
+								th:src="@{/assets/loginandsignup/customer_gray.svg}"
+								style="width: 30px; height: 30px;">
+						</div>
+						<div style="width:90%;">
+							<input 
+									id="ship-receiver"
+									name="shippingReceiverNm"
+									onkeyup="checkShippingReceiver(this)"
+									th:value="${shipping.shippingReceiverNm}"
+									type="text" style="padding: 0 10px 0 10px; width: 100%; height: 55px; outline: none; border: 1px solid #CECECE;" placeholder="받는 사람">
+						</div>
+					</div>
+					<div id="ship-error-receiver" class="ship-error">받는 사람을 입력해주세요.</div>
+					<div style="display: flex; width: 100%; margin-top: 10px;">
+						<div style="width:10%; text-align: center; background-color: #FAFAFA; border: 1px solid #CECECE; display: flex; align-items: center; justify-content: center;">
+							<img 
+								th:src="@{/assets/loginandsignup/location.svg}"
+								style="width: 30px; height: 30px;">
+						</div>
+						<div id="ship-addr" style="width:90%;">
+							<div style="padding: 0 10px 0 10px; height: 55px; line-height:55px; width: 100%; border: 1px solid #CECECE; cursor: pointer; color: #256B04; font-weight: 500; display: flex; justify-content: space-between;">
+								<div id="ship-find-addr" th:text="${shipping.shippingRoadNmAddr}" style="color: black; font-weight: 400;">우편번호 찾기</div>
+								<input id="ship-find-addr-input" name="shippingRoadNmAddr" type="hidden" th:value="${shipping.shippingRoadNmAddr}">
+								<div id="ship-find-addr-btn"><img th:src="@{/assets/header/search.svg}" style="width:20px; height: 20px;"></div>
+							</div>
+							<div id="ship-detail-addr-box">
+								<input 
+									   th:value="${shipping.shippingDaddr}"
+									   id="ship-detail-addr-input"
+									   name="shippingDaddr"
+									   type="text" 
+									   style="padding: 0 10px 0 10px; height: 55px; line-height:55px; width: 100%; border-top:none; border-left: 1px solid #CECECE; border-right: 1px solid #CECECE; border-bottom: 1px solid #CECECE; outline: none;" 
+									   placeholder="상세주소 입력">
+							</div>				
+						</div>
+					</div>
+					<div id="ship-error-addr" class="ship-error">상세주소를 입력해주세요.</div>
+					<div style="display: flex; width: 100%; height: 55px; margin-top: 10px;">
+						<div style="width:10%; text-align: center; line-height: 50px; background-color: #FAFAFA; border: 1px solid #CECECE;">
+							<img 
+								th:src="@{/assets/loginandsignup/phone.svg}"
+								style="width: 30px; height: 30px;">
+						</div>
+						<div style="width:90%;">
+							<input 
+								   th:value="${shipping.shippingReceiverTelno}"
+								   id="ship-telno" 
+								   name="shippingReceiverTelno"
+								   onkeyup="checkShippingTelno(this)"
+								   type="text" style="padding: 0 10px 0 10px; width: 100%; height: 55px; outline: none; border: 1px solid #CECECE;" placeholder="휴대폰 번호 (010-xxxx-xxxx)">
+						</div>
+					</div>
+					<div id="ship-error-telno" class="ship-error"></div>
+					<div style="display: flex; width: 100%; height: 55px; margin-top: 10px;">
+						<div style="width:10%; text-align: center; line-height: 50px; background-color: #FAFAFA; border: 1px solid #CECECE;">
+							<img 
+								th:src="@{/assets/loginandsignup/message.svg}"
+								style="width: 30px; height: 30px;">
+						</div>
+						<div style="width:90%;">
+							<div style="padding: 0 10px 0 10px; width: 100%; height: 55px; line-height:55px; outline: none; border: 1px solid #CECECE; cursor:pointer; display: flex; justify-content: space-between; color:#256B04; font-weight: 500;">
+								<div id="ship-demand-text" th:text="${shipping.shippingDmnd}" style="color: black; font-weight: 400;">배송 요청사항</div>
+								<input id="ship-demand-input-value" name="shippingDmnd" type="hidden" th:value="${shipping.shippingDmnd}">
+								<div onclick="shipDemand()">
+									<img th:src="@{/assets/common/right_arrow_green.svg}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="display: flex; width: 100%; height: 40px; margin-top: 10px; align-items: center;">
+						<input th:if="${shipping.shippingDv} != '기본배송지'" id="ship-normal" name="shippingDv" onchange="chooseNormal(this)" type="checkbox" style="width: 15px; height: 15px; line-height: 40px; margin-top: 3px;" value="302">
+						<input th:unless="${shipping.shippingDv} != '기본배송지'" id="ship-normal" name="shippingDv" onchange="chooseNormal(this)" type="checkbox" style="width: 15px; height: 15px; line-height: 40px; margin-top: 3px;" value="301">
+						<div style="margin-left: 5px;">기본배송지로 선택</div>
+					</div>
+					<div class="ship-add-btn">
+						<button type="submit" style="width: 100%; height: 100%; border:none; background-color: #39594E; color:white; font-weight: 600; outline: none;">저장</button>
+					</div>
+				</form>
+				<form th:action="@{/shipping/{customerId}/delete/{shippingId}(shippingId = ${shippingId}, customerId = ${customerId})}" th:method="post" >
+					<div class="ship-delete-btn">
+						<button type="submit" style="width: 100%; height: 100%; border:none; color:red; font-weight: 600; outline: none; background-color: white;">삭제</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="ship-demand" style="position: absolute; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center;" >
+			<div style="width:75%; height: 85%; background: white;">
+				<div class="ship-demand-title">배송 요청사항</div>
+				<div style="padding: 20px;">
+					<div class="ship-demand-box">
+						<input type="radio" name="demand" value="문 앞" class="ship-demand-input">
+						<div>문 앞</div>
+					</div>
+					<div class="ship-demand-box">
+						<input type="radio" name="demand" value="직접 받고 부재 시 문 앞" class="ship-demand-input">
+						<div>직접 받고 부재 시 문 앞</div>
+					</div>
+					<div class="ship-demand-box">
+						<input type="radio" name="demand" value="경비실" class="ship-demand-input">
+						<div>경비실</div>
+					</div>
+					<div class="ship-demand-box">
+						<input type="radio" name="demand" value="택배함" class="ship-demand-input">
+						<div>택배함</div>
+					</div>
+					<div class="ship-demand-box">
+						<input type="radio" name="demand" value="기타사항" class="ship-demand-input">
+						<div>기타사항</div>
+					</div>
+					<div id="ship-demand-etc">
+						<input type="text" placeholder="장소만 입력(필수)" onkeyup="demandText(this)" id="ship-demand-etc-input">
+					</div>
+					<div id="ship-demand-error" style="display:none; color:red; font-size: 15px; font-weight: 500; margin: 5px 0 0 15px;">내용을 입력해주세요.</div>
+				</div>
+				<div class="ship-demand-btn">
+					<div onclick="demandFinish()">동의하고 저장하기</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" th:inline="javascript">
+	
+	// 기본배송지 상태확인 -> 기본배송지이면 체크, 아니면 체크X
+	const shipNormal = [[${shipping.shippingDv}]];
+	const shipNormalInput = document.getElementById("ship-normal");
+	if(shipNormal == '기본배송지'){
+		shipNormalInput.checked = true;
+	}
+	
+	const shipErrorAddr = document.getElementById("ship-error-addr");
+	const shipAddr =  document.getElementById("ship-addr");
+	const shipFindAddrBtn = document.getElementById("ship-find-addr-btn");
+	const shipDetailAddrBox = document.getElementById("ship-detail-addr-box");
+	const shipDetailAddr = document.getElementById("ship-find-addr");
+	const shipDemandEtc = document.getElementById("ship-demand-etc");
+	const shipDemandError = document.getElementById("ship-demand-error");
+	const shipDemandText = document.getElementById("ship-demand-text");
+	const shipDemandInputValue = document.getElementById("ship-demand-input-value");
+	
+	// 배송지 api
+	shipFindAddrBtn.addEventListener('click', () => {
+		new daum.Postcode({
+	        oncomplete: function(data) {
+	        	shipDetailAddrBox.style.display = 'block';
+	           if(data.userSelectedType == 'J'){
+	        	   shipDetailAddr.innerText = data.jibunAddress + ' [' + data.zonecode + '] ';
+	        	   shipDetailAddr.style.color = 'black';
+	        	   shipDetailAddr.style.fontWeight = '400';
+	        	   document.getElementById("ship-find-addr-input").value = data.jibunAddress;
+	           } else {
+	        	   shipDetailAddr.innerText = data.roadAddress + ' [' + data.zonecode + '] ';
+	        	   shipDetailAddr.style.color = 'black';
+	        	   shipDetailAddr.style.fontWeight = '400';
+	        	   document.getElementById("ship-find-addr-input").value = data.roadAddress;
+	           }
+	           
+	           shipAddr.style.border = 'none';
+	           shipErrorAddr.style.display = 'none';
+	        }
+	    }).open();
+	})
+	
+	
+	// 배송 요구사항 이벤트 처리
+	function shipDemand() {
+		document.getElementById("ship-demand").style.display='flex';	
+	}
+	
+	var radioStatusList = {};
+	
+	document.querySelectorAll(".ship-demand-input").forEach((item) => {
+		radioStatusList[item.value] = false;
+		item.addEventListener('input', toggleRadio);
+	})
+	
+	function toggleRadio(e) {
+		const { checked , value } = e.target;
+		radioStatusList[value] = true;
+		
+		for(key in radioStatusList){
+			if(key != value){
+				radioStatusList[key] = false;
+			}
+		}
+		
+		if(radioStatusList['기타사항']){
+			shipDemandEtc.style.visibility = 'visible';
+		} else {
+			shipDemandEtc.style.visibility = 'hidden';
+			shipDemandEtc.style.border = 'none';
+			shipDemandError.style.display = 'none';
+		}
+	}
+	
+	function demandFinish() {
+		var falseCount = 0;
+		var demandValue = "";
+		
+		for(key in radioStatusList) {
+			if(radioStatusList[key] == false){
+				falseCount += 1;
+			} else {
+				demandValue = key;
+			}
+		}
+		
+		if(falseCount == Object.keys(radioStatusList).length){
+			alert("배송 요청사항을 선택해주세요.");
+		} else {			
+			if(demandValue == '기타사항') {
+				var inputValue = document.getElementById("ship-demand-etc-input").value;
+				if(!inputValue) {
+					alert("필수 사항을 입력해주세요.");
+					shipDemandEtc.style.border = '1px solid red';
+					shipDemandError.style.display = 'block';
+				} else {
+					shipDemandText.innerText = inputValue;
+					shipDemandInputValue .value = inputValue;
+					document.getElementById("ship-demand").style.display='none';
+					shipDemandText.style.color = 'black';
+					shipDemandText.style.fontWeight = '500';
+				}
+			} else {
+				shipDemandText.innerText = demandValue;
+				shipDemandInputValue .value = demandValue;
+				document.getElementById("ship-demand").style.display='none';
+				shipDemandText.style.color = 'black';
+				shipDemandText.style.fontWeight = '500';
+			}
+		}
+	}
+	
+	function demandText(item) {
+		if(!item.value) {
+			shipDemandEtc.style.border = '1px solid red';
+			shipDemandError.style.display = 'block';
+		} else {
+			shipDemandEtc.style.border = '1px solid #CECECE';
+			shipDemandError.style.display = 'none';
+		}
+	}
+	
+	// 저장 클릭 시 이벤트 처리
+	function addShipping() {		
+		if(!document.getElementById("ship-receiver").value) {
+			event.preventDefault();
+			document.getElementById("ship-receiver").style.border = '1px solid red';
+			document.getElementById("ship-error-receiver").style.display = 'block';
+		} else if(!document.getElementById("ship-find-addr-input").value){
+			event.preventDefault();
+			document.getElementById("ship-error-addr").style.display = 'block';
+			document.getElementById("ship-addr").style.border = '1px solid red';
+		} else if(!document.getElementById("ship-telno").value){
+			event.preventDefault();
+			document.getElementById("ship-telno").style.border = '1px solid red';
+			document.getElementById("ship-error-telno").style.display = 'block';
+			document.getElementById("ship-error-telno").innerText='휴대폰 번호를 입력해주세요.'
+		} else if(!document.getElementById("ship-detail-addr-input").value) {
+			if(!confirm("상세주소를 입력하지 않으셨습니다. 이대로 저장하시겠습니끼?")) {
+				event.preventDefault();
+			} 
+		}
+	}
+	
+	// 값 입력받을 경우 이벤트 처리
+	function checkShippingReceiver(item) {
+		if(!item.value) {
+			document.getElementById("ship-receiver").style.border = '1px solid red';
+			document.getElementById("ship-error-receiver").style.display = 'block';
+		} else {
+			document.getElementById("ship-receiver").style.border = '1px solid #CECECE';
+			document.getElementById("ship-error-receiver").style.display = 'none';
+		}
+	}
+	
+	function checkShippingTelno(item) {
+		var patternPhone = /^01([0|1|6|7|8|9])-[0-9]{3,4}-[0-9]{4}$/;
+		if(!item.value) {
+			document.getElementById("ship-telno").style.border = '1px solid red';
+			document.getElementById("ship-error-telno").style.display = 'block';
+			document.getElementById("ship-error-telno").innerText='휴대폰 번호를 입력해주세요.'
+		} else {
+			if(patternPhone.test(item.value)){
+				document.getElementById("ship-telno").style.border = '1px solid #CECECE';
+				document.getElementById("ship-error-telno").style.display = 'none';
+			} else {
+				document.getElementById("ship-error-telno").innerText='형식에 맞는 휴대폰 번호를 입력하세요.';
+				document.getElementById("ship-telno").style.border = '1px solid red';
+				document.getElementById("ship-error-telno").style.display = 'block';
+			}
+		}
+	}
+	
+	// 기본 배송지 체크 이벤트
+	function chooseNormal(item) {
+		if(item.checked){
+			document.getElementById("ship-normal").value = '301';	
+		} else {
+			document.getElementById("ship-normal").value = '302';	
+		}
+	}
+	
+</script>
+</html>

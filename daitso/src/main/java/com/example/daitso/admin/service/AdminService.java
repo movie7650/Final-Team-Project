@@ -47,9 +47,10 @@ public class AdminService implements IAdminService{
 //	}
 	
 	//기존 상품 등록하기
-	@Override
+	@Transactional
 	public void registerExistingProducts(ProductCheck product) {
 		productRepository.registerExistingProducts(product);
+//		productRepository.makeProductCode();
 		
 	}
 	// 카테고리별 상품 조회하기

@@ -35,4 +35,5 @@ public interface IAdminService {
 	
 	//기존 상품 등록하기
 	void registerExistingProducts(ProductCheck product);
+
 }

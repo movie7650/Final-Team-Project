@@ -70,4 +70,26 @@
 		 WHERE customer_id = #{customerId}
 		   AND status = 'Y'
     </select>
+    
+    <!-- 
+    	기능: 사용자 고유번호로부터 사용자 정보(이름,이메일,휴대폰번호) 갖고오기 
+    	담당자: 최준원
+    -->
+    <select id="getCustomerInfoByCustomerId" parameterType="int" resultType="com.example.daitso.customer.model.CustomerInfo">
+		SELECT customer_nm as "customerNm",
+			   customer_email as "customerEmail",
+		       customer_telno as "customerTelno",
+		       (  SELECT shipping_id 
+		       	    FROM shipping 
+		       	   WHERE customer_id = #{customerId} 
+		       	     AND shipping_dv = 301 
+		       	     AND status = 'Y'  ) AS "shippingId",
+		       	(  SELECT MAX(shipping_id) 
+		       	    FROM shipping 
+		       	   WHERE customer_id = #{customerId} 
+		       	     AND shipping_dv != 301 
+		       	     AND status = 'Y'  ) AS "recentShippingId"
+		  FROM customer
+		 WHERE customer_id = #{customerId}
+    </select>
 </mapper>
