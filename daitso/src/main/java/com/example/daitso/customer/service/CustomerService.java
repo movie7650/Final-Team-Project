@@ -54,5 +54,11 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public CustomerInfo getCustomerInfoByCustomerId(int customerId) {
 		return customerRepository.getCustomerInfoByCustomerId(customerId);
+	}
+	
+	//사용자 이메일 가져오기 
+	@Override
+	public String selectCustomerEmail() {
+		return customerRepository.selectCustomerEmail();
 	}	
 }

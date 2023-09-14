@@ -1,18 +1,21 @@
 @charset "UTF-8";
-
+.update-customer-main{
+	display: flex;
+	justify-content: center;
+}
 .update-customer-title{
+	position:absolute;
 	padding-bottom:0.5%;
 	font-size:150%;
-	position:absolute;
-	margin-top:-38%;
-	margin-left:30%;
+	margin-left:165px;
+	margin-top:-660px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 .update-table-container-01{
 	position:absolute;
-	margin-top:-33%;
-	margin-left:30%;
+	margin-top:-600px;
+	margin-left:165px;
 }
 .update-table-container-01 tr{
 	border:solid 1px #e7e7e7;

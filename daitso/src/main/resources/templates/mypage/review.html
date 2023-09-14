@@ -5,7 +5,10 @@
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 	<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+	
+<div class="review-main">
 	<div class="title-review">리뷰관리</div>
+	
 	<div class="rivew-menu-container">
 		<div class="review-menu">리뷰작성</div>
 		<div class="review-menu">작성한리뷰</div>
@@ -29,14 +32,13 @@
 		<input id="review-photo-button" name="review-photo-button" type="file">
 	</div><!-- review-photo-container -->
 	
-	<div class="button-container">
+	
 		<div class="button-container-01">
 			<button class="save-button" type="submit">저장하기</button>
 			<button class="cancle-button" type="reset">취소하기</button>
 		</div><!--button-container-01  -->
-	</div><!-- button-container -->
-
-
+</div><!-- review-main -->
+<div class="empty"></div>
 
 	<div th:replace="~{/include/footer :: footer}"></div>
 </body>

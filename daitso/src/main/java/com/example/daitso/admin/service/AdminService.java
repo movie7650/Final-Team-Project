@@ -25,62 +25,75 @@ public class AdminService implements IAdminService{
 	@Autowired
 	S3Service s3Service;
 	
+	//기존 상품 등록하기
+//	@Transactional
+//	public void registerExistingProducts(ProductCheck product, List<MultipartFile> files) {
+//		List<String> imagePathList = s3Service.upload(files);
+//		product.setProductImageFirst(imagePathList.get(0));
+//		product.setProductImageSecond(imagePathList.get(1));
+//		product.setProductImageThird(imagePathList.get(2));
+//		
+//		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+//		try {
+//			productRepository.registerExistingProducts(product);
+//			product.getProductId();
+//			productRepository.changeProductCode();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			imagePathList.forEach((url) -> {
+//				s3Service.deleteImage(url);	
+//			});
+//		}
+//	}
+	
+	//기존 상품 등록하기
 	@Transactional
-	public void registerExistingProducts(ProductCheck product, List<MultipartFile> files) {
-		List<String> imagePathList = s3Service.upload(files);
-		product.setProductImageFirst(imagePathList.get(0));
-		product.setProductImageSecond(imagePathList.get(1));
-		product.setProductImageThird(imagePathList.get(2));
+	public void registerExistingProducts(ProductCheck product) {
+		productRepository.registerExistingProducts(product);
+//		productRepository.makeProductCode();
 		
-		// 상품 등록 실패시 s3에 등록된 이미지 삭제
-		try {
-			productRepository.registerExistingProducts(product);
-			product.getProductId();
-			productRepository.changeProductCode();
-		} catch(Exception e) {
-			e.printStackTrace();
-			imagePathList.forEach((url) -> {
-				s3Service.deleteImage(url);	
-			});
-		}
 	}
-	
-	
-	
+	// 카테고리별 상품 조회하기
 	@Override
 	public List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize) {
 		return productRepository.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
 	}
 
+	// 카테고리별 상품 개수 조회하기
 	@Override
 	public int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId) {
 		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
 	}
-
+	
+	// 그룹 상품 삭제하기
 	@Override
 	public void deleteGroupProduct(int productGroupId) {
 		productRepository.deleteGroupProduct(productGroupId);
 	}
 	
+	// 그룹별 상품 조회하기
 	@Override
-	public List<Product> selectProductsByGroupId(int productGroupId) {
+	public List<ProductCheck> selectProductsByGroupId(int productGroupId) {
 		return productRepository.selectProductsByGroupId(productGroupId);
 	}
-	
-	
-	
-	
 
+	// 해당 상품 불러오기
 	@Override
-	public void updateProduct(ProductCheck product) {
+	public Product selectProductId(int productId) {
+		return productRepository.selectProductId(productId);
+	}
+	
+	// 해당 상품 수정하기
+	@Override
+	public void updateProduct(Product product) {
 		productRepository.updateProduct(product);
 	}
 
+	// 해당 상품 삭제하기
 	@Override
-	public ProductCheck selectProductId(int productId) {
-		return productRepository.selectProductId(productId);
+	public void deleteProduct(int productId) {
+		productRepository.deleteProduct(productId);
+		
 	}
-
-
 
 }

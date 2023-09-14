@@ -5,9 +5,11 @@
 <body>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+<div class="mypoint-main">
 <div class="point-title">내 포인트</div>
 <div class="point-semi-title">현재포인트</div>
-<div class="my-own-point" th:text="${totalPoint}">0000P</div>
+<div class="my-own-point" name="totalPoint" th:text="${totalPoint}">0000P</div>
 
 <div class="point-rule-container">
 	<ul>
@@ -37,7 +39,7 @@
 	</table>
 </div><!-- point-table-container -->
 
-
+</div><!-- mypoint-main -->
 
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>

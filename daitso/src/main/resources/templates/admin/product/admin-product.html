@@ -8,54 +8,64 @@
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 
 	<!-- 오른쪽 컨텐츠 -->
-	<div id="productTable" style="padding-left: 50px; width: -webkit-fill-available;">
+	<div id="productTable">
 		<hr class="my-3">
 		<div class="row" style="padding-bottom: 10px;">
-				 <div class="col" style="z-index: 1; display: flex; justify-content: space-between;">
-				 			
-						<div class="col-sm-5" style="display: inline-flex; align-items: flex-end; padding-left: 0px;">
-							<!-- 첫 번째 카테고리 선택 -->
-							<div class="col-sm-3" style="padding-left: 0px; padding-right: 0px;">
-								<label for="firstCategory"></label> <select id="firstCategory" onchange="getSecondCategories(this.value)" style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
-								<option value="">전체</option>
-                                <option th:each="category : ${firstCategories}"
-                                        th:value="${category.categoryId}" th:text="${category.categoryNm}"th:selected="${category.categoryId == selectedFirstCategoryId}"></option>
-								</select>
-							</div>                       
-							<!-- 두 번째 카테고리 선택 -->
-							<div class="col-sm-5">
-								<label for="secondCategory"></label> 
-								<select id="secondCategory" name="secondCategory" onchange="getThirdCategories(this.value)" style="border-radius: 8px; padding-left: 5px; padding-right: 5px; width: 167px;">
-								    <option value="">전체</option>
-								   <!-- <input type="hidden" id="selectedSecondCategoryId" th:value="${selectedSecondCategoryId}"/> -->
-								</select>
-							</div>
-							<!-- 세 번째 카테고리 선택 -->
-							 <div class="col-sm-5" style="text-align:center; padding-left: 0px;">
-								<label for="thirdCategory"></label> 
-								<select id="thirdCategory" name="thirdCategory" style="border-radius: 8px; padding-left: 10px; padding-right: 5px;">
-								    <option value="">전체</option>
- 								    <input type="hidden" id="selectedThirdCategoryId" th:value="${selectedThirdCategoryId}"/>
-								</select>
-							</div>
-						</div>				
-
-						<div class="col-sm-3" style="display: inline-flex;align-items: flex-end;padding-left: 0px;justify-content: flex-end;">
-							<!-- "조회" 버튼 -->
-							<div class="col-sm-5" style="text-align: end;padding-right: 0px;">
-									<button class="btn btn-primary" onclick = "searchByCategory()" style="background-color: #E8C369; border-color: #E8C369" type="submit">조회</button>
-							</div>		
-							<!-- "신규등록" 버튼 -->
-							<div class="col-sm-6" style="text-align: end;padding-left: 0px;">
-									<button class="btn btn-primary" style="background-color: #39594e" data-bs-toggle="modal" data-bs-target="#registerModal" type="button">신규등록</button>
-							</div>
-					  </div>
-					  
+			<div class="col"
+				style="z-index: 1; display: flex; justify-content: space-between;">
+				<div class="col-sm-5"
+					style="display: inline-flex; align-items: flex-end; padding-left: 0px;">
+					<!-- 첫 번째 카테고리 -->
+					<div class="col-sm-3"
+						style="padding-left: 0px; padding-right: 0px;">
+						<label for="firstCategory"></label> 
+						<select id="firstCategory" name="firstCategory" onchange="getSecondCategories(this.value, 'unsyn')"
+							style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
+							<option value="">전체</option>
+							<option th:each="category : ${firstCategories}"
+								th:value="${category.categoryId}"
+								th:text="${category.categoryNm}"
+								th:selected="${category.categoryId == selectedFirstCategoryId}"></option>
+						</select>
+					</div>
+					<!-- 두 번째 카테고리 -->
+					<div class="col-sm-5">
+						<label for="secondCategory"></label> 
+						<select id="secondCategory"	name="secondCategory" onchange="getThirdCategories('unsyn')"
+							style="border-radius: 8px; padding-left: 5px; padding-right: 5px; width: 167px;">
+							<option value="">전체</option>
+						</select>
+					</div>
+					<!-- 세 번째 카테고리 -->
+					<div class="col-sm-5"
+						style="text-align: center; padding-left: 0px;">
+						<label for="thirdCategory"></label> 
+						<select id="thirdCategory" name="thirdCategory"
+							style="border-radius: 8px; padding-left: 10px; padding-right: 5px;">
+							<option value="">전체</option>
+						</select>
+					</div>
 				</div>
+
+				<div class="col-sm-3"
+					style="display: inline-flex; align-items: flex-end; padding-left: 0px; justify-content: flex-end;">
+					<!-- "조회" 버튼 -->
+					<div class="col-sm-5" style="text-align: end; padding-right: 0px;">
+						<button class="btn btn-primary" onclick="searchByCategory()"
+							style="background-color: #E8C369; border-color: #E8C369" type="button">조회</button>
+					</div>
+					<!-- "신규등록" 버튼 -->
+					<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
+						<button class="btn btn-primary" style="background-color: #39594e"
+							data-bs-toggle="modal" data-bs-target="#registerNewModal" type="button">신규등록</button>
+					</div>
+				</div>
+
+			</div>
 		</div>
 
- 		<!-- 상품 조회하기 -->
-		<div style="height:690px;">
+		<!-- 카테고리별 상품 조회하기 -->
+		<div style="height: 690px;">
 			<table class="table" style="text-align: center;">
 				<thead>
 					<tr>
@@ -79,18 +89,15 @@
 									data-bs-toggle="modal" data-bs-target="#searchModal"
 									type="button"
 									th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">조회</button>
-									
 								<button class="btn btn-xs"
 									style="background-color: #39594e; color: #ffff"
-									data-bs-toggle="modal" data-bs-target="#registerModal"
+									data-bs-toggle="modal" data-bs-target="#registerExistingModal"
 									type="button"
-									th:onclick="setProductInfo([[${product.productId}]])">추가</button>
-
+									th:onclick="registerExisting([[${product.productGroupId}]], [[${product.categoryNm}]], [[${product.categoryId}]], [[${product.productNm}]])">추가</button>
 								<button class="btn btn-xs"
-									style="background-color: red; color: #fff" type="button"
+									style="background-color: red; color: #fff" 
+									type="button"
 									th:onclick="deleteGroupProduct([[${product.productGroupId}]])">삭제</button>
-									
-								
 							</div>
 						</td>
 					</tr>
@@ -101,28 +108,30 @@
 		<!-- 페이지 링크 표시 -->
 		<div th:if="${totalCount > 0}">
 			<ul class="pagination">
-				
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? disabled"><a
-					class="page-link"
-					th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId})}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
-
-				
-				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}"
-					class="page-item" th:classappend="${page == currentPage} ? active"><a
-					class="page-link"
-					th:href="@{/admin/product(page=${page}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId})}"
-					th:text="${page}"></a></li>
-
-				
-				<li class="page-item"
-					th:classappend="${currentPage * pageSize >= totalCount} ? disabled">
+				<!-- 이전 페이지 -->
+				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
+					<!-- 이전 페이지로 이동하는 링크 -->
 					<a class="page-link"
-					th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId})}"
+					th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId}, thirdCategoryId=${selectedThirdCategoryId})}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+
+				<!-- 페이지 번호 링크 -->
+				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}" class="page-item" th:classappend="${page == currentPage} ? active">
+					<a class="page-link"
+					th:href="@{/admin/product(page=${page}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId}, thirdCategoryId=${selectedThirdCategoryId})}"
+					th:text="${page}">
+					</a>
+				</li>
+
+				<!-- 다음 페이지 -->
+				<li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled"> <!-- 현재 페이지가 마지막 페이지면 비활성화 -->
+					<!-- 다음 페이지로 이동하는 링크 -->
+					<a class="page-link" 
+					th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId}, thirdCategoryId=${selectedThirdCategoryId})}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a>
+					</a>
 				</li>
 			</ul>
 		</div>
@@ -130,195 +139,332 @@
 
 	</div>
 
-		<!-- 상품 등록 모달 -->
-		<div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document" style="max-width: 800px;">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">상품 등록</h5>
-					</div>
-					<form th:action method="post" enctype="multipart/form-data">
-						<div class="modal-body">
-							<div class="row mb-3">
-								<label for="categoryId" class="col-sm-2 col-form-label">상위
-									카테고리</label>
-								<div class="col-sm-10">
-									<select id="categoryId" name="categoryId"
-										onchange="getSecondCategories(this.value)" required>
-										<option value="">전체</option>
-										<option th:each="category : ${firstCategories}"
-											th:value="${category.categoryId}"
-											th:text="${category.categoryNm}"></option>
-									</select>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label form="subCategoryId" class="col-sm-2 col-form-label">하위
-									카테고리</label>
-								<div class="col-sm-10">
-									<select id="secondCategory" name="secondCategory" onchange="updateSubcategoryProducts(this.value)" required>
-										<option value="">전체</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productNm" class="col-sm-2 col-form-label"
-									style="color: red">* 상품명</label>
-								<div class="col-sm-10">
-									<input type="text" maxlength="20" id="productNm"
-										name="productNm" placeholder="* 필수 입력 항목입니다." required>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productContent" class="col-sm-2 col-form-label">상품
-									상세내용</label>
-								<div class="col-sm-10">
-									<textarea id="productContent" name="productContent"
-										style="height: 200px; width: 510px"></textarea>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
-								<div class="col-sm-10">
-									<input type="text" id="productOptionFirst"
-										name="productOptionFirst">
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
-								<div class="col-sm-10">
-									<input type="text" id="productOptionSecond"
-										name="productOptionSecond">
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
-								<div class="col-sm-10">
-									<input type="text" id="productOptionThird"
-										name="productOptionThird">
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productPrice" class="col-sm-2 col-form-label"
-									style="color: red">* 가격</label>
-								<div class="col-sm-10">
-									<input type="text" maxlength="10" id="productPrice"
-										name="productPrice" onkeyup="inputNumberFormat(this);"
-										style="text-align: right;" required>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productStock" class="col-sm-2 col-form-label"
-									style="color: red">* 수량</label>
-								<div class="col-sm-10">
-									<input type="text" maxlength="8" id="productStock"
-										name="productStock" onkeyup="inputOnlyNumberFormat(this);"
-										placeholder="* 필수 입력 항목입니다." required>
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label for="productImages" class="col-sm-2 col-form-label">
-									상품 이미지(3개) </label>
-								<div class="col-sm-10">
-									<input type="file" id="files" name="files"
-										accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
-										multiple required>
-									<div id="files-error"
-										style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
-								</div>
-							</div>
-
-							<div class="modal-footer">
-								<button class="btn btn-primary"
-									style="background-color: #668663"
-									th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
-								<button class="btn btn-secondary"
-									th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
-							</div>
-
-						</div>
-					</form>
+	<!-- 기존 상품 등록 모달 -->
+	<div id="registerExistingModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">기존 상품 등록</h5>
 				</div>
+				<!-- <form th:action method="post" enctype="multipart/form-data">	 -->
+					<form th:action method="post">
+					<div class="modal-body">
+						<div class="row mb-3">
+							<label for="productGroupId" class="col-sm-2 col-form-label">그룹ID</label>
+							<div class="col-sm-10">
+							<input type="text" id="getProductGroupId" name="productGroupId" style="font-weight: bold; background-color: cornsilk;" readonly="readonly">
+							</div>
+						</div>
+					    <div class="row mb-3">
+							<label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
+							<div class="col-sm-10">
+							<input type="text" id="getCategoryNm" name="categoryNm" style="font-weight: bold; background-color: cornsilk;" readonly="readonly">
+							</div>
+						</div>
+						<input type="hidden" id="getCategoryId" name="categoryId">
+						<div class="row mb-3">
+							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
+							<div class="col-sm-10">
+							<input type="text" id="getProductNm" name="productNm" style="font-weight: bold; background-color: cornsilk;"readonly="readonly">
+							</div>
+						</div>			
+						
+						<div class="row mb-3">
+							<label for="productContent" class="col-sm-2 col-form-label" style="padding-bottom: 100px;">상세내용</label>
+							<div class="col-sm-10">
+								<textarea id="productContent" name="productContent"
+									style="height: 200px; width: 510px"></textarea>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
+							<div class="col-sm-10">
+								<input type="text" id="productOptionFirst" maxlength="10"
+									name="productOptionFirst">
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
+							<div class="col-sm-10">
+								<input type="text" id="productOptionSecond" maxlength="10"
+									name="productOptionSecond">
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
+							<div class="col-sm-10">
+								<input type="text" id="productOptionThird" maxlength="10"
+									name="productOptionThird">
+							</div>
+						</div>
+
+						<!-- <div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label"
+								style="color: red;">* 가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="10" id="registerProductPrice"
+									name="registerProductPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;  width: 33%;" 
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div> -->
+						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label"
+								style="color: red;">* 가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="8" id="productPrice"
+									name="productPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;  width: 33%;" 
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div>
+						
+						<div class="row mb-3">
+							<label for="productStock" class="col-sm-2 col-form-label"
+								style="color: red">* 수량</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="7" id="productStock"
+									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div>
+<!-- 						<div class="row mb-3">
+							<label for="productImages" class="col-sm-2 col-form-label">
+								상품 이미지(3개) </label>
+							<div class="col-sm-10">
+								<input type="file" id="files" name="files"
+									accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
+									multiple required>
+								<div id="files-error"
+									style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
+							</div>
+						</div> 
+-->
+						<div class="row mb-3">
+						<label for="productImageFirst" class="col-sm-2 col-form-label">상품 이미지</label>
+						<div class="col-sm-10">
+							<input type="file" id="productImageFirst"
+								name="productImageFirst" required>
+						</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								onclick="saveData()" type="submit">저장</button>
+							<button class="btn btn-secondary"
+								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+						</div>
+
+					</div>
+				</form>
 			</div>
 		</div>
-
-
-		<!-- 상품 수정 모달 -->
-		<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document" style="max-width: 800px;">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">상품 수정</h5>
-					</div>
-					<form th:action="@{/admin/update}" method="post">
-						<input type="hidden" id="updateProductId" name="productId">
-						<div class="modal-body">
-							<div class="row mb-3">
-								<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
-								<div class="col-sm-10">
-									<!-- <input type="text" id="updateProductNm" name="productNm" readonly="readonly"> -->
-									<span id="updateProductNm" th:text="${productNm}"
-										style="font-weight: bold;"></span>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productCode" class="col-sm-2 col-form-label">상품
-									코드</label>
-								<div class="col-sm-10">
-									<!-- <input type="number" id="updateProductCode" name="productCode" readonly="readonly"> -->
-									<span id="updateProductCode" th:text="${productCode}"
-										style="font-weight: bold;"></span>
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
-								<div class="col-sm-10">
-									<input type="number" id="updateProductPrice"
-										name="productPrice" required>
-								</div>
-							</div>
-
-							<div class="row mb-3">
-								<label for="productStock" class="col-sm-2 col-form-label">수량</label>
-								<div class="col-sm-10">
-									<input type="number" id="updateProductStock"
-										name="productStock" required>
-								</div>
-							</div>
-
-							<div class="modal-footer">
-								<button class="btn btn-primary"
-									style="background-color: #668663" type="submit">저장</button>
-								<button class="btn btn-secondary"
-									th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+	</div>
+	
+	<!-- 신규 상품 등록 모달 -->
+	<div id="newRegisterModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 900px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">신규 상품 등록</h5>
+				</div>
+				<form th:action method="post" enctype="multipart/form-data">
+					<div class="modal-body">
+						<div class="row mb-3">
+							<label for="categoryId" class="col-sm-2 col-form-label">첫 번째 카테고리</label>
+							<div class="col-sm-10">
+								<select id="categoryId" name="categoryId"
+									onchange="getSecondCategories(this.value, 'unsyn')" required>
+									<option value="">전체</option>
+									<option th:each="category : ${firstCategories}"
+										th:value="${category.categoryId}"
+										th:text="${category.categoryNm}"></option>
+								</select>
 							</div>
 						</div>
-					</form>
-				</div>
-			</div>	
-		</div>
-		
-		
-		<!-- 상품 조회 모달 -->
-		<div id="searchModal" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document" style="max-width: 1200px;">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">상품 조회</h5>
+
+						<div class="row mb-3">
+							<label for="secondCategory" class="col-sm-2 col-form-label">두 번째 카테고리</label>
+							<div class="col-sm-10">
+								<select id="secondCategory" name="secondCategory" required>
+									<option value="">전체</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productNm" class="col-sm-2 col-form-label"
+								style="color: red">* 상품명</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="20" id="productNm"
+									name="productNm" placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productContent" class="col-sm-2 col-form-label">상품
+								상세내용</label>
+							<div class="col-sm-10">
+								<textarea id="productContent" name="productContent"
+									style="height: 200px; width: 510px"></textarea>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
+							<div class="col-sm-10">
+								<input type="text" id="productOptionFirst"
+									name="productOptionFirst">
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
+							<div class="col-sm-10">
+								<input type="text" id="productOptionSecond"
+									name="productOptionSecond">
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
+							<div class="col-sm-10">
+								<input type="text" id="productOptionThird"
+									name="productOptionThird">
+							</div>
+						</div>
+
+<!-- 						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label"
+								style="color: red">* 가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="10" id="productPrice"
+									name="productPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;" required>
+							</div>
+						</div> -->
+
+						<div class="row mb-3">
+							<label for="productStock" class="col-sm-2 col-form-label"
+								style="color: red">* 수량</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="8" id="productStock"
+									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="productImages" class="col-sm-2 col-form-label">
+								상품 이미지(3개) </label>
+							<div class="col-sm-10">
+								<input type="file" id="files" name="files"
+									accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
+									multiple required>
+								<div id="files-error"
+									style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
+							<button class="btn btn-secondary"
+								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+						</div>
+
 					</div>
-					
-					<form th:action="@{/admin/search}" method="get">
-						<div class="modal-body">
-						
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 해당 상품 수정 모달 -->
+	<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 600px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">상품 수정</h5>
+				</div>
+				<form th:action="@{/admin/update}" method="post">
+					<input type="hidden" id="updateProductId" name="productId">
+					<div class="modal-body">
+						<div class="row mb-3">
+							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
+							<div class="col-sm-10">
+								<span id="updateProductNm" th:text="${productNm}"
+									style="font-weight: bold;"></span>
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="productCode" class="col-sm-2 col-form-label">상품 코드</label>
+							<div class="col-sm-10">
+								<span id="updateProductCode" th:text="${productCode}"
+									style="font-weight: bold;"></span>
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
+							<div class="col-sm-10">
+								<input type="text" id="updateProductOptionFirst"
+									name="productOptionFirst" >
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
+							<div class="col-sm-10">
+								<input type="text" id="updateProductOptionSecond"
+									name="productOptionSecond" >
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
+							<div class="col-sm-10">
+								<input type="text" id="updateProductOptionThird"
+									name="productOptionThird" >
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="8" id="updateProductPrice" 
+									name="productPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;" required>
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="productStock" class="col-sm-2 col-form-label">수량</label>
+							<div class="col-sm-10">
+								<input type="number" maxlength="7" oninput="maxLengthCheck(this)" id="updateProductStock" name="productStock"
+									required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								type="submit" onclick="submitForm()">저장</button>
+							<button class="btn btn-secondary"
+								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- 그룹별 상품 조회 모달 -->
+	<div id="searchModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 1200px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">그룹별 상품 조회</h5>
+				</div>
+
+				<form th:action="@{/admin/search}" method="get">
+					<div class="modal-body">
+
 						<table class="table">
 							<thead>
 								<tr>
@@ -333,145 +479,165 @@
 									<th></th>
 								</tr>
 							</thead>
-							 <tbody id="productTableBody">
+							<tbody id="productTableBody">
 							</tbody>
 						</table>
-						
-						</div>
-					</form>
-				</div>
-			</div>	
+
+					</div>
+				</form>
+				
+			</div>
 		</div>
-		
 	</div>
-	
+
+	</div>
+
 	<div th:replace="~{/include/footer :: footer}"></div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 	
+	// 리로드해도 선택한 값들 유지하려고 (조회 페이지에서 다시 순서대로 클릭 안해도 해당 값들이 나오고 새로고침해도 계속 유지됨)
 	document.addEventListener("DOMContentLoaded", function() {
-	    // 페이지 로드 시 선택된 값들을 가져와서 설정
-	    var selectedFirstCategoryId = $("#firstCategory").val();
+
+	    var selectedFirstCategoryId = $("#firstCategory").val();   
+		// HTML 문서 내에 있는 id가 "firstCategory"인 요소의 값을 가져와 selectedFirstCategoryId 변수에 저장
+		// 첫 번째 카테고리의 현재 선택 값을 저장
 	    var selectedSecondCategoryId = $("#secondCategory").val();
 	    var selectedThirdCategoryId = $("#thirdCategory").val();
 
-	    // 첫 번째 카테고리 변경 시 이벤트 처리
-	    $("#firstCategory").change(function() {
-	        selectedFirstCategoryId = $(this).val();
-	    });
-
-	    // 두 번째 카테고리 변경 시 이벤트 처리
-	    $("#secondCategory").change(function() {
-	        selectedSecondCategoryId = $(this).val();
-	    });
-	    
-	 	// 세 번째 카테고리 변경 시 이벤트 처리
-	    $("#thirdCategory").change(function() {
-	    	selectedThirdCategoryId = $(this).val();
-	    });
-		console.log(selectedThirdCategoryId);
-	    // 조회 버튼 클릭 시 이벤트 처리
-	    $("#searchForm").submit(function() {
-	        // 선택된 값들을 쿼리 매개변수로 추가하여 페이지 리로딩
-	        var newUrl = "/admin/product";
-	        if (selectedFirstCategoryId !== "") {
-	            newUrl += "?firstCategoryId=" + selectedFirstCategoryId;
-	            if (selectedSecondCategoryId !== "") {
-	                newUrl += "&secondCategoryId=" + selectedSecondCategoryId;
-	                if (selectedThirdCategoryId !== "") {
-		                newUrl += "&thirdCategory=" + selectedThirdCategoryId;
-		            }
-	            }
-	        }
-	        window.location.href = newUrl;
-	        return false;
-	    });
-
-	    // 페이지 로딩 시 선택된 값들을 설정
-	    $("#firstCategory").val(selectedFirstCategoryId);
-	    // 두 번째 카테고리 업데이트
-	    getSecondCategories(selectedFirstCategoryId);    
-	    // 두 번째 카테고리 선택
+	    $("#firstCategory").val(selectedFirstCategoryId); 
+	    // 첫 번째 카테고리(#firstCategory)의 선택 값을 이전에 저장한 selectedFirstCategoryId 값으로 설정
+	    // 이렇게 하면 페이지가 로드될 때 사용자가 이전에 선택한 첫 번째 카테고리가 선택된 상태로 표시된다.
+	    getSecondCategories(selectedFirstCategoryId, 'syn');
+	    // 선택한 첫 번째 카테고리(selectedFirstCategoryId)를 기반으로 두 번째 카테고리 값을 업데이트
+	    // 페이지가 로드될 때 두 번째 카테고리를 업데이트
 	    $("#secondCategory").val(selectedSecondCategoryId);
-	    // 세 번째 카테고리 업데이트
-	    getThirdCategories(selectedSecondCategoryId);
-	    // 세 번째 카테고리 선택
+	    // 두 번째 카테고리(#secondCategory)의 선택 값을 이전에 저장한 selectedSecondCategoryId 값으로 설정
+	    // 페이지 로드 시 사용자가 이전에 선택한 두 번째 카테고리가 선택된 상태로 표시
+		getThirdCategories('syn');
 	    $("#thirdCategory").val(selectedThirdCategoryId);
+	    
+		/*if (selectedFirstCategoryId) {
+	        getThirdCategories('syn');
+	    }  */
+
 	}); 
 
-	const secondCategoryNum = [[${selectedSecondCategoryId}]];
-  	
-	//두 번째 카테고리 불러오기
-	function getSecondCategories(firstCategoryId) {
+	const secondCategoryNum = /*[[${selectedSecondCategoryId}]]*/ null;
+
+	// 두 번째 카테고리 불러오기
+	function getSecondCategories(firstCategoryId, selector) {
 	    var secondCategory = $("#secondCategory");
-	    // 기존 옵션을 지우기 전에 "전체" 옵션을 추가합니다.
-	    secondCategory.empty();
+	    secondCategory.empty(); // 조회하고 다시 조회하면 이전 값 붙어서 안 나오게 비워줘야함
 	    secondCategory.append('<option value="">전체</option>');
-	    
-	    // 첫 번째 카테고리가 "전체"로 선택된 경우 처리를 종료합니다.
-	    if (firstCategoryId === "") {
-	        return;
-	    }
-	    $.ajax({
-	        type: "GET",
-	        url: "/admin/product/second/" + firstCategoryId,
-	        success: function (data) {
-	            // 선택된 첫 번째 카테고리의 하위 카테고리 목록을 추가합니다.
-	            for (var i = 0; i < data.length; i++) {
-	            	if (secondCategoryNum == data[i].categoryId){
-	            		// 선택된 항목인 경우 selected 속성을 추가한 옵션을 생성하여 추가
-	            		secondCategory.append('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
-	            	} else {
-	            		// 선택되지 않은 항목인 경우 옵션을 생성하여 추가
-	            		secondCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
-	            	}
-	            }
-	        }
-	    });
-	}
-  	
-	const thirdCategoryNum = [[${selectedThirdCategoryId}]];
-	//세 번째 카테고리 불러오기
-	function getThirdCategories(secondCategoryId) {
-		console.log("두 번째 카테고리 값:", secondCategoryId); // 두 번째 카테고리 값 로깅
+	    getThirdCategories('unsyn');
+		if(selector == 'syn'){
+		    // 첫 번째 카테고리가 "전체"로 선택된 경우 처리 종료
+		    if (firstCategoryId === "") {
+		        return;
+		    }
 		    
-	    var thirdCategory = $("#thirdCategory");
-	    // 기존 옵션을 지우기 전에 "전체" 옵션을 추가합니다.
-	    thirdCategory.empty();
-	    thirdCategory.append('<option value="">전체</option>');
+		    $.ajax({
+		        type: "GET",
+		        url: "/admin/product/second/" + firstCategoryId,
+		        success: function (data) {
+		            // 선택된 첫 번째 카테고리의 하위 카테고리 목록을 추가
+		            for (var i = 0; i < data.length; i++) {
+		            	 if (secondCategoryNum == data[i].categoryId){ // 선택된 항목인 경우 selected 속성을 추가해서 새로고침해도 유지되도록
+		            		secondCategory.append('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
+		            	} else {
+		            		// 선택되지 않은 나머지 옵션들도 나올 수 있도록
+		            		secondCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+		            	} 
+		            }
+		        }
+		    });
+			
+		}
+		else if(selector == 'unsyn'){
+		    // 첫 번째 카테고리가 "전체"로 선택된 경우 처리 종료
+		    if (firstCategoryId === "") {
+		        return;
+		    }
+		    
+		    $.ajax({
+		        type: "GET",
+		        url: "/admin/product/second/" + firstCategoryId,
+		        success: function (data) {
+		            // 선택된 첫 번째 카테고리의 하위 카테고리 목록을 추가
+		            for (var i = 0; i < data.length; i++) {
+	            		secondCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+		            }
+		        }
+		    });
+			
+		}
 	    
-		 // 두 번째 카테고리가 "전체"로 선택된 경우 처리를 종료합니다.
-	    if (secondCategoryId === "") {
-	        return;
-	    }
-	    $.ajax({
-	        type: "GET",
-	        url: "/admin/product/third/" + secondCategoryId,
-	        success: function (data) {
-	            // 선택된 두 번째 카테고리의 하위 카테고리 목록을 추가합니다.
-	            for (var i = 0; i < data.length; i++) {
-	                if (thirdCategoryNum == data[i].categoryId) {
-	                    // 선택된 항목인 경우 selected 속성을 추가한 옵션을 생성하여 추가
-	                    var option = $('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
-	                } else {
-	                    // 선택되지 않은 항목인 경우 옵션을 생성하여 추가
-	                    var option = $('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');
-	                }
-	                thirdCategory.append(option);
-	            }
-	        }
-	    });
-	}
+	} 
+	
+	const thirdCategoryNum = /*[[${selectedThirdCategoryId}]]*/ null;
+	
+	// 세 번째 카테고리 불러오기
+	function getThirdCategories(selector) {
+	    var thirdCategory = $("#thirdCategory");
+	    var secondCategoryId = $("#secondCategory").val(); // 두 번째 카테고리의 값을 가져옴
+		if(selector == 'syn'){
+			if (secondCategoryId === "") {
+		    	secondCategoryId = secondCategoryNum;
+		    }    
+		    if (!secondCategoryId) {
+		        thirdCategory.empty();
+		        thirdCategory.append('<option value="">전체</option>');
+		    } else {
+		        $.ajax({
+		            type: "GET",
+		            url: "/admin/product/third/" + secondCategoryId,
+		            success: function (data) {
+		                thirdCategory.empty();
+		                thirdCategory.append('<option value="">전체</option>');
+		                for (var i = 0; i < data.length; i++)  {
+			                if (thirdCategoryNum == data[i].categoryId) {
+			                	thirdCategory.append('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
+			                } else {
+			                	thirdCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+			                }
+		                }
+		            }
+		        });
+		    }
+		}
+		else if(selector == 'unsyn'){
+			console.log("not so bad")
+		    if (!secondCategoryId) {
+		        thirdCategory.empty();
+		        thirdCategory.append('<option value="">전체</option>');
+		    } else {
+		        $.ajax({
+		            type: "GET",
+		            url: "/admin/product/third/" + secondCategoryId,
+		            success: function (data) {
+		            	/* thirdCategory.show(); //세 번째 카테고리 표시 */
+		                thirdCategory.empty();
+		                thirdCategory.append('<option value="">전체</option>');
+		                for (var i = 0; i < data.length; i++)  {
+			                if (thirdCategoryNum == data[i].categoryId) {
+			                	thirdCategory.append('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
+			                } else {
+			                	thirdCategory.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+			                }
+		                }
+		            }
+		        });
+		    }
+		}
+	}   
   	
-	//조회하기 버튼
+	// 카테고리별 상품 조회하기 버튼
     function searchByCategory() {
-        var firstCategoryId = $("#firstCategory").val();
+		var firstCategoryId = $("#firstCategory").val();
         var secondCategoryId = $("#secondCategory").val();
         var thirdCategoryId = $("#thirdCategory").val();
-        /* console.log(secondCategoryId); */
         
-        console.log("세 번째 카테고리 값:", thirdCategoryId); 
-        // 기본값 설정
         if (!firstCategoryId) {
             firstCategoryId = 0;
         }
@@ -482,9 +648,8 @@
         	thirdCategoryId = 0;
         } 
 
-        // URL 생성
         var newUrl = "/admin/product";
-        if (firstCategoryId !== 0 || secondCategoryId !== 0) {
+        if (firstCategoryId !== 0) {
             newUrl += "?firstCategoryId=" + firstCategoryId;
             if (secondCategoryId !== 0) {
                 newUrl += "&secondCategoryId=" + secondCategoryId;
@@ -493,19 +658,18 @@
                 }
             }
         }
-
-        // 페이지 리다이렉트
         window.location.href = newUrl;
-        return false; // 폼 제출 중지
+        return false;
     }
-    
-  	//삭제 확인 메시지
+	
+	
+  	// 그룹 상품 삭제 확인 메시지
     function deleteGroupProduct(productGroupId) {
-        if (!confirm('정말로 삭제하시겠습니까?')) {
+        if (!confirm('그룹 상품을 삭제하시겠습니까?')) {
             return false;
         }
         const formHtml = `
-            <form id="deleteForm" action="/admin/delete?productGroupId=${productGroupId}" method="post">
+            <form id="deleteForm" action="/admin/delete-group?productGroupId=${productGroupId}" method="post">
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -516,7 +680,7 @@
         }, 50) //대기시간
     }
   	
-  	//조회하기
+  	// 그룹별 상품 조회하기
     function selectProductsByGroupId(productGroupId) {
          fetch("/admin/search/" + productGroupId)
              .then(response => response.json())
@@ -524,7 +688,6 @@
                  const productTableBody = document.getElementById("productTableBody");
                  // 이전에 테이블 내용을 초기화
                  productTableBody.innerHTML = "";
-                 // 데이터를 반복해서 테이블에 추가
                  data.forEach(product => {
                      const row = document.createElement("tr");
                      row.innerHTML = `
@@ -534,13 +697,16 @@
                           <td>${product.productOptionFirst}</td>
                           <td>${product.productOptionSecond}</td>
                           <td>${product.productOptionThird}</td>
-                          <td>${product.productPrice}</td>
+                          <td>${comma(product.productPrice)}</td>
                           <td>${product.productStock}</td>
                           <td>
 		    				<div class="btn-group">
 		  						<button class="btn btn-xs" style="background-color: #aac8b2; color: #ffff">이미지</button>
-		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" style="background-color: #39594e; color: #ffff" type="button">수정</button>
-		  						<button class="btn btn-xs" style="background-color: red; color: #fff" type="button">삭제</button>
+		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
+		   						style="background-color: #39594e; color: #ffff" type="button"
+		   						onclick = "selectProductId(${product.productId})">수정</button>
+		  						<button class="btn btn-xs" style="background-color: red; color: #fff" type="button"
+		  						onclick = "deleteProduct(${product.productId})">삭제</button>
 		    				</div>
 		    			  </td>
                          `;
@@ -548,24 +714,72 @@
                   });
               });
       }
-  	
     
-    //상품 수정 시 해당 상품 정보 가져오기
-    function setProductInfo(productId) {
+    // 해당 상품 정보 불러오기
+    function selectProductId(productId) {
          fetch("/admin/update/" + productId)
             .then(response => response.json())
             .then(data => {
                 const product = data;
                 console.log(product);
-                document.getElementById("updateProductGroupId").value = product.productGroupId; //value는 input에 사용
-                document.getElementById("updateProductNm").textContent = product.productNm; //span 사용하려면 
+                document.getElementById("updateProductId").value = product.productId; //value는 input에 사용
+                document.getElementById("updateProductNm").textContent = product.productNm; //textContent는 span
                 document.getElementById("updateProductCode").textContent = product.productCode;
+                document.getElementById("updateProductOptionFirst").value = product.productOptionFirst;
+                document.getElementById("updateProductOptionSecond").value = product.productOptionSecond;
+                document.getElementById("updateProductOptionThird").value = product.productOptionThird;
                 document.getElementById("updateProductPrice").value = product.productPrice;
                 document.getElementById("updateProductStock").value = product.productStock;
             }); 
     }
+   
+    //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
+    function submitForm() {
+        const updatePrice = document.getElementById("updateProductPrice");
+        const priceUpdated = uncomma(updatePrice.value);
+        updatePrice.value = priceUpdated;
+    }
+   
+    function saveData() {
+    	const productPriceInput = document.getElementById("productPrice");
+    	const productPriceValue = uncomma(productPriceInput.value); // 콤마 제거
+    	productPriceInput.value = productPriceValue;
+    	const productPrice = parseInt(productPriceValue); // 정수로 변환
+    }
+
+    // number 타입 maxlength 걸어주기
+    function maxLengthCheck(object){
+        if (object.value.length > object.maxLength){
+          object.value = object.value.slice(0, object.maxLength);
+        }    
+      }
     
-    // 천 단위로 comma찍기
+    //기존 상품 등록시 그룹ID, 카테고리명, 상품명 불러오기
+    function registerExisting(productGroupId, categoryNm, categoryId, productNm) {
+        document.getElementById("getProductGroupId").value = productGroupId;
+        document.getElementById("getCategoryNm").value = categoryNm;
+        document.getElementById("getCategoryId").value = categoryId;
+        document.getElementById("getProductNm").value = productNm;
+    }
+    
+	// 해당 상품 삭제 확인 메시지
+    function deleteProduct(productId) {
+        if (!confirm('해당 상품을 삭제하시겠습니까?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteForm" action="/admin/delete?productId=${productId}" method="post">
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        setTimeout(() => {
+            document.getElementById('deleteForm').submit();
+        }, 50) //대기시간
+    }
+    
+    // 천 단위로 comma 찍기
     function inputNumberFormat(obj) {
         obj.value = comma(uncomma(obj.value));
     }
@@ -589,7 +803,7 @@
 	    str = String(str);
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
 	}
-    
+ 
 	// 이미지 파일 개수 제한
     function fileCheck() {
     	var filesInput = document.getElementById("files");

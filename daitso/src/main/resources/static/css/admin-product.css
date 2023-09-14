@@ -5,9 +5,14 @@
 	visibility: visible;
 }
 
+#productTable {
+    padding-left: 50px;
+    width: -webkit-fill-available;
+}
+
 #productNm, #productOptionFirst, #productOptionSecond,
 	#productOptionThird, #productPrice, #productStock {
-	width: 80%;
+	width: 33%;
 	padding: 10px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
@@ -31,6 +36,10 @@
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;
+}
+
+.modal-header{
+	background-color: tan;
 }
 
 div.col-sm-10 {
@@ -69,3 +78,7 @@ div.col-sm-10 {
 	z-index: 3;
 	border-color: #39594e;
 }
+
+/*   #thirdCategory {
+    display: none;
+} */ 

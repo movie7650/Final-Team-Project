@@ -3,7 +3,9 @@
 
 .left-menu-container {
     width: 200px;
-    background-color: #f0f0f0; 
+/* 불필요한 css인 것 같아 주석(나현웅)
+   background-color: #f0f0f0;  
+*/
 }
 
 .left-menu {

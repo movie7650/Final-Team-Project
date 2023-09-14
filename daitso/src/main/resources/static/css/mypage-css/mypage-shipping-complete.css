@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.shipping-complete-main{
+	display: flex;
+	justify-content: center;
+}
 .shipping-complete-rectangle01{
 	float:left;
 	border:solid 1.5px #668663;
@@ -8,6 +12,13 @@
 	padding-top:1%;
 	font-family:Inter;
 	
+}
+.shipping-complete-rectangle01 a{
+	text-decoration-line: none;
+	color:black;
+}
+.shipping-complete-rectangle01 a:hover{
+	color:black;
 }
 .shipping-complete-rectangle02{
 	float:left;
@@ -19,8 +30,13 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	
-	
+}
+.shipping-complete-rectangle02 a{
+	text-decoration-line: none;
+	color:black;
+}
+.shipping-complete-rectangle02 a:hover{
+	color:black;
 }
 .shipping-complete-rectangle03{
 	float:left;
@@ -32,7 +48,13 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	
+}
+.shipping-complete-rectangle03 a{
+	text-decoration-line: none;
+	color:black;
+}
+.shipping-complete-rectangle03 a:hover{
+	color:black;
 }
 .shipping-complete-rectangle04{
 	float:left;
@@ -46,7 +68,13 @@
 	font-family:Inter;
 	color:white;
 	background-color:#668663;
-	
+}
+.shipping-complete-rectangle04 a{
+	text-decoration-line: none;
+	color:white;
+}
+.shipping-complete-rectangle04 a:hover{
+	color:black;
 }
 .shipping-complete-button{
 	color:#668663;

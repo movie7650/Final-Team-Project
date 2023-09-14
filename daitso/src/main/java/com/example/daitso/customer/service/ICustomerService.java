@@ -20,6 +20,11 @@ public interface ICustomerService {
 	// 사용자 고유번호로부터 사용자 이름 갖고오기
 	CustomerName getCustomerNmByCustomerId(int customerId);
 	
+
 	// 사용자 고유번호로부터 사용자 정보(이름,이메일,휴대폰번호) 갖고오기
 	CustomerInfo getCustomerInfoByCustomerId(int customerId);
+
+	// 사용자 이메일 가져오기 
+	public String selectCustomerEmail();
+
 }

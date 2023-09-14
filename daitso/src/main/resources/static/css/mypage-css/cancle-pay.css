@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.cancle-pay-main{
+	display: flex;
+	justify-content: center;
+}
 .cancle-rectangle01{
 	float:left;
 	border:solid 1.5px #668663;
@@ -8,6 +12,13 @@
 	padding-top:1%;
 	font-family:Inter;
 	
+}
+.cancle-rectangle01 a{
+	text-decoration-line: none;
+	color:black;
+}
+.cancle-rectangle01 a:hover{
+	color:black;
 }
 .cancle-rectangle02{
 	float:left;
@@ -23,6 +34,13 @@
 	background-color:#668663;
 	
 }
+.cancle-rectangle02 a{
+	text-decoration-line: none;
+	color:white;
+}
+.cancle-rectangle02 a:hover{
+	color:black;
+}
 .cancle-rectangle03{
 	float:left;
 	border-top:solid 1.5px #668663;
@@ -33,7 +51,13 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	
+}
+.cancle-rectangle03 a{
+	text-decoration-line: none;
+	color:black;
+}
+.cancle-rectangle03 a:hover{
+	color:black;
 }
 .cancle-rectangle04{
 	float:left;
@@ -45,9 +69,52 @@
 	text-align:center;
 	padding-top:1%;
 	font-family:Inter;
-	
 }
-.cancle-pay-button{
+.cancle-rectangle04 a{
+	text-decoration-line: none;
+	color:black;
+}
+.cancle-rectangle04 a:hover{
+	color:black;
+}
+.cancle-list-container{
+	position:absolute;
+	border:solid 2px #e7e7e7;
+	height:200px;
+	width:855px;
+	margin-top:-450px;
+	margin-left:165px;
+	border-radius:10px;
+}
+.cancle-list-container-01{
+	width:600px;
+	height:200px;
+	padding-left:20px;
+	padding-top:10px;
+}
+/* .shipping-date{
+	
+	font-family:Inter;
+	margin-top:1%;
+	font-size:100%;
+	color:#668663;
+} */
+.purchase-img-001{
+	border:solid 1px orange;
+	width:100px;
+	height:100px;
+	float:left;
+	margin-top:10px;
+}
+.detail-button-container{
+	border-left:solid 2px #e7e7e7;
+	width:255px;
+	height:200px;
+	float:right;
+	margin-top:-200px;
+	padding-top:50px;
+}
+.detail-button{
 	color:#668663;
 	font-size:80%;
 	font-family:Inter;
@@ -57,6 +124,22 @@
 	border:solid 1px #668663;
 	border-radius:10px;
 	padding-top:3.5%;
+	margin-bottom:2%;
 	margin-left:25%;
-	margin-top:45px;
+}
+.purchase-product-inform{
+	margin-top:10px;
+	width:200px;
+	height:100px;
+	margin-left:115px;
+}
+
+.detail-button-container button{
+	background-color:white;
+	border:solid 1px #668663;
+	width:130px;
+	height:40px;
+	border-radius:10px;
+	margin-left:25%;
+	margin-top:20px;
 }

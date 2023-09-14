@@ -5,10 +5,18 @@
 	    SELECT point_after					AS		"pointAfter",
 			   point_updated_content		AS		"pointUpdatedContent",
 			   create_dt					AS		"createDt",
-			   point_use_dv				AS		"pointUseDv",
-			   point_before				AS		"pointBefore"
+			   point_use_dv					AS		"pointUseDv",
+			   point_before					AS		"pointBefore"
 		  FROM point
-		 WHERE customer_id = 101
+		 WHERE customer_id = 102
 	</select>
+	
+	<select id="selectTotalPoint" resultType="int" >
+		SELECT	sum(point_after)				AS		"totalPoint"
+		FROM	point
+		WHERE	customer_id = 102
+	</select>
+	
+	
 
 </mapper>
