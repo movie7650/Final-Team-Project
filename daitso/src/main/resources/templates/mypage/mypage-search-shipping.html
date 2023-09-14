@@ -9,26 +9,43 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
 
-	<div class="search-shipping-main">
-		<div class="title-order-list">주문목록</div>
-			
-		<div class="order-category">
-			<div class="search-shipping-rectangle01"><a th:href="@{/mypage/orderlist}">전체주문조회</a></div>
-			<div class="search-shipping-rectangle02"><a th:href="@{/mypage/canclepay}">결제취소</a></div>
-			<div class="search-shipping-rectangle03"><a th:href="@{/mypage/searchshipping}">배송중</a></div>
-			<div class="search-shipping-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
-		</div><!-- order-category -->
+<div class="cancle-pay-main">
+	<div class="title-order-list">배송중</div>
 		
-			<div class="order-list-container" >
-				<div class="shipping-status">배송완료</div>
-				<div class="shipping-date">8/2(금)도착</div>
+	<div class="order-category">
+		<div class="search-shipping-rectangle01"><a th:href="@{/mypage/orderlist}">전체주문조회</a></div>
+		<div class="search-shipping-rectangle02"><a th:href="@{/mypage/canclepay}">결제취소</a></div>
+		<div class="search-shipping-rectangle03"><a th:href="@{/mypage/searchshipping}">배송중</a></div>
+		<div class="search-shipping-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
+	</div><!-- order-category -->
+	
+	
+	<th:block th:each="purchase : ${purchaseList}">
+		
+		<div class="cancle-list-container">
+			<div class="cancle-list-container-01">
+				<div class="shipping-status" th:text="${purchase.purchaseDv}">배송완료</div>
+				<!-- <div class="shipping-date">&bull;8/2(금)도착</div> -->
 				<div class="purchase-img-001">이미지</div>
-				<div class="purchase-inform-001" >ProductName</div>
+				
+				<div class="purchase-product-inform">
+					<th:block th:each="purchaseCheck: ${purchaseCheckList}">
+					<div class="purchase-inform-001" th:text="${purchaseCheck.productName}" >ProductName</div>
+					</th:block>
+					<div class="purchase-count" th:text="${purchase.purchaseCount}">구매수량</div>
+					<div class="purchase-product-cost" th:text="${purchase.purchasePrice}">100000<span>원</span></div>
+					<div class="purchase-total-cost"th:text="${purchase.totalCost}">총 가격</div>
+				</div><!-- purchase-product-inform -->
+			</div><!-- order-list-container01 -->
+			
+			
 			<div class="detail-button-container">
-				<div class="search-shipping-button">배송중</div>
+				<div class="search-shipping-status" th:text="${purchase.purchaseDv}">배송중</div>
 			</div><!-- shipping-button-container -->	
-			</div><!-- order-list-container -->
-	</div><!-- search-shipping-main -->
+		</div><!-- order-list-container -->
+	 </th:block>
+</div><!-- order-list-main -->
+
 </form>
 
 

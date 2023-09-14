@@ -11,8 +11,13 @@ import com.example.daitso.purchase.model.PurchaseCheck;
 @Repository
 @Mapper
 public interface IPurchaseRepository {
+	//구매하기 
 	void insertPurchase(Purchase purchase);
-	List<PurchaseCheck> selectAllPurchase();
-	void deletePurchase(Purchase purchase);
+	//구매상품이름가져오기
+	List<PurchaseCheck> selectAllProductNM();
+	//구매정보가져오기
+	List<Purchase> selectAllPurchase();
+	//주문취소 
+	void canclePurchase(Purchase purchase);
 	
 }

@@ -2,15 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.purchase.repository.IPurchaseRepository">
 
-<!-- <insert id="insertPurchase" parameterType="com.example.daitso.purchase.model.Purchase">
-
-</insert> -->
-
-<select id="selectAllPurchase" resultType="com.example.daitso.purchase.model.PurchaseCheck">
-	SELECT product_nm  AS	"productName"
+<select id="selectAllProductNM" resultType="com.example.daitso.purchase.model.PurchaseCheck">
+	SELECT product_nm  AS	"productName"	
 	  FROM product p,  purchase pur
 	 WHERE p.product_id=pur.product_id 
-	   AND pur.customer_id=101
+	   AND pur.customer_id=102
+</select>
+
+<select id="selectAllPurchase" resultType="com.example.daitso.purchase.model.Purchase">
+	SELECT purchase_count	AS	"purchaseCount",
+		   purchase_price	AS	"purchasePrice",
+		   purchase_DV		AS	"purchaseDv",
+		   purchase_count * purchase_price AS "totalCost"
+   	  FROM purchase
+   	 WHERE customer_id=102
 </select>
 
 </mapper>
