@@ -1,0 +1,262 @@
+.purchase-logo {
+	margin-top: 30px;
+	width: 180px;
+	height: 50px;
+}
+
+.purchase-logo-img {
+	width: 100%;
+	height: 100%;
+}
+
+.purchase-box {
+	margin-top: 50px;
+	border-top: 1px solid #E1E1E1; 
+}
+
+.purchase-box-title {
+	height: 53px;
+	line-height:53px;
+	font-size: 35px;
+	font-weight: 600;
+}
+
+.purchase-box-progress {
+	height: 53px;
+	line-height:53px;
+}
+
+.purchase-box-progress span{
+	font-size: 18px;
+    color: #777777;
+}
+
+.purchase-box-progress img {
+	margin: 0 5px 0 0;
+	margin-bottom: 5px;
+}
+
+.purchase-box-progress span:nth-child(1){
+	color: #39594E;
+    font-weight: bold;
+}
+
+.purchase-info-box {
+	border-top: 1px solid black;
+	margin-top: 25px;
+}
+
+.purchase-buyer-info-title {
+	margin-top: 25px;
+	font-size: 22px;
+	font-weight: 500;
+}
+
+.purchase-buyer-info-box {
+	margin-top: 20px;
+	border-top: 2px solid #939393;
+}
+
+.purchase-buyer-info-box div {
+	display: flex;
+	height: 70px;
+	line-height: 70px;
+}
+
+.purchase-buyer-info-box div div:nth-child(1){
+	font-size: 17px;
+	font-weight: 600;
+	width: 25%;
+	text-align: right;
+	display: block;
+	padding-right: 20px;
+	background-color: #E8C369;
+	border-bottom: 1px solid #CECECE;
+}
+
+.purchase-buyer-info-box div div:nth-child(2){
+	padding-left: 30px;
+	font-size: 17px;
+	font-weight: 400;
+	width: 75%;
+	border-bottom: 1px solid #CECECE;
+}
+
+.purchase-shipping-info-title {
+	margin-top: 50px;
+	font-size: 22px;
+	font-weight: 500;
+	display: flex;
+}
+
+.purchase-shipping-btn {
+	text-align: center;
+	width: 110px;
+	height: 40px;
+	line-height: 40px;
+	background-color: #39594E;
+	color: white;
+	font-size: 17px;
+	border-radius: 5px;
+	margin-left: 15px;
+	cursor: pointer;
+}
+
+.purchase-shipping-info-box {
+	width: 100%;
+	height: 160px;
+	line-height: 160px;
+	text-align: center;
+	border-top: 2px solid #939393;
+	margin-top: 20px;
+	border-bottom: 1px solid #CECECE;
+}
+
+.purchase-product-info-title {
+	margin-top: 50px;
+	font-size: 22px;
+	font-weight: 500;
+}
+
+.purchase-product-info-box {
+	margin-top: 20px;	
+}
+
+.purchase-product-info-box div:nth-child(1) {	
+	font-size: 17px;
+	font-weight: bold;
+	color: #39594E;
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	padding-left: 20px;
+	background-color: #E8C369;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.purchase-product-info {	
+	font-size: 17px;
+	font-weight: 400;
+	color: black;
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	padding-left: 20px;
+	border-bottom: 1px solid #CECECE;
+	border-left: 1px solid #CECECE;
+	border-right: 1px solid #CECECE;
+}
+
+.purchase-buy-info-title {
+	margin-top: 50px;
+	font-size: 22px;
+	font-weight: 500;
+}
+
+.purchase-buy-info-box {
+	margin-top: 20px;
+	border-top: 2px solid #939393;
+}
+
+.purchase-buy-info-box div {
+	display: flex;
+	height: 70px;
+	line-height: 70px;
+}
+
+.purchase-buy-info-box div div:nth-child(1){
+	font-size: 17px;
+	font-weight: 600;
+	width: 25%;
+	text-align: right;
+	display: block;
+	padding-right: 20px;
+	background-color: #E8C369;
+	border-bottom: 1px solid #CECECE;
+}
+
+.purchase-buy-info-box div div:nth-child(2){
+	padding-left: 30px;
+	font-size: 17px;
+	font-weight: 400;
+	width: 75%;
+	border-bottom: 1px solid #CECECE;
+}
+
+.purchase-buy-card {
+	color: #256B04;
+	font-weight: 500;
+}	
+
+.purchase-agree {
+	width: 100%;
+	text-align: center;
+	margin-top: 60px;
+	color: #777777;
+	font-size: 17px;
+}
+
+.purchase-complete {
+	margin: 80px 0 80px 0;
+	display: flex;
+	justify-content: center;;
+}
+
+.purchase-complete-btn {
+	width: 200px;
+	height: 60px;
+	background-color: #39594E;
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	border-radius: 5px;
+	text-align: center;
+	line-height: 60px;
+	cursor: pointer;
+}
+
+.purchase-shipping-info-boxes {
+	border-top: 2px solid #939393;
+	margin-top: 20px;
+}
+
+.purchase-shipping-info-mini-box {
+	display: flex;
+}
+
+.purchase-shipping-info-mini-box div:nth-child(1){
+	font-size: 17px;
+	font-weight: 600;
+	width: 25%;
+	text-align: right;
+	display: block;
+	padding-right: 20px;
+	background-color: #E8C369;
+	border-bottom: 1px solid #CECECE;
+	height: 70px;
+	line-height: 70px;
+}
+
+.purchase-shipping-info-mini-box div:nth-child(2){
+	padding-left: 30px;
+	font-size: 17px;
+	font-weight: 400;
+	width: 75%;
+	border-bottom: 1px solid #CECECE;
+	height: 70px;
+	line-height: 70px;
+}
+
+#purchase-normal {
+	margin-left: 20px;
+	font-size: 15px;
+	padding: 0 10px 0 10px;
+	height: 40px;
+	line-height: 37px;
+	border: 2px solid #39594E;
+	color: #39594E;
+	font-weight: 600;
+	border-radius: 5px;
+	
+}

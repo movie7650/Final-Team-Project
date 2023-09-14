@@ -5,16 +5,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CartCoupon {
+public class CartPurchase {
+	
 	private int productId;
 	private String productNm;
-	private String productPrice;
-	private int cartCount;
-	private String cartPrice;
-	private int categoryId;
-	private String productImageFirst;
 	private String productOptionFirst;
 	private String productOptionSecond;
 	private String productOptionThird;
-	private int couponUseCount;
+	private int cartId;
+	private int cartCount;
+	private int cartPrice;
 }

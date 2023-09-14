@@ -1,5 +1,32 @@
 package com.example.daitso.customercoupon.service;
 
-public class CustomerCouponService implements ICustomerCouponService {
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.daitso.cart.model.CartCouponApply;
+import com.example.daitso.customercoupon.repository.ICustomerCouponRepository;
+
+
+@Service
+public class CustomerCouponService implements ICustomerCouponService {
+	
+	@Autowired
+	ICustomerCouponRepository customerCouponRepository;
+	
+	// 매자정마다 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
+	@Scheduled(cron = "0 0 0 * * *")
+	@Transactional
+	public void checkCouponEprDt() {
+		customerCouponRepository.checkCouponEprDt();
+	}
+	
+	// 적용가능한 쿠폰 조회
+	@Override
+	public List<CartCouponApply> getCouponsByCustomerId(int categoryId, int customerId) {
+		return customerCouponRepository.getCouponsByCustomerId(categoryId, customerId);
+	}
 }
