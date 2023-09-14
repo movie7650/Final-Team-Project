@@ -31,11 +31,11 @@
 				
 				<div class="purchase-product-inform">
 					<th:block th:each="purchaseCheck: ${purchaseCheckList}">
-					<div class="purchase-inform-001" th:text="${purchaseCheck.productName}" >ProductName</div>
+					<div class="purchase-inform-001" th:text="|상품명: ${purchaseCheck.productName}|" >ProductName</div>
 					</th:block>
-					<div class="purchase-count" th:text="${purchase.purchaseCount}">구매수량</div>
-					<div class="purchase-product-cost" th:text="${purchase.purchasePrice}">100000<span>원</span></div>
-					<div class="purchase-total-cost"th:text="${purchase.totalCost}">총 가격</div>
+					<div class="purchase-count" th:text="|수량: ${purchase.purchaseCount}개|">구매수량</div>
+					<div class="purchase-product-cost" th:text="|상품가격: ${purchase.purchasePrice}원|"></div>
+					<div class="purchase-total-cost"th:text="|총 가격: ${purchase.totalCost}원|">총 가격</div>
 				</div><!-- purchase-product-inform -->
 			</div><!-- order-list-container01 -->
 			

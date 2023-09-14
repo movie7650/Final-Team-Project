@@ -16,6 +16,7 @@
 
 .coupon-container{
 	position:absolute;
+	width:855px;
 	margin-left:165px;
 	margin-top:-600px;
 }
@@ -105,5 +106,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .empty{
 	height:400px;
 }
-
+.coupon-used a{
+	color:black;
+}
+.coupon-used a:hover{
+	color:#668663;
+}
 

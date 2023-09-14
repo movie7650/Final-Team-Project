@@ -17,5 +17,4 @@ public class CustomerCoupon {
 	private String creator;
 	private Date modifyDt;
 	private String modifier;
-
 }
