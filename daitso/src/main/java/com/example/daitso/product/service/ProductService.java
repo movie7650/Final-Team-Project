@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.SpecialProduct;
 import com.example.daitso.product.repository.IProductRepository;
 
 
@@ -52,6 +53,11 @@ public class ProductService implements IProductService {
 	public Product selectOptionProduct(int productGroupId, String productOptionFirst, String productOptionSecond,
 			String productOptionThird) {
 		return productRepository.selectOptionProduct(productGroupId, productOptionFirst, productOptionSecond, productOptionThird);
+	}
+
+	@Override
+	public List<SpecialProduct> selectSpecialProduct() {
+		return productRepository.selectSpecialProduct();
 	}
 
 }

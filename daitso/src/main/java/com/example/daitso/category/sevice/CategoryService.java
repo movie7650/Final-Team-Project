@@ -49,4 +49,9 @@ public class CategoryService implements ICategoryService{
 		categoryRepository.updateCategory(categoryId, parentCategoryId);
 	}
 
+	@Override
+	public List<Category> selectMainCategory() {
+		return categoryRepository.selectMainCategory();
+	}
+
 }
