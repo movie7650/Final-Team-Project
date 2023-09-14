@@ -19,46 +19,46 @@
 				<div class="recommand-box-frame d-flex" style="height: 1000px; border: solid 2px #f0f0f0; margin-top: 30px ">
 					<div class="d-flex flex-column align-items-center justify-content-center" style="width:100%">
 						<div class="d-flex" style="width:97%; height: 32%">
-							<div class="re-box" style="flex: 1; background-image: url('/images/cup.jpg'); background-size:100% 100%;">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[0].categoryId}]])" style="flex: 1; background-image: url('/images/cup.jpg'); background-size:100% 100%;">
 								<div class="re-box-child">
 									<p>[[${categoryList[0].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" style="flex: 1; margin-left:15px; background-image: url('/images/grape.jpg'); background-size:100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[1].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/grape.jpg'); background-size:100% 100%">
 								<div class="re-box-child">
 									<p>[[${categoryList[1].categoryContent}]]</p>
 								</div>
 							</div>
 						</div>
 						<div class="d-flex" style="width:97%; height: 32%">
-							<div class="re-box" style="flex: 1;  background-image: url('/images/cloth2.jpg'); background-size:100% 100%;">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[2].categoryId}]])" style="flex: 1; background-image: url('/images/cloth2.jpg'); background-size:100% 100%;">
 								<div class="re-box-child-mini">
 									<p>[[${categoryList[2].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" style="flex: 1; margin-left:15px;  background-image: url('/images/manCloth.jpg'); background-size:100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[3].categoryId}]])" style="flex: 1; margin-left:15px;  background-image: url('/images/manCloth.jpg'); background-size:100% 100%">
 								<div class="re-box-child-mini">
 									<p>[[${categoryList[3].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" style="flex: 1; margin-left:15px;  background-image: url('/images/chocolate.jpg'); background-size:100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[4].categoryId}]])" style="flex: 1; margin-left:15px;  background-image: url('/images/chocolate.jpg'); background-size:100% 100%">
 								<div class="re-box-child-mini">
 									<p>[[${categoryList[4].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" style="flex: 1; margin-left:15px;  background-image: url('/images/dish.jpg'); background-size:100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[5].categoryId}]])" style="flex: 1; margin-left:15px;  background-image: url('/images/dish.jpg'); background-size:100% 100%">
 								<div class="re-box-child-mini">
 									<p>[[${categoryList[5].categoryContent}]]</p>
 								</div>
 							</div>
 						</div>
-						<div class="d-flex" style="width:97%; height: 32%">
+						<div class="d-flex" th:onclick="goCategory([[${categoryList[6].categoryId}]])" style="width:97%; height: 32%">
 							<div class="re-box" style="flex: 1; background-image: url('/images/hairTreatment.jpg'); background-size: 100% 100%">
 								<div class="re-box-child">
 									<p>[[${categoryList[6].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" style="flex: 1; margin-left:15px; background-image: url('/images/cleaner.jpg'); background-size: 100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[7].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/cleaner.jpg'); background-size: 100% 100%">
 								<div class="re-box-child">
 									<p>[[${categoryList[7].categoryContent}]]</p>
 								</div>
@@ -88,9 +88,9 @@
 					</th:block>			
 				</div>
 			</div>
-			<div style="text-align: -webkit-center;">
+<!-- 			<div style="text-align: -webkit-center;">
 				<div class="d-flex justify-content-center align-items-center special-product-btn">오늘의 인기상품 전체보기</div>			
-			</div>
+			</div> -->
 			<div style="margin-top: 30px">
 				<span style="margin-left: 15px; font-weight:bold">오늘의 <span style="color:red">세일</span> 상품</span>
 				<div class="d-flex justify-content-evenly align-items-center" style="margin-top: 30px;">
@@ -113,9 +113,9 @@
 					</th:block>			
 				</div>
 			</div>
-			<div style="text-align: -webkit-center;">
+<!-- 			<div style="text-align: -webkit-center;">
 				<div class="d-flex justify-content-center align-items-center special-product-btn" style="margin-bottom:50px;">오늘의 세일상품 전체보기</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
@@ -132,6 +132,11 @@
 	tag.setAttribute('action', `/product/${id}/${groupId}`);
 	document.body.appendChild(tag);
 	tag.submit(); 
+	}
+	
+	function goCategory(categoryId){
+		console.log(categoryId);
+		window.location.href = `/category/${categoryId}`;
 	}
 </script>
 </html>
