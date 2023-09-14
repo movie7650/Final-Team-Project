@@ -3,8 +3,6 @@
 	padding-top:1.5%;
 	width:50%;
 	height:50px;
-	border-top:solid 1.5px #668663;
-	border-left:solid 1.5px #668663;
 	border-bottom:solid 1.5px #668663;
 	float:left;
 	text-align:center;
@@ -20,6 +18,10 @@
 	text-align:center;
 	margin-left:50%;
 	color:#668663;
-
-
+}
+.coupon-ban-usable a{
+	color:black;
+}
+.coupon-ban-usable a:hover{
+	color:#668663;
 }
