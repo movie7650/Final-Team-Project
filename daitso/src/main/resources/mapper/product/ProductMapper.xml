@@ -399,4 +399,22 @@
 	</choose>
 </select>
 
+<select id="selectSpecialProduct" resultType="com.example.daitso.product.model.SpecialProduct">
+	SELECT special_product_id AS specialProductId,
+			p.product_group_id AS specialProductGroupId,
+			special_product_nm AS specialProductNm, 
+			special_product_dv AS specialProductDv, 
+			category_id AS categoryId, 
+			product_price AS productPrice,  
+			NVL(average,0) AS reviewStarPoint, 
+			NVL(cnt,0) AS rCnt
+	FROM special_product sp 
+	LEFT JOIN product p ON sp.special_product_id = p.product_id
+	LEFT JOIN (
+				SELECT product_group_id, round(avg(review_star_point) * 20,0) as average, count(product_group_id) as cnt
+            	FROM review r left join product p on r.product_id = p.product_id group by product_group_id
+              ) sr
+    ON p.product_group_id = sr.product_group_id
+</select>
+
 </mapper>

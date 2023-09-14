@@ -3,6 +3,7 @@ package com.example.daitso.product.service;
 import java.util.List;
 
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.SpecialProduct;
 
 public interface IProductService {
 	
@@ -19,5 +20,7 @@ public interface IProductService {
 	List<String> selectProductOptionThird(int productGroupId, String productOptionFirst, String productOptionSecond);
 
 	Product selectOptionProduct(int productGroupId, String productOptionFirst, String productOptionSecond, String productOptionThird);
+	
+	List<SpecialProduct> selectSpecialProduct();
 
 }

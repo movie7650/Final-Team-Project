@@ -196,8 +196,7 @@
 									style="text-decoration: none; color: #39594E;">계속 쇼핑하기</a>
 							</div>
 							<div class="cart-purchase">
-								<a th:href="@{/customer/test}"
-									style="text-decoration: none; color: white;">구매하기</a>
+								<div style="cursor: pointer;" onclick="goToPurchase()">구매하기</div>
 							</div>
 						</div>
 						<div th:unless="${!cartList.isEmpty()}" class="cart-no-product">
@@ -222,7 +221,9 @@
 	</div>
 </body>
 <script type="text/javascript" th:inline="javascript">	
-	
+
+	console.log(JSON.parse(localStorage.getItem('couponApplyList')));
+
 	const cartDiscountTotalPrice = document.getElementById("cart-discount-total-price");
 	
 	function resetCartDiscountTotalPrice() {
@@ -462,9 +463,11 @@
 				})
 				.then((res) => res.json())
 				.then((data) => {
-					location.reload();
+						location.reload();
 				}); 	
-			} 
+			} else {
+				cartIdList = [];
+			}
 		} 
 	}
 	
@@ -508,13 +511,41 @@
 	}
 	
 	// 상품 총 할인가격
-	if(localStorage.getItem('couponTotalApplyPrice')) {
-		cartDiscountTotalPrice.innerText = localStorage.getItem('couponTotalApplyPrice');
-		document.getElementById("cart-discount-total-price-2").innerText = localStorage.getItem('couponTotalApplyPrice');
+	if(localStorage.getItem('couponTotalApplyPrice') || sessionStorage.getItem('couponTotalApplyPrice')) {
+		if(localStorage.getItem('couponTotalApplyPrice')) {
+			var couponTotalApplyPrice = localStorage.getItem('couponTotalApplyPrice');
+			sessionStorage.setItem('couponTotalApplyPrice', couponTotalApplyPrice);
+			sessionStorage.setItem('couponApplyList', localStorage.getItem('couponApplyList'));
+			localStorage.removeItem('couponTotalApplyPrice');
+			localStorage.removeItem('couponApplyList');
+		} else {
+			sessionStorage.removeItem('couponTotalApplyPrice');
+			sessionStorage.removeItem('couponApplyList');
+			couponTotalApplyPrice = '0';
+		}
+		
+		cartDiscountTotalPrice.innerText = couponTotalApplyPrice;
+		document.getElementById("cart-discount-total-price-2").innerText = couponTotalApplyPrice;
 		document.getElementById('product-total-price-final').innerText =
-		(productTotalPrices - parseInt(localStorage.getItem('couponTotalApplyPrice').replace(/,/g , ''))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		(productTotalPrices - parseInt(couponTotalApplyPrice.replace(/,/g , ''))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");	
 	}
 	
-	console.log(checkStatusList);
+	// 구매하기 버튼 클릭 시
+	function goToPurchase() {
+		console.log(checkStatusList)
+		var falseCount = 0;
+	 	for(key in checkStatusList) {
+			if(checkStatusList[key] == false){
+				falseCount += 1;
+			}
+		} 
+		
+		 if(falseCount == Object.keys(checkStatusList).length){
+			alert("구매하실 상품을 선택해주세요.")
+		} else {
+			window.location.href = 'http://localhost:8080/purchase';
+		} 
+	}
+
 </script>
 </html>
