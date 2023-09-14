@@ -50,7 +50,6 @@ public class AdminService implements IAdminService{
 	@Transactional
 	public void registerExistingProducts(ProductCheck product) {
 		productRepository.registerExistingProducts(product);
-//		productRepository.makeProductCode();
 		
 	}
 	// 카테고리별 상품 조회하기
