@@ -37,7 +37,7 @@
 	
 	
 		<div class="coupon-status-container">
-			<div class="coupon-ban-usable">사용가능</div>
+			<div class="coupon-ban-usable"><a th:href="@{/mypage/mycoupon}">사용가능</a></div>
 			<div class="coupon-ban-used">사용완료/기간만료</div>
 		</div><!--coupon-status-container  -->
 		
@@ -45,15 +45,15 @@
 			<tr>
 				<th>쿠폰명</th>
 				<th>할인율</th>
-				<th>유효기간</th>
+				<th>만료일</th>
 				<th>상태</th>
 			</tr>
-				<td>10%할인쿠폰</td>
-				<td>10%</td>
-				<td>24.08.01</td>
-				<td>사용완료</td>
-			<tr>
-			
+				
+			<tr th:each="selectBanCustomerCoupon : ${banCustomerCouponList}">
+				<td th:text="${selectBanCustomerCoupon.couponNm}">10%할인쿠폰</td>
+				<td th:text="${selectBanCustomerCoupon.couponDscntRate}">10%</td>
+				<td th:text="${selectBanCustomerCoupon.couponEprDt}">24.08.01</td>
+				<td th:text="${selectBanCustomerCoupon.couponUseDv}">사용완료</td>
 			</tr>
 		</table>
 		
