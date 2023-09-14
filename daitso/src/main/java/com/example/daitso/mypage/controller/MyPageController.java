@@ -9,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
+import com.example.daitso.customercoupon.repository.ICustomerCouponRepository;
+import com.example.daitso.customercoupon.service.CustomerCouponService;
+import com.example.daitso.customercoupon.service.ICustomerCouponService;
 import com.example.daitso.point.model.Point;
 import com.example.daitso.point.service.IPointService;
 import com.example.daitso.purchase.model.Purchase;
@@ -28,6 +32,8 @@ public class MyPageController {
 	IReviewService reviewService;
 	@Autowired
 	PasswordEncoder pwEncoder;
+	@Autowired
+	ICustomerCouponService customerCouponService;
 	
 	//마이페이지-포인트 컨트롤러 
 	@RequestMapping(value="/mypoint", method=RequestMethod.GET)
@@ -110,6 +116,35 @@ public class MyPageController {
 
 		return "mypage/mypage-shipping-complete";
 	}
+	
+	
+	//마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
+	@RequestMapping("/mycoupon")
+	public String insertCoupon(Model model) {
+		//상단 잔여포인트
+		int point = pointService.selectTotalPoint();
+		model.addAttribute("totalPoint", point + "P");
+		//사용가능한 쿠폰리스트 출력
+		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon();
+		model.addAttribute("selectCustomerCouponList",selectUsableCustomerCouponList);
+		return "mypage/insert-coupon";
+	}
+	
+	//마이페이지-쿠폰등록 및 쿠폰사용완료리스트 컨트롤러
+	@RequestMapping("/mycoupon-used")
+	public String usedCoupon(Model model) {
+		
+		//상단 잔여포인트
+		int point = pointService.selectTotalPoint();
+		model.addAttribute("totalPoint", point + "P");
+		
+		//사용완료 쿠폰리스트 출력
+		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon();
+		model.addAttribute("banCustomerCouponList",selectBanCustomerCouponList);
+		
+		return "mypage/mycoupon-used";
+	}
+	
 	//마이페이지-리뷰관리 컨트롤러
 	 //리뷰 페이지 불러오기
 	@RequestMapping("/review")
@@ -152,21 +187,6 @@ public class MyPageController {
 		int point = pointService.selectTotalPoint();
 		model.addAttribute("totalPoint", point + "P");
 		return "mypage/update-user-inform";
-	}
-	
-	//마이페이지-쿠폰등록 컨트롤러
-	@RequestMapping("/mycoupon")
-	public String insertCoupon(Model model) {
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		return "mypage/insert-coupon";
-	}
-	//마이페이지-쿠폰등록-쿠폰사용완료페이지
-	@RequestMapping("/mycoupon-used")
-	public String usedCoupon(Model model) {
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		return "mypage/mycoupon-used";
 	}
 	
 	
