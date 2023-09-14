@@ -264,48 +264,37 @@
 	</div>
 	
 	<!-- 신규 상품 등록 모달 -->
-	<div id="newRegisterModal" class="modal fade" tabindex="-1" role="dialog">
+	<div id="registerNewModal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document" style="max-width: 900px;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">신규 상품 등록</h5>
 				</div>
-				<form th:action method="post" enctype="multipart/form-data">
+				<!-- <form th:action method="post" enctype="multipart/form-data">	 -->
+					<form th:action method="post">
 					<div class="modal-body">
 						<div class="row mb-3">
-							<label for="categoryId" class="col-sm-2 col-form-label">첫 번째 카테고리</label>
+							<label for="productGroupId" class="col-sm-2 col-form-label">그룹ID</label>
 							<div class="col-sm-10">
-								<select id="categoryId" name="categoryId"
-									onchange="getSecondCategories(this.value, 'unsyn')" required>
-									<option value="">전체</option>
-									<option th:each="category : ${firstCategories}"
-										th:value="${category.categoryId}"
-										th:text="${category.categoryNm}"></option>
-								</select>
+							<input type="text" id="getProductGroupId" name="productGroupId" style="font-weight: bold; background-color: cornsilk;" readonly="readonly">
 							</div>
 						</div>
-
-						<div class="row mb-3">
-							<label for="secondCategory" class="col-sm-2 col-form-label">두 번째 카테고리</label>
+					    <div class="row mb-3">
+							<label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
 							<div class="col-sm-10">
-								<select id="secondCategory" name="secondCategory" required>
-									<option value="">전체</option>
-								</select>
+							<input type="text" id="getCategoryNm" name="categoryNm" style="font-weight: bold; background-color: cornsilk;" readonly="readonly">
 							</div>
 						</div>
-
+						<input type="hidden" id="getCategoryId" name="categoryId">
 						<div class="row mb-3">
-							<label for="productNm" class="col-sm-2 col-form-label"
-								style="color: red">* 상품명</label>
+							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
 							<div class="col-sm-10">
-								<input type="text" maxlength="20" id="productNm"
-									name="productNm" placeholder="* 필수 입력 항목입니다." required>
+							<input type="text" id="getProductNm" name="productNm" style="font-weight: bold; background-color: cornsilk;"readonly="readonly">
 							</div>
-						</div>
-
+						</div>			
+						
 						<div class="row mb-3">
-							<label for="productContent" class="col-sm-2 col-form-label">상품
-								상세내용</label>
+							<label for="productContent" class="col-sm-2 col-form-label" style="padding-bottom: 100px;">상세내용</label>
 							<div class="col-sm-10">
 								<textarea id="productContent" name="productContent"
 									style="height: 200px; width: 510px"></textarea>
@@ -315,7 +304,7 @@
 						<div class="row mb-3">
 							<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
 							<div class="col-sm-10">
-								<input type="text" id="productOptionFirst"
+								<input type="text" id="productOptionFirst" maxlength="10"
 									name="productOptionFirst">
 							</div>
 						</div>
@@ -323,7 +312,7 @@
 						<div class="row mb-3">
 							<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
 							<div class="col-sm-10">
-								<input type="text" id="productOptionSecond"
+								<input type="text" id="productOptionSecond" maxlength="10"
 									name="productOptionSecond">
 							</div>
 						</div>
@@ -331,31 +320,42 @@
 						<div class="row mb-3">
 							<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
 							<div class="col-sm-10">
-								<input type="text" id="productOptionThird"
+								<input type="text" id="productOptionThird" maxlength="10"
 									name="productOptionThird">
 							</div>
 						</div>
 
-<!-- 						<div class="row mb-3">
+						<!-- <div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label"
-								style="color: red">* 가격</label>
+								style="color: red;">* 가격</label>
 							<div class="col-sm-10">
-								<input type="text" maxlength="10" id="productPrice"
-									name="productPrice" onkeyup="inputNumberFormat(this);"
-									style="text-align: right;" required>
+								<input type="text" maxlength="10" id="registerProductPrice"
+									name="registerProductPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;  width: 33%;" 
+									placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div> -->
-
+						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label"
+								style="color: red;">* 가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="8" id="productPrice"
+									name="productPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;  width: 33%;" 
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div>
+						
 						<div class="row mb-3">
 							<label for="productStock" class="col-sm-2 col-form-label"
 								style="color: red">* 수량</label>
 							<div class="col-sm-10">
-								<input type="text" maxlength="8" id="productStock"
+								<input type="text" maxlength="7" id="productStock"
 									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div>
-						<div class="row mb-3">
+<!-- 						<div class="row mb-3">
 							<label for="productImages" class="col-sm-2 col-form-label">
 								상품 이미지(3개) </label>
 							<div class="col-sm-10">
@@ -365,11 +365,18 @@
 								<div id="files-error"
 									style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
 							</div>
+						</div> 
+-->
+						<div class="row mb-3">
+						<label for="productImageFirst" class="col-sm-2 col-form-label">상품 이미지</label>
+						<div class="col-sm-10">
+							<input type="file" id="productImageFirst"
+								name="productImageFirst" required>
 						</div>
-
+						</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
-								th:onclick="|location.href='@{/admin/product)}'|" type="submit">저장</button>
+								onclick="saveData()" type="submit">저장</button>
 							<button class="btn btn-secondary"
 								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 						</div>
@@ -468,7 +475,7 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th><input type="checkbox" id="selectAllCheckbox"></th>
+									<th><input type="checkbox" name='selectall' onclick='selectAll(this)'></th>
 									<th>그룹 ID</th>
 									<th>상품코드</th>
 									<th>상품명</th>
@@ -488,8 +495,7 @@
 				<div class="modal-footer">
 					<button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
 		  					 id="deleteButton">삭제</button>
-		  		    <button class="btn btn-secondary"
-								 th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+		  		    <button class="btn btn-secondary" th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 				</div>
 			</div>
 		</div>
@@ -685,7 +691,7 @@
         }, 50) //대기시간
     }
   	
-  	// 그룹별 상품 조회하기
+ // 그룹별 상품 조회하기
     function selectProductsByGroupId(productGroupId) {
          fetch("/admin/search/" + productGroupId)
              .then(response => response.json())
@@ -696,7 +702,7 @@
                  data.forEach(product => {
                      const row = document.createElement("tr");
                      row.innerHTML = `
-                    	  <td><input type="checkbox" class="productCheckbox" value="${product.productId}"></td>
+                    	  <td><input type="checkbox" name="productCheckbox" onclick='checkSelectAll()' value="${product.productId}"></td>
                           <td>${product.productGroupId}</td>
                           <td>${product.productCode}</td>
                           <td>${product.productNm}</td>
@@ -775,13 +781,26 @@
             document.getElementById('deleteForm').submit();
         }, 50) //대기시간
     } */
-    
+
+  	function checkSelectAll() {
+  	    const checkboxes = document.querySelectorAll('input[name="productCheckbox"]');
+  	    const selectAll = document.querySelector('input[name="selectall"]');
+
+  	    selectAll.checked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  	}
+
+  	function selectAll(selectAll) {
+  	    const checkboxes = document.getElementsByName('productCheckbox');
+  	    checkboxes.forEach((checkbox) => {
+  	        checkbox.checked = selectAll.checked;
+  	    });
+  	}
+
 	// 해당 상품 삭제하기 (개별 선택 삭제, 전체 선택 삭제)
 	document.getElementById("deleteButton").addEventListener("click", function () {
 	    const selectedProductIds = [];
-	    const productCheckboxes = document.querySelectorAll(".productCheckbox");
-		
-	    // 선택된 상품의 ID를 수집
+	    const productCheckboxes = document.querySelectorAll('input[name="productCheckbox"]');
+
 	    productCheckboxes.forEach((checkbox) => {
 	        if (checkbox.checked) {
 	            selectedProductIds.push(checkbox.value);
