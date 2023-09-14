@@ -129,7 +129,7 @@
 		const applyBodys = document.getElementById("cart-coupon-apply-tbodys");
 		const applyBtn = document.getElementById("cart-coupon-apply-btn");
 		
-	 	fetch('http://localhost:8080/cart/coupon-apply/' + customerId + "/" + cartCouponProduct.categoryId + "/" + cartCouponProduct.categoryPrId + "/" + cartCouponProduct.categoryPrPrId)
+	 	fetch('http://localhost:8080/customer-coupon/coupon-apply/' + customerId + "/" + cartCouponProduct.categoryId)
   		.then((res) => {
         	return res.json(); 
     	})
@@ -240,7 +240,7 @@
 				couponDuplicatedCheck[productId] = key;
 			}
 		}
-		
+				
 		if(falseCount == Object.keys(couponCheckStatusList).length) {
 			alert("쿠폰을 선택해주세요");
 		} else {
@@ -282,17 +282,33 @@
 	
 	// 쿠폰 적용
 	function cartCouponComplete(){
+		var couponApplyList = [];
 		couponTotalApplyPrice = 0;
+		var count = 0;
 		
-		if(confirm("쿠폰을 적용하시겠습니까?")){
-			for(key in couponCheckApplyPriceList){
-				couponTotalApplyPrice += parseInt(couponCheckApplyPriceList[key].replace(/,/g , ''));
+		for(key in couponDuplicatedCheck) {
+			if(couponDuplicatedCheck[key] == '0') {
+				count += 1;
+			} else {
+				couponApplyList.push(couponDuplicatedCheck[key]);
 			}
-			localStorage.setItem('couponTotalApplyPrice', couponTotalApplyPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-			opener.location.reload();
-			window.close();
 		}
 		
+		console.log(couponApplyList);
+		
+		if(!couponDuplicatedCheck || count == Object.keys(couponDuplicatedCheck).length){
+			alert("적용하실 쿠폰을 선택해주세요.");
+		} else {
+			if(confirm("쿠폰을 적용하시겠습니까?")){
+				for(key in couponCheckApplyPriceList){
+					couponTotalApplyPrice += parseInt(couponCheckApplyPriceList[key].replace(/,/g , ''));
+				}
+				localStorage.setItem('couponTotalApplyPrice', couponTotalApplyPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+				localStorage.setItem('couponApplyList', JSON.stringify(couponApplyList));
+				opener.location.reload();
+				window.close();
+			}	
+		}
 	}
 	
 </script>

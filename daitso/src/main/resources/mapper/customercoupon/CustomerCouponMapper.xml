@@ -1,3 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.customercoupon.CustomerCouponMapper"></mapper>
+<mapper namespace="com.example.daitso.customercoupon.repository.ICustomerCouponRepository">
+	
+	
+	<!-- 기능: 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
+	담당자: 최준원 -->
+	<update id="checkCouponEprDt">
+		<![CDATA[
+			UPDATE customer_coupon
+		   	   SET coupon_use_dv = 201
+		 	 WHERE customer_coupon_id 
+		 	 	IN (
+					  SELECT cc.customer_coupon_id
+						FROM customer_coupon cc,
+							 coupon c
+					   WHERE cc.coupon_id = c.coupon_id
+						 AND cc.coupon_use_dv = 203
+			  			 AND c.coupon_epr_dt  - TO_DATE(TO_CHAR(SYSDATE,'YYYY/MM/DD'),'YYYY/MM/DD') < 0
+					)
+		]]>
+	</update>
+	
+	<!-- 
+		기능: 적용가능한 쿠폰 조회
+		담당자: 최준원
+	-->
+	<select id="getCouponsByCustomerId" parameterType="int" resultType="com.example.daitso.cart.model.CartCouponApply">
+		SELECT cc.customer_coupon_id AS "customerCouponId",
+		       c.coupon_id AS "couponId",
+		       c.coupon_nm AS "couponNm",
+		       c.coupon_dscnt_rate AS "couponDscntRate"
+		  FROM coupon c,
+     		   customer_coupon cc
+		 WHERE cc.coupon_id = c.coupon_id	
+		   AND cc.coupon_use_dv = 203
+		   AND cc.customer_id = #{customerId}
+		   AND c.category_id IN 
+		   (
+						SELECT category_id 
+						  FROM category 
+			        START WITH category_id = #{categoryId} 
+	          CONNECT BY PRIOR category_pr_id = category_id   
+		    )	
+	</select>  
+
+
+</mapper>
