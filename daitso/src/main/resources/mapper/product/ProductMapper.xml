@@ -33,17 +33,19 @@
 		a.product_nm AS productNm, 
 		NVL(b.review_star_point,0) AS reviewStarPoint, 
         NVL(b.review_count,0) AS reviewCount,
+		special_product_dv AS productSpecialDv,
 		a.product_content AS productContent, 
 		a.product_stock AS productStock, 
 		a.product_price AS productPrice
     FROM(
-    	SELECT product_id, product_group_id, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
+    	SELECT product_id, product_group_id, NVL(special_product_dv,'N') AS special_product_dv, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
     			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
     	FROM(
-    		SELECT p.product_id		AS		product_id,
+    		SELECT p.product_id		AS		product_id, special_product_dv,
 				   product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point
 			FROM product p
-	        LEFT JOIN review r on p.product_id = r.product_id
+	        LEFT JOIN review r ON p.product_id = r.product_id
+	        LEFT JOIN special_product sp ON p.product_id = sp.special_product_id
    			WHERE category_id in (
 									SELECT category_id from category c
 									START WITH category_id = #{categoryId}
