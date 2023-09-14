@@ -21,6 +21,7 @@ public interface IProductRepository {
 	Product selectProduct(@Param("productId") int productId);
 
 	
+	
 	// 카테고리별 상품 조회하기
     List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
     
@@ -45,7 +46,6 @@ public interface IProductRepository {
     //기존 상품 등록하기
 	void registerExistingProducts(ProductCheck product);
 	
-	/* void makeProductCode(); */
 	
 	
 	List<String> selectProductOptionFirst(int productGroupId);
