@@ -17,7 +17,7 @@
 				coupon_epr_dt AS couponEprDt,
 				coupon_use_dv AS couponUseDv
 		FROM	coupon c, customer_coupon cc
-		WHERE 	customer_id=102 and cc.coupon_id = c.coupon_id and cc.coupon_use_dv=201
+		WHERE 	customer_id=102 and cc.coupon_id = c.coupon_id and cc.coupon_use_dv=201 
 	</select>
 
 	
