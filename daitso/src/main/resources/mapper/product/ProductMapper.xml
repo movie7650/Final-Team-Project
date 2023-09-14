@@ -202,10 +202,11 @@
 	       p.product_option_third  AS "productOptionThird",
 	       p.product_price         AS "productPrice",
  	       p.product_stock         AS "productStock"
-	FROM product p 
-	JOIN category c 
-	  ON p.category_id = c.category_id
-    WHERE p.product_group_id = #{productGroupId}
+   	 FROM  product p 
+	 JOIN  category c 
+	   ON  p.category_id = c.category_id
+    WHERE  p.product_group_id = #{productGroupId}
+ ORDER BY  p.product_price
 </select>
 
 
@@ -284,30 +285,42 @@
 				 #{productOptionSecond}, 
 				 #{productOptionThird} )
 ]]> -->
- INSERT INTO product ( 	  product_group_id,
-    					  product_id, 
-						  category_id, 
-						  product_nm, 
-						  product_content,
-						  product_image_first,
-						  product_price, 
-						  product_stock, 
-						  product_option_first, 
-						  product_option_second, 
-						  product_option_third )
-	    VALUES ( #{productGroupId},
-	    		 product_seq.NEXTVAL, 
-				 #{categoryId}, 
-				 #{productNm}, 
-				 #{productContent},
-				 #{productImageFirst},
-				 #{productPrice}, 
-				 #{productStock}, 
-				 #{productOptionFirst}, 
-				 #{productOptionSecond}, 
-				 #{productOptionThird} )
+DECLARE
+    v_product_id NUMBER;
+BEGIN
+    INSERT INTO product (
+        product_group_id,
+        product_id,
+        category_id,
+        product_nm,
+        product_content,
+        product_image_first,
+        product_price,
+        product_stock,
+        product_option_first,
+        product_option_second,
+        product_option_third
+    ) VALUES (
+        #{productGroupId},
+        product_seq.NEXTVAL,
+        #{categoryId},
+        #{productNm},
+        #{productContent},
+        #{productImageFirst},
+        #{productPrice},
+        #{productStock},
+        #{productOptionFirst},
+        #{productOptionSecond},
+        #{productOptionThird}
+    )
+    RETURNING product_id INTO v_product_id;
+    
+    UPDATE product
+    SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+    WHERE product_id = v_product_id;
+    COMMIT;
+END;
 </insert>
-
 
 <select id="selectProductOptionFirst" parameterType="int" resultType="map">
 	SELECT nvl(product_option_first,0) AS optionFirst 

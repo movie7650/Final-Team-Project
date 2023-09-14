@@ -201,22 +201,32 @@
 							</div>
 						</div>
 
-						<div class="row mb-3">
+						<!-- <div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label"
-								style="color: red">* 가격</label>
+								style="color: red;">* 가격</label>
 							<div class="col-sm-10">
 								<input type="text" maxlength="10" id="registerProductPrice"
 									name="registerProductPrice" onkeyup="inputNumberFormat(this);"
-									style="text-align: right;" 
+									style="text-align: right;  width: 33%;" 
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div> -->
+						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label"
+								style="color: red;">* 가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="8" id="productPrice"
+									name="productPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;  width: 33%;" 
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div>
-
+						
 						<div class="row mb-3">
 							<label for="productStock" class="col-sm-2 col-form-label"
 								style="color: red">* 수량</label>
 							<div class="col-sm-10">
-								<input type="text" maxlength="8" id="productStock"
+								<input type="text" maxlength="7" id="productStock"
 									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
@@ -242,8 +252,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
-							th:onclick="|location.href='@{/admin/product)}'|"
-								onclick="submitForm()">저장</button>
+								onclick="saveData()" type="submit">저장</button>
 							<button class="btn btn-secondary"
 								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 						</div>
@@ -327,7 +336,7 @@
 							</div>
 						</div>
 
-						<div class="row mb-3">
+<!-- 						<div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label"
 								style="color: red">* 가격</label>
 							<div class="col-sm-10">
@@ -335,7 +344,7 @@
 									name="productPrice" onkeyup="inputNumberFormat(this);"
 									style="text-align: right;" required>
 							</div>
-						</div>
+						</div> -->
 
 						<div class="row mb-3">
 							<label for="productStock" class="col-sm-2 col-form-label"
@@ -400,28 +409,28 @@
 							<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
 							<div class="col-sm-10">
 								<input type="text" id="updateProductOptionFirst"
-									name="productOptionFirst" required>
+									name="productOptionFirst" >
 							</div>
 						</div>
 						<div class="row mb-3">
 							<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
 							<div class="col-sm-10">
 								<input type="text" id="updateProductOptionSecond"
-									name="productOptionSecond" required>
+									name="productOptionSecond" >
 							</div>
 						</div>
 						<div class="row mb-3">
 							<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
 							<div class="col-sm-10">
 								<input type="text" id="updateProductOptionThird"
-									name="productOptionThird" required>
+									name="productOptionThird" >
 							</div>
 						</div>
 
 						<div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label">가격</label>
 							<div class="col-sm-10">
-								<input type="text" maxlength="10" id="updateProductPrice"
+								<input type="text" maxlength="8" id="updateProductPrice" 
 									name="productPrice" onkeyup="inputNumberFormat(this);"
 									style="text-align: right;" required>
 							</div>
@@ -429,7 +438,7 @@
 						<div class="row mb-3">
 							<label for="productStock" class="col-sm-2 col-form-label">수량</label>
 							<div class="col-sm-10">
-								<input type="number" id="updateProductStock" name="productStock"
+								<input type="number" maxlength="7" oninput="maxLengthCheck(this)" id="updateProductStock" name="productStock"
 									required>
 							</div>
 						</div>
@@ -671,7 +680,6 @@
         }, 50) //대기시간
     }
   	
-  	
   	// 그룹별 상품 조회하기
     function selectProductsByGroupId(productGroupId) {
          fetch("/admin/search/" + productGroupId)
@@ -731,6 +739,20 @@
         const priceUpdated = uncomma(updatePrice.value);
         updatePrice.value = priceUpdated;
     }
+   
+    function saveData() {
+    	const productPriceInput = document.getElementById("productPrice");
+    	const productPriceValue = uncomma(productPriceInput.value); // 콤마 제거
+    	productPriceInput.value = productPriceValue;
+    	const productPrice = parseInt(productPriceValue); // 정수로 변환
+    }
+
+    // number 타입 maxlength 걸어주기
+    function maxLengthCheck(object){
+        if (object.value.length > object.maxLength){
+          object.value = object.value.slice(0, object.maxLength);
+        }    
+      }
     
     //기존 상품 등록시 그룹ID, 카테고리명, 상품명 불러오기
     function registerExisting(productGroupId, categoryNm, categoryId, productNm) {

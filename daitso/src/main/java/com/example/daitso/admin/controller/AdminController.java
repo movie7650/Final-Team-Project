@@ -179,6 +179,16 @@ public class AdminController {
 	//기존 상품 등록하기
 	@PostMapping("/product")
 	public String registerExistingProducts(ProductCheck product, Model model) {
+		// 입력 필드가 비어 있으면 '-'으로 대체
+	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+	        product.setProductOptionFirst("-");
+	    }
+	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+	        product.setProductOptionSecond("-");
+	    }
+	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+	        product.setProductOptionThird("-");
+	    }
 		adminService.registerExistingProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
