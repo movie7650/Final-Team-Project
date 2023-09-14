@@ -104,8 +104,6 @@
                c.cart_count AS "cartCount",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.cart_price)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
 			   p.category_id AS "categoryId",
-       		   cg.category_pr_id AS "categoryPrId",
-       		   DECODE((SELECT category_pr_id FROM category WHERE category_id = cg.category_pr_id), null, 0, 0) AS "categoryPrPrId",
        		   p.product_option_first AS "productOptionFirst",
        		   p.product_option_second AS "productOptionSecond",
                p.product_option_third AS "productOptionThird",
@@ -125,23 +123,24 @@
 		  AND  c.status = 'Y'
 	</select>
 	
-	 <!-- 
-		기능: 적용가능한 쿠폰 조회
+	 <!--
+		기능: 구매하기 전 장바구니에 담긴 물건들 조회 
 		담당자: 최준원
 	-->
-	<select id="getCouponsByCustomerId" parameterType="int" resultType="com.example.daitso.cart.model.CartCouponApply">
-		SELECT cc.customer_coupon_id AS "customerCouponId",
-		       c.coupon_id AS "couponId",
-		       c.coupon_nm AS "couponNm",
-		       c.coupon_dscnt_rate AS "couponDscntRate"
-		  FROM coupon c,
-     		   customer_coupon cc
-		 WHERE cc.coupon_id = c.coupon_id	
-		   AND cc.coupon_use_dv = 203
-		   AND cc.customer_id = #{customerId}
-		   AND c.category_id IN 
-		   		<foreach collection="categoryIdList" item="categoryId" open="(" close=")" separator=",">
-				 	#{categoryId}
-				</foreach>
-	</select>      
+	<select id="getCartProductBeforePurchaseByCustomerId" parameterType="int" resultType="com.example.daitso.cart.model.CartPurchase">
+		SELECT p.product_id AS "productId",
+			   p.product_nm AS "productNm",
+			   p.product_option_first AS "productOptionFirst",
+			   p.product_option_second AS "productOptionSecond",
+			   p.product_option_third AS "productOptionThird",
+			   c.cart_id AS "cartId",
+			   c.cart_count AS "cartCount",
+			   c.cart_price AS "cartPrice"
+		  FROM cart c,
+			   product p
+		 WHERE c.product_id = p.product_id
+		   AND c.customer_id = #{customerId}
+		   AND c.checked = 'true'
+		   AND c.status = 'Y'
+	</select>    
 </mapper>

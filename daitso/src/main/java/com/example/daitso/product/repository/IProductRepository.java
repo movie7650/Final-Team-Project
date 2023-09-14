@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
+import com.example.daitso.product.model.SpecialProduct;
 
 @Mapper
 @Repository
@@ -19,6 +20,7 @@ public interface IProductRepository {
 	
 	Product selectProduct(@Param("productId") int productId);
 
+	
 	
 	// 카테고리별 상품 조회하기
     List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
@@ -44,7 +46,6 @@ public interface IProductRepository {
     //기존 상품 등록하기
 	void registerExistingProducts(ProductCheck product);
 	
-	/* void makeProductCode(); */
 	
 	
 	List<String> selectProductOptionFirst(int productGroupId);
@@ -56,6 +57,8 @@ public interface IProductRepository {
 	Product selectOptionProduct(@Param("productGroupId") int productGroupId , @Param("productOptionFirst") String productOptionFirst, @Param("productOptionSecond") String productOptionSecond, @Param("productOptionThird") String productOptionThird);
 
 	int selectInquiryProductId(@Param("productGroupId") int productGroupId, @Param("size") String size, @Param("color") String color, @Param("other") String other);
+	
+	List<SpecialProduct> selectSpecialProduct();
 
 }
 

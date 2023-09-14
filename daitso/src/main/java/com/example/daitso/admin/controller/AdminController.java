@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -150,12 +151,31 @@ public class AdminController {
 	}
 
 	// 해당 상품 삭제하기
+//	@PostMapping("/delete")
+//	public String deleteProduct(@RequestParam int productId, Model model) {
+//		adminService.deleteProduct(productId);
+//		model.addAttribute("message","상품이 삭제되었습니다.");
+//		model.addAttribute("searchUrl","/admin/product");
+//		return "admin/product/message";
+//	}
+	
+	// 해당 상품 삭제하기
+//	@PostMapping("/delete")
+//	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
+//	    for (Integer productId : selectedProductIds) {
+//	        adminService.deleteProduct(productId);
+//	    }
+//	    model.addAttribute("message", "상품이 삭제되었습니다.");
+//	    model.addAttribute("searchUrl", "/admin/product");
+//	    return "admin/product/message";
+//	}
+	
 	@PostMapping("/delete")
-	public String deleteProduct(@RequestParam int productId, Model model) {
-		adminService.deleteProduct(productId);
-		model.addAttribute("message","상품이 삭제되었습니다.");
-		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
+	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
+	    for (Integer productId : selectedProductIds) {
+	        adminService.deleteProduct(productId);
+	    }
+	    return "admin/product";
 	}
 	
 	//카테고리 수정하기

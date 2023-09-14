@@ -25,4 +25,7 @@ public interface ICategoryService {
 	
 	// 카테고리 계층 업데이트 
 	void updateCategory(int categoryId, int parentCategoryId);
+	
+	// 카테고리 무작휘 8개 갖고오기
+	List<Category> selectMainCategory();
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<body>
+	<div class="ship-title">배송지 선택</div>
+	<div class="ship-boxes">
+		<div class="ship-box" th:each=" shipping : ${shippings}">
+			<div style="display: flex;">
+				<div style="height: 29px; line-height:29px; font-weight: 600; font-size: 19px;" th:text="${shipping.shippingReceiverNm}">최준원</div>
+				<div th:if="${shipping.shippingDv} != '일반배송지'" class="ship-normal">기본배송지</div>
+			</div>
+			<div style="margin-top:10px;" th:if="${shipping.shippingDaddr}" th:text="${shipping.shippingRoadNmAddr} + ' ' + ${shipping.shippingDaddr}"></div>
+			<div style="margin-top:10px;" th:unless="${shipping.shippingDaddr}" th:text="${shipping.shippingRoadNmAddr}"></div>
+			<div th:text="${shipping.shippingReceiverTelno}"></div>
+			<div style="margin-top:10px;" th:text="${shipping.shippingDmnd}"></div>
+			<div style="display: flex; justify-content: space-between; margin-top: 20px;">
+				<div class="ship-modify"><a th:href="@{/shipping/{customerId}/update/{shippingId}(shippingId = ${shipping.shippingId},customerId = ${customerId})}" style="color: #39594E; text-decoration: none;">수정</a></div>
+				<div class="ship-choose" th:onclick="chooseShipping([[${shipping.shippingId}]])">선택</div>
+			</div>
+		</div>
+		<div class="ship-plus"><a th:href="@{/shipping/{customerId}/add(customerId = ${customerId})}" style="color:#39594E; text-decoration: none;">+ 배송지 추가</a></div>
+	</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+	
+	function chooseShipping(shippingId) {
+		localStorage.setItem("shippingId", shippingId);
+		opener.location.reload();
+		window.close();
+	}
+
+</script>
+</html>

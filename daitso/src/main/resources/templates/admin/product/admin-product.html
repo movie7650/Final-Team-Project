@@ -468,6 +468,7 @@
 						<table class="table">
 							<thead>
 								<tr>
+									<th><input type="checkbox" id="selectAllCheckbox"></th>
 									<th>그룹 ID</th>
 									<th>상품코드</th>
 									<th>상품명</th>
@@ -482,10 +483,14 @@
 							<tbody id="productTableBody">
 							</tbody>
 						</table>
-
 					</div>
 				</form>
-				
+				<div class="modal-footer">
+					<button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
+		  					 id="deleteButton">삭제</button>
+		  		    <button class="btn btn-secondary"
+								 th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -691,6 +696,7 @@
                  data.forEach(product => {
                      const row = document.createElement("tr");
                      row.innerHTML = `
+                    	  <td><input type="checkbox" class="productCheckbox" value="${product.productId}"></td>
                           <td>${product.productGroupId}</td>
                           <td>${product.productCode}</td>
                           <td>${product.productNm}</td>
@@ -705,8 +711,6 @@
 		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
 		   						style="background-color: #39594e; color: #ffff" type="button"
 		   						onclick = "selectProductId(${product.productId})">수정</button>
-		  						<button class="btn btn-xs" style="background-color: red; color: #fff" type="button"
-		  						onclick = "deleteProduct(${product.productId})">삭제</button>
 		    				</div>
 		    			  </td>
                          `;
@@ -732,7 +736,7 @@
                 document.getElementById("updateProductStock").value = product.productStock;
             }); 
     }
-   
+    
     //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function submitForm() {
         const updatePrice = document.getElementById("updateProductPrice");
@@ -740,6 +744,7 @@
         updatePrice.value = priceUpdated;
     }
    
+    //가격 콤마 제거하고 정수로 변환하여 저장하기
     function saveData() {
     	const productPriceInput = document.getElementById("productPrice");
     	const productPriceValue = uncomma(productPriceInput.value); // 콤마 제거
@@ -754,15 +759,7 @@
         }    
       }
     
-    //기존 상품 등록시 그룹ID, 카테고리명, 상품명 불러오기
-    function registerExisting(productGroupId, categoryNm, categoryId, productNm) {
-        document.getElementById("getProductGroupId").value = productGroupId;
-        document.getElementById("getCategoryNm").value = categoryNm;
-        document.getElementById("getCategoryId").value = categoryId;
-        document.getElementById("getProductNm").value = productNm;
-    }
-    
-	// 해당 상품 삭제 확인 메시지
+	/*   // 해당 상품 삭제 확인 메시지
     function deleteProduct(productId) {
         if (!confirm('해당 상품을 삭제하시겠습니까?')) {
             return false;
@@ -777,8 +774,69 @@
         setTimeout(() => {
             document.getElementById('deleteForm').submit();
         }, 50) //대기시간
-    }
+    } */
     
+	// 해당 상품 삭제하기 (개별 선택 삭제, 전체 선택 삭제)
+	document.getElementById("deleteButton").addEventListener("click", function () {
+	    const selectedProductIds = [];
+	    const productCheckboxes = document.querySelectorAll(".productCheckbox");
+		
+	    // 선택된 상품의 ID를 수집
+	    productCheckboxes.forEach((checkbox) => {
+	        if (checkbox.checked) {
+	            selectedProductIds.push(checkbox.value);
+	        }
+	    });
+	
+	    if (selectedProductIds.length === 0) {
+	        alert("선택된 상품이 없습니다.");
+	        return;
+	    }
+	    
+	    if (confirm('해당 상품을 삭제하시겠습니까?')) {
+	        fetch("/admin/delete", {
+	            method: "POST",
+	            headers: {
+	                "Content-Type": "application/json",
+	            },
+	            body: JSON.stringify(selectedProductIds),
+	        })
+	        .then((response) => response.json())
+	        .then((data) => {
+	            alert("상품이 삭제되었습니다.");
+	            setTimeout(() => {
+	                window.location.href = "/admin/product";
+	            }, 50);
+	        })
+	        .catch((error) => {
+	            console.error("상품 삭제 오류:", error);
+	        });
+	    }
+	}); 
+    
+	/*   // 모달 창 닫기 버튼 클릭 이벤트 처리
+    document.getElementById("closeModalButton").addEventListener("click", function () {
+        // 모달 창 숨기기 (Bootstrap 모달 숨김 클래스 활용)
+        const modal = document.getElementById("searchModal");
+        modal.classList.remove("show");
+        modal.style.display = "none";
+        modal.setAttribute("aria-hidden", "true");
+        
+        // 모달 배경 숨기기
+        const modalBackdrop = document.querySelector(".modal-backdrop");
+        modalBackdrop.style.display = "none";
+    }); */
+
+
+   
+    //기존 상품 등록시 그룹ID, 카테고리명, 상품명 불러오기
+    function registerExisting(productGroupId, categoryNm, categoryId, productNm) {
+        document.getElementById("getProductGroupId").value = productGroupId;
+        document.getElementById("getCategoryNm").value = categoryNm;
+        document.getElementById("getCategoryId").value = categoryId;
+        document.getElementById("getProductNm").value = productNm;
+    }
+
     // 천 단위로 comma 찍기
     function inputNumberFormat(obj) {
         obj.value = comma(uncomma(obj.value));

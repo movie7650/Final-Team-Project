@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.cart.model.CartCheck;
 import com.example.daitso.cart.model.CartCoupon;
-import com.example.daitso.cart.model.CartCouponApply;
 import com.example.daitso.cart.model.CartUpdate;
 import com.example.daitso.cart.model.Tomorrow;
 import com.example.daitso.cart.service.ICartService;
@@ -118,7 +116,7 @@ public class CartController {
 	}
 	
 	// 내일 날짜 구하기
-	private Tomorrow getTomorrowMonthAndDay() {
+	public Tomorrow getTomorrowMonthAndDay() {
 
 		// 내일 날짜(년,월,일)
 		Calendar cal = Calendar.getInstance();
@@ -139,6 +137,20 @@ public class CartController {
 		// 주말에는 배달을 안한다는 가정하...
 		if("(토)".equals(dof)) {
 			cal.add(cal.DATE, +2);
+			String mdate = sdf.format(cal.getTime());
+			String[] mdateSplit = mdate.split("/");
+			String mmad = mdateSplit[1] + "/" + mdateSplit[2];
+
+			// 담주 월요일 날짜(요일)
+			LocalDate nm = LocalDate.of(Integer.valueOf(mdateSplit[0]), Integer.valueOf(mdateSplit[1]),
+					Integer.valueOf(mdateSplit[2]));
+
+			DayOfWeek mdayOfWeek = nm.getDayOfWeek();
+			String mdof = "(" + mdayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN) + ")";
+			
+			return Tomorrow.builder().mad(mmad).dof(mdof).build();
+		} else if("(일)".equals(dof)){
+			cal.add(cal.DATE, +1);
 			String mdate = sdf.format(cal.getTime());
 			String[] mdateSplit = mdate.split("/");
 			String mmad = mdateSplit[1] + "/" + mdateSplit[2];
@@ -177,16 +189,5 @@ public class CartController {
 		model.addAttribute("customerId", customerId);
 		model.addAttribute("cartCouponProducts", cartCouponProducts);
 		return "cart/cart-coupon";
-	}
-	
-	// 적용 가능한 쿠폰 조회
-	@GetMapping("/coupon-apply/{customerId}/{categoryId}/{categoryPrId}/{categoryPrPrId}")
-	public @ResponseBody List<CartCouponApply> getCartCouponApply(@PathVariable int customerId, @PathVariable int categoryId, @PathVariable int categoryPrId, @PathVariable int categoryPrPrId){
-		List<Integer> categoryIdList = new ArrayList<Integer>();
-		categoryIdList.add(categoryId);
-		categoryIdList.add(categoryPrId);
-		categoryIdList.add(categoryPrPrId);
-		
-		return cartService.getCouponsByCustomerId(categoryIdList, customerId);
 	}
 }

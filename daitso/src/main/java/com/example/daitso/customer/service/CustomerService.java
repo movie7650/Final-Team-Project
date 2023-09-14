@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
 import com.example.daitso.customer.repository.ICustomerRepository;
@@ -43,15 +44,21 @@ public class CustomerService implements ICustomerService {
 		customerRepository.insertIntoCustomer(customerSignUp);
 	}
 
+	// 사용자 고유번호로부터 사용자 이름 갖고오기
 	@Override
 	public CustomerName getCustomerNmByCustomerId(int customerId) {
 		return customerRepository.getCustomerNmByCustomerId(customerId);
+	}
+
+	// 사용자 고유번호로부터 사용자 정보(이름,이메일,휴대폰번호) 갖고오기
+	@Override
+	public CustomerInfo getCustomerInfoByCustomerId(int customerId) {
+		return customerRepository.getCustomerInfoByCustomerId(customerId);
 	}
 	
 	//사용자 이메일 가져오기 
 	@Override
 	public String selectCustomerEmail() {
-		// TODO Auto-generated method stub
 		return customerRepository.selectCustomerEmail();
 	}	
 }

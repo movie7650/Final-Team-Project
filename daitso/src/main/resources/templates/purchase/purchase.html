@@ -1,10 +1,252 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
 <body>
-
+	<div style="display: flex; justify-content: center">
+		<div style="width: 57%">
+			<div class="purchase-logo">
+				<a th:href="@{/customer/test}"> <img class="purchase-logo-img"
+					th:src="@{/assets/header/daitso_logo_header.png}">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div style="display: flex; justify-content: center" class="purchase-box">
+		<div style="width: 57%">
+			<div style="display: flex; justify-content: space-between; margin-top: 50px;">
+				<div class="purchase-box-title">주문/결제</div>
+				<div class="purchase-box-progress">
+					<span>주문/결제</span>
+					<img src="/assets/common/right_arrow_gray.svg">
+					<span>주문완료</span>
+				</div>
+			</div>
+			<div class="purchase-info-box">
+				<div class="purchase-buyer-info-title">구매자정보</div>
+				<div class="purchase-buyer-info-box">
+					<div>
+						<div>이름</div>
+						<div th:text="${customerInfo.customerNm}"></div>
+					</div>
+					<div>
+						<div>이메일</div>
+						<div th:text="${customerInfo.customerEmail}"></div>
+					</div>
+					<div>
+						<div>휴대폰 번호</div>
+						<div th:text="${customerInfo.customerTelno}"></div>
+					</div>
+				</div>
+				<div class="purchase-shipping-info-title">
+					<div style="line-height: 40px;">받는사람정보</div>
+					<div th:if="${customerInfo.shippingId}" class="purchase-shipping-btn" onclick="plusShipping()">배송지변경</div>
+					<div th:unless="${customerInfo.shippingId}" class="purchase-shipping-btn" onclick="plusShipping()">배송지추가</div>
+				</div>
+				<div th:if="${customerInfo.shippingId}" class="purchase-shipping-info-boxes">
+					<div class="purchase-shipping-info-mini-box">
+						<div>이름</div>
+						<div style="display: flex; align-items: center;">
+							<span id="purchase-shipping-nm" th:text="${shipping.shippingReceiverNm}"></span>
+							<span id="purchase-normal">기본배송지</span>
+						</div>
+					</div>
+					<div class="purchase-shipping-info-mini-box">
+						<div>배송주소</div>
+						<div
+							id="purchase-shipping-addr"
+							th:if="${shipping.shippingDaddr}" 
+							th:text="${shipping.shippingRoadNmAddr} + ' ' + ${shipping.shippingDaddr}"></div>
+						<div
+							id="purchase-shipping-addr"
+							th:unless="${shipping.shippingDaddr}" 
+							th:text="${shipping.shippingRoadNmAddr}"></div>
+					</div>
+					<div class="purchase-shipping-info-mini-box">
+						<div>연락처</div>
+						<div id="purchase-shipping-telno" th:text="${shipping.shippingReceiverTelno}"></div>
+					</div>
+					<div class="purchase-shipping-info-mini-box">
+						<div>배송 요청사항</div>
+						<div id="purchase-shipping-dmnd" th:text="${shipping.shippingDmnd}"></div>
+					</div>
+				</div>
+				<div th:unless="${customerInfo.shippingId}">
+					<div th:if="${customerInfo.recentShippingId}" class="purchase-shipping-info-boxes">
+						<div class="purchase-shipping-info-mini-box">
+						<div>이름</div>
+						<div style="display: flex; align-items: center;">
+							<span id="purchase-shipping-nm" th:text="${recentShipping.shippingReceiverNm}"></span>
+							<span id="purchase-normal" style="display: none">기본배송지</span>
+						</div>
+					</div>
+					<div class="purchase-shipping-info-mini-box">
+						<div>배송주소</div>
+						<div
+							id="purchase-shipping-addr"
+							th:if="${recentShipping.shippingDaddr}" 
+							th:text="${recentShipping.shippingRoadNmAddr} + ' ' + ${recentShipping.shippingDaddr}"></div>
+						<div
+							id="purchase-shipping-addr"
+							th:unless="${recentShipping.shippingDaddr}" 
+							th:text="${recentShipping.shippingRoadNmAddr}"></div>
+					</div>
+					<div class="purchase-shipping-info-mini-box">
+						<div>연락처</div>
+						<div id="purchase-shipping-telno" th:text="${recentShipping.shippingReceiverTelno}"></div>
+					</div>
+					<div class="purchase-shipping-info-mini-box">
+						<div>배송 요청사항</div>
+						<div id="purchase-shipping-dmnd" th:text="${recentShipping.shippingDmnd}"></div>
+					</div>
+					</div>
+					<div th:unless="${customerInfo.recentShippingId}" class="purchase-shipping-info-box">
+						저장되어 있는 배송지가 없습니다. 배송지를 추가해주세요.
+					</div>
+				</div>
+				<div class="purchase-product-info-title">상품정보</div>
+				<div class="purchase-product-info-box">
+					<div>
+						<span>내일</span>
+						<span th:text="${tommorrow.dof}"></span>
+						<span th:text="${tommorrow.mad}"></span>  
+						<span>도착 보장</span>
+					</div>
+					<div class="purchase-product-info" th:each="cartProductBeforePurchase : ${cartProductsBeforePurchase}">
+						<span>
+							<span th:text="${cartProductBeforePurchase.productNm}"></span>
+							<span style="margin-left: 5px;" th:if="${cartProductBeforePurchase.productOptionFirst} != '-'">
+								<span>,</span>
+								<span th:text="${cartProductBeforePurchase.productOptionFirst}"></span>
+							</span>
+							<span style="margin-left: 5px;" th:if="${cartProductBeforePurchase.productOptionSecond} != '-'">
+								<span>,</span>
+								<span th:text="${cartProductBeforePurchase.productOptionSecond}"></span>
+							</span>
+							<span style="margin-left: 5px;" th:if="${cartProductBeforePurchase.productOptionThird} != '-'">
+								<span>,</span>
+								<span th:text="${cartProductBeforePurchase.productOptionThird}"></span>
+							</span>
+						</span>
+						<span style="margin-left: 20px;">수량<span th:text="${cartProductBeforePurchase.cartCount}">0</span>개</span>
+					</div>
+				</div>
+				<div class="purchase-buy-info-title">결재정보</div>
+				<div class="purchase-buy-info-box">
+					<div>
+						<div>총상품가격</div>
+						<div><span id="purchase-total-product-price">32,000</span>원</div>
+					</div>
+					<div>
+						<div>총할인가격</div>
+						<div><span id="purchase-total-discount-price">0</span>원</div>
+					</div>
+					<div>
+						<div>배송비</div>
+						<div><span>0</span>원</div>
+					</div>
+					<div>
+						<div>총결제금액</div>
+						<div><span id="purchase-total-price">32,000</span>원</div>
+					</div>
+					<div>
+						<div>결제방법</div>
+						<div>
+							<span class="purchase-buy-card">신용/체크카드</span>
+							<div style="display: flex; align-items: center;">
+								<span>은행선택</span>
+								<select style="width: 90px; height: 40px; margin-left: 10px;">
+									<option>국민</option>
+									<option>신한</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="purchase-agree">
+					위 주문 내용을 확인 하였으며, 회원 본인은 개인정보 이용 및 제공(해외직구의 경우 국외제공) 및 결제에 동의합니다.
+				</div>
+				<div class="purchase-complete">
+					<div class="purchase-complete-btn">동의하고 계속하기</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script type="text/javascript" th:inline="javascript">
+	
+	var customerId = [[${customerId}]];
+	
+	//결제 정보
+	var cartProductsBeforePurchase = [[${cartProductsBeforePurchase}]];
+	var cartTotalProductPrice = 0;
+	const purchaseTotalProductPrice = document.getElementById("purchase-total-product-price");
+	const purchaseTotalPrice = document.getElementById("purchase-total-price");
+	
+	cartProductsBeforePurchase.forEach((item) => {
+		cartTotalProductPrice += item.cartPrice;
+	})
+	
+	purchaseTotalProductPrice.innerText = cartTotalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	
+	// 총할인금액
+	if(sessionStorage.getItem('couponTotalApplyPrice')) {
+		document.getElementById("purchase-total-discount-price").innerText = sessionStorage.getItem('couponTotalApplyPrice');
+		purchaseTotalPrice.innerText =
+			(cartTotalProductPrice - parseInt(sessionStorage.getItem('couponTotalApplyPrice').replace(/,/g , '')))
+			.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	} else {
+		document.getElementById("purchase-total-discount-price").innerText = '0';
+		purchaseTotalPrice.innerText = cartTotalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	
+	// 배송지 추가
+	function plusShipping() {
+		window.open('http://localhost:8080/shipping/' + customerId, '배송지 조회,선택,추가', 'width=520px,height=650px,scrollbars=yes');
+	}
+	
+	
+	// 받는 사람 정보
+	
+	const shippingNm = document.getElementById("purchase-shipping-nm");
+	const shippingTelno = document.getElementById("purchase-shipping-telno");
+	const shippingAddr = document.getElementById("purchase-shipping-addr");
+	const shippingDmnd = document.getElementById("purchase-shipping-dmnd");
+	
+	var shippingIdLocal = localStorage.getItem('shippingId');
+	var shippingIdSession = 0;
+	if(shippingIdLocal) {
+		localStorage.removeItem('shippingId');
+		sessionStorage.setItem('shippingId',shippingIdLocal);
+		shippingIdSession = sessionStorage.getItem('shippingId');
+		
+		fetch('http://localhost:8080/shipping/api/' + shippingIdSession)
+  		.then((res) => {
+        	return res.json(); 
+    	})
+    	.then((json) => {
+    		
+    		if(json.shippingDv == '기본배송지'){
+    			document.getElementById("purchase-normal").style.display = 'block';
+    		} else {
+    			document.getElementById("purchase-normal").style.display = 'none';	
+    		}
+    
+    		shippingNm.innerText = json.shippingReceiverNm;
+    		shippingTelno.innerText = json.shippingReceiverTelno;
+    		if(!json.shippingDaddr){
+    			shippingAddr.innerText = json.shippingRoadNmAddr;	
+    		} else {
+    			shippingAddr.innerText = json.shippingRoadNmAddr + ' ' + json.shippingDaddr;
+    		} 
+    		shippingDmnd.innerText = json.shippingDmnd;
+    	})
+    	.catch(function(error) {
+    	      console.log(error);
+    	});
+	} else {
+		sessionStorage.removeItem('shippingId');
+	}
+	
+</script>
 </html>
