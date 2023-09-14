@@ -50,7 +50,7 @@
 			const categoryList = document.getElementById('header-category-list');
 			const category = document.getElementById('header-category');
 			
-    	    fetch('http://localhost:8080/category/first-category')
+    	    fetch(window.location.origin + '/category/first-category')
     	  		.then((res) => {
     	  			//Promise 반환
     	        	return res.json(); 
@@ -94,7 +94,7 @@
     	        	   		a.style.textDecoration = 'none'
     	        	    });
     	        		
-    	    	    	fetch('http://localhost:8080/category/second-category/' + categoryId)
+    	    	    	fetch( window.location.origin + '/category/second-category/' + categoryId)
     		     	  		.then((res) => {
     		     	  			//Promise 반환
     		   		        	return res.json(); 
@@ -147,7 +147,7 @@
     	    	});
     	    
     	    // 스프링 시큐리티에서 사용자 정보(사용자 고유번호) 받아오기
-    	    fetch('http://localhost:8080/customer/customer-id')
+    	    fetch( window.location.origin + '/customer/customer-id')
 	  		.then((res) => {
 	  			//Promise 반환
 	        	return res.json(); 
@@ -156,7 +156,7 @@
 	    		console.log(json);
 	    		let customerId = json;
 	    		if(json !== -1) {
-	    			fetch('http://localhost:8080/customer/customer-nm/' + customerId)
+	    			fetch( window.location.origin + '/customer/customer-nm/' + customerId)
 	    			.then((res) => {
 	    				return res.json();
 	    			})

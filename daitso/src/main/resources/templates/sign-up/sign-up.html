@@ -272,7 +272,7 @@
 	const emailCheck = () => {
 		const email = document.getElementById("customerEmail").value;
 		if(reg_email.test(email)) { 
-			fetch('http://localhost:8080/customer/email-dupllicated/' + email)
+			fetch( window.location.origin + '/customer/email-dupllicated/' + email)
 			.then((res) => {
 				return res.json();
 			})
@@ -343,7 +343,7 @@
 		const email = document.getElementById("customerEmail").value;
 	    //Promise로 fetch를 감싼다
 	    return new Promise((resolve, reject) => {
-	        fetch('http://localhost:8080/customer/auth/' + email)
+	        fetch( window.location.origin + '/customer/auth/' + email)
 	        .then(response => response.json())
 	        .then(data => {
 	            //Promise resolve 메소드를 이용해 success 시 data를 반환
@@ -411,7 +411,7 @@
     	
     	var patternPhone = /^01([0|1|6|7|8|9])-[0-9]{3,4}-[0-9]{4}$/;
     	if(patternPhone.test(telno)){
-    		fetch('http://localhost:8080/customer/telno-dupllicated/' + telno)
+    		fetch( window.location.origin + '/customer/telno-dupllicated/' + telno)
     		.then((res) => {
     			return res.json();
     		})
