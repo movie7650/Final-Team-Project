@@ -85,4 +85,21 @@
     <update id="updateCategory">
     	UPDATE category SET category_pr_id = #{parentCategoryId} where category_id = #{categoryId}
     </update>
+    
+    <!-- 
+    	기능: 전체 카테고리중 무작위로 8개의 카테고리만 갖고오기(dmbs_radom 패키지 사용)
+    	담당자: 나현웅
+     -->
+    <select id="selectMainCategory" resultType="com.example.daitso.category.model.Category">
+    <![CDATA[
+    	SELECT category_id AS categoryId, 
+    			category_nm AS categoryNm, 
+    			category_content AS categoryContent 
+   		FROM  (
+    			SELECT category_id, category_nm, category_content from category
+				ORDER BY dbms_random.value
+			  )
+		WHERE rownum <= 8
+	]]>
+    </select>
 </mapper>

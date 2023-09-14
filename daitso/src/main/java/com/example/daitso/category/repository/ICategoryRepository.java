@@ -27,5 +27,8 @@ public interface ICategoryRepository {
 	
 	// 카테고리 계층 업데이트
 	void updateCategory(@Param("categoryId") int categoryId, @Param("parentCategoryId") int parentCategoryId);
+	
+	// 카테고리 무작위 8개 갖고오기
+	List<Category> selectMainCategory();
 }
 
