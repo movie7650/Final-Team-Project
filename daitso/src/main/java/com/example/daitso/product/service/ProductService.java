@@ -60,4 +60,9 @@ public class ProductService implements IProductService {
 		return productRepository.selectSpecialProduct();
 	}
 
+	@Override
+	public List<Product> saleProductList() {
+		return productRepository.saleProductList();
+	}
+
 }

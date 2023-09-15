@@ -17,7 +17,7 @@
 	<result column="product_image_first"	property="productImageFirst" />
 	<result column="product_image_second"	property="productImageSecond" />
 	<result column="product_image_third"	property="productImageThird" />
-	<result column="special_product_dv"     property="specialProductDv" />
+	<result column="discount_rate"          property="discountRate" />
 	<result column="status"					property="status" />
 	<result column="create_dt"				property="createDt" />
 	<result column="creator"				property="creator" />
@@ -34,19 +34,18 @@
 		a.product_nm AS productNm, 
 		NVL(b.review_star_point,0) AS reviewStarPoint, 
         NVL(b.review_count,0) AS reviewCount,
-		special_product_dv AS specialProductDv,
 		a.product_content AS productContent, 
 		a.product_stock AS productStock, 
+		a.discount_rate AS discountRate,
 		a.product_price AS productPrice
     FROM(
-    	SELECT product_id, product_group_id, NVL(special_product_dv,'N') AS special_product_dv, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
+    	SELECT product_id, product_group_id, discount_rate, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
     			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
     	FROM(
-    		SELECT p.product_id		AS		product_id, special_product_dv,
+    		SELECT p.product_id		AS		product_id,  discount_rate,
 				   product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point
 			FROM product p
 	        LEFT JOIN review r ON p.product_id = r.product_id
-	        LEFT JOIN special_product sp ON p.product_id = sp.special_product_id
    			WHERE category_id in (
 									SELECT category_id from category c
 									START WITH category_id = #{categoryId}
@@ -93,9 +92,9 @@
 			product_image_first AS productImageFirst,
 			product_image_second AS productImageSecond,
 			product_image_third AS productImageThird,
-			special_product_dv AS specialProductDv
+			product_max_get AS productMaxGet,
+			discount_rate AS discountRate
 	 FROM product p
-	LEFT JOIN special_product sp ON p.product_id = sp.special_product_id
 	WHERE product_id = #{productId}
 </select>
 
@@ -363,8 +362,8 @@
 <select id="selectOptionProduct" resultMap="productMap">
 	SELECT * FROM
 				(
-				SELECT NVL(special_product_dv,'N') as special_product_dv, p.*, rownum as rnum 
-				FROM product p left join special_product sp on p.product_id = sp.special_product_id
+				SELECT p.*, rownum as rnum 
+				FROM product p
 				WHERE product_group_id = #{productGroupId}
 				<choose>
 					<when test='productOptionFirst.equals("0")'>
@@ -426,7 +425,6 @@
 	SELECT special_product_id AS specialProductId,
 			p.product_group_id AS specialProductGroupId,
 			special_product_nm AS specialProductNm, 
-			special_product_dv AS specialProductDv, 
 			category_id AS categoryId, 
 			product_price AS productPrice,  
 			NVL(average,0) AS reviewStarPoint, 
@@ -438,6 +436,26 @@
             	FROM review r left join product p on r.product_id = p.product_id group by product_group_id
               ) sr
     ON p.product_group_id = sr.product_group_id
+    WHERE to_char(sp.create_dt,'YY/MM/DD') = to_char(sysdate,'YY/MM/DD')
+</select>
+
+<select id="saleProductList" resultType = "com.example.daitso.product.model.Product" >
+	SELECT  p.product_id AS productId,
+            p.product_group_id AS productGroupId,
+            p.product_nm AS productNm,
+            category_id AS categoryId,
+            product_price AS productPrice,
+            NVL(average,0) AS reviewStarPoint, 
+			NVL(cnt,0) AS reviewCount
+	FROM product p  
+	LEFT JOIN (
+				SELECT product_group_id, round(avg(review_star_point) * 20,0) as average, count(product_group_id) as cnt
+            	FROM review r 
+                LEFT JOIN product p ON r.product_id = p.product_id 
+                GROUP BY product_group_id
+              ) sr
+    ON p.product_group_id = sr.product_group_id
+    WHERE discount_rate != 0
 </select>
 
 </mapper>

@@ -14,7 +14,6 @@ public class Product {
 	private int categoryId;
 	private String productNm;
 	private String productContent;
-	private String specialProductDv;
 	private int productPrice;
 	private int productStock;
 	private int productSalesCount;
@@ -33,4 +32,6 @@ public class Product {
 	private float reviewStarPoint;
 	private int reviewCount;
 	private int subCategoryId;
+	private int productMaxGet;
+	private int discountRate;
 }

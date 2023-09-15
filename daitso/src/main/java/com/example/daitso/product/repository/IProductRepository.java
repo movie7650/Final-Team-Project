@@ -59,6 +59,8 @@ public interface IProductRepository {
 	int selectInquiryProductId(@Param("productGroupId") int productGroupId, @Param("size") String size, @Param("color") String color, @Param("other") String other);
 	
 	List<SpecialProduct> selectSpecialProduct();
+	
+	List<Product> saleProductList();
 
 }
 
