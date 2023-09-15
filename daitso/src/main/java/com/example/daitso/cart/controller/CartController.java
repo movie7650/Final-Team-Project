@@ -170,7 +170,7 @@ public class CartController {
 	
 	//장바구니 추가
 	@PostMapping("/insert")
-	public String insertCart(int productId, int productCnt, int totalPrice) {
+	public String insertCart(int productId, int productCnt, int totalPrice, String selector) {
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails)principal;
@@ -179,7 +179,13 @@ public class CartController {
 		
 		cartService.insertCart(productId, customerId, productCnt, totalPrice);
 		
-		return "redirect:/cart";
+		if(selector.equals("purchase")) {
+			return "purchase/purchase";
+		}
+		else {
+			return "redirect:/cart";			
+		}
+		
 	}
 	
 	// 장바구니 쿠폰 적용화면
