@@ -17,6 +17,7 @@
 	<result column="product_image_first"	property="productImageFirst" />
 	<result column="product_image_second"	property="productImageSecond" />
 	<result column="product_image_third"	property="productImageThird" />
+	<result column="special_product_dv"     property="specialProductDv" />
 	<result column="status"					property="status" />
 	<result column="create_dt"				property="createDt" />
 	<result column="creator"				property="creator" />
@@ -33,7 +34,7 @@
 		a.product_nm AS productNm, 
 		NVL(b.review_star_point,0) AS reviewStarPoint, 
         NVL(b.review_count,0) AS reviewCount,
-		special_product_dv AS productSpecialDv,
+		special_product_dv AS specialProductDv,
 		a.product_content AS productContent, 
 		a.product_stock AS productStock, 
 		a.product_price AS productPrice
@@ -76,8 +77,25 @@
 </select>
 
 
-<select id="selectProduct" parameterType="int" resultMap="productMap">
-	SELECT * FROM product
+<select id="selectProduct" parameterType="int" resultType="com.example.daitso.product.model.Product">
+	SELECT product_group_id AS productGroupId,
+			product_id AS productId,
+			category_id AS categoryId,
+			product_nm AS productNm,
+			product_content AS productContent,
+			product_price AS productPrice,
+			product_stock AS productStock,
+			product_sales_count AS productSalesCount,
+			product_max_get AS productMaxGet,
+			product_option_first AS productOptionFirst,
+			product_option_second AS productOptionSecond,
+			product_option_third AS productOptionThird,
+			product_image_first AS productImageFirst,
+			product_image_second AS productImageSecond,
+			product_image_third AS productImageThird,
+			special_product_dv AS specialProductDv
+	 FROM product p
+	LEFT JOIN special_product sp ON p.product_id = sp.special_product_id
 	WHERE product_id = #{productId}
 </select>
 
@@ -344,30 +362,33 @@
 
 <select id="selectOptionProduct" resultMap="productMap">
 	SELECT * FROM
-	(SELECT p.*, rownum as rnum FROM product p
-	WHERE product_group_id = #{productGroupId}
-	<choose>
-		<when test='productOptionFirst.equals("0")'>
-		</when>
-		<otherwise>
-			AND product_option_first = #{productOptionFirst}
-		</otherwise>
-	</choose>
-	<choose>
-		<when test='productOptionSecond.equals("0")'>
-		</when>
-		<otherwise>
-			AND product_option_second = #{productOptionSecond}
-		</otherwise>
-	</choose>
-	<choose>
-		<when test='productOptionThird.equals("0")'>
-		</when>
-		<otherwise>
-				AND product_option_third = #{productOptionThird}
-		</otherwise>
-	</choose>
-	ORDER BY product_price)
+				(
+				SELECT NVL(special_product_dv,'N') as special_product_dv, p.*, rownum as rnum 
+				FROM product p left join special_product sp on p.product_id = sp.special_product_id
+				WHERE product_group_id = #{productGroupId}
+				<choose>
+					<when test='productOptionFirst.equals("0")'>
+					</when>
+					<otherwise>
+						AND product_option_first = #{productOptionFirst}
+					</otherwise>
+				</choose>
+				<choose>
+					<when test='productOptionSecond.equals("0")'>
+					</when>
+					<otherwise>
+						AND product_option_second = #{productOptionSecond}
+					</otherwise>
+				</choose>
+				<choose>
+					<when test='productOptionThird.equals("0")'>
+					</when>
+					<otherwise>
+							AND product_option_third = #{productOptionThird}
+					</otherwise>
+				</choose>
+				ORDER BY product_price
+				)
 	WHERE rnum = 1
 </select>
 

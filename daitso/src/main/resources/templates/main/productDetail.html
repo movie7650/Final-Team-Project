@@ -26,6 +26,7 @@
 				</div>
 			</div>
 			<hr></hr>
+			<div class="origin-price"></div>		
 			<h5 class="total-price" style="color: red"></h5>
 			<p class="font-s-13">무료 배송(산간 지역은 별도)<p>
 			<div class="d-flex margin-b-10">
@@ -69,10 +70,10 @@
 				</div>
 			</div>
 			<div class="d-flex" style="height:40px">
-				<div class="add-cart-btn d-flex justify-content-center align-items-center width-50-per" onclick="goToCart()">
+				<div class="add-cart-btn d-flex justify-content-center align-items-center width-50-per" onclick="goToCart('cart')">
 					<span>장바구니 담기</span>
 				</div>
-				<div class="direct-purchase-btn d-flex justify-content-center align-items-center width-50-per" >
+				<div class="direct-purchase-btn d-flex justify-content-center align-items-center width-50-per" onclick="goToCart('purchase')" >
 					<span>바로 구매하기</span>
 				</div>
 			</div>
@@ -231,6 +232,13 @@
 	customerId = /*[[${customerId}]]*/
 	hiddenProductId.value = product.productId;
 	fPrice = product.productPrice;
+	if(product.specialProductDv == 'S'){
+//		document.querySelector('.origin-price').textContent = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+		text = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",") + '원';
+		document.querySelector('.origin-price').innerHTML = `<h5 style="color: #9E9E9E; font-size:15px; text-decoration: line-through; margin-bottom: 0px">${text}</h5>`
+		//Math.round함수로 할인상품 반올림 사용
+		fPrice = Math.round(product.productPrice * 0.9);						
+	}
 	totalPrice.textContent = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
 	totalPrice.value = fPrice;
 
@@ -356,7 +364,6 @@
         .then(data => {
             const product = data;
             const cPrice = product.productPrice;
-            totalPrice.textContent = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
         	totalPrice.value = cPrice;
         	fPrice = cPrice;
         	hiddenProductId.value = product.productId;
@@ -366,6 +373,16 @@
         	if(num == 1){
         		params += `&optionSecond=${cColor}`;
         	} 
+        	if(product.specialProductDv == "S"){
+        		text = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",") + '원';
+        		document.querySelector('.origin-price').innerHTML = `<h5 style="color: #9E9E9E; font-size:15px; text-decoration: line-through; margin-bottom: 0px">${text}</h5>`
+        		totalPrice.textContent = (Math.round(cPrice*0.9)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+        		fPrice = Math.round(cPrice * 0.9);
+        	}
+        	else{
+        		document.querySelector('.origin-price').innerHTML = '';
+        		totalPrice.textContent = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+        	}
         	fetch("/product/option/" + productGroupId + params)
             .then(response => response.json())
             .then(data => {
@@ -409,7 +426,7 @@
         });
 	}
 	
-	function goToCart(){
+	function goToCart(selector){
 		if(customerId == 'whotheFisthatguy'){
 			window.alert('whotheFisthatguy');
 		}
@@ -430,10 +447,16 @@
 			objPrice.setAttribute('type','hidden');
 			objPrice.setAttribute('name', 'totalPrice');
 			objPrice.setAttribute('value', totalPrice.value);
+
+			let objSelector = document.createElement('input');
+			objSelector.setAttribute('type','hidden');
+			objSelector.setAttribute('name', 'selector');
+			objSelector.setAttribute('value', selector);
 			
 			tag.appendChild(objId);
 			tag.appendChild(objCnt);
 			tag.appendChild(objPrice);
+			tag.appendChild(objSelector);
 			tag.setAttribute('method', 'post');
 			tag.setAttribute('action', '/cart/insert');
 			document.body.appendChild(tag);
