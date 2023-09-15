@@ -232,7 +232,7 @@
 	customerId = /*[[${customerId}]]*/
 	hiddenProductId.value = product.productId;
 	fPrice = product.productPrice;
-	if(product.specialProductDv == 'S'){
+	if(product.discountRate != 0){
 //		document.querySelector('.origin-price').textContent = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
 		text = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",") + '원';
 		document.querySelector('.origin-price').innerHTML = `<h5 style="color: #9E9E9E; font-size:15px; text-decoration: line-through; margin-bottom: 0px">${text}</h5>`
@@ -247,7 +247,7 @@
 	function cntBtn(division){
 		if(division == 'plus'){
 			var num = cntInput.value;
-			if(num == product.productStock){
+			if(num == product.productMaxGet){
 				window.alert("max holloway");
 			}else{
 
@@ -373,7 +373,7 @@
         	if(num == 1){
         		params += `&optionSecond=${cColor}`;
         	} 
-        	if(product.specialProductDv == "S"){
+        	if(product.discountRate != 0){
         		text = cPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",") + '원';
         		document.querySelector('.origin-price').innerHTML = `<h5 style="color: #9E9E9E; font-size:15px; text-decoration: line-through; margin-bottom: 0px">${text}</h5>`
         		totalPrice.textContent = (Math.round(cPrice*0.9)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';

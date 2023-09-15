@@ -22,5 +22,7 @@ public interface IProductService {
 	Product selectOptionProduct(int productGroupId, String productOptionFirst, String productOptionSecond, String productOptionThird);
 	
 	List<SpecialProduct> selectSpecialProduct();
+	
+	List<Product> saleProductList();
 
 }

@@ -10,7 +10,6 @@ public class SpecialProduct {
 	private int specialProductId;
 	private int specialProductGroupId;
 	private String specialProductNm;
-	private String specialProductDv;
 	private int categoryId;
 	private int productPrice;
 	private float reviewStarPoint;
