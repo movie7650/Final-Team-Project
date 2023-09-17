@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
+import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.SpecialProduct;
 import com.example.daitso.product.service.IProductService;
 
@@ -26,8 +27,10 @@ public class HelloController {
 	@GetMapping("")
 	public String hello(Model model) {
 		List<SpecialProduct> list = productService.selectSpecialProduct();
+		List<Product> sList = productService.saleProductList();
 		List<Category> cList = categoryService.selectMainCategory();
 		model.addAttribute("productList", list);
+		model.addAttribute("saleProductList", sList);
 		model.addAttribute("categoryList", cList);
 		return "/main/main";
 	}

@@ -17,6 +17,7 @@
 	<result column="product_image_first"	property="productImageFirst" />
 	<result column="product_image_second"	property="productImageSecond" />
 	<result column="product_image_third"	property="productImageThird" />
+	<result column="discount_rate"          property="discountRate" />
 	<result column="status"					property="status" />
 	<result column="create_dt"				property="createDt" />
 	<result column="creator"				property="creator" />
@@ -24,61 +25,77 @@
 	<result column="modifier"				property="modifier" />
 </resultMap>
 
-	<select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
-	    SELECT a.product_id AS productId, 
-	   		a.product_group_id AS productGroupId,
-			a.category_id AS categoryId, 
-			a.product_image_first AS productImageFirst, 
-			a.product_nm AS productNm, 
-			NVL(b.review_star_point,0) AS reviewStarPoint, 
-	        NVL(b.review_count,0) AS reviewCount,
-			special_product_dv AS productSpecialDv,
-			a.product_content AS productContent, 
-			a.product_stock AS productStock, 
-			a.product_price AS productPrice
-	    FROM(
-	    	SELECT product_id, product_group_id, NVL(special_product_dv,'N') AS special_product_dv, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
-	    			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
-	    	FROM(
-	    		SELECT p.product_id		AS		product_id, special_product_dv,
-					   product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point
-				FROM product p
-		        LEFT JOIN review r ON p.product_id = r.product_id
-		        LEFT JOIN special_product sp ON p.product_id = sp.special_product_id
-	   			WHERE category_id in (
-										SELECT category_id from category c
-										START WITH category_id = #{categoryId}
-									   	CONNECT BY PRIOR category_id = category_pr_id
-									  )
-				 AND p.status = 'Y'
-				 ORDER BY p.product_id
-	            )
-	    ) a
-	    LEFT JOIN  (select product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count from review r 
-	                LEFT JOIN product p ON r.product_id = p.product_id GROUP BY product_group_id
-	           	   ) b 
-	    ON a.product_group_id = b.product_group_id
-	    WHERE rnum between #{start} and #{end} and snum = 1
-	</select>
-	
-	<select id="selectCountProductList" parameterType="int" resultType="int">
-		SELECT count(*)
-		  FROM (
-		  		 SELECT distinct product_group_id 
-		  		   FROM product 
-		 		  WHERE category_id IN (
-				 						 SELECT category_id 
-			 							   FROM category START WITH category_id = #{categoryId} 
-									    CONNECT BY PRIOR category_id = category_pr_id
-							   		   )
-		        )
-	</select>
-	
-	<select id="selectProduct" parameterType="int" resultMap="productMap">
-		SELECT * FROM product
-		WHERE product_id = #{productId}
-	</select>
+<select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
+    SELECT a.product_id AS productId, 
+   		a.product_group_id AS productGroupId,
+		a.category_id AS categoryId, 
+		a.product_image_first AS productImageFirst, 
+		a.product_nm AS productNm, 
+		NVL(b.review_star_point,0) AS reviewStarPoint, 
+        NVL(b.review_count,0) AS reviewCount,
+		a.product_content AS productContent, 
+		a.product_stock AS productStock, 
+		a.discount_rate AS discountRate,
+		a.product_price AS productPrice
+    FROM(
+    	SELECT product_id, product_group_id, discount_rate, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
+    			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
+    	FROM(
+    		SELECT p.product_id		AS		product_id,  discount_rate,
+				   product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point
+			FROM product p
+	        LEFT JOIN review r ON p.product_id = r.product_id
+   			WHERE category_id in (
+									SELECT category_id from category c
+									START WITH category_id = #{categoryId}
+								   	CONNECT BY PRIOR category_id = category_pr_id
+								  )
+			 AND p.status = 'Y'
+			 ORDER BY p.product_id
+            )
+    ) a
+    LEFT JOIN  (select product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count from review r 
+                LEFT JOIN product p ON r.product_id = p.product_id GROUP BY product_group_id
+           	   ) b 
+    ON a.product_group_id = b.product_group_id
+    WHERE rnum between #{start} and #{end} and snum = 1
+</select>
 
+<select id="selectCountProductList" parameterType="int" resultType="int">
+	SELECT count(*)
+	  FROM (
+	  		 SELECT distinct product_group_id 
+	  		   FROM product 
+	 		  WHERE category_id IN (
+			 						 SELECT category_id 
+		 							   FROM category START WITH category_id = #{categoryId} 
+								    CONNECT BY PRIOR category_id = category_pr_id
+						   		   )
+	        )
+</select>
+
+
+<select id="selectProduct" parameterType="int" resultType="com.example.daitso.product.model.Product">
+	SELECT product_group_id AS productGroupId,
+			product_id AS productId,
+			category_id AS categoryId,
+			product_nm AS productNm,
+			product_content AS productContent,
+			product_price AS productPrice,
+			product_stock AS productStock,
+			product_sales_count AS productSalesCount,
+			product_max_get AS productMaxGet,
+			product_option_first AS productOptionFirst,
+			product_option_second AS productOptionSecond,
+			product_option_third AS productOptionThird,
+			product_image_first AS productImageFirst,
+			product_image_second AS productImageSecond,
+			product_image_third AS productImageThird,
+			product_max_get AS productMaxGet,
+			discount_rate AS discountRate
+	 FROM product p
+	WHERE product_id = #{productId}
+</select>
 
 
     <!-- 
@@ -346,30 +363,33 @@
 
 <select id="selectOptionProduct" resultMap="productMap">
 	SELECT * FROM
-	(SELECT p.*, rownum as rnum FROM product p
-	WHERE product_group_id = #{productGroupId}
-	<choose>
-		<when test='productOptionFirst.equals("0")'>
-		</when>
-		<otherwise>
-			AND product_option_first = #{productOptionFirst}
-		</otherwise>
-	</choose>
-	<choose>
-		<when test='productOptionSecond.equals("0")'>
-		</when>
-		<otherwise>
-			AND product_option_second = #{productOptionSecond}
-		</otherwise>
-	</choose>
-	<choose>
-		<when test='productOptionThird.equals("0")'>
-		</when>
-		<otherwise>
-				AND product_option_third = #{productOptionThird}
-		</otherwise>
-	</choose>
-	ORDER BY product_price)
+				(
+				SELECT p.*, rownum as rnum 
+				FROM product p
+				WHERE product_group_id = #{productGroupId}
+				<choose>
+					<when test='productOptionFirst.equals("0")'>
+					</when>
+					<otherwise>
+						AND product_option_first = #{productOptionFirst}
+					</otherwise>
+				</choose>
+				<choose>
+					<when test='productOptionSecond.equals("0")'>
+					</when>
+					<otherwise>
+						AND product_option_second = #{productOptionSecond}
+					</otherwise>
+				</choose>
+				<choose>
+					<when test='productOptionThird.equals("0")'>
+					</when>
+					<otherwise>
+							AND product_option_third = #{productOptionThird}
+					</otherwise>
+				</choose>
+				ORDER BY product_price
+				)
 	WHERE rnum = 1
 </select>
 
@@ -407,7 +427,6 @@
 	SELECT special_product_id AS specialProductId,
 			p.product_group_id AS specialProductGroupId,
 			special_product_nm AS specialProductNm, 
-			special_product_dv AS specialProductDv, 
 			category_id AS categoryId, 
 			product_price AS productPrice,  
 			NVL(average,0) AS reviewStarPoint, 
@@ -419,6 +438,26 @@
             	FROM review r left join product p on r.product_id = p.product_id group by product_group_id
               ) sr
     ON p.product_group_id = sr.product_group_id
+    WHERE to_char(sp.create_dt,'YY/MM/DD') = to_char(sysdate,'YY/MM/DD')
+</select>
+
+<select id="saleProductList" resultType = "com.example.daitso.product.model.Product" >
+	SELECT  p.product_id AS productId,
+            p.product_group_id AS productGroupId,
+            p.product_nm AS productNm,
+            category_id AS categoryId,
+            product_price AS productPrice,
+            NVL(average,0) AS reviewStarPoint, 
+			NVL(cnt,0) AS reviewCount
+	FROM product p  
+	LEFT JOIN (
+				SELECT product_group_id, round(avg(review_star_point) * 20,0) as average, count(product_group_id) as cnt
+            	FROM review r 
+                LEFT JOIN product p ON r.product_id = p.product_id 
+                GROUP BY product_group_id
+              ) sr
+    ON p.product_group_id = sr.product_group_id
+    WHERE discount_rate != 0
 </select>
 
 </mapper>

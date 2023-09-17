@@ -1,6 +1,7 @@
 package com.example.daitso.cart.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,5 +38,8 @@ public interface ICartRepository {
 	
 	// 구매하기 전 장바구니에 담긴 물건들 조회 
 	List<CartPurchase> getCartProductBeforePurchaseByCustomerId(int customerId);
+	
+	// 장바구니 추가하기 전 기존에 추가된 상품 있는지 조회
+	Map<String, Integer> selectCustomerCartProduct(int customerId, int productId);
 
 }

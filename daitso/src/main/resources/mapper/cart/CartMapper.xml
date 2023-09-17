@@ -143,4 +143,17 @@
 		   AND c.checked = 'true'
 		   AND c.status = 'Y'
 	</select>    
+	
+	<!-- 
+		기능: 장바구니 추가하기 전 기존에 추가된 상품 있는지 조회
+		담당자: 나현웅
+	 -->
+	 <select id="selectCustomerCartProduct" resultType="Map">
+	 	SELECT cart_id AS cartId, 
+	 			cart_count AS cartCount,
+	 			product_max_get AS productMaxGet
+	 	FROM cart c
+	 	LEFT JOIN product p ON c.product = p.product
+	 	WHERE customer_id = #{customerId} and c.product_id = #{productId} and c.status = 'Y'
+	 </select>
 </mapper>
