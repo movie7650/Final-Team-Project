@@ -14,5 +14,5 @@ public interface IPurchaseService {
 	List<PurchaseCheck> selectAllProductNm(int customerId);
 	//구매취소
 	void canclePurchase(Purchase purchase);
-
+	
 }

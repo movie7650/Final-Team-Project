@@ -10,7 +10,6 @@
 	<result column="product_content"	property="productContent" />
 	<result column="product_price"	property="productPrice" />
 	<result column="product_stock"	property="productStock" />
-	<result column="product_sales_count"	property="productSalesCount" />
 	<result column="product_option_first"	property="productOptionFirst" />
 	<result column="product_option_second"	property="productOptionSecond" />
 	<result column="product_option_third"	property="productOptionThird" />
@@ -24,7 +23,6 @@
 	<result column="modify_dt"				property="modifyDt" />
 	<result column="modifier"				property="modifier" />
 </resultMap>
-
 
 <select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
     SELECT a.product_id AS productId, 
@@ -84,7 +82,6 @@
 			product_content AS productContent,
 			product_price AS productPrice,
 			product_stock AS productStock,
-			product_sales_count AS productSalesCount,
 			product_max_get AS productMaxGet,
 			product_option_first AS productOptionFirst,
 			product_option_second AS productOptionSecond,
@@ -99,222 +96,225 @@
 </select>
 
 
+    <!-- 
+	    기능: 상품 조회하기(카테고리별)
+	    담당자: 이세인
+    -->
+    <select id="selectProductsByCategory" resultType="com.example.daitso.product.model.ProductCheck">
+	    SELECT *
+	      FROM ( SELECT p.product_group_id  AS "productGroupId",
+		                p.product_nm        AS "productNm",
+		                c.category_pr_id    AS "categoryPrId",
+		                c.category_id       AS "categoryId",
+		                c.category_nm       AS "categoryNm",
+		                ROW_NUMBER() OVER (ORDER BY p.product_group_id DESC) AS "rn"
+		           FROM product p
+		           JOIN category c
+					 ON p.category_id = c.category_id
+		       GROUP BY p.product_group_id, 
+		                p.product_nm, 
+		                c.category_pr_id, 
+		                c.category_id, 
+		                c.category_nm
+		         HAVING 1=1
+			        <choose>
+			            <!-- 아무 카테고리도 선택되지 않은 경우 -->
+			            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
+			            and (thirdCategoryId == null or thirdCategoryId == 0)">		            
+			            </when>
+			            
+			            <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
+			            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+			            and (thirdCategoryId == null or thirdCategoryId == 0)">
+			                AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
+			                 OR  c.category_pr_id = #{secondCategoryId}
+			            </when>
+			            
+			            <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
+			            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+			            and thirdCategoryId != null and thirdCategoryId != 0">
+			                AND c.category_pr_id = #{secondCategoryId}
+			            </when>
+			            
+			            <!-- 첫 번째 카테고리만 선택한 경우 -->
+			            <otherwise>
+			                AND c.category_pr_id = #{firstCategoryId}
+			            </otherwise>
+			        </choose>
+	    ) WHERE "rn" BETWEEN #{offset} + 1 
+	                     AND #{offset} + #{pageSize}
+	</select>
 
-<!-- 
-	기능: 카테고리별 상품 조회하기
-	담당자: 이세인
--->
-<select id="selectProductsByCategory" resultType="com.example.daitso.product.model.ProductCheck">
-    SELECT *
-    FROM (
-	          SELECT
-	              	p.product_group_id  AS "productGroupId",
-	                p.product_nm        AS "productNm",
-	                c.category_pr_id    AS "categoryPrId",
-	                c.category_id       AS "categoryId",
-	                c.category_nm       AS "categoryNm",
-	                ROW_NUMBER() OVER (ORDER BY p.product_group_id DESC) AS "rn"
-	           FROM product p
-	           JOIN category c
-				 ON p.category_id = c.category_id
-	       GROUP BY p.product_group_id, 
-	                p.product_nm, 
-	                c.category_pr_id, 
-	                c.category_id, 
-	                c.category_nm
-	         HAVING 1=1
-        <choose>
-            <!-- 아무 카테고리도 선택되지 않은 경우 -->
-            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-            and (thirdCategoryId == null or thirdCategoryId == 0)">
-            
-            </when>
-            <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
-            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-            and (thirdCategoryId == null or thirdCategoryId == 0)">
-                AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
-                 OR  c.category_pr_id = #{secondCategoryId}
-            </when>
-            <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
-            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-            and thirdCategoryId != null and thirdCategoryId != 0">
-                AND c.category_pr_id = #{secondCategoryId}
-            </when>
-            <!-- 첫 번째 카테고리만 선택한 경우 -->
-            <otherwise>
-                AND c.category_pr_id = #{firstCategoryId}
-            </otherwise>
-        </choose>
-    ) WHERE "rn" BETWEEN #{offset} + 1 
-                     AND #{offset} + #{pageSize}
-</select>
+    <!-- 
+		기능: 카테고리별 상품 개수 조회하기
+		담당자: 이세인
+	-->
+	<select id="selectCountProducts">
+		SELECT COUNT (cnt)
+		  FROM(	SELECT COUNT(*) AS cnt 
+		          FROM product p 
+			      JOIN category c 
+			        ON p.category_id = c.category_id
+			  GROUP BY p.product_group_id, 
+			           p.product_nm, 
+			           c.category_pr_id, 
+			           c.category_id, 
+			           c.category_nm
+		    	HAVING 1=1
+				   <choose>
+				       <!-- 아무 카테고리도 선택되지 않은 경우 -->
+				       <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
+				            	    and (thirdCategoryId == null or thirdCategoryId == 0)">
+				       )
+				       </when>
+				        
+				       <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
+				       <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+				                   and (thirdCategoryId == null or thirdCategoryId == 0)">
+				         AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
+				          OR  c.category_pr_id = #{secondCategoryId}
+				       )
+				       </when>
+				        
+				       <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
+				       <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+				                   and thirdCategoryId != null and thirdCategoryId != 0">
+				         AND c.category_pr_id = #{secondCategoryId}
+				       )
+				       </when>
+				          
+				       <!-- 첫 번째 카테고리만 선택한 경우 -->
+				       <otherwise>
+				         AND c.category_pr_id = #{firstCategoryId}
+				       )
+				       </otherwise>
+				   </choose>
+    </select>
 
+	<!-- 
+		기능: 상품 조회하기(그룹별)
+		담당자: 이세인
+	-->
+	<select id="selectProductsByGroupId" resultType="com.example.daitso.product.model.ProductCheck">
+	    SELECT p.product_id            AS "productId",
+	           c.category_nm           AS "categoryNm",
+	           p.category_id           AS "categoryId",
+		       p.product_group_id      AS "productGroupId",
+		       p.product_code          AS "productCode",
+	           p.product_nm            AS "productNm",
+		       p.product_option_first  AS "productOptionFirst",		       
+		       p.product_option_second AS "productOptionSecond",
+		       p.product_option_third  AS "productOptionThird",
+		       p.product_price         AS "productPrice",
+	 	       p.product_stock         AS "productStock"
+	   	 FROM  product p 
+		 JOIN  category c 
+		   ON  p.category_id = c.category_id
+	    WHERE  p.product_group_id = #{productGroupId}
+	 ORDER BY  p.product_price
+	</select>
+	
+	<!-- 
+		기능: 상품 삭제하기(그룹)
+		담당자: 이세인
+	-->
+	<delete id="deleteProductByGroupId" parameterType="int">
+	    DELETE 
+	      FROM product 
+	     WHERE product_group_id = #{productGroupId}
+	</delete>
 
-<!-- 
-	기능: 카테고리별 상품 개수 조회하기
-	담당자: 이세인
--->
-<select id="selectCountProducts">
-	SELECT COUNT (cnt)
-	FROM(
-			SELECT COUNT(*) AS cnt 
-	          FROM product p 
-		      JOIN category c 
-		        ON p.category_id = c.category_id
-		  GROUP BY p.product_group_id, 
-		           p.product_nm, 
-		           c.category_pr_id, 
-		           c.category_id, 
-		           c.category_nm
-	    	HAVING 1=1
-    <choose>
-        <!-- 아무 카테고리도 선택되지 않은 경우 -->
-        <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-            and (thirdCategoryId == null or thirdCategoryId == 0)">
-           )
-            </when>
-        <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
-            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-            and (thirdCategoryId == null or thirdCategoryId == 0)">
-           AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
-            OR  c.category_pr_id =#{secondCategoryId}
-           )
-        </when>
-        <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
-            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-            and thirdCategoryId != null and thirdCategoryId != 0">
-          AND c.category_pr_id = #{secondCategoryId}
-          )
-            </when>  
-        <!-- 첫 번째 카테고리만 선택한 경우 -->
-        <otherwise>
-          AND c.category_pr_id = #{firstCategoryId}
-          )
-        </otherwise>
-    </choose>
-</select>
+	<!-- 
+		기능: 상품ID로 상품 정보 갖고오기
+		담당자: 이세인
+	-->
+	<select id="selectProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
+	    SELECT product_group_id        AS "productGroupId",
+	           product_code            AS "productCode",
+	           product_id			   AS "productId",
+	           product_nm 			   AS "productNm",
+	           product_option_first    AS "productOptionFirst",
+		       product_option_second   AS "productOptionSecond",
+			   product_option_third    AS "productOptionThird",
+			   product_price           AS "productPrice",
+			   product_stock           AS "productStock"
+		  FROM product p
+	     WHERE product_id = #{productId}
+	</select>
 
-
-<!-- 
-	기능: 그룹 상품 삭제하기
-	담당자: 이세인
--->
-<delete id="deleteGroupProduct" parameterType="int">
-    DELETE 
-      FROM product 
-     WHERE product_group_id = #{productGroupId}
-</delete>
-
-
-<!-- 
-	기능: 그룹별 상품 조회하기
-	담당자: 이세인
--->
-<select id="selectProductsByGroupId" resultType="com.example.daitso.product.model.ProductCheck">
-    SELECT p.product_id            AS "productId",
-           c.category_nm           AS "categoryNm",
-	       p.product_group_id      AS "productGroupId",
-	       p.product_code          AS "productCode",
-           p.product_nm            AS "productNm",
-	       p.product_option_first  AS "productOptionFirst",		       
-	       p.product_option_second AS "productOptionSecond",
-	       p.product_option_third  AS "productOptionThird",
-	       p.product_price         AS "productPrice",
- 	       p.product_stock         AS "productStock"
-   	 FROM  product p 
-	 JOIN  category c 
-	   ON  p.category_id = c.category_id
-    WHERE  p.product_group_id = #{productGroupId}
- ORDER BY  p.product_price
-</select>
-
-
-<!-- 
-	기능: 해당 상품 불러오기
-	담당자: 이세인
--->
-<select id="selectProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
-    SELECT product_group_id AS "productGroupId",
-           product_code AS "productCode",
-           product_id AS "productId",
-           product_nm AS "productNm",
-           product_option_first AS "productOptionFirst",
-	       product_option_second AS "productOptionSecond",
-		   product_option_third AS "productOptionThird",
-		   product_price AS "productPrice",
-		   product_stock AS "productStock"
-	  FROM product p
-     WHERE product_id = #{productId}
-</select>
-
-
-<!-- 
-	기능: 해당 상품 수정하기
-	담당자: 이세인
--->
-<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
-    UPDATE product
-	   SET product_option_first = #{productOptionFirst},
-	   	   product_option_second = #{productOptionSecond},
-	   	   product_option_third = #{productOptionThird},
-	   	   product_price = #{productPrice},
-	       product_stock = #{productStock}
-	 WHERE product_id = #{productId}
-</update>
-
-
-<!-- 
-	기능: 해당 상품 삭제하기
-	담당자: 이세인
--->
-<delete id="deleteProduct" parameterType="int">
-    DELETE 
-      FROM product 
-     WHERE product_id = #{productId}
-</delete>
-
-
-<!-- 
-	기능: 기존 상품 등록하기
-	담당자: 이세인
--->
-<insert id="registerExistingProducts" parameterType="com.example.daitso.product.model.ProductCheck">
-	DECLARE
-	    v_product_id NUMBER;
-	BEGIN
-	    INSERT INTO product (
-	        product_group_id,
-	        product_id,
-	        category_id,
-	        product_nm,
-	        product_content,
-	        product_image_first,
-	        product_price,
-	        product_stock,
-	        product_option_first,
-	        product_option_second,
-	        product_option_third
-	    ) VALUES (
-	        #{productGroupId},
-	        product_seq.NEXTVAL,
-	        #{categoryId},
-	        #{productNm},
-	        #{productContent},
-	        #{productImageFirst},
-	        #{productPrice},
-	        #{productStock},
-	        #{productOptionFirst},
-	        #{productOptionSecond},
-	        #{productOptionThird}
-	    )
-	    RETURNING product_id INTO v_product_id;
-	    
+	<!-- 
+		기능: 상품 수정하기
+		담당자: 이세인
+	-->
+	<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
 	    UPDATE product
-	    SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-	    WHERE product_id = v_product_id;
-	    COMMIT;
-	END;
-</insert>
+		   SET product_option_first  = #{productOptionFirst},
+		   	   product_option_second = #{productOptionSecond},
+		   	   product_option_third  = #{productOptionThird},
+		   	   product_price = #{productPrice},
+		       product_stock = #{productStock}
+		 WHERE product_id = #{productId}
+	</update>
+
+	<!-- 
+		기능: 상품 삭제하기
+		담당자: 이세인
+	-->
+	<delete id="deleteProduct" parameterType="int">
+	    DELETE 
+	      FROM product 
+	     WHERE product_id = #{productId}
+	</delete>
+
+	<!-- 
+		기능: 기존 상품 등록하기
+		담당자: 이세인
+	-->
+	<insert id="registerExistingProducts" parameterType="com.example.daitso.product.model.ProductCheck">
+		DECLARE v_product_id NUMBER;
+		  BEGIN		  
+		 INSERT INTO product ( product_group_id,
+							   product_id,
+							   category_id,
+						       product_nm,
+					     	   product_content,
+						       product_image_first,
+							   product_price,
+							   product_stock,
+							   product_option_first,
+							   product_option_second,
+							   product_option_third ) 
+		 VALUES ( #{productGroupId},
+		          product_seq.NEXTVAL,
+		          #{categoryId},
+		          #{productNm},
+		          #{productContent},
+		          #{productImageFirst},
+		          #{productPrice},
+		          #{productStock},
+		          #{productOptionFirst},
+		          #{productOptionSecond},
+		          #{productOptionThird} )		         
+       RETURNING  product_id INTO v_product_id;
+          UPDATE  product
+		     SET  product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+		   WHERE  product_id = v_product_id;
+		 COMMIT;
+		    END;
+    </insert>
+
+
+ <select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
+        SELECT DISTINCT
+        p.product_group_id AS "productGroupId",
+        c.category_nm AS "categoryNm",
+        p.product_nm AS "productNm",
+        p.category_id AS "categoryId"
+        FROM product p
+        JOIN category c ON p.category_id = c.category_id
+        WHERE p.product_nm 
+        LIKE '%' ||  #{searchText} || '%'
+</select>
 
 
 
@@ -424,7 +424,7 @@
 <select id="selectSpecialProduct" resultType="com.example.daitso.product.model.SpecialProduct">
 	SELECT special_product_id AS specialProductId,
 			p.product_group_id AS specialProductGroupId,
-			special_product_nm AS specialProductNm, 
+			p.product_nm AS specialProductNm, 
 			category_id AS categoryId, 
 			product_price AS productPrice,  
 			NVL(average,0) AS reviewStarPoint, 
@@ -457,5 +457,26 @@
     ON p.product_group_id = sr.product_group_id
     WHERE discount_rate != 0
 </select>
+
+<select id="searchPopularProduct" resultType="map">
+	SELECT product_id as productId 
+	FROM(
+		SELECT p.product_id, p.product_nm, NVL(pSum, 0) as pSum, rownum as rnum from product p 	
+		LEFT JOIN (
+					select product_id, sum(purchase_count) as pSum from purchase group by product_id order by pSum desc
+				  ) s 
+		ON  p.product_id = s.product_id
+		)
+	WHERE rnum between 1 and 10
+</select>
+
+<insert id="insertPopularProducts">
+	INSERT ALL
+	<foreach collection="list" item="item" index="index" separator=" ">
+		INTO special_product (special_product_id, product_id, create_dt, creator) 
+		VALUES( special_product_seq.nextVal + #{index}, #{item.PRODUCTID}, sysdate, 'computer')
+	</foreach>
+	SELECT * FROM dual
+</insert>
 
 </mapper>
