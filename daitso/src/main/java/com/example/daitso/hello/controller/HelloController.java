@@ -32,6 +32,7 @@ public class HelloController {
 		model.addAttribute("productList", list);
 		model.addAttribute("saleProductList", sList);
 		model.addAttribute("categoryList", cList);
+
 		return "/main/main";
 	}
 }

@@ -3,14 +3,13 @@
 <mapper namespace="com.example.daitso.product.repository.IProductRepository">
 
 <resultMap type="com.example.daitso.product.model.Product" id="productMap">
-    <result column="product_group_id" 		property="productGroupId" />
-	<result column="product_id"				property="productId" />
-	<result column="category_id"			property="categoryId" />
-	<result column="product_nm"				property="productNm" />
-	<result column="product_content"		property="productContent" />
-	<result column="product_price"			property="productPrice" />
-	<result column="product_stock"			property="productStock" />
-	<result column="product_sales_count"	property="productSalesCount" />
+	<result column="product_group_id" property="productGroupId" />
+	<result column="product_id"		property="productId" />
+	<result column="category_id"	property="categoryId" />
+	<result column="product_nm"		property="productNm" />
+	<result column="product_content"	property="productContent" />
+	<result column="product_price"	property="productPrice" />
+	<result column="product_stock"	property="productStock" />
 	<result column="product_option_first"	property="productOptionFirst" />
 	<result column="product_option_second"	property="productOptionSecond" />
 	<result column="product_option_third"	property="productOptionThird" />
@@ -83,7 +82,6 @@
 			product_content AS productContent,
 			product_price AS productPrice,
 			product_stock AS productStock,
-			product_sales_count AS productSalesCount,
 			product_max_get AS productMaxGet,
 			product_option_first AS productOptionFirst,
 			product_option_second AS productOptionSecond,
@@ -426,7 +424,7 @@
 <select id="selectSpecialProduct" resultType="com.example.daitso.product.model.SpecialProduct">
 	SELECT special_product_id AS specialProductId,
 			p.product_group_id AS specialProductGroupId,
-			special_product_nm AS specialProductNm, 
+			p.product_nm AS specialProductNm, 
 			category_id AS categoryId, 
 			product_price AS productPrice,  
 			NVL(average,0) AS reviewStarPoint, 
@@ -459,5 +457,26 @@
     ON p.product_group_id = sr.product_group_id
     WHERE discount_rate != 0
 </select>
+
+<select id="searchPopularProduct" resultType="map">
+	SELECT product_id as productId 
+	FROM(
+		SELECT p.product_id, p.product_nm, NVL(pSum, 0) as pSum, rownum as rnum from product p 	
+		LEFT JOIN (
+					select product_id, sum(purchase_count) as pSum from purchase group by product_id order by pSum desc
+				  ) s 
+		ON  p.product_id = s.product_id
+		)
+	WHERE rnum between 1 and 10
+</select>
+
+<insert id="insertPopularProducts">
+	INSERT ALL
+	<foreach collection="list" item="item" index="index" separator=" ">
+		INTO special_product (special_product_id, product_id, create_dt, creator) 
+		VALUES( special_product_seq.nextVal + #{index}, #{item.PRODUCTID}, sysdate, 'computer')
+	</foreach>
+	SELECT * FROM dual
+</insert>
 
 </mapper>
