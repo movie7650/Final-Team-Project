@@ -8,10 +8,10 @@ import com.example.daitso.purchase.model.PurchaseCheck;
 public interface IPurchaseService {
 	//구매
 	void insertPurchase(Purchase purchase);
-	//구매상품이름가져오기
-	List<PurchaseCheck> selectAllProductNM();
-	//구매상품정보가져오기
-	List<Purchase> selectAllPurchase();
+	//전체주문상품가져오기
+	List<PurchaseCheck> selectAllOrderProduct(int customerId);
+	//전체상품이름가져오기
+	List<PurchaseCheck> selectAllProductNm(int customerId);
 	//구매취소
 	void canclePurchase(Purchase purchase);
 

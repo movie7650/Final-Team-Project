@@ -71,13 +71,15 @@
 	color:#fff;
 }
 .left-menu-container{
-	display: flex;
-	justify-content:center;
+	width:180px;
+	padding-right:100px;
+	height:auto;
+	margin-right:65px;
+	
 }
 .left-menu-container01{
 	width:180px;
 	height:auto;
-	margin-right:920px;
 	
 }
 .left-menu{

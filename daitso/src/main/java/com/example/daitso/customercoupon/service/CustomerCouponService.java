@@ -23,13 +23,13 @@ public class CustomerCouponService implements ICustomerCouponService {
 	ICustomerCouponRepository customerCouponRepository;
 	
 	@Override
-	public List<SelectCustomerCoupon> selectUsableCoupon() {
-		return customerCouponRepository.selectUsableCoupon();
+	public List<SelectCustomerCoupon> selectUsableCoupon(int customerId) {
+		return customerCouponRepository.selectUsableCoupon(customerId);
 	}
 	
 	@Override
-	public List<SelectCustomerCoupon> selectBanCoupon() {
-		return customerCouponRepository.selectBanCoupon();
+	public List<SelectCustomerCoupon> selectBanCoupon(int customerId) {
+		return customerCouponRepository.selectBanCoupon(customerId);
 	}
 	
 	@Override

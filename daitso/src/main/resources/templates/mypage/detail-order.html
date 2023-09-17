@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/header :: header}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
+<form th:action="@{/mypage/order-list}" method="post">
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
+
 <div class="detail-order-main">
-	<div class="detail-order-title">상세주문정보</div>
+	<div class="detail-order-title">주문상세목록</div>
 	
-	<div class="detail-order-product-container">
-		<div class="detail-order-product01">
-			<button type="submit">리뷰남기기</button>
-		</div><!-- detail-order-product01 -->
-		
-		<div class="detail-order-product02">
-			<div class="detail-product-name">productName</div>
-			<div class="detail-product-cost">productCost</div>
-			<div class="detail-order-img">
-				<img th:src="@{/assets/mypage/request.JPG}" width="80px">
-			</div><!-- detail-order-img -->
+	
+	<th:block th:each="purchase : ${purchaseList}">
+		<div class="detail-order-list-container">
+			<div class="order-list-container-01">
+				<div class="shipping-status" th:text="${purchase.purchaseDv}">배송완료</div>
+				<!-- <div class="shipping-date">&bull;8/2(금)도착</div> -->
+				
+				<div class="purchase-img-001">이미지</div>
+				
+				<div class="purchase-product-inform">
+					<th:block th:each="purchaseCheck: ${purchaseCheckList}">
+					<div class="purchase-inform-001" th:text="|상품명: ${purchaseCheck.productName}|" >ProductName</div>
+					</th:block>
+					<div class="purchase-count" th:text="|수량: ${purchase.purchaseCount}개|">구매수량</div>
+					<div class="purchase-product-cost" th:text="|상품가격: ${purchase.purchasePrice}원|"></div>
+					<div class="purchase-total-cost"th:text="|총 가격: ${purchase.totalCost}원|">총 가격</div>
+				</div><!-- purchase-product-inform -->
+			</div><!-- order-list-container01 -->
 			
-		</div><!-- detail-order-product02 -->
-	</div><!-- detail-order-product-container -->
-	
-	<div class="detail-receiver-title">받는사람정보</div>
-	
-	<div class="detail-order-table-container">
+			
+			<div class="detail-button-container01">
+				<div class="detail-order-button"><a th:href="@{/mypage/review}">리뷰남기기</a></div>
+			</div><!-- shipping-button-container -->	
+		</div><!--detail-order-list-container -->
+	 </th:block>
+	 
+	 <div class="detail-receiver-title">받는사람</div>
+	 <div class="detail-order-table-container">
 		<table class="detail-order-table">
 			<tr>
 			<th>받는사람</th>
@@ -44,16 +57,16 @@
 		</table>
 	
 	</div><!-- detail-order-table-container -->
-	
-	
-	<div class="empty"></div>
-	
-	
-	
-	
-	
-</div><!-- detail-order-main -->
-<div th:replace="~{/include/footer :: footer}"></div>
+	 
+</div><!-- order-list-main -->
 
+</form>
+
+
+
+
+
+
+<div th:replace="~{/include/footer :: footer}"></div>
 </body>
 </html>

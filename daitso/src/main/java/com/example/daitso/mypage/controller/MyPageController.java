@@ -1,8 +1,11 @@
 package com.example.daitso.mypage.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
-import com.example.daitso.customercoupon.repository.ICustomerCouponRepository;
-import com.example.daitso.customercoupon.service.CustomerCouponService;
 import com.example.daitso.customercoupon.service.ICustomerCouponService;
 import com.example.daitso.point.model.Point;
 import com.example.daitso.point.service.IPointService;
@@ -38,96 +39,177 @@ public class MyPageController {
 	//마이페이지-포인트 컨트롤러 
 	@RequestMapping(value="/mypoint", method=RequestMethod.GET)
 	public String selectPoint(Model model) {
-		List<Point> points = pointService.selectPoint();
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("points",points);
-		model.addAttribute("totalPoint", point + "P"); 
 		
-		return "mypage/my-point";
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			List<Point> points = pointService.selectPoint(customerId);
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("points",points);
+			model.addAttribute("totalPoint", point + "P"); 
+			
+			return "mypage/my-point";
+			
+		}catch(ClassCastException e) {
+			return "redirect:/login";
+			
+		}
 	}
 	
 	//마이페이지-주문목록 컨트롤러
 	@RequestMapping(value="/orderlist", method=RequestMethod.GET)
 	public String selectPurchase(Model model) {
-		//상단에 잔여 포인트 출력 
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint",point + "P");
-		
-		//구매 목록 출력
-		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
-		model.addAttribute("purchaseList",purchaseList);
-		
-		//구매상품이름출력
-		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
-		model.addAttribute("purchaseCheckList",purchasecheckList);
-	
-		
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 잔여 포인트 출력 
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint",point + "P");
+			
+			//구매 목록 출력
+			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+			model.addAttribute("purchaseList",purchaseList);
+			
 		return "mypage/order-list";
+		}catch(ClassCastException e){
+			
+			return "redirect:/customer/login";
+			
+		}
+		
 	}
+	
+	//마이페이지-상세주문
+	@RequestMapping(value="/mydetailorder", method=RequestMethod.GET)
+	public String detailOrder(Model model) {
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 잔여 포인트 출력 
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint",point + "P");
+			
+			//구매 목록 출력
+			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+			model.addAttribute("purchaseList",purchaseList);
+			return "mypage/detail-order";
+			
+		}catch(ClassCastException e){
+			return "redirect:/customer/login";
+		}
+		
+	}
+	
 	
 	//마이페이지-주문조회-결제취소
 	@RequestMapping("/canclepay")
 	public String canclePay(Model model) {
-		//상단 잔여포인트 출력
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		
-		//구매 목록 출력
-		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
-		model.addAttribute("purchaseList",purchaseList);
-		
-		//구매상품이름출력
-		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
-		model.addAttribute("purchaseCheckList",purchasecheckList);
-		
-		return "mypage/cancle-pay";
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 잔여 포인트 출력 
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint",point + "P");
+			
+			//구매 목록 출력
+			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+			model.addAttribute("purchaseList",purchaseList);
+			return "mypage/cancle-pay";
+			
+		}catch(ClassCastException e){
+			return "redirect:/customer/login";
+		}
 	}
 	//마이페이지-주문조회-배송중
 	@RequestMapping("/searchshipping")
 	public String searchShipping(Model model) {
-		//상단 잔여포인트 출력
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		
-		//구매 목록 출력
-		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
-		model.addAttribute("purchaseList",purchaseList);
-		
-		//구매상품이름출력
-		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
-		model.addAttribute("purchaseCheckList",purchasecheckList);
-
-		return "mypage/mypage-search-shipping";
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 잔여 포인트 출력 
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint",point + "P");
+			
+			//구매 목록 출력
+			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+			model.addAttribute("purchaseList",purchaseList);
+			return "mypage/mypage-search-shipping";
+			
+		}catch(ClassCastException e){
+			return "redirect:/customer/login";
+		}
 	}
 	//마이페이지-주문주회-배송완료
 	@RequestMapping("/shippingcomplete")
 	public String shippingComplete(Model model) {
-		//상단 잔여포인트
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		
-		//구매 목록 출력
-		List<Purchase> purchaseList = purchaseService.selectAllPurchase();
-		model.addAttribute("purchaseList",purchaseList);
-		
-		//구매상품이름출력
-		List<PurchaseCheck> purchasecheckList=purchaseService.selectAllProductNM();
-		model.addAttribute("purchaseCheckList",purchasecheckList);
-
-		return "mypage/mypage-shipping-complete";
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 잔여 포인트 출력 
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint",point + "P");
+			
+			//주문 목록 출력
+			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+			model.addAttribute("purchaseList",purchaseList);
+			return "mypage/mypage-shipping-complete";
+			
+		}catch(ClassCastException e){
+			return "redirect:/customer/login";
+		}
 	}
 	
 	
 	//마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
 	@RequestMapping("/mycoupon")
 	public String insertCoupon(Model model) {
-		//상단 잔여포인트
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		//사용가능한 쿠폰리스트 출력
-		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon();
-		model.addAttribute("selectCustomerCouponList",selectUsableCustomerCouponList);
-		return "mypage/insert-coupon";
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			//상단 잔여포인트
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint", point + "P");
+			//사용가능한 쿠폰리스트 출력
+			List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon(customerId);
+			model.addAttribute("selectCustomerCouponList",selectUsableCustomerCouponList);
+			return "mypage/insert-coupon";
+			
+		}catch(ClassCastException e) {
+			return "redirect:/customer/login";
+		}
 	}
 	
 	//마이페이지-쿠폰등록 및 쿠폰사용완료리스트 컨트롤러
@@ -200,13 +282,6 @@ public class MyPageController {
 		return "mypage/mypage-inquiry";
 	}
 	
-	//마이페이지-상세주문
-	@RequestMapping("/mydetailorder")
-	public String detaiOrder(Model model) {
-		int point = pointService.selectTotalPoint();
-		model.addAttribute("totalPoint", point + "P");
-		return "mypage/detail-order";
-	}
 	
 
 }
