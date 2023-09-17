@@ -3,10 +3,12 @@ package com.example.daitso.purchase.repository;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
+import com.example.daitso.purchase.model.PurchaseList;
 
 @Repository
 @Mapper
@@ -20,4 +22,7 @@ public interface IPurchaseRepository {
 	//주문취소 
 	void canclePurchase(Purchase purchase);
 	
+	List<PurchaseList> selectAllPurchaseList();
+	
+	void changePurchaseStatus(@Param("purchaseId") int purchaseId, @Param("commonCodeId") int commonCodeId);
 }
