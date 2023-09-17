@@ -1,9 +1,12 @@
 package com.example.daitso.product.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.SpecialProduct;
@@ -63,6 +66,15 @@ public class ProductService implements IProductService {
 	@Override
 	public List<Product> saleProductList() {
 		return productRepository.saleProductList();
+	}
+	
+	//매 자정마다 인기상품 업데이트 시켜주기
+	 @Scheduled(cron = "0 0 0 * * *")
+	 @Transactional
+	public void insertSpecialProduct() {
+		List<Map<String,Integer>> list = productRepository.searchPopularProduct();
+		productRepository.insertPopularProducts(list);
+
 	}
 
 }

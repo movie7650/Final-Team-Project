@@ -24,5 +24,7 @@ public interface IProductService {
 	List<SpecialProduct> selectSpecialProduct();
 	
 	List<Product> saleProductList();
+	
+	void insertSpecialProduct();
 
 }
