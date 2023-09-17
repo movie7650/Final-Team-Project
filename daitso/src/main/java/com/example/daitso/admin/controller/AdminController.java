@@ -1,7 +1,11 @@
 package com.example.daitso.admin.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,15 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
+import com.example.daitso.purchase.model.Purchase;
+import com.example.daitso.purchase.model.PurchaseList;
+import com.example.daitso.purchase.service.IPurchaseService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -33,21 +40,22 @@ public class AdminController {
 	@Autowired
 	ICategoryService categoryService;
 
+	@Autowired
+	IPurchaseService purchaseService;
+	
 	// 로그인
 	@GetMapping("/login")
 	public String login() {
 		return "admin/login/admin-login";
 	}
 
-	// 카테고리별 상품 조회하기(페이징)
+	// 상품 조회하기(카테고리별)
 	@GetMapping("/product")
-	public String selectProductsByCategory(
-	    @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
-	    @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
-	    @RequestParam(name = "thirdCategoryId", required = false) Integer thirdCategoryId,
-	    @RequestParam(name = "page", defaultValue = "1") int page,
-	    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-	    Model model) {
+	public String selectProductsByCategory( @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
+				  @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+				  @RequestParam(name = "thirdCategoryId", required = false) Integer thirdCategoryId,
+				  @RequestParam(name = "page", defaultValue = "1") int page,
+				  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
 	    
 		// 해당 페이지에 보여질 상품들 번호 가져오는 것 ex)3 페이지면 offset=20으로 매퍼에서 21(offset+1)번부터 30(offset+pageSize)번까지 보여준다.
 	    int offset = (page - 1) * pageSize;
@@ -108,36 +116,39 @@ public class AdminController {
 		model.addAttribute("thirdCategories",thirdCategories);
 		return thirdCategories;
 	}
-
-	// 그룹 상품 삭제하기
-	@PostMapping("/delete-group")
-	public String deleteGroupProduct(@RequestParam int productGroupId, Model model) {
-		adminService.deleteGroupProduct(productGroupId);
-		model.addAttribute("message","상품이 삭제되었습니다.");
-		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
-	}
 	
-	// 그룹별 상품 조회하기
+	// 상품 조회하기(그룹별)
 	@GetMapping("/search/{productGroupId}")
 	@ResponseBody
 	public List<ProductCheck> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
 	
-	// 해당 상품 불러오기
+	// 상품 삭제하기(그룹)
+	@PostMapping("/delete-group")
+	public String deleteProductByGroupId(@RequestParam int productGroupId, Model model) {
+		adminService.deleteProductByGroupId(productGroupId);
+		model.addAttribute("message","상품이 삭제되었습니다.");
+		model.addAttribute("searchUrl","/admin/product");
+		return "admin/product/message";
+	}	
+	
+	// 상품ID로 상품 정보 갖고오기
 	@GetMapping("/update/{productId}")
 	@ResponseBody
 	public Product selectProductId(@PathVariable int productId, Model model) {
 		return adminService.selectProductId(productId);
 	}
 
-	// 해당 상품 수정하기
+	// 상품 수정하기
 	@PostMapping("/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
 		adminService.updateProduct(product);
 		model.addAttribute("product", product);
-		session.setAttribute("productCode", product.getProductCode());
+//	    product.setProductOptionFirst(Jsoup.clean(product.getProductOptionFirst(), Safelist.basic()));
+//	    product.setProductOptionSecond(Jsoup.clean(product.getProductOptionSecond(), Safelist.basic()));
+//	    product.setProductOptionThird(Jsoup.clean(product.getProductOptionThird(), Safelist.basic()));
+	   	session.setAttribute("productCode", product.getProductCode());
 		session.setAttribute("productId", product.getProductId());
 		session.setAttribute("productNm", product.getProductNm());
 		session.setAttribute("productOptionFirst", product.getProductOptionFirst());
@@ -149,42 +160,14 @@ public class AdminController {
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
 	}
-
-	// 해당 상품 삭제하기
-//	@PostMapping("/delete")
-//	public String deleteProduct(@RequestParam int productId, Model model) {
-//		adminService.deleteProduct(productId);
-//		model.addAttribute("message","상품이 삭제되었습니다.");
-//		model.addAttribute("searchUrl","/admin/product");
-//		return "admin/product/message";
-//	}
 	
-	// 해당 상품 삭제하기
-//	@PostMapping("/delete")
-//	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
-//	    for (Integer productId : selectedProductIds) {
-//	        adminService.deleteProduct(productId);
-//	    }
-//	    model.addAttribute("message", "상품이 삭제되었습니다.");
-//	    model.addAttribute("searchUrl", "/admin/product");
-//	    return "admin/product/message";
-//	}
-	
+	// 상품 삭제하기
 	@PostMapping("/delete")
 	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
 	    for (Integer productId : selectedProductIds) {
 	        adminService.deleteProduct(productId);
 	    }
 	    return "admin/product";
-	}
-	
-	//카테고리 수정하기
-	@GetMapping("/category/update")
-	public String updateCategory(Model model) {
-		List<Category> list = categoryService.selectAllCategory();
-		model.addAttribute("categoryList", list);
-		System.out.println(list);
-		return "admin/category/category-update";
 	}
 	
 	//기존 상품 등록하기
@@ -195,8 +178,8 @@ public class AdminController {
 //		model.addAttribute("searchUrl","/admin/product");
 //		return "admin/product/message";
 //	}
-	
-	//기존 상품 등록하기
+		
+	// 기존 상품 등록하기
 	@PostMapping("/product")
 	public String registerExistingProducts(ProductCheck product, Model model) {
 		// 입력 필드가 비어 있으면 '-'으로 대체
@@ -213,6 +196,53 @@ public class AdminController {
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
+	}
+	
+	
+	// 상품 검색
+    @GetMapping("/search-product")
+    @ResponseBody
+    public List<ProductCheck> searchProducts(@RequestParam("searchText") String searchText) {
+        List<ProductCheck> productList = adminService.searchProductsByName(searchText);
+        return productList;
+    }
+    
+    
+//	@GetMapping("/purchase/{purchaseDv}")
+//	public String selectAllPurchaseList(@PathVariable int purchaseDv, Model model) {
+//		List<Purchase> purchases = adminService.selectAllPurchaseList(purchaseDv);
+//		model.addAttribute(purchases);
+//	    return "admin/purchase/admin-purchase";
+//	}
+    
+    
+	@GetMapping("/purchase")
+	public String selectAllPurchaseList(Model model) {
+		List<PurchaseList> purchaselist = adminService.selectAllPurchaseList();
+		model.addAttribute("purchaselist",purchaselist);
+	    return "admin/purchase/admin-purchase";
+	}
+	
+    @PostMapping("/purchase/change-status")
+    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
+        adminService.changePurchaseStatus(purchaseId, commonCodeId);
+        return "admin/purchase/admin-purchase";
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	//카테고리 수정하기
+	@GetMapping("/category/update")
+	public String updateCategory(Model model) {
+		List<Category> list = categoryService.selectAllCategory();
+		model.addAttribute("categoryList", list);
+		System.out.println(list);
+		return "admin/category/category-update";
 	}
 	
 	//카테고리 수정하기
