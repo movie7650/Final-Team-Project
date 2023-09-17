@@ -7,10 +7,10 @@ import lombok.Setter;
 public class PurchaseCheck {
 	private int customerId;
 	private String productNm;
-	private String productPrice;
+	private int productPrice;
 	private String purchaseNum;
 	private int purchaseCount;
-	private int purchasePrice;
+	private String purchasePrice;
 	private String totalCost;
 	private String purchaseDv;
 }

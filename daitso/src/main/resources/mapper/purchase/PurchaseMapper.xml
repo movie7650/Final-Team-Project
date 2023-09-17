@@ -3,9 +3,9 @@
 <mapper namespace="com.example.daitso.purchase.repository.IPurchaseRepository">
 <select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
 	SELECT purchase_count					AS	"purchaseCount",
-		   purchase_price					AS	"purchasePrice",
+		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
 		   cc.common_code_nm				AS	"purchaseDv",
-		   purchase_count * purchase_price	AS "totalCost",
+		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
 		   product_nm						AS 	"productNm",
 		   purchase_num						AS	"purchaseNum"
 		   
