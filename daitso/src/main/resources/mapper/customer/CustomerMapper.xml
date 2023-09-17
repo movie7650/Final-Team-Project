@@ -7,7 +7,7 @@
 		참고: 상태가 'N'인 상태인 컬럼은 중복체크에서 제외
 		담당자: 최준원 
 	-->
-	<select id="checkEmailDuplicated" parameterType="String" resultType="int">
+    <select id="checkEmailDuplicated" parameterType="String" resultType="int">
 		SELECT count(*)
 		  FROM customer
 		 WHERE customer_email = #{customerEmail} 
