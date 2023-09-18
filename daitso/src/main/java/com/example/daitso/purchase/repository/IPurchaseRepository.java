@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
@@ -24,6 +25,12 @@ public interface IPurchaseRepository {
 	//주문취소 
 	void canclePurchase(Purchase purchase);
 	
+	
+	
+//	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("start") int start, @Param("end") int end);
+	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
+	int selectCountPurchaseList(@Param("commonCodeId") int commonCodeId);
+
 	//배송중인 상품 갯수
 	int selectShipping(int customerId);
 	
@@ -36,6 +43,11 @@ public interface IPurchaseRepository {
 	
 	
 	List<PurchaseList> selectAllPurchaseList();
+
 	
 	void changePurchaseStatus(@Param("purchaseId") int purchaseId, @Param("commonCodeId") int commonCodeId);
+	
+	
+	List<PurchaseList> searchPurchaseInfo(String searchText);
+	
 }
