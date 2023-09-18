@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.category.model.Category;
@@ -42,17 +43,17 @@ public class CategoryController {
 	
 	// category별 상품 조회 1페이지
 	@GetMapping("/{categoryId}")
-	public String productList(@PathVariable int categoryId, HttpSession session ,Model model) {
+	public String productList(@PathVariable int categoryId, @RequestParam(value="sort", required=false, defaultValue="normal") String sort, HttpSession session ,Model model) {
 		
-		return productList(categoryId, 1, session, model);
+		return productList(categoryId, 1, session, model, sort);
 	}
 	
 	// category별 상품 조회 2~페이지
 	@GetMapping("/{categoryId}/{page}")
-	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model) {
+	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model, String sort) {
 		session.setAttribute("page", page);
 		model.addAttribute("categoryId", categoryId);
-		List<Product> list = productService.selectProductList(categoryId, page);
+		List<Product> list = productService.selectProductList(categoryId, page, sort);
 		List<Category> categoryList = categoryService.selectCategoryList(categoryId);
 		String path = categoryService.selectCategoryPath(categoryId);
 		
@@ -78,7 +79,7 @@ public class CategoryController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		
+		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("productList", list);
 		model.addAttribute("path", path);
