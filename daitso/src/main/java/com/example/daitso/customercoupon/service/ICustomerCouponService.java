@@ -8,9 +8,9 @@ import com.example.daitso.cart.model.CartCouponApply;
 public interface ICustomerCouponService {
 	
 	//사용가능한 쿠폰 리스트 출력
-	List<SelectCustomerCoupon> selectUsableCoupon();
+	List<SelectCustomerCoupon> selectUsableCoupon(int customerId);
 	//사용불가능한 쿠폰 리스트 출력
-	List<SelectCustomerCoupon> selectBanCoupon();
+	List<SelectCustomerCoupon> selectBanCoupon(int customerId);
 	//사용자 쿠폰등록
 	void insertCustomerCoupon();
 	// 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기

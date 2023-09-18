@@ -13,10 +13,10 @@ import com.example.daitso.purchase.repository.IPurchaseRepository;
 public class PurchaseService implements IPurchaseService {
 	@Autowired
 	IPurchaseRepository purchaseRepository;
-	//구매상품이름가져오기
+	//전체주문상품가져오기
 	@Override
-	public List<PurchaseCheck> selectAllProductNM() {
-		return purchaseRepository.selectAllProductNM();
+	public List<PurchaseCheck> selectAllOrderProduct(int customerId) {
+		return purchaseRepository.selectAllOrderProduct(customerId);
 	}
 	//구매취소
 	@Override
@@ -29,10 +29,19 @@ public class PurchaseService implements IPurchaseService {
 		 purchaseRepository.insertPurchase(purchase);
 		
 	}
-	//구매상품정보가져오기
 	@Override
-	public List<Purchase> selectAllPurchase() {
-			return purchaseRepository.selectAllPurchase();
+	public List<PurchaseCheck> selectAllProductNm(int customerId) {
+		// TODO Auto-generated method stub
+		return purchaseRepository.selectAllProductNm(customerId);
 	}
-
+	@Override
+	public int selectShipping(int customerId) {
+		return purchaseRepository.selectShipping(customerId);
+		
+	}
+	@Override
+	public int selectShippingComplete(int customerId) {
+		return purchaseRepository.selectShippingComplete(customerId);
+		
+	}
 }
