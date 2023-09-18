@@ -306,6 +306,7 @@
     </insert>
 
 
+<!-- 상품명으로 그룹 상품 찾기 -->
  <select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
         SELECT DISTINCT
         p.product_group_id AS "productGroupId",
@@ -314,8 +315,7 @@
         p.category_id AS "categoryId"
         FROM product p
         JOIN category c ON p.category_id = c.category_id
-        WHERE p.product_nm 
-        LIKE '%' ||  #{searchText} || '%'
+        WHERE INSTR(p.product_nm,#{searchText}) > 0
 </select>
 
 

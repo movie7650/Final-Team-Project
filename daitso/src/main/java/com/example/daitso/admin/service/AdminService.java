@@ -108,15 +108,31 @@ public class AdminService implements IAdminService{
 		return productRepository.searchProductsByName(searchText);
 	}
 
+
+	
+	
 	@Override
-	public List<PurchaseList> selectAllPurchaseList() {
-		return purchaseRepository.selectAllPurchaseList();
+	public List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize) {
+		return purchaseRepository.selectPurchaseList(commonCodeId, offset, pageSize);
 	}
 
+	@Override
+	public int selectCountPurchaseList(int commonCodeId) {
+		return purchaseRepository.selectCountPurchaseList(commonCodeId);
+	}
+	
+	
+	
 	@Override
 	public void changePurchaseStatus(int purchaseId, int commonCodeId) {
 		purchaseRepository.changePurchaseStatus(purchaseId, commonCodeId);
 	}
+
+	@Override
+	public List<PurchaseList> searchPurchaseInfo(String searchText) {
+		return purchaseRepository.searchPurchaseInfo(searchText);
+	}
+
 
 	
 }

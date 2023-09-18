@@ -41,7 +41,14 @@ public interface IAdminService {
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
 
-	List<PurchaseList> selectAllPurchaseList();
+	
+	List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize);
+	
+	int selectCountPurchaseList(int commonCodeId);
+
 	void changePurchaseStatus(int purchaseId, int commonCodeId);	
 	
+	
+	List<PurchaseList> searchPurchaseInfo(String searchText);
+
 }

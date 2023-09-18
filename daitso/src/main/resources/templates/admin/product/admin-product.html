@@ -82,7 +82,7 @@
 								<button class="btn btn-xs"
 									style="background-color: #aac8b2; color: #ffff"
 									data-bs-toggle="modal" data-bs-target="#searchModal"
-									type="button" th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">조회</button>
+									type="button" th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">상세</button>
 								<button class="btn btn-xs"
 									style="background-color: red; color: #fff" 
 									type="button"
@@ -141,20 +141,20 @@
 						<div class="row mb-3">
 							<label for="productGroupId" class="col-sm-2 col-form-label">그룹ID</label>
 							<div class="col-sm-10">
-							<input type="text" id="getProductGroupId" name="productGroupId" style="font-weight: bold; background-color: cornsilk;" readonly="readonly">
+							<input type="text" id="getProductGroupId" name="productGroupId" style="font-weight: bold;" readonly="readonly">
 							</div>
 						</div>
 					    <div class="row mb-3">
 							<label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
 							<div class="col-sm-10">
-							<input type="text" id="getCategoryNm" name="categoryNm" style="font-weight: bold; background-color: cornsilk;" readonly="readonly">
+							<input type="text" id="getCategoryNm" name="categoryNm" style="font-weight: bold;" readonly="readonly">
 							</div>
 						</div>
 						<input type="hidden" id="getCategoryId" name="categoryId">
 						<div class="row mb-3">
 							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
 							<div class="col-sm-10">
-							<input type="text" id="getProductNm" name="productNm" style="font-weight: bold; background-color: cornsilk;"readonly="readonly">
+							<input type="text" id="getProductNm" name="productNm" style="font-weight: bold;"readonly="readonly">
 							</div>
 						</div>			
 						
@@ -231,7 +231,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
-								onclick="saveData()" type="submit">저장</button>
+								onclick="changeData()" type="submit">저장</button>
 							<button class="btn btn-secondary"
 								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 						</div>
@@ -244,7 +244,7 @@
 
 	<!-- 신규 상품 등록 모달 -->
 	<div id="registerNewModal" class="modal fade" tabindex="-1"	role="dialog">
-		<div class="modal-dialog" role="document" style="max-width: 1200px;">
+		<div class="modal-dialog" role="document" style="max-width: 900px;">
 			<div class="modal-content">
 				<div class="modal-header">
 				<h5 class="modal-title">신규 상품 등록</h5>
@@ -252,8 +252,8 @@
 				<form th:action method="post">
 					<div class="modal-body">
 						<div id="searchTextDiv" style="display:flex;">
-							<input id="searchText" type="text"> 
-							<input type="button" class="btn btn-primary" style="background-color: #668663" value="검색" onclick="searchList()" />
+							<input id="searchText" style="width:20%;" type="text"> 
+							<input type="button" class="btn btn-primary" style="width:7%; background-color: #668663" value="검색" onclick="searchList()"/>
 						</div>
 
 						<table class="table">
@@ -271,6 +271,7 @@
 						<input type="hidden" id="selectProductGroupId" name="productGroupId">
 						<input type="hidden" id="selectCategoryNm" name ="categoryNm">
 						<input type="hidden" id="selectProductNm" name="productNm">
+						<input type="hidden" id="selectCategoryId" name="categoryId">
 						<div class="row mb-3">
 							<label for="productContent" class="col-sm-2 col-form-label"
 								style="padding-bottom: 100px;">상세내용</label>
@@ -304,7 +305,7 @@
 							</div>
 						</div>
 
-						<div class="row mb-3">
+						<!-- <div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label"
 								style="color: red;">* 가격</label>
 							<div class="col-sm-10">
@@ -323,6 +324,26 @@
 									name="productStock" 
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
+						</div> -->
+						<div class="row mb-3">
+							<label for="productPrice" class="col-sm-2 col-form-label"
+								style="color: red;">* 가격</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="8" id="productPrice"
+									name="productPrice" onkeyup="inputNumberFormat(this);"
+									style="text-align: right;  width: 28%;" 
+									placeholder="* 필수 입력 항목입니다." required>
+							</div>
+						</div>
+						
+						<div class="row mb-3">
+							<label for="productStock" class="col-sm-2 col-form-label"
+								style="color: red">* 수량</label>
+							<div class="col-sm-10">
+								<input type="text" maxlength="7" id="productStock"
+									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
+									 style="width: 28%;" placeholder="* 필수 입력 항목입니다." required>
+							</div>
 						</div>
 
 						<div class="row mb-3">
@@ -335,7 +356,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
-								type="submit">저장</button>
+								onclick="changeData()" type="submit">저장</button>
 							<button class="btn btn-secondary"
 								th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
 						</div>
@@ -490,10 +511,11 @@
     	                for (var i = 0; i < response.length; i++) {
     	                	
     	                    var addTableRow = "<tr>" +
-    	                        "<td><input type='radio' onchange='getProductCheck(this)' name ='productCheck' value=" + response[i].productGroupId + " class ='productCheckbox'></td>" +
+    	                        "<td><input type='radio' onchange='getProductCheck(this)' name ='productCheck' value=" + response[i].productGroupId + " class ='productCheckbox' required></td>" +
     	                        "<td>" + response[i].productGroupId + "</td>" +
     	                        "<td id = categoryNm" + response[i].productGroupId +">" + response[i].categoryNm + "</td>" +
     	                        "<td id = productNm" + response[i].productGroupId +">" + response[i].productNm + "</td>" +
+    	                        "<td id='categoryId" + response[i].productGroupId + "' style='display: none;'>" + response[i].categoryId + "</td>" +
     	                        "</tr>"
     	                        ;
 
@@ -511,6 +533,7 @@
     		document.getElementById("selectProductGroupId").value = item.value;
     		document.getElementById("selectCategoryNm").value = document.getElementById("categoryNm" + item.value).innerText;
     		document.getElementById("selectProductNm").value =  document.getElementById("productNm" + item.value).innerText;
+    		document.getElementById("selectCategoryId").value =  document.getElementById("categoryId" + item.value).innerText;
     		console.log(item.value);
     	}
      }
@@ -699,7 +722,7 @@
         }, 50) //대기시간
     }  	
   	
- 	// 그룹별 상품 "조회" 버튼
+ 	// 그룹별 상품 조회
     function selectProductsByGroupId(productGroupId) {
  		console.log(productGroupId);
          fetch("/admin/search/" + productGroupId)
@@ -728,8 +751,8 @@
 		   						onclick = "selectProductId(${product.productId})">수정</button>
 		    				</div>
 		    			  </td>
-		    			  <td><input id="categoryNm" type="hidden" value=${product.categoryNm}></td>
-		    			  <td><input id="categoryId" type="hidden" value=${product.categoryId}></td>
+		    			  <input id="categoryNm" type="hidden" value=${product.categoryNm}></td>
+		    			  <input id="categoryId" type="hidden" value=${product.categoryId}></td>
                          `;
                       productTableBody.appendChild(row);
                   });
@@ -763,7 +786,17 @@
         updatePrice.value = priceUpdated;
     }
    
-    
+ 	//입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
+    function changeData() {
+        const changedPrices = document.querySelectorAll("#productPrice");
+        for (let i = 0; i < changedPrices.length; i++) {
+            const changedPrice = changedPrices[i];
+            const priceChanged = uncomma(changedPrice.value);
+            changedPrice.value = priceChanged;
+        }
+    }
+
+/*     
     //가격 콤마 제거하고 정수로 변환하여 저장하기
     function saveData() {
     	const productPriceInput = document.getElementById("productPrice");
@@ -771,7 +804,7 @@
     	productPriceInput.value = productPriceValue;
     	const productPrice = parseInt(productPriceValue); // 정수로 변환
     }
-
+ */
     
     // number 타입 maxlength 걸어주기
     function maxLengthCheck(object){
