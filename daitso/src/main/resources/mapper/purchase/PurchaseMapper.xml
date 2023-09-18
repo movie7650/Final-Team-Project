@@ -33,21 +33,101 @@
 
 
 
-<select id="selectAllPurchaseList" resultType="com.example.daitso.purchase.model.PurchaseList">
-    SELECT p.purchase_id     AS  "purchaseId",
-           r.product_nm      AS  "productNm",
-           c.customer_nm     AS  "customerNm",
-	       p.purchase_num	 AS  "purchaseNum",
-	       p.create_dt       AS  "createDt",
-           d.common_code_id  AS  "commonCodeId",
-           d.common_code_nm  AS  "commonCodeNm"
-      FROM purchase p
-	  JOIN customer c ON p.customer_id = c.customer_id 
-      JOIN common_code d ON p.purchase_dv = d.common_code_id
-      JOIN product r ON r.product_id = p.product_id
-  ORDER BY p.create_dt
-<!-- 	 WHERE purchase_dv = #{purchaseDv} -->
+
+	<select id="selectPurchaseList" resultType="com.example.daitso.purchase.model.PurchaseList">
+	    SELECT *
+		  FROM( SELECT p.purchase_id                            AS  "purchaseId",
+		               r.product_nm                             AS  "productNm",
+		               c.customer_nm                            AS  "customerNm",
+		               p.purchase_num	                        AS  "purchaseNum",
+		               p.create_dt                              AS  "createDt",
+		               d.common_code_id                         AS  "commonCodeId",
+		               d.common_code_nm                         AS  "commonCodeNm",
+		               ROW_NUMBER() OVER (ORDER BY p.create_dt desc) AS "rn"
+		  FROM purchase p
+		  JOIN customer c ON p.customer_id = c.customer_id 
+		  JOIN common_code d ON p.purchase_dv = d.common_code_id
+		  JOIN product r ON r.product_id = p.product_id
+	  GROUP BY p.purchase_id, 
+			   r.product_nm, 
+			   c.customer_nm, 
+			   p.purchase_num, 
+			   p.create_dt,
+	           d.common_code_id,
+	           d.common_code_nm
+	    HAVING 1=1 
+		       <choose>
+				<!-- 전체 조회 -->
+					<when test="(commonCodeId == null or commonCodeId == 0)">	
+						            
+					</when>
+				<!-- commonCodeId에 따라서 -->
+					<otherwise>
+					 AND d.common_code_id = #{commonCodeId}
+					 </otherwise>
+			  </choose>
+			    )    WHERE "rn" BETWEEN #{offset} + 1 
+	                     AND #{offset} + #{pageSize}
+	</select>
+
+
+	<select id="selectCountPurchaseList">
+	    SELECT COUNT (cnt)
+		  FROM(	SELECT COUNT(*) AS cnt 
+				  FROM purchase p
+		          JOIN customer c ON p.customer_id = c.customer_id 
+				  JOIN common_code d ON p.purchase_dv = d.common_code_id
+				  JOIN product r ON r.product_id = p.product_id
+			  GROUP BY p.purchase_id, 
+					   r.product_nm, 
+					   c.customer_nm, 
+					   p.purchase_num, 
+					   p.create_dt,
+			           d.common_code_id,
+			           d.common_code_nm
+				HAVING 1=1
+					   <choose>
+					       <!-- 전체 조회 -->
+							<when test="(commonCodeId == null or commonCodeId == 0)">	
+					       )
+					       </when>
+	
+					       <!-- commonCodeId에 따라서 -->
+							<otherwise>
+							 AND d.common_code_id = #{commonCodeId}
+					       )
+					       </otherwise>
+					   </choose>
+	 </select>
+
+
+
+<select id="searchPurchaseInfo" resultType="com.example.daitso.purchase.model.PurchaseList">
+    SELECT p.purchase_id                            AS  "purchaseId",
+		   r.product_nm                             AS  "productNm",
+		   c.customer_nm                            AS  "customerNm",
+		   p.purchase_num	                        AS  "purchaseNum",
+		   p.create_dt                              AS  "createDt",
+		   d.common_code_id                         AS  "commonCodeId",
+		   d.common_code_nm                         AS  "commonCodeNm"
+     FROM purchase p
+	 JOIN customer c ON p.customer_id = c.customer_id 
+	 JOIN common_code d ON p.purchase_dv = d.common_code_id
+	 JOIN product r ON r.product_id = p.product_id
+     WHERE 1=1 
+	        <if test='option=="회원명"'>
+			AND INSTR(c.customer_nm,#{searchText}) > 0
+	        </if>
+	        <if test='option=="주문번호"'>
+	        AND INSTR(p.purchase_num,#{searchText}) > 0
+	        </if>
 </select>
+
+
+
+
+
+
 
 <update id="changePurchaseStatus" parameterType="com.example.daitso.purchase.model.PurchaseList">
     UPDATE purchase

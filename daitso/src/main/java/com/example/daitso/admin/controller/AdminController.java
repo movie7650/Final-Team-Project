@@ -99,6 +99,39 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
+	
+	@GetMapping("/purchase")
+	public String selectPurchaseList(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
+			  @RequestParam(name = "page", defaultValue = "1") int page,
+			  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+		
+	    int offset = (page - 1) * pageSize;	   
+	    
+	    // 초기값 설정
+	    if (commonCodeId == null) {
+	    	commonCodeId = 0; 
+	    }
+		List<PurchaseList> purchaselist = adminService.selectPurchaseList(commonCodeId, offset, pageSize);
+	    model.addAttribute("purchaselist", purchaselist);
+
+	    // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountPurchaseList(commonCodeId);
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+
+	    return "admin/purchase/admin-purchase";
+	}
+	
+	
+	
 	// 두 번째 카테고리 불러오기
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
@@ -199,7 +232,7 @@ public class AdminController {
 	}
 	
 	
-	// 상품 검색
+	// 상품명으로 상품 검색하기
     @GetMapping("/search-product")
     @ResponseBody
     public List<ProductCheck> searchProducts(@RequestParam("searchText") String searchText) {
@@ -207,33 +240,30 @@ public class AdminController {
         return productList;
     }
     
-    
-//	@GetMapping("/purchase/{purchaseDv}")
-//	public String selectAllPurchaseList(@PathVariable int purchaseDv, Model model) {
-//		List<Purchase> purchases = adminService.selectAllPurchaseList(purchaseDv);
+
+//	@GetMapping("/purchase/{commonCodeId}")
+//	public String selectPurchaseList(@PathVariable int commonCodeId, Model model) {
+//		List<PurchaseList> purchases = adminService.selectPurchaseList(commonCodeId);
 //		model.addAttribute(purchases);
 //	    return "admin/purchase/admin-purchase";
 //	}
     
     
-	@GetMapping("/purchase")
-	public String selectAllPurchaseList(Model model) {
-		List<PurchaseList> purchaselist = adminService.selectAllPurchaseList();
-		model.addAttribute("purchaselist",purchaselist);
-	    return "admin/purchase/admin-purchase";
-	}
 	
     @PostMapping("/purchase/change-status")
     public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        return "admin/purchase/admin-purchase";
+        return "redirect:/admin/purchase";
     }
-	
-	
-	
-	
-	
-	
+	 
+    
+	// 상품명으로 상품 검색하기
+    @GetMapping("/search-purchase")
+    @ResponseBody
+    public List<PurchaseList> searchPurchaseInfo(@RequestParam("searchText") String searchText) {
+    	List<PurchaseList> purchaseInfo = adminService.searchPurchaseInfo(searchText);
+        return purchaseInfo;
+    }
 	
 	
 	//카테고리 수정하기
