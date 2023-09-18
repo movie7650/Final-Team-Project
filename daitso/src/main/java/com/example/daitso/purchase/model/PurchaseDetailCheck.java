@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class PurchaseCheck {
-	private int customerId;
+public class PurchaseDetailCheck {
+	private int customerId;  
 	private String productNm;
 	private int productPrice;
 	private String purchaseNum;
@@ -16,7 +16,10 @@ public class PurchaseCheck {
 	private String totalCost;
 	private String purchaseDv;
 	private Date createDt;
-	private int shippingCompleteCount;
-	private int shippingCount;
-	
+	private String shippingReceiverNm;
+	private String shippingReceiverTelno;
+	private String shippingRoadNmAddr;
+	private String shippingDaddr;
+	private String shippingDmnd;
+
 }

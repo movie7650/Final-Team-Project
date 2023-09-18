@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
+import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.model.PurchaseList;
 
 @Repository
@@ -20,6 +21,7 @@ public interface IPurchaseRepository {
 	List<PurchaseCheck> selectAllOrderProduct(int customerId);
 	//전체주문상품이름가져오기
 	List<PurchaseCheck> selectAllProductNm(int customerId);
+	
 	//주문취소 
 	void canclePurchase(Purchase purchase);
 	
@@ -34,6 +36,11 @@ public interface IPurchaseRepository {
 	
 	//배송완료인 상품 갯수
 	int selectShippingComplete(int customerId);
+	
+	//상세주문조회
+	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId") int customerId, @Param("purchaseNum")String purchaseNum);
+	
+	
 	
 	List<PurchaseList> selectAllPurchaseList();
 
