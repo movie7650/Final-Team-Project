@@ -170,19 +170,21 @@ public class CartController {
 	
 	//장바구니 추가
 	@PostMapping("/insert")
-	public void insertCart(int productId, int productCnt, int totalPrice, String selector) {
+	public String insertCart(Model model, RedirectAttributes redirectAttributes, int productId, int productCnt, String selector) {
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails)principal;
 
 		int customerId = Integer.parseInt(userDetails.getUsername());
 		
-		cartService.insertCartService(productId, customerId, productCnt, totalPrice);
+		if(selector.equals("cart")) {
+			cartService.insertCartService(productId, customerId, productCnt);			
+		}
+		else if(selector.equals("purchase")) {
+			cartService.directPurchase(productId, customerId, productCnt);
+		}
 		
-		/*
-		 * if(selector.equals("purchase")) { return "purchase/purchase"; } else { return
-		 * "redirect:/cart"; }
-		 */
+		return getCart(model, redirectAttributes);
 		
 	}
 	

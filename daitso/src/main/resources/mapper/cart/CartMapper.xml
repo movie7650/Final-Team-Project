@@ -2,9 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.cart.repository.ICartRepository">
 
+	<!-- 
+		기능: 장바구니에 담겨있지 않은 상품 담기
+		담당자: 나현웅
+	 -->
 	<insert id="insertCart">
-		INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator, cart_price)
-		VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId}, #{totalPrice})
+		INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
+		VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId})
 	</insert>
 
 	<!-- 
@@ -153,7 +157,19 @@
 	 			cart_count AS cartCount,
 	 			product_max_get AS productMaxGet
 	 	FROM cart c
-	 	LEFT JOIN product p ON c.product = p.product
+	 	LEFT JOIN product p ON c.product_id = p.product_id
 	 	WHERE customer_id = #{customerId} and c.product_id = #{productId} and c.status = 'Y'
 	 </select>
+	 
+	 
+	 <!-- 
+		기능1: 장바구니에 담겨있는 상품 담기(개수만 추가)
+		기능2: 바로 구매하기 전 장바구니 업데이트
+		담당자: 나현웅
+	 -->
+	<update id="updateCartCnt">
+		UPDATE cart SET cart_count = #{productCnt} 
+		WHERE customer_id = #{customerId} and product_id = #{productId}
+	</update>
+
 </mapper>

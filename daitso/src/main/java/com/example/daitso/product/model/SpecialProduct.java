@@ -7,7 +7,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class SpecialProduct {
-	private int specialProductId;
+	private String specialProductId;
+	private int productId;
 	private int specialProductGroupId;
 	private String specialProductNm;
 	private int categoryId;
