@@ -4,20 +4,19 @@
 	justify-content: center;
 }
 .detail-order-list-container{
-	position:absolute;
 	border:solid 2px #e7e7e7;
 	height:200px;
-	width:855px;
-	margin-top:-550px;
-	margin-left:165px;
+	width:800px;
+	margin-top:-80px;
 	border-radius:10px;
+	margin-bottom:100px;
 }
 .detail-order-title{
 	position:absolute;
 	padding-bottom:0.5%;
 	font-size:150%;
 	margin-left:165px;
-	margin-top:-660px;
+	margin-top:10px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }

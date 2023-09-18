@@ -41,16 +41,25 @@ public class MyPageController {
 	public String selectPoint(Model model) {
 		
 		try {
+			//로그인확인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
+			
 			List<Point> points = pointService.selectPoint(customerId);
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {
 				point = "0";
 			}
 			model.addAttribute("points",points);
-			model.addAttribute("totalPoint", point + "P"); 
+			model.addAttribute("totalPoint", point + "P");  
 			
 			return "mypage/my-point";
 			
@@ -64,10 +73,17 @@ public class MyPageController {
 	@RequestMapping(value="/orderlist", method=RequestMethod.GET)
 	public String selectPurchase(Model model) {
 		try {
+			//로그인확인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {
@@ -96,6 +112,14 @@ public class MyPageController {
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
 			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
+			
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {
@@ -115,14 +139,20 @@ public class MyPageController {
 	}
 	
 	
-	//마이페이지-주문조회-결제취소
+	//마이페이지-주문조회-입금/결제
 	@RequestMapping("/canclepay")
 	public String canclePay(Model model) {
 		try {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {
@@ -146,7 +176,13 @@ public class MyPageController {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {
@@ -170,7 +206,13 @@ public class MyPageController {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {

@@ -18,4 +18,5 @@ public interface ICustomerCouponService {
 	
 	// 적용가능한 쿠폰 조회
 	List<CartCouponApply> getCouponsByCustomerId(int categoryId, int customerId);
+	
 }

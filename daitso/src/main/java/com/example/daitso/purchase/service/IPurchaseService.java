@@ -15,4 +15,10 @@ public interface IPurchaseService {
 	//구매취소
 	void canclePurchase(Purchase purchase);
 	
+	//배송중인 상품 갯수
+	int selectShipping(int customerId);
+		
+	//배송완료인 상품 갯수
+	int selectShippingComplete(int customerId);
+	
 }

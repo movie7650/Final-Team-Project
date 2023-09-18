@@ -34,4 +34,14 @@ public class PurchaseService implements IPurchaseService {
 		// TODO Auto-generated method stub
 		return purchaseRepository.selectAllProductNm(customerId);
 	}
+	@Override
+	public int selectShipping(int customerId) {
+		return purchaseRepository.selectShipping(customerId);
+		
+	}
+	@Override
+	public int selectShippingComplete(int customerId) {
+		return purchaseRepository.selectShippingComplete(customerId);
+		
+	}
 }

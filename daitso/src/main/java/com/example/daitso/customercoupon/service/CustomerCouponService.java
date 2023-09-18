@@ -7,13 +7,10 @@ import org.springframework.stereotype.Service;
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
 import com.example.daitso.customercoupon.repository.ICustomerCouponRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.daitso.cart.model.CartCouponApply;
-import com.example.daitso.customercoupon.repository.ICustomerCouponRepository;
 
 
 @Service
@@ -36,6 +33,7 @@ public class CustomerCouponService implements ICustomerCouponService {
 	public void insertCustomerCoupon() {
 		customerCouponRepository.insertCustomerCoupon();
 	}
+	
 	// 매자정마다 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
 	@Scheduled(cron = "0 0 0 * * *")
 	@Transactional
