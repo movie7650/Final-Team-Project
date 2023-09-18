@@ -443,10 +443,6 @@
 			objCnt.setAttribute('name', 'productCnt');
 			objCnt.setAttribute('value', cntInput.value);
 			
-			let objPrice = document.createElement('input');
-			objPrice.setAttribute('type','hidden');
-			objPrice.setAttribute('name', 'totalPrice');
-			objPrice.setAttribute('value', totalPrice.value);
 
 			let objSelector = document.createElement('input');
 			objSelector.setAttribute('type','hidden');
@@ -455,7 +451,6 @@
 			
 			tag.appendChild(objId);
 			tag.appendChild(objCnt);
-			tag.appendChild(objPrice);
 			tag.appendChild(objSelector);
 			tag.setAttribute('method', 'post');
 			tag.setAttribute('action', '/cart/insert');
