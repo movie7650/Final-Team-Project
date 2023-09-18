@@ -2,9 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.cart.repository.ICartRepository">
 
+	<!-- 
+		기능: 장바구니에 담겨있지 않은 상품 담기
+		담당자: 나현웅
+	 -->
 	<insert id="insertCart">
-		INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator, cart_price)
-		VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId}, #{totalPrice})
+		INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
+		VALUES(cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, sysdate, #{customerId})
 	</insert>
 
 	<!-- 
@@ -17,8 +21,13 @@
 			   c.cart_count AS "cartCount",
 			   c.checked AS "checked",
 			   p.product_nm AS "productNm",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productPrice",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.cart_price)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productRealPrice",
+			   CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','')
+                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') 
+               END AS "productPrice",
+               CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price * c.cart_count)), '(\d{3})','\1,')), '^,','')
+                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') 
+               END AS "productTotalPrice",
 			   p.product_stock AS "productStock",
 			   p.product_option_first AS "productOptionFirst",
 			   p.product_option_second AS "productOptionSecond",
@@ -26,7 +35,8 @@
 			   p.product_image_first AS "productImageFirst",
 			   p.category_id AS "categoryId",
 			   a.category_pr_id AS "categoryPrId",
-			   p.status AS "productStatus"
+			   p.status AS "productStatus",
+			   p.discount_rate AS "discountRate"       
 		  FROM cart c,
 		  	   product p,
                category a
@@ -55,7 +65,6 @@
     <update id="updateCartCountByCartId" parameterType="com.example.daitso.cart.model.CartUpdate">
     	UPDATE cart
 		   SET cart_count = #{cartCount},
-			   cart_price = #{cartPrice},
 			   modify_dt = SYSDATE,
 			   modifier = #{customerId}
 		 WHERE cart_id = #{cartId}
@@ -100,9 +109,14 @@
 		SELECT p.product_id AS "productId",
        		   p.product_image_first AS "productImageFirst",
        		   p.product_nm AS "productNm",
-               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productPrice",
+               CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','')
+                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') 
+               END AS "productPrice",
+               c.cart_id AS "cartId",
                c.cart_count AS "cartCount",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(c.cart_price)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
+			   CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price * c.cart_count)), '(\d{3})','\1,')), '^,','')
+                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') 
+               END AS "cartPrice",
 			   p.category_id AS "categoryId",
        		   p.product_option_first AS "productOptionFirst",
        		   p.product_option_second AS "productOptionSecond",
@@ -112,7 +126,12 @@
                  WHERE c.coupon_id = cc.coupon_id
                    AND cc.customer_id = #{customerId}
                    AND cc.coupon_use_dv = 203
-                   AND category_id IN (p.category_id ,cg.category_pr_id)) AS "couponUseCount"
+                   AND c.category_id IN (
+														SELECT category_id 
+									  					  FROM category 
+						        					START WITH category_id = p.category_id 
+				          					  CONNECT BY PRIOR category_pr_id = category_id 
+										)) AS "couponUseCount"
 		 FROM  cart c,
      		   product p,
      		   category cg
@@ -121,6 +140,7 @@
 		  AND  c.customer_id = #{customerId}
 		  AND  c.checked = 'true'
 		  AND  c.status = 'Y'
+     ORDER BY c.cart_id
 	</select>
 	
 	 <!--
@@ -135,7 +155,9 @@
 			   p.product_option_third AS "productOptionThird",
 			   c.cart_id AS "cartId",
 			   c.cart_count AS "cartCount",
-			   c.cart_price AS "cartPrice"
+			   CASE WHEN p.discount_rate = 0 THEN p.product_price * c.cart_count
+                    ELSE (p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count
+               END AS "cartPrice"
 		  FROM cart c,
 			   product p
 		 WHERE c.product_id = p.product_id
@@ -153,7 +175,29 @@
 	 			cart_count AS cartCount,
 	 			product_max_get AS productMaxGet
 	 	FROM cart c
-	 	LEFT JOIN product p ON c.product = p.product
+	 	LEFT JOIN product p ON c.product_id = p.product_id
 	 	WHERE customer_id = #{customerId} and c.product_id = #{productId} and c.status = 'Y'
 	 </select>
+	 
+	 
+	 <!-- 
+		기능1: 장바구니에 담겨있는 상품 담기(개수만 추가)
+		기능2: 바로 구매하기 전 장바구니 업데이트
+		담당자: 나현웅
+	 -->
+	<update id="updateCartCnt">
+		UPDATE cart SET cart_count = #{productCnt} 
+		WHERE customer_id = #{customerId} and product_id = #{productId}
+	</update>
+
+	 <!-- 
+		기능: customer_coupon_id 업데이트
+		담당자: 최준원
+	 -->
+	 <update id="updateCustomerCouponId">
+		UPDATE cart
+	   	   SET customer_coupon_id = #{customerCouponId}
+	 	 WHERE cart_id = #{cartId}
+	</update>
+	 
 </mapper>

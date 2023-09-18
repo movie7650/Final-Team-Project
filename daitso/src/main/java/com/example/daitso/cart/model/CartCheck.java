@@ -11,7 +11,9 @@ public class CartCheck {
 	private int cartCount;
 	private String purchaseNum;
 	private String productNm;
+	private String productRealPrice;
 	private String productPrice;
+	private String productTotalPrice;
 	private String cartPrice;
 	private int productStock;
 	private String productOptionFirst;
@@ -22,4 +24,5 @@ public class CartCheck {
 	private String checked;
 	private char productStatus; 
 	private int categoryPrId;
+	private int discountRate;
 }

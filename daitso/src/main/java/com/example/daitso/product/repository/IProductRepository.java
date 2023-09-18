@@ -1,6 +1,7 @@
 package com.example.daitso.product.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ import com.example.daitso.product.model.SpecialProduct;
 @Repository
 public interface IProductRepository {
 
-	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
+	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end, @Param("sort") String sort);
 	
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
@@ -65,6 +66,9 @@ public interface IProductRepository {
 	List<SpecialProduct> selectSpecialProduct();
 	
 	List<Product> saleProductList();
-
+	
+	List<Map<String,Integer>> searchPopularProduct();
+	
+	void insertPopularProducts(List<Map<String, Integer>> list);
 }
 

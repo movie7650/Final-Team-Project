@@ -16,7 +16,12 @@ import com.example.daitso.cart.model.CartUpdate;
 @Mapper
 public interface ICartRepository {
 	
-	void insertCart(int productId, int customerId, int productCnt, int totalPrice);
+	// 장바구니에 담겨있지 않은 상품 담기
+	void insertCart(int productId, int customerId, int productCnt);
+	
+	// 기능1: 장바구니에 담겨있는 상품 담기(개수만 추가)
+	// 기능2: 바로 구매하기 전 장바구니 업데이트
+	void updateCartCnt(int productId, int customerId, int productCnt);
 
 	// 사용자 고유번호로부터 사용자 장바구니 조회
 	List<CartCheck> getCartByCustomerId(int customerId);
@@ -41,5 +46,8 @@ public interface ICartRepository {
 	
 	// 장바구니 추가하기 전 기존에 추가된 상품 있는지 조회
 	Map<String, Integer> selectCustomerCartProduct(int customerId, int productId);
+	
+	// customer_coupon_id 업데이트
+	void updateCustomerCouponId(@Param("cartId") int cartId, @Param("customerCouponId") int customerCouponId);
 
 }

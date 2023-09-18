@@ -112,6 +112,7 @@
 	var couponCheckPriceList = {};
 	var couponCheckApplyPriceList = {};
 	var couponDuplicatedCheck = {};
+	var couponCartIdList = {};
 	
 	function isDuplicated(customerCouponId){
 		for(key in couponDuplicatedCheck){
@@ -196,7 +197,7 @@
    			const textnode7 = document.createTextNode('쿠폰 선택');
    			btn3.appendChild(textnode7);
    			btn3.onclick = function () {
-   				chooseApplyCoupon(cartCouponProduct.productId);
+   				chooseApplyCoupon(cartCouponProduct.productId, cartCouponProduct.cartId);
    			}
    			btn1.appendChild(btn3);
        		
@@ -231,16 +232,18 @@
 	}
 	
 	// 쿠폰 선택 시(2번째)
-	function chooseApplyCoupon(productId) {		
+	function chooseApplyCoupon(productId, cartId) {		
 		var falseCount = 0;
+		var customerCouponId = "";
 		for(key in couponCheckStatusList) {
 			if(!couponCheckStatusList[key]){
 				falseCount += 1; 
 			} else {
 				couponDuplicatedCheck[productId] = key;
+				couponCartIdList[cartId]= key;
 			}
 		}
-				
+			
 		if(falseCount == Object.keys(couponCheckStatusList).length) {
 			alert("쿠폰을 선택해주세요");
 		} else {
@@ -287,6 +290,26 @@
 		couponTotalApplyPrice = 0;
 		var count = 0;
 			
+		for (key in couponCartIdList) {
+			// customer_coupon -> cartId 업데이트
+			fetch( window.location.origin + "/cart/update-customer-coupon-id", {
+			    method: "PATCH",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        cartId: key,
+			        customerCouponId: couponCartIdList[key]
+			    }),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+			})
+			.catch(function(error) {
+	    	      console.log(error);
+	    	});   	
+		}
+		
 		for(key in couponDuplicatedCheck) {
 			if(couponDuplicatedCheck[key] == '0') {
 				count += 1;
@@ -294,8 +317,6 @@
 				couponApplyList.push(couponDuplicatedCheck[key]);
 			}
 		}
-		
-		console.log(couponApplyList);
 		
 		if(!couponDuplicatedCheck || count == Object.keys(couponDuplicatedCheck).length){
 			alert("적용하실 쿠폰을 선택해주세요.");

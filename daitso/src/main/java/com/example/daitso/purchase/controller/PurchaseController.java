@@ -1,5 +1,7 @@
 package com.example.daitso.purchase.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 //import java.util.List;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.cart.controller.CartController;
@@ -19,8 +23,12 @@ import com.example.daitso.cart.model.Tomorrow;
 import com.example.daitso.cart.service.ICartService;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.service.ICustomerService;
+import com.example.daitso.purchase.model.PurchaseNum;
 import com.example.daitso.shipping.model.ShippingInfo;
 import com.example.daitso.shipping.service.IShippingService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 
 
 @Controller
@@ -76,12 +84,38 @@ public class PurchaseController {
 				ShippingInfo recentShipping = shippingService.getShippingInfoByShippingId(customerInfo.getRecentShippingId());
 				model.addAttribute("recentShipping", recentShipping);
 			}
-			
+
 			return "purchase/purchase";
 		} catch (ClassCastException e) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
 	}
+	
+	// 주문번호 생성
+	@GetMapping("/purchase-num")
+	public @ResponseBody PurchaseNum getPurchaseNum() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        
+        SimpleDateFormat sdf = new SimpleDateFormat ("yyyyMMddhhmmssSSSSSSSSS");
+        String purchaseNum = sdf.format(timestamp);
+        return PurchaseNum.builder().purchaseNum(purchaseNum).build(); 
+	}
+	
+	// 구매 성공시 나오는 화면
+	@GetMapping("/success")
+	public String getPurchaseSuccess(RedirectAttributes redirectAttributes, HttpServletRequest request, @RequestParam int shippingId, @RequestParam String orderRequest, @RequestParam List<Integer> cartIdList) {
+		try {
+			// spring security -> 사용자 고유번호 받아오기
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails) principal;
+			
+			int customerId = Integer.valueOf(userDetails.getUsername());
 
+			return "purchase/purchase-success";
+		} catch (ClassCastException e) {
+			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+	}
 }

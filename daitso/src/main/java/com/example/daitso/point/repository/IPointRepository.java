@@ -12,7 +12,7 @@ import com.example.daitso.point.model.Point;
 public interface IPointRepository {
 	void insertPoint(Point point);
 	void updatePoint(Point point);
-	List<Point> selectPoint();
-	int selectTotalPoint();
+	List<Point> selectPoint(int customerId);
+	String selectTotalPoint(int customerId);
 	
 }

@@ -10,16 +10,15 @@
 			<div class="top-rectangle-02">
 				<div class="rectangle-title">배송중</div>
 					<div class="rectangle-count-wrap">
-						<span class="rectangle-count">0</span> <!-- 타임리프 써야함 -->
-						<span class="rectangle-02-count">개</span>
+						<span class="rectangle-02-count" th:text="|${shipCount}개|">0</span> <!-- 타임리프 써야함 -->
+						<!-- <span class="rectangle-02-count">개</span> -->
 					</div><!-- rectangle-count-wrap  -->
 			</div><!--top-rectangle-02  -->
 			
 			<div class="top-rectangle-02">
 				<div class="rectangle-title">배송완료</div>
 					<div class="rectangle-count-wrap">
-						<span class="rectangle-count">0</span> <!-- 타임리프 써야함 -->
-						<span class="rectangle-02-count">개</span>
+						<span th:text="|${shippingCompleteCount}개|" class="rectangle-count">0</span> <!-- 타임리프 써야함 -->
 				</div><!-- rectangle-count-wrap  -->
 			</div><!-- top-rectangle-02 -->
 			
@@ -38,10 +37,10 @@
 						<!-- <span class="rectangle-02-count">P</span> -->
 				</div><!-- rectangle-count-wrap  -->
 			</div><!-- top-rectangle-02 -->
-			
+</div><!-- main -->
 		</div><!-- top-container -->
 	</div><!-- top-header -->
-	 <div class="left-menu-container">
+	 <div th:fragment="mypageBreadBoard01" class="left-menu-container">
 		<div class="left-menu-container01">
 			<div class="left-menu">
 				<div class="left-menu-title">MY쇼핑</div>
@@ -64,5 +63,5 @@
 			</div><!-- left-menu -->
 		</div><!-- left-menu-container01 -->
 	</div><!--left-menu-container -->
-</div> <!--main div -->
+<!-- </div> main div -->
 </html>

@@ -21,18 +21,18 @@ public class CartService implements ICartService{
 
 	// 장바구니 추가
 	@Transactional
-	public void insertCartService(int productId, int customerId, int productCnt, int totalPrice) {
+	public void insertCartService(int productId, int customerId, int productCnt) {
 		Map<String, Integer> map =  cartRepository.selectCustomerCartProduct(customerId, productId);
-		System.out.println("selectCustomerCartProduct" + (map == null));
 		if(map == null) {
-			cartRepository.insertCart(productId, customerId, productCnt, totalPrice);			
+			cartRepository.insertCart(productId, customerId, productCnt);			
 		}else {
-			int maxVal = map.get("PRODUCTMAXGET");
-			int productCartVal = map.get("CARTCOUNT");
+			int maxVal = Integer.parseInt(String.valueOf(map.get("PRODUCTMAXGET")));
+			int productCartVal = Integer.parseInt(String.valueOf(map.get("CARTCOUNT")));
 			if(productCnt + productCartVal <= maxVal) {
-				
+				cartRepository.updateCartCnt(productId, customerId, productCnt + productCartVal);
 			}
 			else {
+				cartRepository.updateCartCnt(productId, customerId, maxVal);
 				
 			}
 		}
@@ -79,5 +79,16 @@ public class CartService implements ICartService{
 	@Override
 	public List<CartPurchase> getCartProductBeforePurchaseByCustomerId(int customerId) {
 		return cartRepository.getCartProductBeforePurchaseByCustomerId(customerId);
+	}
+
+	@Override
+	public void directPurchase(int productId, int customerId, int productCnt) {
+		cartRepository.updateCartCnt(productId, customerId, productCnt);
+	}
+	
+	// customer_coupon_id 업데이트
+	@Override
+	public void updateCustomerCouponId(int cartId, int customerCouponId) {
+		cartRepository.updateCustomerCouponId(cartId, customerCouponId);
 	}
 }

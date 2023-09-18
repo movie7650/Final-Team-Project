@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.purchase.repository.IPurchaseRepository">
-
-<select id="selectAllProductNM" resultType="com.example.daitso.purchase.model.PurchaseCheck">
-	SELECT product_nm  AS	"productName"	
-	  FROM product p,  purchase pur
-	 WHERE p.product_id=pur.product_id 
-	   AND pur.customer_id=102
+<select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
+	SELECT purchase_count					AS	"purchaseCount",
+		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
+		   cc.common_code_nm				AS	"purchaseDv",
+		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+		   product_nm						AS 	"productNm",
+		   purchase_num						AS	"purchaseNum",
+		   pur.create_dt						AS	"createDt"
+		   
+   	  FROM purchase pur, product p, common_code cc
+   	 WHERE customer_id=#{customerId} 
+   	   AND pur.product_id = p.product_id
+   	   AND pur.purchase_dv = cc.common_code_id
+  ORDER BY purchase_id DESC
 </select>
 
-<select id="selectAllPurchase" resultType="com.example.daitso.purchase.model.Purchase">
-	SELECT purchase_count	AS	"purchaseCount",
-		   purchase_price	AS	"purchasePrice",
-		   purchase_DV		AS	"purchaseDv",
-		   purchase_count * purchase_price AS "totalCost"
-   	  FROM purchase
-   	 WHERE customer_id=102
+<select id="selectShipping" parameterType="int" resultType="int">
+	SELECT COUNT(pur.purchase_dv) as "shippingCount"
+	  FROM purchase pur
+	 WHERE pur.purchase_dv=402 
+	   AND pur.customer_id=#{customerId}
+</select>
+
+<select id="selectShippingComplete" parameterType="int" resultType="int">
+		SELECT COUNT(pur.purchase_dv) as "shippingCompleteCount"
+	  FROM purchase pur
+	 WHERE pur.purchase_dv=403 
+	   AND pur.customer_id=#{customerId}
 </select>
 
 

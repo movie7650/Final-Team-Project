@@ -21,13 +21,14 @@
 }
 
 .product-sidebar{
-	width: 23%;
+	margin: 15px 10px 0 0;
+	width: 100px;
 	display: flex;
 	justify-content: center;
 }
 
 .product-large-box{
-	width:90%; 
+	width:1010px; 
 	display:flex; 
 	flex-wrap: wrap;
 } 

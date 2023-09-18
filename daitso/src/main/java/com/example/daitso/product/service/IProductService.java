@@ -7,7 +7,7 @@ import com.example.daitso.product.model.SpecialProduct;
 
 public interface IProductService {
 	
-	List<Product> selectProductList(int categoryId, int start);
+	List<Product> selectProductList(int categoryId, int start, String sort);
 	
 	int selectCountProductList(int categoryId);
 	
@@ -24,5 +24,7 @@ public interface IProductService {
 	List<SpecialProduct> selectSpecialProduct();
 	
 	List<Product> saleProductList();
+	
+	void insertSpecialProduct();
 
 }
