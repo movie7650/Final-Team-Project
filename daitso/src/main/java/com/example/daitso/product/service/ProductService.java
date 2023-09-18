@@ -20,9 +20,9 @@ public class ProductService implements IProductService {
 	IProductRepository productRepository;
 
 	@Override
-	public List<Product> selectProductList(int categoryId, int page) {
+	public List<Product> selectProductList(int categoryId, int page, String sort) {
 		int start = (page-1)*16 + 1;
-		return productRepository.selectProductList(categoryId, start, start+15);
+		return productRepository.selectProductList(categoryId, start, start+15, sort);
 	}
 
 	@Override

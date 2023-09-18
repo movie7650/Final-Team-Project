@@ -15,7 +15,7 @@ import com.example.daitso.product.model.SpecialProduct;
 @Repository
 public interface IProductRepository {
 
-	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
+	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end, @Param("sort") String sort);
 	
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
