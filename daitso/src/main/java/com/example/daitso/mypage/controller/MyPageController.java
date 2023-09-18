@@ -134,7 +134,6 @@ public class MyPageController {
 //			model.addAttribute("purchaseList",purchaseList);
 			
 			//주문한 상품 상세정보 출력 
-			System.out.println(purchaseNum);
 			List<PurchaseDetailCheck> purchaseCheckList = purchaseService.selectDetailPurchase(customerId, purchaseNum);
 			model.addAttribute("purchaseDetailList",purchaseCheckList);
 		
