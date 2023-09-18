@@ -1,6 +1,7 @@
 package com.example.daitso.cart.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,22 @@ public class CartService implements ICartService{
 	ICartRepository cartRepository;
 
 	// 장바구니 추가
-	@Override
-	public void insertCart(int productId, int customerId, int productCnt, int totalPrice) {
-		cartRepository.insertCart(productId, customerId, productCnt, totalPrice);
+	@Transactional
+	public void insertCartService(int productId, int customerId, int productCnt, int totalPrice) {
+		Map<String, Integer> map =  cartRepository.selectCustomerCartProduct(customerId, productId);
+		System.out.println("selectCustomerCartProduct" + (map == null));
+		if(map == null) {
+			cartRepository.insertCart(productId, customerId, productCnt, totalPrice);			
+		}else {
+			int maxVal = map.get("PRODUCTMAXGET");
+			int productCartVal = map.get("CARTCOUNT");
+			if(productCnt + productCartVal <= maxVal) {
+				
+			}
+			else {
+				
+			}
+		}
 	}
 	
 	// 사용자 고유번호로부터 사용자 장바구니 조회

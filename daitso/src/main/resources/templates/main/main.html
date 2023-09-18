@@ -1,15 +1,13 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>메인</title>
-<style>
-
-</style>
 </head>
 <div th:replace="~{/include/header :: header}"></div>
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-	<div style="height:2800px" class="d-flex flex-column justify-content-center align-items-center">
+	<div class="d-flex flex-column justify-content-center align-items-center" style="margin-bottom: 50px">
 		<div style="height: 430px; width:100%">
 			<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
 		</div>
@@ -31,36 +29,26 @@
 							</div>
 						</div>
 						<div class="d-flex" style="width:97%; height: 32%">
-							<div class="re-box" th:onclick="goCategory([[${categoryList[2].categoryId}]])" style="flex: 1; background-image: url('/images/cloth2.jpg'); background-size:100% 100%;">
-								<div class="re-box-child-mini">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[2].categoryId}]])" style="flex: 1; background-image: url('/images/cup.jpg'); background-size:100% 100%;">
+								<div class="re-box-child">
 									<p>[[${categoryList[2].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[3].categoryId}]])" style="flex: 1; margin-left:15px;  background-image: url('/images/manCloth.jpg'); background-size:100% 100%">
-								<div class="re-box-child-mini">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[3].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/grape.jpg'); background-size:100% 100%">
+								<div class="re-box-child">
 									<p>[[${categoryList[3].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[4].categoryId}]])" style="flex: 1; margin-left:15px;  background-image: url('/images/chocolate.jpg'); background-size:100% 100%">
-								<div class="re-box-child-mini">
+						</div>						
+						<div class="d-flex" th:onclick="goCategory([[${categoryList[4].categoryId}]])" style="width:97%; height: 32%">
+							<div class="re-box" style="flex: 1; background-image: url('/images/hairTreatment.jpg'); background-size: 100% 100%">
+								<div class="re-box-child">
 									<p>[[${categoryList[4].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[5].categoryId}]])" style="flex: 1; margin-left:15px;  background-image: url('/images/dish.jpg'); background-size:100% 100%">
-								<div class="re-box-child-mini">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[5].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/cleaner.jpg'); background-size: 100% 100%">
+								<div class="re-box-child">
 									<p>[[${categoryList[5].categoryContent}]]</p>
-								</div>
-							</div>
-						</div>
-						<div class="d-flex" th:onclick="goCategory([[${categoryList[6].categoryId}]])" style="width:97%; height: 32%">
-							<div class="re-box" style="flex: 1; background-image: url('/images/hairTreatment.jpg'); background-size: 100% 100%">
-								<div class="re-box-child">
-									<p>[[${categoryList[6].categoryContent}]]</p>
-								</div>
-							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[7].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/cleaner.jpg'); background-size: 100% 100%">
-								<div class="re-box-child">
-									<p>[[${categoryList[7].categoryContent}]]</p>
 								</div>
 							</div>
 						</div>
@@ -69,50 +57,63 @@
 			</div>
 			<div class="decalcomania" style="margin-top: 30px">
 				<span style="margin-left: 15px; font-weight:bold">오늘의 <span style="color:#e5e500">인기</span> 상품</span>
-				<div class="d-flex justify-content-evenly align-items-center" style="margin-top: 30px;">
-					<th:block th:each="product : ${productList}">
-						<div th:if='${product.specialProductDv.equals("P")}' class="product-box" th:onclick="goProductDetail([[${product.specialProductId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 248px; height: 400px;">
-							<img style="width: 100%; height: 195px" th:src="@{/images/mainImages.png}">
-							<p class="font-s-13" style="margin-bottom: 0px;">[[${product.specialProductNm}]]</p>
-							<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
-							<p style="margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
-							<div class="star-parent">
-								<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
-									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-								</div>
-								<div class="star-base">
-									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+				<div class="window" style="width:1132px; overflow:hidden">
+					<div class="popular-container d-flex justify-content-evenly align-items-center margin-b-10" style="margin-top: 30px; flex-wrap: nowrap">
+						<th:block th:each="product : ${productList}">
+							<div class="product-box" th:onclick="goProductDetail([[${product.specialProductId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 248px; height: 320px;">
+								<img style="width: 100%; height: 195px" th:src="@{/images/mainImages.png}">
+								<p class="font-s-13" style="margin-bottom: 0px;">[[${product.specialProductNm}]]</p>
+								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
+								<p style="margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
+								<div class="star-parent">
+									<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
+									<div class="star-base">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
 								</div>
 							</div>
-						</div>
-					</th:block>			
+						</th:block>			
+					</div>				
+				</div>
+				<div class="d-flex justify-content-between">
+					<button class="carousel-btn" onclick="prev('P')"><</button>
+					<button class="carousel-btn" onclick="next('P')">></button>
 				</div>
 			</div>
 <!-- 			<div style="text-align: -webkit-center;">
 				<div class="d-flex justify-content-center align-items-center special-product-btn">오늘의 인기상품 전체보기</div>			
 			</div> -->
-			<div style="margin-top: 30px">
+ 			<div style="margin-top: 30px">
 				<span style="margin-left: 15px; font-weight:bold">오늘의 <span style="color:red">세일</span> 상품</span>
-				<div class="d-flex justify-content-evenly align-items-center" style="margin-top: 30px;">
-					<th:block th:each="product : ${productList}">
-						<div th:if='${product.specialProductDv.equals("S")}' class="product-box" th:onclick="goProductDetail([[${product.specialProductId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 248px; height: 400px;">
-							<img style="width: 100%; height: 195px" th:src="@{/images/mainImages.png}">
-							<p class="font-s-13" style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:5px">지금 10% 할인중</p>
-							<p class="font-s-13" style="margin-bottom: 0px;">[[${product.specialProductNm}]]</p>
-							<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
-							<p style="margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
-							<div class="star-parent">
-								<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
-									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-								</div>
-								<div class="star-base">
-									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+				<div class="window" style="width: 1132px; overflow: hidden">
+					<div class="sale-container d-flex align-items-center margin-b-10" style="margin-top: 30px; flex-wrap: nowrap">
+						<th:block th:each="product : ${saleProductList}">
+							<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.productGroupId}]])" style="margin-left: 15px; width: 248px; height: 320px;">
+								<img style="width: 100%; height: 195px" th:src="@{/images/mainImages.png}">
+								<p class="font-s-13" style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:5px">지금 10% 할인중</p>
+								<p class="font-s-13" style="margin-bottom: 0px;">[[${product.productNm}]]</p>
+								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
+								<p style="margin-bottom:0px">상품리뷰([[${product.reviewCount}]])</p>
+								<div class="star-parent">
+									<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
+									<div class="star-base">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
 								</div>
 							</div>
-						</div>
-					</th:block>			
+						</th:block>			
+					</div>
 				</div>
-			</div>
+				<div class="d-flex justify-content-between">
+					<button class="carousel-btn" onclick="prev('S')"><</button>
+					<button class="carousel-btn" onclick="next('S')">></button>
+				</div>
+			</div> 		
+
 <!-- 			<div style="text-align: -webkit-center;">
 				<div class="d-flex justify-content-center align-items-center special-product-btn" style="margin-bottom:50px;">오늘의 세일상품 전체보기</div>
 			</div> -->
@@ -120,7 +121,67 @@
 	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
-<script>
+<script th:inline="javascript">
+
+	const saleContainer = document.querySelector('.sale-container')
+	const popularContainer = document.querySelector('.popular-container');
+	productList = /*[[${productList}]]*/
+	saleProductList = /*[[${saleProductList}]]*/
+	
+	document.querySelector('.sale-container').style.width = `${saleProductList.length * 290}px`; 
+	document.querySelector('.popluar-container').style.width = `${productList.length * 290}px`; 
+
+	//캐러셀 이전 버튼
+	function prev(selector){
+		if(selector == 'S'){
+			//요소 이동 속도
+			saleContainer.style.transitionDuration = '500ms';
+			//x축 방향 이동 위치
+			saleContainer.style.transform = `translateX(290px)`;
+			//transition속성 완료시 실행 즉 여기선 transitionDuration이 완료되면 실행
+			saleContainer.ontransitionend = () => reorganizeEl('prev', 'S');
+		}
+		else if(selector == 'P'){
+			popularContainer.style.transitionDuration = '500ms';
+			popularContainer.style.transform = `translateX(290px)`;
+			popularContainer.ontransitionend = () => reorganizeEl('prev', 'P');
+			
+		}
+	}
+	
+	//캐러셀 이후 버튼
+	function next(selector){
+		if(selector == 'S'){
+			saleContainer.style.transitionDuration = '500ms';
+			saleContainer.style.transform = `translateX(-290px)`;
+			saleContainer.ontransitionend = () => reorganizeEl('next', 'S');
+		}
+		else if(selector == 'P'){
+			popularContainer.style.transitionDuration = '500ms';
+			popularContainer.style.transform = `translateX(-290px)`;
+			popularContainer.ontransitionend = () => reorganizeEl('next', 'P');
+			
+		}
+	}
+	
+	function reorganizeEl(selectedBtn, selector) {
+		if(selector == 'S'){
+			//요소 위치 초기화(이동 효과만 주고 초기화시킴)
+			saleContainer.style.transform = '';
+			//요소 위치 초기화시 이동 속도 초기화(이동 속도를 주면 다시 돌아가는 모습이 보임)
+			saleContainer.style.transitionDuration = '';	
+			//appendChild(): 한 노드를 특정 부모 노드의 자식 노드 리스트 중 마지막 자식으로 붙임
+			//insertBefore(): 참조된 노드 앞에 특정 부모 노드의 자식 노드를 삽입
+		  (selectedBtn === 'prev') ? saleContainer.insertBefore(saleContainer.lastElementChild, saleContainer.firstElementChild): saleContainer.appendChild(saleContainer.firstElementChild);			
+		}
+		else if(selector == 'P'){
+			popularContainer.style.transform = '';
+			popularContainer.style.transitionDuration = '';		
+		  (selectedBtn === 'prev') ? popularContainer.insertBefore(popularContainer.lastElementChild, popularContainer.firstElementChild): popularContainer.appendChild(popularContainer.firstElementChild);			
+			
+		}
+	}
+
 	// 카테고리 추천 상품 프레임을 다른 프레임과 맞춰주기
 	const decalcomania = document.querySelector('.decalcomania');
 	document.querySelector('.recommand-box-frame').style.width = decalcomania.offsetWidth

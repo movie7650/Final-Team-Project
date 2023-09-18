@@ -99,7 +99,7 @@
     			SELECT category_id, category_nm, category_content from category
 				ORDER BY dbms_random.value
 			  )
-		WHERE rownum <= 8
+		WHERE rownum <= 6
 	]]>
     </select>
 </mapper>

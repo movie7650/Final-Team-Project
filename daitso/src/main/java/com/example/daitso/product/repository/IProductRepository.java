@@ -1,6 +1,7 @@
 package com.example.daitso.product.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,30 +22,34 @@ public interface IProductRepository {
 	Product selectProduct(@Param("productId") int productId);
 
 	
-	
-	// 카테고리별 상품 조회하기
+	// 상품 조회하기(카테고리별)
     List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
     
-    // 카테고리별 상품 개수 조회하기
+    // 상품 개수 조회하기(카테고리별)
     int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId);
     
-    // 그룹 상품 삭제하기
-    void deleteGroupProduct(int productGroupId);
-    
-    // 그룹별 상품 조회하기
+    // 상품 조회하기(그룹별)
     List<ProductCheck> selectProductsByGroupId(int productGroupId);
+    
+    // 상품 삭제하기(그룹)
+    void deleteProductByGroupId(int productGroupId);
 	
-	// 해당 상품 불러오기
+	// 상품ID로 상품 정보 갖고오기
 	Product selectProductId(int productId);
 	
-	// 해당 상품 수정하기
+	// 상품 수정하기
 	void updateProduct(Product product);
 	
-	// 해당 상품 삭제하기
+	// 상품 삭제하기
     void deleteProduct(int productId);
     
-    //기존 상품 등록하기
+    // 기존 상품 등록하기
 	void registerExistingProducts(ProductCheck product);
+	
+	// 신규 상품 등록하기
+	
+	// 상품명을 검색해서 해당 상품 정보 갖고오기
+	List<ProductCheck> searchProductsByName(String searchText);
 	
 	
 	
@@ -59,6 +64,11 @@ public interface IProductRepository {
 	int selectInquiryProductId(@Param("productGroupId") int productGroupId, @Param("size") String size, @Param("color") String color, @Param("other") String other);
 	
 	List<SpecialProduct> selectSpecialProduct();
-
+	
+	List<Product> saleProductList();
+	
+	List<Map<String,Integer>> searchPopularProduct();
+	
+	void insertPopularProducts(List<Map<String, Integer>> list);
 }
 
