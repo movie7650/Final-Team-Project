@@ -80,10 +80,4 @@ public class CartService implements ICartService{
 	public List<CartPurchase> getCartProductBeforePurchaseByCustomerId(int customerId) {
 		return cartRepository.getCartProductBeforePurchaseByCustomerId(customerId);
 	}
-
-	// customer_coupon_id 업데이트
-	@Override
-	public void updateCustomerCouponId(int cartId, int customerCouponId) {
-		cartRepository.updateCustomerCouponId(cartId, customerCouponId);
-	}
 }

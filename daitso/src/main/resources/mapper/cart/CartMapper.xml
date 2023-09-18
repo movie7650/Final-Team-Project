@@ -174,15 +174,5 @@
 	 	LEFT JOIN product p ON c.product = p.product
 	 	WHERE customer_id = #{customerId} and c.product_id = #{productId} and c.status = 'Y'
 	 </select>
-	 
-	 <!-- 
-		기능: customer_coupon_id 업데이트
-		담당자: 최준원
-	 -->
-	 <update id="updateCustomerCouponId">
-		UPDATE cart
-	   	   SET customer_coupon_id = #{customerCouponId}
-	 	 WHERE cart_id = #{cartId}
-	</update>
-	 
+		 
 </mapper>

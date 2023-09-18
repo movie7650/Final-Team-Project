@@ -33,8 +33,6 @@ public interface ICartService {
     
     // 구매하기 전 장바구니에 담긴 물건들 조회 
  	List<CartPurchase> getCartProductBeforePurchaseByCustomerId(int customerId);
- 	
- 	// customer_coupon_id 업데이트
- 	void updateCustomerCouponId(int cartId, int customerCouponId);
+ 
 }
 
