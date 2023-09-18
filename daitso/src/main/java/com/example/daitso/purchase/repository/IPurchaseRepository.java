@@ -15,12 +15,18 @@ import com.example.daitso.purchase.model.PurchaseList;
 public interface IPurchaseRepository {
 	//구매하기 
 	void insertPurchase(Purchase purchase);
-	//구매상품이름가져오기
-	List<PurchaseCheck> selectAllProductNM();
-	//구매정보가져오기
-	List<Purchase> selectAllPurchase();
+	//전체주문상품가져오기
+	List<PurchaseCheck> selectAllOrderProduct(int customerId);
+	//전체주문상품이름가져오기
+	List<PurchaseCheck> selectAllProductNm(int customerId);
 	//주문취소 
 	void canclePurchase(Purchase purchase);
+	
+	//배송중인 상품 갯수
+	int selectShipping(int customerId);
+	
+	//배송완료인 상품 갯수
+	int selectShippingComplete(int customerId);
 	
 	List<PurchaseList> selectAllPurchaseList();
 	

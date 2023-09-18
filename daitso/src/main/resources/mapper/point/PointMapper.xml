@@ -8,13 +8,13 @@
 			   point_use_dv					AS		"pointUseDv",
 			   point_before					AS		"pointBefore"
 		  FROM point
-		 WHERE customer_id = 102
+		 WHERE customer_id = #{customerId}
 	</select>
 	
-	<select id="selectTotalPoint" resultType="int" >
-		SELECT	sum(point_after)				AS		"totalPoint"
+	<select id="selectTotalPoint" resultType="String" >
+		SELECT	TO_CHAR(sum(point_after))				AS		"totalPoint"
 		FROM	point
-		WHERE	customer_id = 102
+		WHERE	customer_id = #{customerId}
 	</select>
 	
 	

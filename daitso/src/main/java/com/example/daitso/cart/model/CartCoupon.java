@@ -9,6 +9,7 @@ public class CartCoupon {
 	private int productId;
 	private String productNm;
 	private String productPrice;
+	private int cartId;
 	private int cartCount;
 	private String cartPrice;
 	private int categoryId;

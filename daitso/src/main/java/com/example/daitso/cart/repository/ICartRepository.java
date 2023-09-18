@@ -46,5 +46,8 @@ public interface ICartRepository {
 	
 	// 장바구니 추가하기 전 기존에 추가된 상품 있는지 조회
 	Map<String, Integer> selectCustomerCartProduct(int customerId, int productId);
+	
+	// customer_coupon_id 업데이트
+	void updateCustomerCouponId(@Param("cartId") int cartId, @Param("customerCouponId") int customerCouponId);
 
 }
