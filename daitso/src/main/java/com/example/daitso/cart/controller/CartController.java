@@ -192,4 +192,17 @@ public class CartController {
 		model.addAttribute("cartCouponProducts", cartCouponProducts);
 		return "cart/cart-coupon";
 	}
+	
+	// cartId 업데이트
+	@PatchMapping("/update-customer-coupon-id")
+	public @ResponseBody String updateCartId(@RequestBody String data) {
+		
+		JsonElement element = JsonParser.parseString(data);
+		String cartId = element.getAsJsonObject().get("cartId").getAsString();
+		String customerCouponId = element.getAsJsonObject().get("customerCouponId").getAsString();
+		
+		cartService.updateCustomerCouponId(Integer.valueOf(cartId), Integer.valueOf(customerCouponId));
+		
+		return cartId;
+	}
 }

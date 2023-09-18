@@ -22,8 +22,10 @@
 
 	
 	
-	<!-- 기능: 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
-	담당자: 최준원 -->
+	<!-- 
+		기능: 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
+		담당자: 최준원 
+	-->
 	<update id="checkCouponEprDt">
 		<![CDATA[
 			UPDATE customer_coupon
@@ -62,5 +64,4 @@
 	          CONNECT BY PRIOR category_pr_id = category_id   
 		    )	
 	</select>  
-
 </mapper>

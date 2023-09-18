@@ -108,6 +108,7 @@
                CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','')
                     ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') 
                END AS "productPrice",
+               c.cart_id AS "cartId",
                c.cart_count AS "cartCount",
 			   CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price * c.cart_count)), '(\d{3})','\1,')), '^,','')
                     ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') 
@@ -173,4 +174,15 @@
 	 	LEFT JOIN product p ON c.product = p.product
 	 	WHERE customer_id = #{customerId} and c.product_id = #{productId} and c.status = 'Y'
 	 </select>
+	 
+	 <!-- 
+		기능: customer_coupon_id 업데이트
+		담당자: 최준원
+	 -->
+	 <update id="updateCustomerCouponId">
+		UPDATE cart
+	   	   SET customer_coupon_id = #{customerCouponId}
+	 	 WHERE cart_id = #{cartId}
+	</update>
+	 
 </mapper>

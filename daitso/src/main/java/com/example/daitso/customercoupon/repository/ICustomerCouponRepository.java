@@ -28,4 +28,5 @@ public interface ICustomerCouponRepository {
 	
 	// 적용가능한 쿠폰 조회
 	List<CartCouponApply> getCouponsByCustomerId(@Param("categoryId") int categoryId,@Param("customerId") int customerId);
+
 }
