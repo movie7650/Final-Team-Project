@@ -40,7 +40,7 @@
 				
 				
 				<div  class="detail-button-container">
-					<div class="detail-button"><a th:href="@{/mypage/mydetailorder}">주문상세보기</a></div>
+					<div class="detail-button"><a th:href="@{/mypage/mydetailorder?purchaseNum=__${purchase.purchaseNum}__}">주문상세보기</a></div>
 					<div th:if="${purchase.purchaseDv} == '배송완료'" class="detail-button"><a th:href="@{/mypage/review}">리뷰남기기</a></div>
 				</div><!-- shipping-button-container -->	
 			</div><!-- order-list-container -->
