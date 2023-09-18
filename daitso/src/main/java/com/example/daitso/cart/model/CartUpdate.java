@@ -11,7 +11,6 @@ import lombok.ToString;
 @ToString
 public class CartUpdate {
 	private int cartCount;
-	private String cartPrice;
 	private int cartId;
 	private int customerId;
 }
