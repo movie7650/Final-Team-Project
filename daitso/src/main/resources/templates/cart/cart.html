@@ -7,7 +7,7 @@
 			<div style="display: flex; justify-content: center">
 				<div style="width: 57%">
 					<div class="cart-logo">
-						<a th:href="@{/customer/test}"> <img class="cart-logo-img"
+						<a th:href="@{/}"> <img class="cart-logo-img"
 							th:src="@{/assets/header/daitso_logo_header.png}">
 						</a>
 					</div>
@@ -71,8 +71,7 @@
 												th:text="${cart.productOptionSecond}"></span> <span
 												th:if="${cart.productOptionThird != '-'}">,</span> <span
 												th:if="${cart.productOptionThird != '-'}"
-												th:text="${cart.productOptionThird}"></span> <span>,</span>
-											<span><span th:text="${cart.cartCount}"></span>개</span>
+												th:text="${cart.productOptionThird}"></span>
 											<span
 												th:if="${cart.productStock < 10 && cart.productStock > 0}" 
 												style="margin-left: 10px; font-size: 16px; font-weight:bold; color:red;">품절임박</span>
@@ -96,15 +95,17 @@
 											</div>
 											<div>
 												<div>
-													<span>
 													<span 
-														th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'"
-														th:text="${cart.cartPrice}"
-														th:class="'product-price-' + ${cart.cartId}"
+														th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y' and ${cart.discountRate} == 0"
+														th:text="${cart.productPrice} + ' 원'"
 														></span>
 													<span 
-														th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'">0</span>원	
-													</span> 
+														th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'">0 원</span>
+													<span th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y' and ${cart.discountRate} != 0">
+														<span th:text="${cart.discountRate} + '%'" style="font-size: 15px; color: red; font-weight: 500;"></span>
+														<span th:text="${cart.productRealPrice} + ' 원'" style="font-size: 15px; color: #888888; text-decoration:line-through; margin: 0 10px 0 5px;"></span>
+														<span th:text="${cart.productPrice} + ' 원'"></span>
+													</span>
 													<select
 														th:if="${cart.productStock >= 10} and ${cart.productStatus} == 'Y'"
 														class="select-list" style="margin-left: 10px; width:45px;"
@@ -133,7 +134,7 @@
 										</div>
 									</div>
 									<div class="cart-table-td-3" style="line-height: 140px">
-										<span th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" th:text="${cart.cartPrice}" th:class="'product-price-' + ${cart.cartId}"></span>
+										<span th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" th:text="${cart.productTotalPrice}" th:class="'product-price-' + ${cart.cartId}"></span>
 										<span th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'" th:class="'product-price-' + ${cart.cartId}">0</span>원
 									</div>
 									<div class="cart-table-td-4" style="line-height: 140px">무료</div>
@@ -275,7 +276,6 @@
 		    body: JSON.stringify({
 		        cartId: cartId,
 		        cartCount: cartCount,
-		        cartPrice: cartPrice,
 		        customerId: customerId
 		    }),
 		})

@@ -5,7 +5,7 @@
 	<div style="display: flex; justify-content: center">
 		<div style="width: 57%">
 			<div class="purchase-logo">
-				<a th:href="@{/customer/test}"> <img class="purchase-logo-img"
+				<a th:href="@{/}"> <img class="purchase-logo-img"
 					th:src="@{/assets/header/daitso_logo_header.png}">
 				</a>
 			</div>
@@ -149,12 +149,12 @@
 						<div><span id="purchase-total-price">32,000</span>원</div>
 					</div>
 				</div>
-				<div id="payment-method"></div>
+				<div id="payment-method" style="margin-top: 50px;"></div>
 				<div class="purchase-agree">
 					위 주문 내용을 확인 하였으며, 회원 본인은 개인정보 이용 및 제공(해외직구의 경우 국외제공) 및 결제에 동의합니다.
 				</div>
 				<div class="purchase-complete">
-					<div class="purchase-complete-btn" th:onclick="purchase([[${customerInfo.customerEmail}]], [[${customerInfo.customerNm}]])">동의하고 계속하기</div>
+					<div class="purchase-complete-btn" th:onclick="purchase([[${customerInfo.customerEmail}]], [[${customerInfo.customerNm}]], [[${cartProductsBeforePurchase}]])">동의하고 계속하기</div>
 				</div>
 			</div>
 		</div>
@@ -193,7 +193,6 @@
 	function plusShipping() {
 		window.open( window.location.origin + '/shipping/' + customerId, '배송지 조회,선택,추가', 'width=520px,height=650px,scrollbars=yes');
 	}
-	
 	
 	// 받는 사람 정보
 	
@@ -237,9 +236,14 @@
 		sessionStorage.removeItem('shippingId');
 	}
 	
+	var shippingId = sessionStorage.getItem("shippingId");
 	
-	var couponApplyPriceList = JSON.parse(sessionStorage.getItem('couponApplyPriceList'));
-	var couponApplyList = JSON.parse(sessionStorage.getItem('couponApplyList'));
+	if(!shippingId) {
+		shippingId = [[${customerInfo.shippingId}]];
+	}
+	
+	const totalPrice = document.getElementById("purchase-total-price").innerText;
+	const orderRequest = document.getElementById("purchase-shipping-dmnd").innerText;
 	
 	// 결제
 	const clientKey = "test_ck_Z61JOxRQVE1EWP6AkQwVW0X9bAqw";
@@ -247,17 +251,35 @@
 	
 	const paymentWidget = PaymentWidget(clientKey, customerKey); 
 	
-	paymentWidget.renderPaymentMethods("#payment-method", "5000");
+	paymentWidget.renderPaymentMethods("#payment-method", /* parseInt(totalPrice.replace(/,/g , '')).toString() */ "100");
 	
-	function purchase(email, name) {
-		paymentWidget.requestPayment({
-	        orderId: "7MYVnZRBg-N2xLb-uwbpz",            // 주문 ID(직접 만들어주세요)
-	        orderName: "토스 티셔츠 외 2건",                 // 주문명
-	        successUrl: window.location.origin + "/purchase/success",  // 결제에 성공하면 이동하는 페이지(직접 만들어주세요)
-	        failUrl: window.location.origin + "/purchase",        // 결제에 실패하면 이동하는 페이지(직접 만들어주세요)
-	        customerEmail: email,
-	        customerName: name
-	      })
+	function purchase(email, name, products) {
+		
+		var cartIdListUrl = "";
+		
+		for(i in products){
+			cartIdListUrl += "cartIdList=" + products[i].cartId + "&";
+		}
+		
+		fetch( window.location.origin + '/purchase/purchase-num')
+  		.then((res) => {
+        	return res.json(); 
+    	})
+    	.then((json) => {
+    		var orderId = json.purchaseNum;
+    		paymentWidget.requestPayment({
+    	        orderId: orderId,        
+    	        orderName: products[0].productNm + " 외 " + products.length +"건",                 
+    	        successUrl: window.location.origin + "/purchase/success?shippingId=" + shippingId + "&" 
+    	        		+ "orderRequest=" + orderRequest + "&" + cartIdListUrl.substring(0,cartIdListUrl.length-1) ,  
+    	        failUrl: window.location.origin + "/purchase",     
+    	        customerEmail: email,
+    	        customerName: name
+    	      })
+    	})
+    	.catch(function(error) {
+    	      console.log(error);
+    	});
 	}
 	
 </script>

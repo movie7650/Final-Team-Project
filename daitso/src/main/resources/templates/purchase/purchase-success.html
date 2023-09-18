@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div id="purchase-success-container">
+	<div id="purchase-success-box">
+		<div class="purchase-success-title">주문완료</div>
+		<div class="purchase-success-complete-box">
+			<div class="purchase-success-complete-title">
+				<span><span style="color:#E8C369;">주문이 완료</span>되었습니다. 감사합니다!</span>
+			</div>
+			<div class="purchase-success-date-num">
+				<span>주문일 <span>2023-09-15</span></span>
+				<span style="margin:0 10px 0 10px;">|</span>
+				<span>주문번호 <span>2023091510590100000009</span></span>
+			</div>
+			<div style="margin-top:100px; display: flex; justify-content: center;">
+				<div class="purchase-success-out"><a th:href="@{/}" style="color:white; text-decoration: none;">계속 쇼핑하기</a></div>
+			</div>
+		</div>
+		<div class="purchase-success-info-boxes">
+			<div class="purchase-success-info-box">
+				<div class="purchase-success-info-title">받는사람 정보</div>
+				<div class="purchase-success-info-small-box">
+					<div style="display: flex;">
+						<div>이름</div>
+						<div>최준원</div>
+					</div>
+					<div style="display: flex;">
+						<div>연락처</div>
+						<div>010-1234-5678</div>
+					</div>
+					<div style="display: flex;">
+						<div>배송주소</div>
+						<div>서울</div>
+					</div>
+					<div style="display: flex;">
+						<div>배송요청사항</div>
+						<div>문 앞</div>
+					</div>
+					<div class="purchase-success-line" style="background-color: transparent;"></div>
+				</div>
+			</div>
+			<div class="purchase-success-info-box">
+				<div class="purchase-success-info-title">결제 정보</div>
+				<div class="purchase-success-info-small-box">
+					<div style="display: flex;">
+						<div>주문금액</div>
+						<div>최준원</div>
+					</div>
+					<div style="display: flex;">
+						<div>쿠폰할인</div>
+						<div>010-1234-5678</div>
+					</div>
+					<div style="display: flex;">
+						<div>배송비</div>
+						<div>0원</div>
+					</div>
+					<div class="purchase-success-line"></div>
+					<div style="display: flex;">
+						<div>총 결제금액</div>
+						<div>문 앞</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="display: flex; justify-content: center; margin-top: 50px;">
+			<div class="purchase-success-info-detail-btn">주문 상세보기</div>
+		</div>
+	</div>
+</div>
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+	const secretKey = "test_sk_PBal2vxj81PJkWDN1bJr5RQgOAND";
+	const basickToken = Buffer.from(secretKey + ":").toString("base64");
+	
+	fetch('https://api.tosspayments.com/v1/payments/confirm', {
+		method: 'post',
+		body: JSON.stringify({
+			
+		})
+	})
+		.then((res) => {
+    	return res.json(); 
+	})
+	.then((json) => {
+		var orderId = json.purchaseNum;
+		paymentWidget.requestPayment({
+	        orderId: orderId,        
+	        orderName: products[0].productNm + " 외 " + products.length +"건",                 
+	        successUrl: window.location.origin + "/purchase/success",  
+	        failUrl: window.location.origin + "/purchase",     
+	        customerEmail: email,
+	        customerName: name
+	      })
+	})
+	.catch(function(error) {
+	      console.log(error);
+	});
+</script>
+</html>

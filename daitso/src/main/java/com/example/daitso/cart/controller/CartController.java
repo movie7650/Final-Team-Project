@@ -79,13 +79,11 @@ public class CartController {
 		JsonElement element = JsonParser.parseString(data);
 		String cartId = element.getAsJsonObject().get("cartId").getAsString();
 		String cartCount = element.getAsJsonObject().get("cartCount").getAsString();
-		String cartPrice = element.getAsJsonObject().get("cartPrice").getAsString();
 		String customerId = element.getAsJsonObject().get("customerId").getAsString();
 		
 		CartUpdate cartUpdate = CartUpdate.builder()
 								.cartId(Integer.valueOf(cartId))
 								.cartCount(Integer.valueOf(cartCount))
-								.cartPrice(cartPrice)
 								.customerId(Integer.valueOf(customerId))
 								.build();
 		cartService.updateCartCountByCartId(cartUpdate);
