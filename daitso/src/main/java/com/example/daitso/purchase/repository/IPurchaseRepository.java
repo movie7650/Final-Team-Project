@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
@@ -50,6 +52,9 @@ public interface IPurchaseRepository {
 //	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption);
 	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption,@Param("offset") int offset, @Param("pageSize") int pageSize);
 
-	//
+	// 검색 결과 개수 조회하기
 	int selectCountPurchaseInfo(String searchText, String searchOption);
+	
+	// 주문 내역 정보 갖고오기
+	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 }

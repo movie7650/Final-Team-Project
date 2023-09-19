@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.category.model.Category;
@@ -131,14 +132,21 @@ public class AdminService implements IAdminService{
 //		return purchaseRepository.searchPurchaseInfo(searchText, searchOption);
 //	}
 	
+	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
 	@Override
 	public List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption, int offset, int pageSize) {
 		return purchaseRepository.searchPurchaseInfo(searchText, searchOption, offset, pageSize);
 	}
 
+	// 검색 결과 개수 조회하기
 	@Override
 	public int selectCountPurchaseInfo(String searchText, String searchOption) {
 		return purchaseRepository.selectCountPurchaseInfo(searchText, searchOption);
 	}
-	
+
+	@Override
+	public List<PurchaseList> getPurchaseDetails(String purchaseNum) {
+		return purchaseRepository.getPurchaseDetails(purchaseNum);
+	}
+
 }

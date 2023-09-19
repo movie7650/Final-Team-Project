@@ -147,26 +147,6 @@
 		기능: 주문 내역 검색하기 (회원명, 주문번호 선택해서)
 		담당자: 이세인
 	-->
-<!-- 	<select id="searchPurchaseInfo" resultType="com.example.daitso.purchase.model.PurchaseList">
-	    SELECT p.purchase_id                            AS  "purchaseId",
-			   r.product_nm                             AS  "productNm",
-			   c.customer_nm                            AS  "customerNm",
-			   p.purchase_num	                        AS  "purchaseNum",
-			   p.create_dt                              AS  "createDt",
-			   d.common_code_id                         AS  "commonCodeId",
-			   d.common_code_nm                         AS  "commonCodeNm"
-	     FROM purchase p
-		 JOIN customer c ON p.customer_id = c.customer_id 
-		 JOIN common_code d ON p.purchase_dv = d.common_code_id
-		 JOIN product r ON r.product_id = p.product_id
-	     WHERE 1=1 
-		     <if test='searchOption == "customerNm"'>
-				AND INSTR(c.customer_nm,#{searchText}) > 0
-		     </if>
-		     <if test='searchOption == "purchaseNum"'>
-		        AND INSTR(p.purchase_num,#{searchText}) > 0
-		     </if>
-	</select> -->
 		<select id="searchPurchaseInfo" resultType="com.example.daitso.purchase.model.PurchaseList">
 	    SELECT *
 		  FROM( SELECT p.purchase_id                    AS  "purchaseId",
@@ -202,9 +182,13 @@
 	</select>
 
 
+	<!-- 
+		기능: 검색 결과 개수 조회하기
+		담당자: 이세인
+	-->
 	<select id="selectCountPurchaseInfo">
-	SELECT COUNT (cnt)
-		  FROM(	SELECT COUNT(*) AS cnt 
+    SELECT COUNT (cnt)
+		    FROM(	SELECT COUNT(*) AS cnt 
 				  FROM purchase p
                  JOIN customer c ON p.customer_id = c.customer_id 
                  JOIN common_code d ON p.purchase_dv = d.common_code_id
@@ -228,4 +212,24 @@
 				     </when>
 				</choose>
 	</select>
+	
+	
+	
+<select id="getPurchaseDetails" resultType="com.example.daitso.purchase.model.PurchaseList">
+    SELECT     p.purchase_id                            AS  "purchaseId",
+			   r.product_nm                             AS  "productNm",
+			   c.customer_nm                            AS  "customerNm",
+			   p.purchase_num	                        AS  "purchaseNum",
+			   p.create_dt                              AS  "createDt",
+			   d.common_code_nm                         AS  "commonCodeNm",
+               p.total_cost                             AS  "totalCost",
+               p.purchase_count                         AS  "purchaseCount",
+               p.purchase_price							AS  "purchasePrice"
+	     FROM purchase p
+		 JOIN customer c ON p.customer_id = c.customer_id 
+		 JOIN common_code d ON p.purchase_dv = d.common_code_id
+		 JOIN product r ON r.product_id = p.product_id
+	     WHERE p.purchase_num = #{purchaseNum}	
+</select>
+
 </mapper>
