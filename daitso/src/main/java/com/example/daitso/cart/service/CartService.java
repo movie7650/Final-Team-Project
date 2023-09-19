@@ -85,10 +85,4 @@ public class CartService implements ICartService{
 	public void directPurchase(int productId, int customerId, int productCnt) {
 		cartRepository.updateCartCnt(productId, customerId, productCnt);
 	}
-	
-	// customer_coupon_id 업데이트
-	@Override
-	public void updateCustomerCouponId(int cartId, int customerCouponId) {
-		cartRepository.updateCustomerCouponId(cartId, customerCouponId);
-	}
 }
