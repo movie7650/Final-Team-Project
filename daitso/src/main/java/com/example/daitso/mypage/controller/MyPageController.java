@@ -167,6 +167,10 @@ public class MyPageController {
 			//상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount",shipCount01);
+			//입금/결제 갯수 
+			int payCoin = purchaseService.selectPayCoin(customerId);
+			model.addAttribute("payCoinCount",payCoin);
+			
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {

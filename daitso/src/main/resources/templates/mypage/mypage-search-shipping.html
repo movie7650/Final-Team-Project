@@ -21,7 +21,9 @@
 		<div class="ship-ing-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
 	</div><!-- order-category -->
 	<div style="margin-top:200px; padding-right:55px;">
-	<div style="width:800px;" th:if="${shipCount} == 0">배송중인 상품이 없습니다</div>
+	<div style="width:800px;" th:if="${shipCount} == 0">
+				<img style="width:800px; border-radius:10px;" th:src="@{/assets/mypage/shipping.JPG}">
+	</div>
 		<th:block  th:each="purchase : ${purchaseList}">
 			<div th:if="${purchase.purchaseDv}==배송중" class="order-list-container">
 				<div  class="order-list-container-01">
