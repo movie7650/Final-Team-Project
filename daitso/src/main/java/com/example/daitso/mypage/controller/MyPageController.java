@@ -20,6 +20,7 @@ import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.service.IPurchaseService;
+import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.service.IReviewService;
 
 @Controller
@@ -36,6 +37,7 @@ public class MyPageController {
 	PasswordEncoder pwEncoder;
 	@Autowired
 	ICustomerCouponService customerCouponService;
+	
 	
 	//마이페이지-포인트 컨트롤러 
 	@RequestMapping(value="/mypoint", method=RequestMethod.GET)
@@ -209,7 +211,7 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 	}
-	//마이페이지-주문주회-배송완료
+	//마이페이지-주문조회-배송완료
 	@RequestMapping("/shippingcomplete")
 	public String shippingComplete(Model model) {
 		try {
@@ -236,6 +238,38 @@ public class MyPageController {
 			return "mypage/mypage-shipping-complete";
 			
 		}catch(ClassCastException e){
+			return "redirect:/customer/login";
+		}
+	}
+	//마이페이지-리뷰관리 컨트롤러
+	//리뷰 페이지 불러오기
+	@RequestMapping("/review")
+	public String Review(Model model) {
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			//상단 잔여포인트
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint", point + "P");
+			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
+			
+			//내가쓴 리뷰 조회
+			List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
+			model.addAttribute("mypageReviewList",myReviewList);
+			
+			return "mypage/review";
+		}catch(ClassCastException e) {
 			return "redirect:/customer/login";
 		}
 	}
@@ -287,25 +321,6 @@ public class MyPageController {
 	
 	}
 	
-	//마이페이지-리뷰관리 컨트롤러
-	 //리뷰 페이지 불러오기
-	@RequestMapping("/review")
-	public String Review(Model model) {
-		try {
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails)principal;
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			//상단 잔여포인트
-			String point = pointService.selectTotalPoint(customerId);
-			if(point == null) {
-				point = "0";
-			}
-			model.addAttribute("totalPoint", point + "P");
-			return "mypage/review";
-		}catch(ClassCastException e) {
-			return "redirect:/customer/login";
-		}
-	}
 	
 	//마이페이지-배송지관리 컨트롤러
 	@RequestMapping("/myshipping")
