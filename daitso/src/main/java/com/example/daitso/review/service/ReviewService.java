@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
 import com.example.daitso.review.repository.IReviewRepository;
@@ -21,8 +22,8 @@ public class ReviewService implements IReviewService{
 	}
 
 	@Override
-	public List<Review> selectReviewAll() {
-		return reviewRepository.selectReviewAll();
+	public List<MypageReviewCheck> selectReviewAll(int customerId) {
+		return reviewRepository.selectReviewAll(customerId);
 	}
 
 	@Override

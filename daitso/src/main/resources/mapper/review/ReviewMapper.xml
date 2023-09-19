@@ -47,4 +47,19 @@
 	LEFT JOIN product p ON r.product_id = p.product_id
 	WHERE p.product_group_id = #{groupId} AND r.status = 'Y' GROUP BY p.product_group_id
 </select>
+
+<!-- 마이페이지 내가 쓴 리뷰 조회  -->
+<select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
+	SELECT re.review_title as "reviewTitle",
+              p.product_nm as "productNm",
+              re.review_star_point as "reviewStarPoint",
+              re.review_content as "reviewContent",
+              re.review_image_first as "reviewImageFirst",
+              re.review_image_second as "reviewImageSecond",
+              re.review_image_third   as "reviewImageThird",
+              re.create_dt              as "createDt"
+	   FROM   review re, product p
+        WHERE re.customer_id=#{customerId} 
+ 	     AND  re.product_id = p.product_id
+</select>
 </mapper>

@@ -2,6 +2,7 @@ package com.example.daitso.review.service;
 
 import java.util.List;
 
+import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
 
@@ -9,7 +10,7 @@ public interface IReviewService {
 	
 	void insertReview(Review review);
 	
-	List<Review> selectReviewAll();
+	List<MypageReviewCheck> selectReviewAll(int customerId);
 	
 	void selectReview(int reviewId);
 	

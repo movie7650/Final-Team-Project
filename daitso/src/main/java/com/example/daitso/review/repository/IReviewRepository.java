@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
 
@@ -15,7 +16,7 @@ public interface IReviewRepository {
 	
 	void insertReview(Review review);
 	
-	List<Review> selectReviewAll();
+	List<MypageReviewCheck> selectReviewAll(int customerId);
 	
 	void selectReview(int reviewId);
 	
