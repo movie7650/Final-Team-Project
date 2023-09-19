@@ -18,9 +18,11 @@ public interface IReviewService {
 	
 	void deleteReview(Review review);
 
-	List<ReviewProductDetail> selectProductReview(int groupId, int page);
+	List<ReviewProductDetail> selectProductReview(int groupId, int page, int customerId);
 	
 	int selectProductReviewCount(int groupId);
 	
 	int selectProductReviewAvg(int groupId);
+	
+	int insertReviewHeart(int reviewId, int customerId);
 }
