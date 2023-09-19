@@ -22,6 +22,7 @@
 	</div><!-- order-category -->
 	<div style="margin-top:200px; padding-right:55px;">
 		<th:block th:each="purchase : ${purchaseList}">
+		<div th:if="${purchase.purchaseNum} == null">입금/결제중인상품이 없습니다.</div>
 			<div th:if="${purchase.purchaseDv}=='입금/결제'" class="order-list-container">
 				<div class="order-list-container-01">
 					<div class="shipping-status" th:text="${purchase.purchaseDv}">배송완료</div>
