@@ -14,8 +14,8 @@
 	<div class="detail-order-title">주문상세보기</div>
 	
 	<div style="margin-top:200px; padding-right:55px;">
-		<th:block>
-			<div th:each="purchase : ${purchaseDetailList}" class="detail-order-list-container">
+		<th:block th:each="purchase : ${purchaseDetailList}" >
+			<div class="detail-order-list-container">
 				<div class="order-list-container-01">
 					 <div class="shipping-status" th:text="|주문날짜: ${purchase.createDt}|">주문날짜</div>
 					 <div class="shipping-date" th:text="|상태: ${purchase.purchaseDv}|">상태</div>

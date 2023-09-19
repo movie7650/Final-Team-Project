@@ -135,8 +135,11 @@ public class MyPageController {
 			
 			//주문한 상품 상세정보 출력 
 			List<PurchaseDetailCheck> purchaseCheckList = purchaseService.selectDetailPurchase(customerId, purchaseNum);
+			System.out.println("-------------------------------------");
+			System.out.println(purchaseCheckList.get(0).toString());
+			System.out.println("-------------------------------------");
 			model.addAttribute("purchaseDetailList",purchaseCheckList);
-		
+			
 		
 		return "mypage/detail-order";	
 		}catch(ClassCastException e){
