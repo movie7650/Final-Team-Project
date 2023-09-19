@@ -51,14 +51,14 @@
 									<div th:if="${cart.productStock > 0} and ${cart.productStatus} == 'Y'" class="cart-table-td-1">
 										<input type="checkbox" 
 											th:class="cart-check + ' ' + ${cart.checked}"
-											th:value="${cart.cartId}"> <img
-											th:src="${cart.productImageFirst}">
+											th:value="${cart.cartId}"> 
+										<a th:href="@{/product/{productId}/{productGroupId}(productId = ${cart.productId}, productGroupId = ${cart.productGroupId})}"><img th:src="${cart.productImageFirst}"></a>
 									</div>
 									<!-- 재고가 없을 경우 및 품절,판매중지 -->
 									<div th:if="${cart.productStock <= 0} or ${cart.productStatus} != 'Y'" class="cart-table-td-1">
 										<input type="checkbox" class="none"
-											th:value="${cart.cartId}" style="visibility: hidden;"> <img
-											th:src="${cart.productImageFirst}">
+											th:value="${cart.cartId}" style="visibility: hidden;"> 
+										<a th:href="@{/product/{productId}/{productGroupId}(productId = ${cart.productId}, productGroupId = ${cart.productGroupId})}"><img th:src="${cart.productImageFirst}"></a>
 									</div>
 									<div class="cart-table-td-2">
 										<div style="border-bottom: 1px solid #D9D9D9;">

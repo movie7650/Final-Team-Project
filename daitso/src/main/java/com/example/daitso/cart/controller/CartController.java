@@ -182,7 +182,7 @@ public class CartController {
 		}
 	}
 	
-	//장바구니 추가 및 바로 구매하기
+	//바로 구매하기
 	@PostMapping("/insert")
 	public String insertCart(Model model, RedirectAttributes redirectAttributes, int productId, int productCnt, String selector) {
 		
@@ -192,16 +192,32 @@ public class CartController {
 		int customerId = Integer.parseInt(userDetails.getUsername());
 		
 		String purchaseClassification = "";
-		
-		if(selector.equals("cart")) {
-			cartService.insertCartService(productId, customerId, productCnt);
-			purchaseClassification = "cart";
-		}
-		else if(selector.equals("purchase")) {
+			
+		if(selector.equals("purchase")) {
 			cartService.directPurchase(productId, customerId, productCnt);
 			purchaseClassification = "purchase";
 		}
+		
 		return getCart(model, redirectAttributes, purchaseClassification);
+	}
+	
+	// 장바구니 추가
+	@PostMapping("/insert-in-to")
+	public @ResponseBody String insertCart(@RequestBody String data) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails)principal;
+			
+		int customerId = Integer.parseInt(userDetails.getUsername());
+		
+		JsonElement element = JsonParser.parseString(data);
+		
+		int productId = Integer.valueOf(element.getAsJsonObject().get("productId").getAsString());
+		int	productCnt = Integer.valueOf(element.getAsJsonObject().get("productCnt").getAsString());
+		
+		cartService.insertCartService(productId, customerId, productCnt);
+
+		return null;
 	}
 	
 	// 장바구니 쿠폰 적용화면

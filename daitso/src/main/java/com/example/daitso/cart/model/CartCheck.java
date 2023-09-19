@@ -8,6 +8,7 @@ import lombok.Setter;
 public class CartCheck {
 	private int cartId;
 	private int productId;
+	private int productGroupId;
 	private int cartCount;
 	private String purchaseNum;
 	private String productNm;

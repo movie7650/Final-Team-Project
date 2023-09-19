@@ -18,6 +18,7 @@
 	<select id="getCartByCustomerId" resultType="com.example.daitso.cart.model.CartCheck" parameterType="int">
 		SELECT c.cart_id AS "cartId",
 			   c.product_id AS "productId",
+			   p.product_group_id AS "productGroupId",
 			   c.cart_count AS "cartCount",
 			   c.checked AS "checked",
 			   p.product_nm AS "productNm",
@@ -289,6 +290,7 @@
 	<select id="getCartByCartIdDirectPurchase" resultType="com.example.daitso.cart.model.CartCheck">
 		SELECT c.cart_id AS "cartId",
 		       c.product_id AS "productId",
+		       p.product_group_id AS "productGroupId",
 		       c.cart_count AS "cartCount",
 		       c.checked AS "checked",
 		       p.product_nm AS "productNm",
