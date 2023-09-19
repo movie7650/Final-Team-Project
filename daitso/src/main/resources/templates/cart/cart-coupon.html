@@ -286,30 +286,9 @@
 	// 쿠폰 적용
 	function cartCouponComplete(){
 		var couponApplyList = [];
-		var couponApplyPriceList = {};
 		couponTotalApplyPrice = 0;
 		var count = 0;
-			
-		for (key in couponCartIdList) {
-			// customer_coupon -> cartId 업데이트
-			fetch( window.location.origin + "/cart/update-customer-coupon-id", {
-			    method: "PATCH",
-			    headers: { 
-			        "Content-Type": "application/json",
-			    },
-			    body: JSON.stringify({
-			        cartId: key,
-			        customerCouponId: couponCartIdList[key]
-			    }),
-			})
-			.then((res) => res.json())
-			.then((data) => {
-			})
-			.catch(function(error) {
-	    	      console.log(error);
-	    	});   	
-		}
-		
+				
 		for(key in couponDuplicatedCheck) {
 			if(couponDuplicatedCheck[key] == '0') {
 				count += 1;
@@ -324,12 +303,11 @@
 			if(confirm("쿠폰을 적용하시겠습니까?")){
 				for(key in couponCheckApplyPriceList){
 					couponTotalApplyPrice += parseInt(couponCheckApplyPriceList[key].replace(/,/g , ''));
-					couponApplyPriceList[key] = parseInt(couponCheckApplyPriceList[key].replace(/,/g , ''));
 				}
 				
 				localStorage.setItem('couponTotalApplyPrice', couponTotalApplyPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 				localStorage.setItem('couponApplyList', JSON.stringify(couponApplyList));
-				localStorage.setItem('couponApplyPriceList', JSON.stringify(couponApplyPriceList));
+				localStorage.setItem('couponCartIdList', JSON.stringify(couponCartIdList));
 				
 				opener.location.reload();
 				window.close();
