@@ -11,7 +11,7 @@
 
 	 <div class="title-review">내 리뷰</div>
 	 <div>
-		 <th:block th:each="mypageReview : ${mypageReviewList}">
+		 <th:block th:each="mypageReview : ${mypageReviewList}"> 
 			<div class="my-review-container">
 			<div style="width:500px;">
 				<div th:text="|제목: ${mypageReview.reviewTitle}|" class="my-review-title">리뷰제목</div>
