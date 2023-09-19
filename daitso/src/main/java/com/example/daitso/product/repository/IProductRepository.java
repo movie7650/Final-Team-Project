@@ -15,7 +15,7 @@ import com.example.daitso.product.model.SpecialProduct;
 @Repository
 public interface IProductRepository {
 
-	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end);
+	List<Product> selectProductList(@Param("categoryId") int categoryId, @Param("start") int start, @Param("end") int end, @Param("sort") String sort);
 	
 	int selectCountProductList(@Param("categoryId") int categoryId);
 	
@@ -28,10 +28,10 @@ public interface IProductRepository {
     // 상품 개수 조회하기(카테고리별)
     int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId);
     
-    // 상품 조회하기(그룹별)
+    // 상품 조회하기(그룹ID별)
     List<ProductCheck> selectProductsByGroupId(int productGroupId);
     
-    // 상품 삭제하기(그룹)
+    // 상품 삭제하기(그룹ID)
     void deleteProductByGroupId(int productGroupId);
 	
 	// 상품ID로 상품 정보 갖고오기
@@ -43,14 +43,11 @@ public interface IProductRepository {
 	// 상품 삭제하기
     void deleteProduct(int productId);
     
-    // 기존 상품 등록하기
-	void registerExistingProducts(ProductCheck product);
-	
-	// 신규 상품 등록하기
+    // 상품 등록하기
+	void registerProducts(ProductCheck product);
 	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
-	
 	
 	
 	List<String> selectProductOptionFirst(int productGroupId);

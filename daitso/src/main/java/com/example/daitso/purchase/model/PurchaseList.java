@@ -27,4 +27,7 @@ public class PurchaseList {
 	private String customerNm;
 	private String commonCodeNm;
 	private String productNm;
+	private int commonCodeId;
+	private int rn;
+	private String searchText;
 }

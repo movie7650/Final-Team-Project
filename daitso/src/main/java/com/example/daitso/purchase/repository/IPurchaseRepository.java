@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseInsert;
+import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.model.PurchaseList;
 
 @Repository
@@ -33,7 +34,25 @@ public interface IPurchaseRepository {
 	//배송완료인 상품 갯수
 	int selectShippingComplete(int customerId);
 	
-	List<PurchaseList> selectAllPurchaseList();
+	//상세주문조회
+	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId") int customerId, @Param("purchaseNum")String purchaseNum);
+
 	
+	List<PurchaseList> selectAllPurchaseList();
+
+	// 주문 내역 조회하기(배송상태별)
+	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
+	
+	// 주문 내역 개수 조회하기(배송상태별)
+	int selectCountPurchaseList(@Param("commonCodeId") int commonCodeId);
+	
+	// 배송 상태 변경하기
 	void changePurchaseStatus(@Param("purchaseId") int purchaseId, @Param("commonCodeId") int commonCodeId);
+	
+	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
+//	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption);
+	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption,@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+	//
+	int selectCountPurchaseInfo(String searchText, String searchOption);
 }

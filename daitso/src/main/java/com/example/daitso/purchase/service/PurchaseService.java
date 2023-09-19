@@ -11,6 +11,7 @@ import com.example.daitso.customercoupon.repository.ICustomerCouponRepository;
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseInsert;
+import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.repository.IPurchaseRepository;
 
 @Service
@@ -47,7 +48,6 @@ public class PurchaseService implements IPurchaseService {
 	}
 	@Override
 	public List<PurchaseCheck> selectAllProductNm(int customerId) {
-		// TODO Auto-generated method stub
 		return purchaseRepository.selectAllProductNm(customerId);
 	}
 	@Override
@@ -60,4 +60,10 @@ public class PurchaseService implements IPurchaseService {
 		return purchaseRepository.selectShippingComplete(customerId);
 		
 	}
+	@Override
+	public List<PurchaseDetailCheck> selectDetailPurchase(int customerId, String purchaseNum) {
+		// TODO Auto-generated method stub
+		return purchaseRepository.selectDetailPurchase(customerId, purchaseNum);
+	}
+	
 }

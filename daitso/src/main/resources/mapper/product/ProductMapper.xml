@@ -25,39 +25,54 @@
 </resultMap>
 
 <select id="selectProductList" parameterType="int" resultType="com.example.daitso.product.model.Product">
-    SELECT a.product_id AS productId, 
-   		a.product_group_id AS productGroupId,
-		a.category_id AS categoryId, 
-		a.product_image_first AS productImageFirst, 
-		a.product_nm AS productNm, 
-		NVL(b.review_star_point,0) AS reviewStarPoint, 
-        NVL(b.review_count,0) AS reviewCount,
-		a.product_content AS productContent, 
-		a.product_stock AS productStock, 
-		a.discount_rate AS discountRate,
-		a.product_price AS productPrice
+    SELECT product_id AS productId, 
+   		product_group_id AS productGroupId,
+		category_id AS categoryId, 
+        product_image_first AS productImageFirst, 
+		product_nm AS productNm, 
+		NVL(review_star_point,0) AS reviewStarPoint, 
+        NVL(review_count,0) AS reviewCount,
+		product_content AS productContent, 
+		product_stock AS productStock, 
+		discount_rate AS discountRate,
+		product_price AS productPrice
     FROM(
-    	SELECT product_id, product_group_id, discount_rate, category_id, product_image_first, product_nm, review_star_point, product_content, product_stock, 
-    			product_price, rownum as rnum , row_number() over (partition by product_group_id order by product_price) snum
+    	SELECT product_id, product_group_id, discount_rate, category_id, product_image_first, product_nm, product_content, product_stock, 
+                review_star_point, review_count,
+    			product_price, rownum as rnum
     	FROM(
-    		SELECT p.product_id		AS		product_id,  discount_rate,
-				   product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point
+    		SELECT p.product_id		AS		product_id,  discount_rate, row_number() over (partition by p.product_group_id order by product_price) snum,
+				   p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point, review_count
 			FROM product p
-	        LEFT JOIN review r ON p.product_id = r.product_id
+            LEFT JOIN  (
+                        select product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count 
+                        from review r 
+                        LEFT JOIN product mp ON r.product_id = mp.product_id GROUP BY product_group_id
+                        ) b ON p.product_group_id = b.product_group_id
    			WHERE category_id in (
 									SELECT category_id from category c
 									START WITH category_id = #{categoryId}
 								   	CONNECT BY PRIOR category_id = category_pr_id
 								  )
 			 AND p.status = 'Y'
-			 ORDER BY p.product_id
+			 <choose>
+			 	<when test='sort.equals("normal")'>
+					 ORDER BY p.product_id			 	
+			 	</when>
+			 	<when test='sort.equals("highPrice")'>
+			 		ORDER BY p.product_price DESC
+			 	</when>
+			 	<when test='sort.equals("lowPrice")'>
+			 		ORDER BY p.product_price
+			 	</when>
+			 	<when test='sort.equals("highRate")'>
+			 		ORDER BY review_star_point
+			 	</when>
+			 </choose>
             )
-    ) a
-    LEFT JOIN  (select product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count from review r 
-                LEFT JOIN product p ON r.product_id = p.product_id GROUP BY product_group_id
-           	   ) b 
-    ON a.product_group_id = b.product_group_id
-    WHERE rnum between #{start} and #{end} and snum = 1
+        WHERE snum = 1
+    ) 
+    WHERE rnum between #{start} and #{end}
 </select>
 
 <select id="selectCountProductList" parameterType="int" resultType="int">
@@ -145,6 +160,7 @@
 	                     AND #{offset} + #{pageSize}
 	</select>
 
+
     <!-- 
 		기능: 카테고리별 상품 개수 조회하기
 		담당자: 이세인
@@ -191,8 +207,9 @@
 				   </choose>
     </select>
 
+
 	<!-- 
-		기능: 상품 조회하기(그룹별)
+		기능: 상품 조회하기(그룹ID별)
 		담당자: 이세인
 	-->
 	<select id="selectProductsByGroupId" resultType="com.example.daitso.product.model.ProductCheck">
@@ -214,6 +231,7 @@
 	 ORDER BY  p.product_price
 	</select>
 	
+	
 	<!-- 
 		기능: 상품 삭제하기(그룹)
 		담당자: 이세인
@@ -223,6 +241,7 @@
 	      FROM product 
 	     WHERE product_group_id = #{productGroupId}
 	</delete>
+
 
 	<!-- 
 		기능: 상품ID로 상품 정보 갖고오기
@@ -242,6 +261,7 @@
 	     WHERE product_id = #{productId}
 	</select>
 
+
 	<!-- 
 		기능: 상품 수정하기
 		담당자: 이세인
@@ -256,6 +276,7 @@
 		 WHERE product_id = #{productId}
 	</update>
 
+
 	<!-- 
 		기능: 상품 삭제하기
 		담당자: 이세인
@@ -266,11 +287,12 @@
 	     WHERE product_id = #{productId}
 	</delete>
 
+
 	<!-- 
-		기능: 기존 상품 등록하기
+		기능: 상품 등록하기
 		담당자: 이세인
 	-->
-	<insert id="registerExistingProducts" parameterType="com.example.daitso.product.model.ProductCheck">
+	<insert id="registerProducts" parameterType="com.example.daitso.product.model.ProductCheck">
 		DECLARE v_product_id NUMBER;
 		  BEGIN		  
 		 INSERT INTO product ( product_group_id,
@@ -304,17 +326,19 @@
     </insert>
 
 
- <select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
-        SELECT DISTINCT
-        p.product_group_id AS "productGroupId",
-        c.category_nm AS "categoryNm",
-        p.product_nm AS "productNm",
-        p.category_id AS "categoryId"
-        FROM product p
-        JOIN category c ON p.category_id = c.category_id
-        WHERE p.product_nm 
-        LIKE '%' ||  #{searchText} || '%'
-</select>
+	<!-- 
+		기능: 상품명으로 그룹 상품 찾기
+		담당자: 이세인
+	-->
+	<select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
+	    SELECT DISTINCT p.product_group_id   AS "productGroupId",
+		        	    c.category_nm        AS "categoryNm",
+		       			p.product_nm         AS "productNm",
+		        		p.category_id        AS "categoryId"
+		  FROM product p
+		  JOIN category c ON p.category_id = c.category_id
+		 WHERE INSTR(p.product_nm,#{searchText}) > 0
+	</select>
 
 
 
