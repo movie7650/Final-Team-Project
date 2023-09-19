@@ -64,8 +64,10 @@ public interface IProductRepository {
 	
 	List<Product> saleProductList();
 	
-	List<Map<String,Integer>> searchPopularProduct();
+	List<Map<String,Integer>> searchSpecialProduct(String selector);
 	
 	void insertPopularProducts(List<Map<String, Integer>> list);
+	
+	void updateSaleProducts(List<Map<String, Integer>> list);
 }
 
