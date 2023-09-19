@@ -14,7 +14,6 @@
 		review_content AS reviewContent,
 		review_star_point * 20 AS reviewStarPoint,
 		create_dt as createDt,
-		review_heart_count AS reviewHeartCount,
 		review_image_first AS reviewImageFirst,
 		review_image_second AS reviewImageSecond,
 		review_image_third AS reviewImageThird,
@@ -22,7 +21,7 @@
            			SELECT r.review_id, r.product_id, p.product_nm,
 					p.product_option_first || ' ' || p.product_option_second || ' ' || p.product_option_third AS options,
 					c.customer_nm, r.review_title, r.review_content, r.review_star_point, r.create_dt,
-					r.review_heart_count, r.review_image_first, r.review_image_second, r.review_image_third, rownum as rnum
+					r.review_image_first, r.review_image_second, r.review_image_third, rownum as rnum
 					FROM (
 						SELECT * FROM review ORDER BY review_star_point desc
 						  ) r

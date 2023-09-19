@@ -68,13 +68,16 @@ public class ProductService implements IProductService {
 		return productRepository.saleProductList();
 	}
 	
-	//매 자정마다 인기상품 업데이트 시켜주기
+	//매 자정마다 인기상품 및 할인상품 업데이트 시켜주기
 	 //@Scheduled(cron = "0 0 0 * * *")
-	 @Scheduled(cron = "0 40 9 * * *")
+	 @Scheduled(cron = "0 6 14 * * *")
 	 @Transactional
 	public void insertSpecialProduct() {
-		List<Map<String,Integer>> list = productRepository.searchPopularProduct();
+		List<Map<String,Integer>> list = productRepository.searchSpecialProduct("popular");
 		productRepository.insertPopularProducts(list);
+		
+		List<Map<String,Integer>> sList = productRepository.searchSpecialProduct("sale");
+		productRepository.updateSaleProducts(sList);
 
 	}
 
