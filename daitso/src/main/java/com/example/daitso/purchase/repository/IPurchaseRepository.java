@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseList;
@@ -23,11 +22,6 @@ public interface IPurchaseRepository {
 	//주문취소 
 	void canclePurchase(Purchase purchase);
 	
-	
-	
-//	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("start") int start, @Param("end") int end);
-	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
-	int selectCountPurchaseList(@Param("commonCodeId") int commonCodeId);
 
 	//배송중인 상품 갯수
 	int selectShipping(int customerId);
@@ -35,12 +29,20 @@ public interface IPurchaseRepository {
 	//배송완료인 상품 갯수
 	int selectShippingComplete(int customerId);
 	
-	List<PurchaseList> selectAllPurchaseList();
 
+	// 주문 내역 조회하기(배송상태별)
+	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
 	
+	// 주문 내역 개수 조회하기(배송상태별)
+	int selectCountPurchaseList(@Param("commonCodeId") int commonCodeId);
+	
+	// 배송 상태 변경하기
 	void changePurchaseStatus(@Param("purchaseId") int purchaseId, @Param("commonCodeId") int commonCodeId);
 	
-	
-	List<PurchaseList> searchPurchaseInfo(String searchText);
-	
+	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
+//	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption);
+	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption,@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+	//
+	int selectCountPurchaseInfo(String searchText, String searchOption);
 }

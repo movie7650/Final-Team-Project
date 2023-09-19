@@ -32,9 +32,9 @@ public class AdminService implements IAdminService{
 	@Autowired
 	S3Service s3Service;
 	
-	// 기존 상품 등록하기
+	// 상품 등록하기
 //	@Transactional
-//	public void registerExistingProducts(ProductCheck product, List<MultipartFile> files) {
+//	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
 //		List<String> imagePathList = s3Service.upload(files);
 //		product.setProductImageFirst(imagePathList.get(0));
 //		product.setProductImageSecond(imagePathList.get(1));
@@ -42,7 +42,7 @@ public class AdminService implements IAdminService{
 //		
 //		// 상품 등록 실패시 s3에 등록된 이미지 삭제
 //		try {
-//			productRepository.registerExistingProducts(product);
+//			productRepository.registerProducts(product);
 //			product.getProductId();
 //			productRepository.changeProductCode();
 //		} catch(Exception e) {
@@ -65,7 +65,7 @@ public class AdminService implements IAdminService{
 		return productRepository.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
 	}
 	
-	// 상품 조회하기(그룹별)
+	// 상품 조회하기(그룹ID별)
 	@Override
 	public List<ProductCheck> selectProductsByGroupId(int productGroupId) {
 		return productRepository.selectProductsByGroupId(productGroupId);
@@ -95,11 +95,10 @@ public class AdminService implements IAdminService{
 		productRepository.deleteProduct(productId);
 	}
 	
-	// 기존 상품 등록하기
+	// 상품 등록하기
 	@Transactional
-	public void registerExistingProducts(ProductCheck product) {
-		productRepository.registerExistingProducts(product);
-		
+	public void registerProducts(ProductCheck product) {
+		productRepository.registerProducts(product);
 	}
 	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
@@ -108,31 +107,38 @@ public class AdminService implements IAdminService{
 		return productRepository.searchProductsByName(searchText);
 	}
 
-
-	
-	
+	// 주문 내역 조회하기(배송상태별)
 	@Override
 	public List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize) {
 		return purchaseRepository.selectPurchaseList(commonCodeId, offset, pageSize);
 	}
 
+	// 주문 내역 개수 조회하기(배송상태별)
 	@Override
 	public int selectCountPurchaseList(int commonCodeId) {
 		return purchaseRepository.selectCountPurchaseList(commonCodeId);
 	}
 	
-	
-	
+	// 배송 상태 변경하기
 	@Override
 	public void changePurchaseStatus(int purchaseId, int commonCodeId) {
 		purchaseRepository.changePurchaseStatus(purchaseId, commonCodeId);
 	}
 
+	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
+//	@Override
+//	public List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption) {
+//		return purchaseRepository.searchPurchaseInfo(searchText, searchOption);
+//	}
+	
 	@Override
-	public List<PurchaseList> searchPurchaseInfo(String searchText) {
-		return purchaseRepository.searchPurchaseInfo(searchText);
+	public List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption, int offset, int pageSize) {
+		return purchaseRepository.searchPurchaseInfo(searchText, searchOption, offset, pageSize);
 	}
 
-
+	@Override
+	public int selectCountPurchaseInfo(String searchText, String searchOption) {
+		return purchaseRepository.selectCountPurchaseInfo(searchText, searchOption);
+	}
 	
 }

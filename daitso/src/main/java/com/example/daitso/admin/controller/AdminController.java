@@ -1,12 +1,12 @@
 package com.example.daitso.admin.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
-import com.example.daitso.purchase.model.Purchase;
+import com.example.daitso.purchase.model.PageResult;
 import com.example.daitso.purchase.model.PurchaseList;
 import com.example.daitso.purchase.service.IPurchaseService;
 
@@ -99,39 +98,6 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
-	
-	@GetMapping("/purchase")
-	public String selectPurchaseList(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
-			  @RequestParam(name = "page", defaultValue = "1") int page,
-			  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
-		
-	    int offset = (page - 1) * pageSize;	   
-	    
-	    // 초기값 설정
-	    if (commonCodeId == null) {
-	    	commonCodeId = 0; 
-	    }
-		List<PurchaseList> purchaselist = adminService.selectPurchaseList(commonCodeId, offset, pageSize);
-	    model.addAttribute("purchaselist", purchaselist);
-
-	    // 페이징 정보 전달
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-
-	    // 총 상품 개수
-	    int totalCount = adminService.selectCountPurchaseList(commonCodeId);
-	    
-	    // 총 페이지 수
-	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-	    
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("totalPages", totalPages);
-
-	    return "admin/purchase/admin-purchase";
-	}
-	
-	
-	
 	// 두 번째 카테고리 불러오기
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
@@ -150,7 +116,7 @@ public class AdminController {
 		return thirdCategories;
 	}
 	
-	// 상품 조회하기(그룹별)
+	// 상품 조회하기(그룹ID별)
 	@GetMapping("/search/{productGroupId}")
 	@ResponseBody
 	public List<ProductCheck> product (@PathVariable int productGroupId, Model model) {
@@ -203,18 +169,18 @@ public class AdminController {
 	    return "admin/product";
 	}
 	
-	//기존 상품 등록하기
+	//  상품 등록하기
 //	@PostMapping("/product")
-//	public String registerExistingProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-//		adminService.registerExistingProducts(product, files);
+//	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+//		adminService.registerProducts(product, files);
 //		model.addAttribute("message","상품이 등록되었습니다.");
 //		model.addAttribute("searchUrl","/admin/product");
 //		return "admin/product/message";
 //	}
 		
-	// 기존 상품 등록하기
+	// 상품 등록하기
 	@PostMapping("/product")
-	public String registerExistingProducts(ProductCheck product, Model model) {
+	public String registerProducts(ProductCheck product, Model model) {
 		// 입력 필드가 비어 있으면 '-'으로 대체
 	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
 	        product.setProductOptionFirst("-");
@@ -225,7 +191,7 @@ public class AdminController {
 	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
 	        product.setProductOptionThird("-");
 	    }
-		adminService.registerExistingProducts(product);
+		adminService.registerProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/product/message";
@@ -240,16 +206,66 @@ public class AdminController {
         return productList;
     }
     
+    
+    // 주문 내역 조회하기(배송상태별), admin-purchase.html 전체 조회
+    @GetMapping("/purchase")
+	public String selectPurchaseList(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
+			  @RequestParam(name = "page", defaultValue = "1") int page,
+			  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+		
+	    int offset = (page - 1) * pageSize;	   
+	    
+	    // 초기값 설정
+	    if (commonCodeId == null) {
+	    	commonCodeId = 0; 
+	    }
+		List<PurchaseList> purchaselist = adminService.selectPurchaseList(commonCodeId, offset, pageSize);
+	    model.addAttribute("purchaselist", purchaselist);
 
-//	@GetMapping("/purchase/{commonCodeId}")
-//	public String selectPurchaseList(@PathVariable int commonCodeId, Model model) {
-//		List<PurchaseList> purchases = adminService.selectPurchaseList(commonCodeId);
-//		model.addAttribute(purchases);
-//	    return "admin/purchase/admin-purchase";
-//	}
+	    // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountPurchaseList(commonCodeId);
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+
+	    return "admin/purchase/admin-purchase";
+	}
+
     
+	// 주문 내역 조회하기(배송상태별), 데이터 불러오기 위한(purchaselist, 페이지 정보) 
+    @GetMapping("/purchases")
+    @ResponseBody
+    public PageResult<PurchaseList> selectPurchaseLists(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
+              @RequestParam(name = "page", defaultValue = "1") int page,
+              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+        
+        int offset = (page - 1) * pageSize;       
+        
+        if (commonCodeId == null) {
+            commonCodeId = 0; 
+        }
+
+        List<PurchaseList> purchaselist = adminService.selectPurchaseList(commonCodeId, offset, pageSize);
+        
+        int totalCount = adminService.selectCountPurchaseList(commonCodeId);
+
+        PageResult<PurchaseList> result = new PageResult<>();
+        result.setData(purchaselist);
+        result.setCurrentPage(page);
+        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize));
+
+        return result;
+    }
+
     
-	
+    // 배송 상태 변경하기
     @PostMapping("/purchase/change-status")
     public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
@@ -257,14 +273,39 @@ public class AdminController {
     }
 	 
     
-	// 상품명으로 상품 검색하기
+    // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
+//    @GetMapping("/search-purchase")
+//    @ResponseBody
+//    public List<PurchaseList> searchPurchaseInfo(@RequestParam("searchText") String searchText,
+//                                                @RequestParam("searchOption") String searchOption) {
+//        List<PurchaseList> purchaseInfo = adminService.searchPurchaseInfo(searchText, searchOption);
+//        return purchaseInfo;
+//    }
+    
+    // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
     @ResponseBody
-    public List<PurchaseList> searchPurchaseInfo(@RequestParam("searchText") String searchText) {
-    	List<PurchaseList> purchaseInfo = adminService.searchPurchaseInfo(searchText);
-        return purchaseInfo;
+    public PageResult<PurchaseList> searchPurchaseInfo(@RequestParam("searchText") String searchText,
+                                                      @RequestParam("searchOption") String searchOption,
+                                                      @RequestParam(name = "page", defaultValue = "1") int page,
+                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        int offset = (page - 1) * pageSize;
+
+        List<PurchaseList> purchaseInfo = adminService.searchPurchaseInfo(searchText, searchOption, offset, pageSize);
+        
+        // 총 개수 조회하기
+        int totalCount = adminService.selectCountPurchaseInfo(searchText, searchOption);
+
+        PageResult<PurchaseList> result = new PageResult<>();
+        result.setData(purchaseInfo);
+        result.setCurrentPage(page);
+        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize));
+
+        return result;
     }
-	
+
+    
+    
 	
 	//카테고리 수정하기
 	@GetMapping("/category/update")
