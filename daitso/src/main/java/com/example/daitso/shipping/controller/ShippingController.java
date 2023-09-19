@@ -74,7 +74,7 @@ public class ShippingController {
 	// 배송지 삭제
 	@PostMapping("/{customerId}/delete/{shippingId}")
 	public String deleteShipping(@PathVariable int shippingId, @PathVariable int customerId) {
-		shippingService.deleteShipping(shippingId);
+		shippingService.deleteShipping(shippingId,customerId);
 		return "redirect:/shipping/" + customerId;
 	}
 	

@@ -222,9 +222,9 @@
 	</div>
 </body>
 <script type="text/javascript" th:inline="javascript">	
-
-	console.log(JSON.parse(localStorage.getItem('couponApplyList')));
-
+	
+    const purchaseClassification = [[${purchaseClassification}]];
+    const cartList = [[${cartList}]];
 	const cartDiscountTotalPrice = document.getElementById("cart-discount-total-price");
 	
 	function resetCartDiscountTotalPrice() {
@@ -505,8 +505,13 @@
 		if(cartIdList.length == 0) {
 			alert("상품을 선택한 후 쿠폰조회 및 적용을 해주세요.");
 		} else {
-			window.open( window.location.origin + '/cart/coupon/' + customerId, '쿠폰 조회 및 적용', 'width=870px,height=600px,scrollbars=yes');
-			cartIdList = [];
+			if(purchaseClassification == 'cart' || purchaseClassification == null){
+				window.open( window.location.origin + '/cart/coupon/' + customerId, '쿠폰 조회 및 적용', 'width=870px,height=600px,scrollbars=yes');
+				cartIdList = [];	
+			} else {
+				window.open( window.location.origin + '/cart/coupon/' + customerId + '/' + cartList[0].cartId, '쿠폰 조회 및 적용', 'width=870px,height=600px,scrollbars=yes');
+				cartIdList = [];
+			}
 		}
 	}
 	
@@ -544,11 +549,14 @@
 				falseCount += 1;
 			}
 		} 
-		
 		 if(falseCount == Object.keys(checkStatusList).length){
 			alert("구매하실 상품을 선택해주세요.")
 		} else {
-			window.location.href = window.location.origin + '/purchase';
+			if(purchaseClassification == 'cart' || purchaseClassification == null) {
+				window.location.href = window.location.origin + '/purchase/0';	
+			} else {
+				window.location.href = window.location.origin + '/purchase/' + cartList[0].cartId;
+			}
 		} 
 	}
 

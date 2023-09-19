@@ -22,5 +22,5 @@ public interface IShippingService {
 	void updateShipping(ShippingAdd shippingUpdate, int shippingId, int customerId);
 	
 	// 배송지 삭제
-	void deleteShipping(int shippingId);
+	void deleteShipping(int shippingId, int customerId);
 }

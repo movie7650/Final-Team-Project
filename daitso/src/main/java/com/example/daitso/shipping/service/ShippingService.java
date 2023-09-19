@@ -42,7 +42,7 @@ public class ShippingService implements IShippingService {
 
 	// 배송지 삭제
 	@Override
-	public void deleteShipping(int shippingId) {
-		shippingRepository.deleteShipping(shippingId);
+	public void deleteShipping(int shippingId, int customerId) {
+		shippingRepository.deleteShipping(shippingId, customerId);
 	}
 }
