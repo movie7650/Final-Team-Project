@@ -30,6 +30,7 @@
 					<div class="purchase-img-001">이미지</div>
 					
 					<div class="purchase-product-inform">
+						<div class="purchase-number" th:text="|주문번호: ${purchase.purchaseNum}|">주문번호</div>
 						<div class="purchase-inform-001" th:text="|상품명: ${purchase.productNm}|" >ProductName</div>
 						<div class="purchase-count" th:text="|수량: ${purchase.purchaseCount}개|">구매수량</div>
 						<div class="purchase-product-cost" th:text="|상품가격: ${purchase.purchasePrice}원|"></div>
@@ -39,7 +40,7 @@
 				
 				
 				<div class="detail-button-container">
-					<div class="detail-button"><a th:href="@{/mypage/mydetailorder}">주문상세보기</a></div>
+					<div class="detail-button"><a th:href="@{/mypage/mydetailorder?purchaseNum=__${purchase.purchaseNum}__}">주문상세보기</a></div>
 					<div class="detail-button"><a th:href="@{/mypage/review}">리뷰남기기</a></div>
 				</div><!-- shipping-button-container -->	
 			</div><!-- order-list-container -->

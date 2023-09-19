@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.purchase.repository.IPurchaseRepository">
+<!-- 주문목록조회  -->
 <select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
 	SELECT purchase_count					AS	"purchaseCount",
 		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
@@ -17,6 +18,7 @@
   ORDER BY purchase_id DESC
 </select>
 
+<!--배송중 갯수세기  -->
 <select id="selectShipping" parameterType="int" resultType="int">
 	SELECT COUNT(pur.purchase_dv) as "shippingCount"
 	  FROM purchase pur
@@ -24,6 +26,7 @@
 	   AND pur.customer_id=#{customerId}
 </select>
 
+<!--배송완료 갯수세기  -->
 <select id="selectShippingComplete" parameterType="int" resultType="int">
 		SELECT COUNT(pur.purchase_dv) as "shippingCompleteCount"
 	  FROM purchase pur
@@ -31,6 +34,27 @@
 	   AND pur.customer_id=#{customerId}
 </select>
 
+<!-- 주문상세조회 -->
+<select id="selectDetailPurchase" resultType="com.example.daitso.purchase.model.PurchaseDetailCheck">
+	SELECT p.product_nm 							as "productNm",
+		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
+           pur.purchase_num 						as "purchaseNum",
+           pur.purchase_count 						as "purchaseCount",
+		   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+           sh.shipping_receiver_nm 					as "shippingReceiverNm",
+           sh.shipping_receiver_telno 				as "shippingReceiverTelno",
+           sh.shipping_road_nm_addr 				as "shippingRoadNmAddr",
+           sh.shipping_daddr            			as "shippingDaddr",
+           sh.shipping_dmnd             			as "shippingDmnd",
+           pur.create_dt                       		as "createDt",
+   		   cc.common_code_nm     					as "purchaseDv"
+           
+	  FROM purchase pur , product p, shipping sh, common_code cc
+     WHERE pur.customer_id = #{customerId} and pur.purchase_num = #{purchaseNum}
+       AND pur.product_id = p.product_id 
+       AND pur.shipping_id = sh.shipping_id
+       AND pur.purchase_dv = cc.common_code_id
+</select>
 
 
 	<!-- 
