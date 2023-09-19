@@ -7,6 +7,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class MypageReviewCheck {
+	private int reviewId;
 	private int customerId;
 	private int productId;
 	private String productNm;
