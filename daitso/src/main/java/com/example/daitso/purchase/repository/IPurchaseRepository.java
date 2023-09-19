@@ -8,17 +8,22 @@ import org.springframework.stereotype.Repository;
 
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
+import com.example.daitso.purchase.model.PurchaseInsert;
 import com.example.daitso.purchase.model.PurchaseList;
 
 @Repository
 @Mapper
 public interface IPurchaseRepository {
+	
 	//구매하기 
-	void insertPurchase(Purchase purchase);
+	void insertPurchase(PurchaseInsert purchaseInsert);
+	
 	//전체주문상품가져오기
 	List<PurchaseCheck> selectAllOrderProduct(int customerId);
+	
 	//전체주문상품이름가져오기
 	List<PurchaseCheck> selectAllProductNm(int customerId);
+	
 	//주문취소 
 	void canclePurchase(Purchase purchase);
 	

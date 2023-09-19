@@ -13,7 +13,7 @@
 			<div class="purchase-success-date-num">
 				<span>주문일 <span>2023-09-15</span></span>
 				<span style="margin:0 10px 0 10px;">|</span>
-				<span>주문번호 <span>2023091510590100000009</span></span>
+				<span>주문번호 <span th:text="${purchaseSuccess.purchaseNum}">2023091510590100000009</span></span>
 			</div>
 			<div style="margin-top:100px; display: flex; justify-content: center;">
 				<div class="purchase-success-out"><a th:href="@{/}" style="color:white; text-decoration: none;">계속 쇼핑하기</a></div>
@@ -25,19 +25,19 @@
 				<div class="purchase-success-info-small-box">
 					<div style="display: flex;">
 						<div>이름</div>
-						<div>최준원</div>
+						<div th:text="${purchaseSuccess.shippingReceiverNm}">최준원</div>
 					</div>
 					<div style="display: flex;">
 						<div>연락처</div>
-						<div>010-1234-5678</div>
+						<div th:text="${purchaseSuccess.shippingReceiverTelno}">010-1234-5678</div>
 					</div>
 					<div style="display: flex;">
 						<div>배송주소</div>
-						<div>서울</div>
+						<div th:text="${purchaseSuccess.shippingRoadNmAddr} + ' ' + ${purchaseSuccess.shippingDaddr}">서울</div>
 					</div>
 					<div style="display: flex;">
 						<div>배송요청사항</div>
-						<div>문 앞</div>
+						<div th:text="${purchaseSuccess.shippingDmnd}">문 앞</div>
 					</div>
 					<div class="purchase-success-line" style="background-color: transparent;"></div>
 				</div>
@@ -47,11 +47,11 @@
 				<div class="purchase-success-info-small-box">
 					<div style="display: flex;">
 						<div>주문금액</div>
-						<div>최준원</div>
+						<div th:text="${purchaseSuccess.totalProductPrice}">최준원</div>
 					</div>
 					<div style="display: flex;">
 						<div>쿠폰할인</div>
-						<div>010-1234-5678</div>
+						<div th:text="${purchaseSuccess.discountPrice}">010-1234-5678</div>
 					</div>
 					<div style="display: flex;">
 						<div>배송비</div>
@@ -60,7 +60,7 @@
 					<div class="purchase-success-line"></div>
 					<div style="display: flex;">
 						<div>총 결제금액</div>
-						<div>문 앞</div>
+						<div th:text="${purchaseSuccess.totalCost}">문 앞</div>
 					</div>
 				</div>
 			</div>
@@ -73,31 +73,55 @@
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
 <script type="text/javascript" th:inline="javascript">
-	const secretKey = "test_sk_PBal2vxj81PJkWDN1bJr5RQgOAND";
-	const basickToken = Buffer.from(secretKey + ":").toString("base64");
+	var cartIdList = [[${cartIdList}]];
+	var purchaseSuccess = [[${purchaseSuccess}]];
+	var couponCartIdList = {};
+	if(sessionStorage.getItem("couponCartIdList")){
+		couponCartIdList = JSON.parse(sessionStorage.getItem("couponCartIdList"));
+	} else {
+		couponCartIdList = {}
+	} 
 	
-	fetch('https://api.tosspayments.com/v1/payments/confirm', {
-		method: 'post',
-		body: JSON.stringify({
-			
-		})
+	cartIdList.forEach((item) => {
+		if(couponCartIdList[item]){
+			fetch( window.location.origin + "/purchase/insert" , {
+			    method: "POST",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        cartId: item,
+			        customerCouponId: couponCartIdList[item],
+			        customerId: purchaseSuccess.customerId,
+			        shippingId: purchaseSuccess.shippingId,
+			        purchaseNum: purchaseSuccess.purchaseNum,
+			        totalCost: parseInt(purchaseSuccess.totalCost.replace(/,/g , '')),
+			        orderRequest: purchaseSuccess.shippingDmnd
+			    }),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+			});	  
+		} else {
+			fetch( window.location.origin + "/purchase/insert" , {
+			    method: "POST",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        cartId: item,
+			        customerCouponId: '0',
+			        customerId: purchaseSuccess.customerId,
+			        shippingId: purchaseSuccess.shippingId,
+			        purchaseNum: purchaseSuccess.purchaseNum,
+			        totalCost: parseInt(purchaseSuccess.totalCost.replace(/,/g , '')),
+			        orderRequest: purchaseSuccess.shippingDmnd
+			    }),
+			})
+			.then((res) => res.json())
+			.then((data) => {
+			});	 
+		}	
 	})
-		.then((res) => {
-    	return res.json(); 
-	})
-	.then((json) => {
-		var orderId = json.purchaseNum;
-		paymentWidget.requestPayment({
-	        orderId: orderId,        
-	        orderName: products[0].productNm + " 외 " + products.length +"건",                 
-	        successUrl: window.location.origin + "/purchase/success",  
-	        failUrl: window.location.origin + "/purchase",     
-	        customerEmail: email,
-	        customerName: name
-	      })
-	})
-	.catch(function(error) {
-	      console.log(error);
-	});
 </script>
 </html>
