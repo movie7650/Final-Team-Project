@@ -35,8 +35,6 @@ public interface ICartService {
  	
  	// 바로 구매하기 전 장바구니 업데이트
  	void directPurchase(int productId, int customerId, int productCnt);
- 	
- 	// customer_coupon_id 업데이트
- 	void updateCustomerCouponId(int cartId, int customerCouponId);
+ 
 }
 

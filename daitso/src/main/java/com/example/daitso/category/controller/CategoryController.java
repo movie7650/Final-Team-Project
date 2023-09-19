@@ -49,8 +49,8 @@ public class CategoryController {
 	}
 	
 	// category별 상품 조회 2~페이지
-	@GetMapping("/{categoryId}/{page}")
-	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model, String sort) {
+	@GetMapping("/{categoryId}/{page}/{sort}")
+	public String productList(@PathVariable int categoryId, @PathVariable int page ,HttpSession session ,Model model, @PathVariable String sort) {
 		session.setAttribute("page", page);
 		model.addAttribute("categoryId", categoryId);
 		List<Product> list = productService.selectProductList(categoryId, page, sort);
@@ -73,6 +73,7 @@ public class CategoryController {
 			endPage = totalPage;
 		}
 		
+		model.addAttribute("sort", sort);
 		model.addAttribute("totalPageCount", totalPage);
 		model.addAttribute("nowPage", page);
 		model.addAttribute("totalPageBlock", totalPageBlock);

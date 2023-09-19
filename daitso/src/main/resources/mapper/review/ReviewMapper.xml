@@ -14,7 +14,6 @@
 		review_content AS reviewContent,
 		review_star_point * 20 AS reviewStarPoint,
 		create_dt as createDt,
-		review_heart_count AS reviewHeartCount,
 		review_image_first AS reviewImageFirst,
 		review_image_second AS reviewImageSecond,
 		review_image_third AS reviewImageThird,
@@ -22,7 +21,7 @@
            			SELECT r.review_id, r.product_id, p.product_nm,
 					p.product_option_first || ' ' || p.product_option_second || ' ' || p.product_option_third AS options,
 					c.customer_nm, r.review_title, r.review_content, r.review_star_point, r.create_dt,
-					r.review_heart_count, r.review_image_first, r.review_image_second, r.review_image_third, rownum as rnum
+					r.review_image_first, r.review_image_second, r.review_image_third, rownum as rnum
 					FROM (
 						SELECT * FROM review ORDER BY review_star_point desc
 						  ) r
@@ -46,5 +45,20 @@
 	FROM review r
 	LEFT JOIN product p ON r.product_id = p.product_id
 	WHERE p.product_group_id = #{groupId} AND r.status = 'Y' GROUP BY p.product_group_id
+</select>
+
+<!-- 마이페이지 내가 쓴 리뷰 조회  -->
+<select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
+	SELECT re.review_title as "reviewTitle",
+              p.product_nm as "productNm",
+              re.review_star_point as "reviewStarPoint",
+              re.review_content as "reviewContent",
+              re.review_image_first as "reviewImageFirst",
+              re.review_image_second as "reviewImageSecond",
+              re.review_image_third   as "reviewImageThird",
+              re.create_dt              as "createDt"
+	   FROM   review re, product p
+        WHERE re.customer_id=#{customerId} 
+ 	     AND  re.product_id = p.product_id
 </select>
 </mapper>

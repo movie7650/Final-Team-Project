@@ -517,15 +517,15 @@
 			
 			sessionStorage.setItem('couponTotalApplyPrice', couponTotalApplyPrice);
 			sessionStorage.setItem('couponApplyList', localStorage.getItem('couponApplyList'));
-			sessionStorage.setItem('couponApplyPriceList', localStorage.getItem('couponApplyPriceList'));
+			sessionStorage.setItem('couponCartIdList', localStorage.getItem('couponCartIdList'));
 			
 			localStorage.removeItem('couponTotalApplyPrice');
 			localStorage.removeItem('couponApplyList');
-			localStorage.removeItem('couponApplyPriceList');
+			localStorage.removeItem('couponCartIdList');
 		} else {
 			sessionStorage.removeItem('couponTotalApplyPrice');
 			sessionStorage.removeItem('couponApplyList');
-			sessionStorage.removeItem('couponApplyPriceList');
+			sessionStorage.removeItem('couponCartIdList');
 			couponTotalApplyPrice = '0';
 		}
 		

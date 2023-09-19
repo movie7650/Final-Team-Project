@@ -63,5 +63,18 @@
 			        START WITH category_id = #{categoryId} 
 	          CONNECT BY PRIOR category_pr_id = category_id   
 		    )	
-	</select>  
+	</select>
+	
+	<!-- 
+		기능: 구매 성공시 사용했던 쿠폰 coupon_use_dv 상태바꾸기
+		담당자: 최준원 
+	-->
+	<update id="updateCustomerCouponStatusPurchaseSuccess">
+		UPDATE customer_coupon 
+   		   SET coupon_use_dv = 202,
+   		   	   coupon_use_dt = SYSDATE,
+       		   modifier = #{customerId},
+               modify_dt = SYSTIMESTAMP
+         WHERE customer_coupon_id = #{customerCouponId}
+	</update>  
 </mapper>

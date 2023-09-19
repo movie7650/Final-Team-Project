@@ -492,7 +492,7 @@
     WHERE discount_rate != 0
 </select>
 
-<select id="searchPopularProduct" resultType="map">
+<select id="searchSpecialProduct" resultType="map">
 	SELECT product_id as productId 
 	FROM (	
     	SELECT product_id
@@ -506,7 +506,12 @@
 			ON  p.product_group_id = s.product_group_id
 			)
     	WHERE snum = 1 
-    	ORDER BY pSum DESC
+    	<if test='selector.equals("popular")'>
+	    	ORDER BY pSum DESC   	
+    	</if>
+    	<if test='selector.equals("sale")'>
+	    	ORDER BY pSum    	
+    	</if>
     	  ) 
    	WHERE rownum between 1 and 10
 </select>
@@ -519,5 +524,19 @@
 	</foreach>
 	SELECT * FROM dual
 </insert>
+
+<update id="updateSaleProducts">
+	DECLARE 
+    
+    BEGIN
+		
+		UPDATE product SET discount_rate = 0;
+		       
+		<foreach collection="list" item="item" index="index" separator=" ">
+			UPDATE product SET discount_rate = 10 WHERE product_id = #{item.PRODUCTID} ;
+		</foreach>
+
+    END;
+</update>
 
 </mapper>

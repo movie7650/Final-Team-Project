@@ -242,16 +242,19 @@
 		shippingId = [[${customerInfo.shippingId}]];
 	}
 	
+	// 결제
 	const totalPrice = document.getElementById("purchase-total-price").innerText;
 	const orderRequest = document.getElementById("purchase-shipping-dmnd").innerText;
+	const discountPrice = document.getElementById("purchase-total-discount-price").innerText;
+	const totalProductPrice = document.getElementById("purchase-total-product-price").innerText;
 	
-	// 결제
+	
 	const clientKey = "test_ck_Z61JOxRQVE1EWP6AkQwVW0X9bAqw";
 	const customerKey = customerId;
 	
 	const paymentWidget = PaymentWidget(clientKey, customerKey); 
 	
-	paymentWidget.renderPaymentMethods("#payment-method", /* parseInt(totalPrice.replace(/,/g , '')).toString() */ "100");
+	paymentWidget.renderPaymentMethods("#payment-method", parseInt(totalPrice.replace(/,/g , '')).toString());
 	
 	function purchase(email, name, products) {
 		
@@ -270,8 +273,9 @@
     		paymentWidget.requestPayment({
     	        orderId: orderId,        
     	        orderName: products[0].productNm + " 외 " + products.length +"건",                 
-    	        successUrl: window.location.origin + "/purchase/success?shippingId=" + shippingId + "&" 
-    	        		+ "orderRequest=" + orderRequest + "&" + cartIdListUrl.substring(0,cartIdListUrl.length-1) ,  
+    	        successUrl: window.location.origin + "/purchase/success?shippingId=" + shippingId +  "&" 
+    	        		+ cartIdListUrl.substring(0,cartIdListUrl.length-1) + "&" 
+    	        		+ "totalProductPrice=" + totalProductPrice + "&" + "discountPrice=" + discountPrice,  
     	        failUrl: window.location.origin + "/purchase",     
     	        customerEmail: email,
     	        customerName: name
