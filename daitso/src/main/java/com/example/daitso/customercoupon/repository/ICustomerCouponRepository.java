@@ -25,16 +25,16 @@ public interface ICustomerCouponRepository {
 
 	List<SelectCustomerCoupon> selectBanCoupon();
 	
-
 	//사용자 쿠폰등록
 	void insertCustomerCoupon();
-
-
 
 	// 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
 	void checkCouponEprDt();
 	
 	// 적용가능한 쿠폰 조회
 	List<CartCouponApply> getCouponsByCustomerId(@Param("categoryId") int categoryId,@Param("customerId") int customerId);
+	
+	// 구매 성공시 사용했던 쿠폰 coupon_use_dv 상태바꾸기
+	void updateCustomerCouponStatusPurchaseSuccess(@Param("customerId") int customerId,@Param("customerCouponId") int customerCouponId);
 
 }

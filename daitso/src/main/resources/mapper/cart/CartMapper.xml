@@ -22,12 +22,8 @@
 			   c.checked AS "checked",
 			   p.product_nm AS "productNm",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productRealPrice",
-			   CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','')
-                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') 
-               END AS "productPrice",
-               CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price * c.cart_count)), '(\d{3})','\1,')), '^,','')
-                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') 
-               END AS "productTotalPrice",
+               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
+               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "productTotalPrice",
 			   p.product_stock AS "productStock",
 			   p.product_option_first AS "productOptionFirst",
 			   p.product_option_second AS "productOptionSecond",
@@ -109,14 +105,10 @@
 		SELECT p.product_id AS "productId",
        		   p.product_image_first AS "productImageFirst",
        		   p.product_nm AS "productNm",
-               CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','')
-                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') 
-               END AS "productPrice",
+               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
                c.cart_id AS "cartId",
                c.cart_count AS "cartCount",
-			   CASE WHEN p.discount_rate = 0 THEN REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price * c.cart_count)), '(\d{3})','\1,')), '^,','')
-                    ELSE REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') 
-               END AS "cartPrice",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
 			   p.category_id AS "categoryId",
        		   p.product_option_first AS "productOptionFirst",
        		   p.product_option_second AS "productOptionSecond",
@@ -155,9 +147,7 @@
 			   p.product_option_third AS "productOptionThird",
 			   c.cart_id AS "cartId",
 			   c.cart_count AS "cartCount",
-			   CASE WHEN p.discount_rate = 0 THEN p.product_price * c.cart_count
-                    ELSE (p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count
-               END AS "cartPrice"
+			   (p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count AS "cartPrice"
 		  FROM cart c,
 			   product p
 		 WHERE c.product_id = p.product_id
@@ -178,8 +168,7 @@
 	 	LEFT JOIN product p ON c.product_id = p.product_id
 	 	WHERE customer_id = #{customerId} and c.product_id = #{productId} and c.status = 'Y'
 	 </select>
-	 
-	 
+
 	 <!-- 
 		기능1: 장바구니에 담겨있는 상품 담기(개수만 추가)
 		기능2: 바로 구매하기 전 장바구니 업데이트
@@ -189,15 +178,17 @@
 		UPDATE cart SET cart_count = #{productCnt} 
 		WHERE customer_id = #{customerId} and product_id = #{productId}
 	</update>
-
-	 <!-- 
-		기능: customer_coupon_id 업데이트
+	
+	<!-- 
+		기능:  구매 성공시 장바구니 상태 'N' 변경
 		담당자: 최준원
 	 -->
-	 <update id="updateCustomerCouponId">
-		UPDATE cart
-	   	   SET customer_coupon_id = #{customerCouponId}
-	 	 WHERE cart_id = #{cartId}
+	<update id="updateCartStatusPurchaseSuccess">
+		UPDATE cart 
+   		   SET status = 'N',
+      		   modifier = #{customerId},
+       		   modify_dt = SYSTIMESTAMP
+ 		 WHERE cart_id = #{cartId}
 	</update>
-	 
+
 </mapper>
