@@ -160,6 +160,7 @@
 	                     AND #{offset} + #{pageSize}
 	</select>
 
+
     <!-- 
 		기능: 카테고리별 상품 개수 조회하기
 		담당자: 이세인
@@ -206,8 +207,9 @@
 				   </choose>
     </select>
 
+
 	<!-- 
-		기능: 상품 조회하기(그룹별)
+		기능: 상품 조회하기(그룹ID별)
 		담당자: 이세인
 	-->
 	<select id="selectProductsByGroupId" resultType="com.example.daitso.product.model.ProductCheck">
@@ -229,6 +231,7 @@
 	 ORDER BY  p.product_price
 	</select>
 	
+	
 	<!-- 
 		기능: 상품 삭제하기(그룹)
 		담당자: 이세인
@@ -238,6 +241,7 @@
 	      FROM product 
 	     WHERE product_group_id = #{productGroupId}
 	</delete>
+
 
 	<!-- 
 		기능: 상품ID로 상품 정보 갖고오기
@@ -257,6 +261,7 @@
 	     WHERE product_id = #{productId}
 	</select>
 
+
 	<!-- 
 		기능: 상품 수정하기
 		담당자: 이세인
@@ -271,6 +276,7 @@
 		 WHERE product_id = #{productId}
 	</update>
 
+
 	<!-- 
 		기능: 상품 삭제하기
 		담당자: 이세인
@@ -281,11 +287,12 @@
 	     WHERE product_id = #{productId}
 	</delete>
 
+
 	<!-- 
-		기능: 기존 상품 등록하기
+		기능: 상품 등록하기
 		담당자: 이세인
 	-->
-	<insert id="registerExistingProducts" parameterType="com.example.daitso.product.model.ProductCheck">
+	<insert id="registerProducts" parameterType="com.example.daitso.product.model.ProductCheck">
 		DECLARE v_product_id NUMBER;
 		  BEGIN		  
 		 INSERT INTO product ( product_group_id,
@@ -319,17 +326,19 @@
     </insert>
 
 
-<!-- 상품명으로 그룹 상품 찾기 -->
- <select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
-        SELECT DISTINCT
-        p.product_group_id AS "productGroupId",
-        c.category_nm AS "categoryNm",
-        p.product_nm AS "productNm",
-        p.category_id AS "categoryId"
-        FROM product p
-        JOIN category c ON p.category_id = c.category_id
-        WHERE INSTR(p.product_nm,#{searchText}) > 0
-</select>
+	<!-- 
+		기능: 상품명으로 그룹 상품 찾기
+		담당자: 이세인
+	-->
+	<select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
+	    SELECT DISTINCT p.product_group_id   AS "productGroupId",
+		        	    c.category_nm        AS "categoryNm",
+		       			p.product_nm         AS "productNm",
+		        		p.category_id        AS "categoryId"
+		  FROM product p
+		  JOIN category c ON p.category_id = c.category_id
+		 WHERE INSTR(p.product_nm,#{searchText}) > 0
+	</select>
 
 
 

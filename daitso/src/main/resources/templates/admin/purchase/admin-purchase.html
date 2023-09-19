@@ -12,21 +12,20 @@
 	<div id="productTable">
 	<hr class="my-3">
 		<div class="col-sm-12"	style="display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
-			<a	th:href="@{/admin/purchase(page=${page}, pageSize=${pageSize}, commonCodeId=${401})}"
-				class="btn btn-default" style="border-color: #aac8b2;">입금/결제</a> 
-			<a th:href="@{/admin/purchase(page=${page}, pageSize=${pageSize}, commonCodeId=${402})}"
-				class="btn btn-default" style="border-color: #aac8b2;">배송중</a> 
-			<a th:href="@{/admin/purchase(page=${page}, pageSize=${pageSize}, commonCodeId=${403})}"
-				class="btn btn-default" style="border-color: #aac8b2;">배송완료</a>
+				<button type="button" onclick="loadData(401)" class="btn btn-default" style="border-color: #aac8b2;">입금/결제</button>
+				<button type="button" onclick="loadData(402)" class="btn btn-default" style="border-color: #aac8b2;">배송중</button>
+				<button type="button" onclick="loadData(403)" class="btn btn-default" style="border-color: #aac8b2;">배송완료</button>				
 		</div>
-		<div id="searchTextDiv" style="display:flex;justify-content: flex-end;padding-right: 15px; padding-bottom: 15px;">
-			<select>
-				<option>회원명</option>
-				<option>주문번호</option>
-			</select>
-			<input id="searchText" style="width:15%;" type="text"> 
-			<input type="button" class="btn-secondary" style="width:7%; background-color: #aac8b2" value="검색" onclick="searchList()"/>
+		
+		<div id="searchTextDiv" style="display:flex; justify-content:flex-end; padding-right:15px; padding-bottom:15px;">
+		    <select id="searchOption">
+		        <option value="customerNm">회원명</option>
+		        <option value="purchaseNum">주문번호</option>
+		    </select>
+		    <input id="searchText" style="width:15%;" type="text"> 
+		    <input type="button" class="btn btn-secondary" style="width:7%; background-color: #aac8b2; border-color: #aac8b2; color: #ffff; margin-left: 5px;" value="검색" onclick="searchList()"/>
 		</div>
+
 
 		<div style="height: 690px;">
 			<table class="table" style="text-align: center;">
@@ -39,7 +38,7 @@
 						<th>배송상태</th>
 					</tr>
 				</thead>
-				<tbody id="searchTable">		
+				<tbody id="purchaseTable">		
 					 <tr th:each="purchase : ${purchaselist}">
 					 	<td th:text="${purchase.rn}"></td>
 						<td th:text="${purchase.customerNm}"></td>
@@ -55,15 +54,14 @@
 									</select>
 							</form>
 						</td>
-					</tr>
-					 
+					</tr>				 
 				</tbody>
 			</table>
 		</div>
 		
 		<!-- 페이지 링크 표시 -->
 		<div th:if="${totalCount > 0}">
-			<ul class="pagination">
+			 <ul class="pagination" id="pagination">
 				<!-- 이전 페이지 -->
 				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
 					<!-- 이전 페이지로 이동하는 링크 -->
@@ -101,38 +99,118 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 	
-	function searchList() {
-	    var searchText = document.getElementById('searchText').value;
+	//배송 상태별 데이터 + 페이지
+	function loadData(commonCodeId, page) {
 	    $.ajax({
 	        type: "GET",
-	        url: "/admin/search-purchase",
-	        contentType: "application/json",
-	        data: { searchText: searchText },
-	        success: function (response) {
-	            $('#searchTable').empty();    	            
-	            if (response.length == 0) {
-	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
-	                $('#searchTable').append(noResultRow);
-	            } else {
-	                for (var i = 0; i < response.length; i++) {
-	                	
-	                    var addTableRow = "<tr>" +
-	                        "<td><input type='radio' onchange='getProductCheck(this)' name ='productCheck' value=" + response[i].productGroupId + " class ='productCheckbox' required></td>" +
-	                        "<td>" + response[i].productGroupId + "</td>" +
-	                        "<td id = categoryNm" + response[i].productGroupId +">" + response[i].categoryNm + "</td>" +
-	                        "<td id = productNm" + response[i].productGroupId +">" + response[i].productNm + "</td>" +
-	                        "<td id='categoryId" + response[i].productGroupId + "' style='display: none;'>" + response[i].categoryId + "</td>" +
-	                        "</tr>"
-	                        ;
+	        url: "/admin/purchases",
+	        data: { commonCodeId: commonCodeId, page: page }, 
+	        success: function (data) {
+	            var tableBody = $('#purchaseTable');
+	            tableBody.empty(); 
 
-	                    $('#searchTable').append(addTableRow);
+	            if (data.length === 0) {
+	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow);
+	            } else {
+	            	console.log(data);
+	                for (var i = 0; i < data.length; i++) {
+	                    var newRow = "<tr>" +
+	                        "<td>" + data[i].rn + "</td>" +
+	                        "<td>" + data[i].customerNm + "</td>" +
+	                        "<td>" + data[i].purchaseNum + "</td>" +
+	                        "<td>" + data[i].createDt + "</td>" +
+	                        "<td>" +
+	                        "<form action='/admin/purchase/change-status' method='post' style='display:flex; align-items: center; justify-content: space-evenly;'>" +
+	                        "<input type='hidden' name='purchaseId' value='" + data[i].purchaseId + "'>" +
+	                        "<select onchange='this.form.submit()' name='commonCodeId' class='form-select'>" +
+	                        "<option value='401' " + (data[i].commonCodeId === 401 ? 'selected' : '') + ">입금/결제</option>" +
+	                        "<option value='402' " + (data[i].commonCodeId === 402 ? 'selected' : '') + ">배송중</option>" +
+	                        "<option value='403' " + (data[i].commonCodeId === 403 ? 'selected' : '') + ">배송완료</option>" +
+	                        "</select>" +
+	                        "</form>" +
+	                        "</td>" +
+	                        "</tr>"; 
+	                      
+	                    tableBody.append(newRow);
 	                }
 	            }
-	            return;
+
+	            // 페이징 정보를 업데이트
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + i + ")'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
 	        }
 	    });
 	}
+
 	
+	//검색한 결과 데이터 + 페이지
+	function searchList() {
+	    var searchText = $('#searchText').val();
+	    var searchOption = $('#searchOption').val();
+
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/search-purchase",
+	        data: { searchText: searchText, searchOption: searchOption }, // 검색어와 검색 옵션을 서버에 전달
+	        success: function (data) {
+	        	var tableBody = $('#purchaseTable');
+	            tableBody.empty(); 
+
+	            if (data.length === 0) {
+	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow);
+	            } else {
+	            	console.log(data);
+	                for (var i = 0; i < data.length; i++) {
+	                    var newRow = "<tr>" +
+	                        "<td>" + data[i].rn + "</td>" +
+	                        "<td>" + data[i].customerNm + "</td>" +
+	                        "<td>" + data[i].purchaseNum + "</td>" +
+	                        "<td>" + data[i].createDt + "</td>" +
+	                        "<td>" +
+	                        "<form action='/admin/purchase/change-status' method='post' style='display:flex; align-items: center; justify-content: space-evenly;'>" +
+	                        "<input type='hidden' name='purchaseId' value='" + data[i].purchaseId + "'>" +
+	                        "<select onchange='this.form.submit()' name='commonCodeId' class='form-select'>" +
+	                        "<option value='401' " + (data[i].commonCodeId === 401 ? 'selected' : '') + ">입금/결제</option>" +
+	                        "<option value='402' " + (data[i].commonCodeId === 402 ? 'selected' : '') + ">배송중</option>" +
+	                        "<option value='403' " + (data[i].commonCodeId === 403 ? 'selected' : '') + ">배송완료</option>" +
+	                        "</select>" +
+	                        "</form>" +
+	                        "</td>" +
+	                        "</tr>"; 
+	                      
+	                    tableBody.append(newRow);
+	                }
+	            }
+
+	            // 페이징 정보
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+	        	
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
+	        }
+	    });
+	}	
+
+
 	</script>		
 		
 </body>
