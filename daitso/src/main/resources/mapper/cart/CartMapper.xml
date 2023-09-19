@@ -18,6 +18,7 @@
 	<select id="getCartByCustomerId" resultType="com.example.daitso.cart.model.CartCheck" parameterType="int">
 		SELECT c.cart_id AS "cartId",
 			   c.product_id AS "productId",
+			   p.product_group_id AS "productGroupId",
 			   c.cart_count AS "cartCount",
 			   c.checked AS "checked",
 			   p.product_nm AS "productNm",
@@ -135,6 +136,43 @@
      ORDER BY c.cart_id
 	</select>
 	
+	 <!-- 
+		기능: 쿠폰 적용 대상 상품들 조회(바로구매)
+		담당자: 최준원
+	-->
+	<select id="getCouponProductByCustomerIdAndCartId" resultType="com.example.daitso.cart.model.CartCoupon">
+		SELECT p.product_id AS "productId",
+       		   p.product_image_first AS "productImageFirst",
+       		   p.product_nm AS "productNm",
+               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
+               c.cart_id AS "cartId",
+               c.cart_count AS "cartCount",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
+			   p.category_id AS "categoryId",
+       		   p.product_option_first AS "productOptionFirst",
+       		   p.product_option_second AS "productOptionSecond",
+               p.product_option_third AS "productOptionThird",
+               (SELECT COUNT(*) 
+                  FROM coupon c, customer_coupon cc 
+                 WHERE c.coupon_id = cc.coupon_id
+                   AND cc.customer_id = #{customerId}
+                   AND cc.coupon_use_dv = 203
+                   AND c.category_id IN (
+														SELECT category_id 
+									  					  FROM category 
+						        					START WITH category_id = p.category_id 
+				          					  CONNECT BY PRIOR category_pr_id = category_id 
+										)) AS "couponUseCount"
+		 FROM  cart c,
+     		   product p,
+     		   category cg
+		WHERE  c.product_id = p.product_id
+		  AND  cg.category_id = p.category_id
+		  AND  c.customer_id = #{customerId}
+		  AND  c.checked = 'true'
+		  AND  c.cart_id = #{cartId}
+	</select>
+	
 	 <!--
 		기능: 구매하기 전 장바구니에 담긴 물건들 조회 
 		담당자: 최준원
@@ -154,7 +192,27 @@
 		   AND c.customer_id = #{customerId}
 		   AND c.checked = 'true'
 		   AND c.status = 'Y'
-	</select>    
+	</select>
+	
+	<!--
+		기능: 구매하기 전 장바구니에 담긴 물건들 조회(바로구매)
+		담당자: 최준원
+	-->
+	<select id="getCartProductBeforePurchaseByCustomerIdAndCartId" resultType="com.example.daitso.cart.model.CartPurchase">
+		SELECT p.product_id AS "productId",
+			   p.product_nm AS "productNm",
+			   p.product_option_first AS "productOptionFirst",
+			   p.product_option_second AS "productOptionSecond",
+			   p.product_option_third AS "productOptionThird",
+			   c.cart_id AS "cartId",
+			   c.cart_count AS "cartCount",
+			   (p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count AS "cartPrice"
+		  FROM cart c,
+			   product p
+		 WHERE c.product_id = p.product_id
+		   AND c.customer_id = #{customerId}
+		   AND c.cart_id = #{cartId}
+	</select>      
 	
 	<!-- 
 		기능: 장바구니 추가하기 전 기존에 추가된 상품 있는지 조회
@@ -175,8 +233,12 @@
 		담당자: 나현웅
 	 -->
 	<update id="updateCartCnt">
-		UPDATE cart SET cart_count = #{productCnt} 
-		WHERE customer_id = #{customerId} and product_id = #{productId}
+		UPDATE cart 
+		   SET cart_count = #{productCnt},
+		   	   modifier = #{customerId},
+       		   modify_dt = SYSTIMESTAMP 
+		 WHERE customer_id = #{customerId} 
+		   AND product_id = #{productId}
 	</update>
 	
 	<!-- 
@@ -191,4 +253,78 @@
  		 WHERE cart_id = #{cartId}
 	</update>
 
+	<!-- 
+		기능:  바로 구매하기
+		담당자: 최준원
+	 -->
+	<insert id="directPurchase">
+		DECLARE
+  			cart_cnt NUMBER;
+		BEGIN
+			SELECT count(*) 
+			  INTO cart_cnt 
+			  FROM cart
+			 WHERE customer_id = #{customerId}
+               AND product_id = #{productId}
+               AND status = 'Y';
+		IF 
+			cart_cnt = 1
+		THEN
+	    	UPDATE cart 
+               SET cart_count = #{productCnt},
+		   	       modifier = #{customerId},
+       		       modify_dt = SYSTIMESTAMP 
+		     WHERE customer_id = #{customerId} 
+		       AND product_id = #{productId};
+        ELSE
+            INSERT INTO cart (cart_id, product_id, customer_id, cart_count, create_dt, creator)
+                 VALUES (cart_seq.nextval, #{productId}, #{customerId}, #{productCnt}, SYSDATE, #{customerId});
+		END IF;
+		END;
+	</insert>
+	
+	<!-- 
+		기능: 바로 구매시 해당 상품 정보들 장바구니 화면에 띄우기
+		담당자: 최준원
+	-->
+	<select id="getCartByCartIdDirectPurchase" resultType="com.example.daitso.cart.model.CartCheck">
+		SELECT c.cart_id AS "cartId",
+		       c.product_id AS "productId",
+		       p.product_group_id AS "productGroupId",
+		       c.cart_count AS "cartCount",
+		       c.checked AS "checked",
+		       p.product_nm AS "productNm",
+		       REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productRealPrice",
+		       REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
+		       REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "productTotalPrice",
+		       p.product_stock AS "productStock",
+		       p.product_option_first AS "productOptionFirst",
+		       p.product_option_second AS "productOptionSecond",
+		       p.product_option_third AS "productOptionThird",
+		       p.product_image_first AS "productImageFirst",
+		       p.category_id AS "categoryId",
+		       a.category_pr_id AS "categoryPrId",
+		       p.status AS "productStatus",
+		       p.discount_rate AS "discountRate"
+		  FROM cart c, 
+		       product p,
+		       category a
+		 WHERE c.product_id = p.product_id
+		   AND a.category_id = p.category_id
+		   AND cart_id = ( SELECT cart_id 
+		                     FROM cart
+		                     WHERE create_dt = ( SELECT MAX( CASE WHEN modify_dt IS NULL 
+		                                                          THEN create_dt
+		                                                          ELSE GREATEST(create_dt, modify_dt) 
+		                                                          END )
+		                                           FROM cart
+		                                          WHERE status = 'Y' ) 
+		                        OR modify_dt = ( SELECT MAX( CASE WHEN modify_dt IS NULL 
+		                                                         THEN create_dt
+		                                                         ELSE GREATEST(create_dt, modify_dt) 
+		                                                         END )
+		                                          FROM cart
+		                                         WHERE status = 'Y' )
+		                       AND status = 'Y' )
+    </select>
 </mapper>

@@ -53,7 +53,9 @@
 
 <!-- 마이페이지 내가 쓴 리뷰 조회  -->
 <select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
-	SELECT re.review_title as "reviewTitle",
+SELECT  	  re.review_title as "reviewTitle",
+ 			  re.review_id 	  as "reviewId",
+              NVL(cnt,0) AS "reviewHeartCount", 
               p.product_nm as "productNm",
               re.review_star_point as "reviewStarPoint",
               re.review_content as "reviewContent",
@@ -61,9 +63,10 @@
               re.review_image_second as "reviewImageSecond",
               re.review_image_third   as "reviewImageThird",
               re.create_dt              as "createDt"
-	   FROM   review re, product p
-        WHERE re.customer_id=#{customerId} 
- 	     AND  re.product_id = p.product_id
+From   review re
+left join product p on re.product_id = p.product_id
+left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
+WHERE re.customer_id=#{customerId} 
 </select>
 
 <!-- 리뷰 좋아요 데이터 삽입 -->
@@ -75,4 +78,12 @@
 <select id="selectReviewHeartCount" resultType="int">
 	select count(*) from review_heart where review_id = #{reviewId}
 </select>
+
+<!-- 마이페이지 내가 쓴 리뷰 삭제하기 -->
+<delete id="deleteReview">
+	DELETE 
+	  FROM review  re
+	 WHERE re.customer_id=#{customerId} and re.review_id=#{reviewId};
+</delete>
+
 </mapper>

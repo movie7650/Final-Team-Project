@@ -87,6 +87,9 @@ public class MyPageController {
 			//상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount",shipCount01);
+			//입금/결제 갯수 
+			int payCoin = purchaseService.selectPayCoin(customerId);
+			model.addAttribute("payCoinCount",payCoin);
 			//상단에 잔여 포인트 출력 
 			String point = pointService.selectTotalPoint(customerId);
 			if(point == null) {
@@ -137,9 +140,8 @@ public class MyPageController {
 			
 			//주문한 상품 상세정보 출력 
 			List<PurchaseDetailCheck> purchaseCheckList = purchaseService.selectDetailPurchase(customerId, purchaseNum);
-			System.out.println("-------------------------------------");
-			System.out.println(purchaseCheckList.get(0).toString());
-			System.out.println("-------------------------------------");
+			List<PurchaseDetailCheck> purchaseShippingList = purchaseService.selectDetailPurchase(customerId, purchaseNum);
+			model.addAttribute("purchaseShipList",purchaseShippingList.get(0));
 			model.addAttribute("purchaseDetailList",purchaseCheckList);
 			
 		
@@ -273,7 +275,17 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 	}
-	
+	//내가쓴리뷰삭제 get
+	@RequestMapping(value="/deleteReview", method=RequestMethod.GET)
+	public String deleteReview() {
+		return "mypage/review";
+	}
+	//내가쓴 리뷰 post
+	@RequestMapping(value="/deleteReview", method=RequestMethod.POST)
+	public String deleteReview(int customerId, int reviewId) {
+		reviewService.deleteReview(customerId, reviewId);
+		return "redirect:/mypage/review";
+	}
 	
 	//마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
 	@RequestMapping("/mycoupon")

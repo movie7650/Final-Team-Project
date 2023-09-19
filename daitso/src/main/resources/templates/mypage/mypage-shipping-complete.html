@@ -21,6 +21,7 @@
 		<div class="ship-complete-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
 	</div><!-- order-category -->
 	<div style="margin-top:200px; padding-right:55px;">
+	<div style="width:800px;" th:if="${shippingCompleteCount} == 0">배송완료된상품이 없습니다</div>
 		<th:block th:each="purchase : ${purchaseList}">
 			<div th:if="${purchase.purchaseDv}==배송완료" class="order-list-container">
 				<div class="order-list-container-01">
@@ -30,6 +31,7 @@
 					<div class="purchase-img-001">이미지</div>
 					
 					<div class="purchase-product-inform">
+						
 						<div class="purchase-number" th:text="|주문번호: ${purchase.purchaseNum}|">주문번호</div>
 						<div class="purchase-inform-001" th:text="|상품명: ${purchase.productNm}|" >ProductName</div>
 						<div class="purchase-count" th:text="|수량: ${purchase.purchaseCount}개|">구매수량</div>

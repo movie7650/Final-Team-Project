@@ -240,6 +240,15 @@
 	    DELETE 
 	      FROM product 
 	     WHERE product_group_id = #{productGroupId}
+	     
+	<!--DELETE
+		FROM product p
+		WHERE EXISTS
+		(
+		    SELECT 1
+		    FROM special_product s
+		    WHERE p.product_group_id = s.product_id AND p.product_group_id = #{productGroupId}
+		) -->
 	</delete>
 
 
