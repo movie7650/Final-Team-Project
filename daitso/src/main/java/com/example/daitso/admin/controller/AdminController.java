@@ -142,11 +142,16 @@ public class AdminController {
 	// 상품 수정하기
 	@PostMapping("/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
+		 
+		// 각 필드를 Jsoup.clean으로 처리
+//	    String productCode = Jsoup.clean(product.getProductCode(), Whitelist.basic());
+//	    String productNm = Jsoup.clean(product.getProductNm(), Whitelist.basic());
+//	    String productOptionFirst = Jsoup.clean(product.getProductOptionFirst(), Whitelist.basic());
+//	    String productOptionSecond = Jsoup.clean(product.getProductOptionSecond(), Whitelist.basic());
+//	    String productOptionThird = Jsoup.clean(product.getProductOptionThird(), Whitelist.basic());
+	    
 		adminService.updateProduct(product);
 		model.addAttribute("product", product);
-//	    product.setProductOptionFirst(Jsoup.clean(product.getProductOptionFirst(), Safelist.basic()));
-//	    product.setProductOptionSecond(Jsoup.clean(product.getProductOptionSecond(), Safelist.basic()));
-//	    product.setProductOptionThird(Jsoup.clean(product.getProductOptionThird(), Safelist.basic()));
 	   	session.setAttribute("productCode", product.getProductCode());
 		session.setAttribute("productId", product.getProductId());
 		session.setAttribute("productNm", product.getProductNm());
@@ -270,17 +275,7 @@ public class AdminController {
     public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
         return "redirect:/admin/purchase";
-    }
-	 
-    
-    // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
-//    @GetMapping("/search-purchase")
-//    @ResponseBody
-//    public List<PurchaseList> searchPurchaseInfo(@RequestParam("searchText") String searchText,
-//                                                @RequestParam("searchOption") String searchOption) {
-//        List<PurchaseList> purchaseInfo = adminService.searchPurchaseInfo(searchText, searchOption);
-//        return purchaseInfo;
-//    }
+    }	 
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
@@ -304,6 +299,15 @@ public class AdminController {
         return result;
     }
 
+    
+    @GetMapping("/purchase-details/{purchaseNum}")
+    @ResponseBody
+    public List<PurchaseList> getPurchaseDetails(@PathVariable String purchaseNum) {
+    	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
+        return purchaselist;
+    }
+    
+    
     
     
 	

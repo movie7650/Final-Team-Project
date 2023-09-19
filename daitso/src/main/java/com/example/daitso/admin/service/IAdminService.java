@@ -3,6 +3,7 @@ package com.example.daitso.admin.service;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.product.model.Product;
@@ -54,7 +55,9 @@ public interface IAdminService {
 //	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption);
 	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption, int offset, int pageSize);
 	
-	//
+	// 검색 결과 개수 조회하기
 	int selectCountPurchaseInfo(String searchText, String searchOption);
+	
+	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 
 }
