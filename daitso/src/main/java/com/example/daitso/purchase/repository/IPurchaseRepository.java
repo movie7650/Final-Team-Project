@@ -36,6 +36,9 @@ public interface IPurchaseRepository {
 	//배송완료인 상품 갯수
 	int selectShippingComplete(int customerId);
 	
+	//입금/결제상품갯수
+	int selectPayCoin(int customerId);
+	
 	//상세주문조회
 	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId") int customerId, @Param("purchaseNum")String purchaseNum);
 

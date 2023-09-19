@@ -69,9 +69,17 @@
 	
 	<!--배송완료 갯수세기  -->
 	<select id="selectShippingComplete" parameterType="int" resultType="int">
-			SELECT COUNT(pur.purchase_dv) as "shippingCompleteCount"
+		SELECT COUNT(pur.purchase_dv) as "shippingCompleteCount"
 		  FROM purchase pur
 		 WHERE pur.purchase_dv=403 
+		   AND pur.customer_id=#{customerId}
+	</select>
+	
+	<!-- 입금/결제 갯수세기 -->
+	<select id="selectPayCoin" parameterType="int" resultType="int">
+		SELECT COUNT(pur.purchase_dv) as "payCoinCount"
+		  FROM purchase pur
+		 WHERE pur.purchase_dv=401 
 		   AND pur.customer_id=#{customerId}
 	</select>
 	
