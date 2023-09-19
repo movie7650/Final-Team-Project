@@ -22,7 +22,7 @@ public interface IReviewRepository {
 	
 	void updateReview(Review review);
 	
-	void deleteReview(Review review);
+	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
 	
 	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end);
 	
