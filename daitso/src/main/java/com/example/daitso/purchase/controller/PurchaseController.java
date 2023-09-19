@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,9 +68,12 @@ public class PurchaseController {
 	@Autowired
 	IPurchaseService purchaseService;
 	
-	// 구매 화면
-	@GetMapping("")
-	public String getPurchase(Model model, RedirectAttributes redirectAttributes) {
+	/*
+	 *  구매 화면 
+	 *  cartId -> 0이면 장바구니에서 구매, 0이 아니면 바로 구매
+	 */
+	@GetMapping("/{cartId}")
+	public String getPurchase(@PathVariable int cartId, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			// spring security -> 사용자 고유번호 받아오기
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -78,8 +82,13 @@ public class PurchaseController {
 			int customerId = Integer.valueOf(userDetails.getUsername());
 			model.addAttribute("customerId", customerId);
 			
-			List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerId(customerId);
-			model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
+			if(cartId == 0) {
+				List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerId(customerId);
+				model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
+			} else {
+				List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerIdAndCartId(customerId, cartId);
+				model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
+			}
 			
 			Tomorrow tommorrow = cartController.getTomorrowMonthAndDay();
 			model.addAttribute("tommorrow", tommorrow);

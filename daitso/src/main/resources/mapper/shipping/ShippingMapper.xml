@@ -55,7 +55,8 @@
 								    shipping_dmnd,
 								    shipping_road_nm_addr,
 								    shipping_daddr,
-								    shipping_dv	 ) 
+								    shipping_dv,
+								    creator	 ) 
 				 VALUES (  shipping_seq.nextval,
 						   #{customerId},
 						   #{shippingAdd.shippingReceiverNm},
@@ -63,7 +64,8 @@
 						   #{shippingAdd.shippingDmnd},
 						   #{shippingAdd.shippingRoadNmAddr},
 						   #{shippingAdd.shippingDaddr},
-						   #{shippingAdd.shippingDv}  );
+						   #{shippingAdd.shippingDv},
+						   #{customerId}  );
 			     
 			     SELECT shipping_dv 
 			       INTO shipping_dv_num 
@@ -79,7 +81,10 @@
 		IF
 			shipping_dv_num = 301	 
 		THEN 	     	     
-			     UPDATE shipping set shipping_dv = 302 
+			     UPDATE shipping 
+			        SET shipping_dv = 302,
+			        	modifier = #{customerId},
+			        	modify_dt = SYSTIMESTAMP 
                   WHERE shipping_dv = 301 
 					AND customer_id = #{customerId}
 					AND shipping_id != (  SELECT shipping_id 
@@ -106,7 +111,9 @@
 				   shipping_dmnd = #{shippingUpdate.shippingDmnd},
 				   shipping_road_nm_addr = #{shippingUpdate.shippingRoadNmAddr},
 				   shipping_daddr = #{shippingUpdate.shippingDaddr},
-				   shipping_dv = TO_NUMBER(#{shippingUpdate.shippingDv})
+				   shipping_dv = TO_NUMBER(#{shippingUpdate.shippingDv}),
+				   modifier = #{customerId},
+				   modify_dt = SYSTIMESTAMP
 			 WHERE shipping_id = #{shippingId};
 
 			SELECT shipping_dv 
@@ -118,7 +125,9 @@
 			shipping_dv_num = 301
 		THEN
 	    	UPDATE shipping 
-	    	   SET shipping_dv = 302
+	    	   SET shipping_dv = 302,
+	    	   	   modifier = #{customerId},
+				   modify_dt = SYSTIMESTAMP
 	         WHERE customer_id = #{customerId}
 	    	   AND shipping_dv = 301
 	    	   AND shipping_id != #{shippingId};
@@ -130,9 +139,11 @@
 		기능: 배송지 삭제
 	 	담당자: 최준원
 	 -->
-	<update id="deleteShipping" parameterType="int">
+	<update id="deleteShipping">
 		UPDATE shipping 
-		   SET status = 'N'
+		   SET status = 'N',
+		   	   modifier = #{customerId},
+			   modify_dt = SYSTIMESTAMP
 	     WHERE shipping_id = #{shippingId}
 	</update>
 

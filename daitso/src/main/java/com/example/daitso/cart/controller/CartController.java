@@ -43,7 +43,7 @@ public class CartController {
 	
 	// 장바구니 조회
 	@GetMapping("")
-	public String getCart(Model model, RedirectAttributes redirectAttributes) {
+	public String getCart(Model model, RedirectAttributes redirectAttributes, String purchaseClassification) {
 		try {
 			// spring security -> 사용자 고유번호 받아오기
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -52,14 +52,30 @@ public class CartController {
 			int customerId = Integer.valueOf(userDetails.getUsername());
 			model.addAttribute("customerId",customerId);
 
-			// 장바구니 조회
-			List<CartCheck> cartList = cartService.getCartByCustomerId(customerId);
-			
-			model.addAttribute("cartList", cartList);
-
-			// 장바구니에 담긴 총 물건 개수 조회
-			int cartTotalCount = cartService.getCartCountByCustomerId(customerId);
-			model.addAttribute("cartTotalCount", cartTotalCount);
+			// 장바구니 클릭 혹은 장바구니 담기 눌렀을 경우
+			if("cart".equals(purchaseClassification) || purchaseClassification == null) {
+				
+				// 장바구니 조회
+				List<CartCheck> cartList = cartService.getCartByCustomerId(customerId);
+				model.addAttribute("cartList", cartList);
+				
+				// 장바구니에 담긴 총 물건 개수 조회
+				int cartTotalCount = cartService.getCartCountByCustomerId(customerId);
+				model.addAttribute("cartTotalCount", cartTotalCount);
+				
+				model.addAttribute("purchaseClassification", purchaseClassification);
+				
+			} else { // 바로 구매하기 눌렀을 경우
+				
+				// 장바구니 조회
+				List<CartCheck> cartList = cartService.getCartByCartIdDirectPurchase();
+				model.addAttribute("cartList", cartList);
+				
+				// 장바구니에 담긴 총 물건 개수 조회
+				model.addAttribute("cartTotalCount", 1);
+				
+				model.addAttribute("purchaseClassification", purchaseClassification);
+			}
 			
 			// 내일 날짜 구하기
 			Tomorrow tomorrow = getTomorrowMonthAndDay();
@@ -166,7 +182,7 @@ public class CartController {
 		}
 	}
 	
-	//장바구니 추가
+	//바로 구매하기
 	@PostMapping("/insert")
 	public String insertCart(Model model, RedirectAttributes redirectAttributes, int productId, int productCnt, String selector) {
 		
@@ -175,21 +191,48 @@ public class CartController {
 
 		int customerId = Integer.parseInt(userDetails.getUsername());
 		
-		if(selector.equals("cart")) {
-			cartService.insertCartService(productId, customerId, productCnt);			
-		}
-		else if(selector.equals("purchase")) {
+		String purchaseClassification = "";
+			
+		if(selector.equals("purchase")) {
 			cartService.directPurchase(productId, customerId, productCnt);
+			purchaseClassification = "purchase";
 		}
 		
-		return getCart(model, redirectAttributes);
+		return getCart(model, redirectAttributes, purchaseClassification);
+	}
+	
+	// 장바구니 추가
+	@PostMapping("/insert-in-to")
+	public @ResponseBody String insertCart(@RequestBody String data) {
 		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails)principal;
+			
+		int customerId = Integer.parseInt(userDetails.getUsername());
+		
+		JsonElement element = JsonParser.parseString(data);
+		
+		int productId = Integer.valueOf(element.getAsJsonObject().get("productId").getAsString());
+		int	productCnt = Integer.valueOf(element.getAsJsonObject().get("productCnt").getAsString());
+		
+		cartService.insertCartService(productId, customerId, productCnt);
+
+		return null;
 	}
 	
 	// 장바구니 쿠폰 적용화면
 	@GetMapping("/coupon/{customerId}")
 	public String getCartCoupon(@PathVariable int customerId, Model model) {
 		List<CartCoupon> cartCouponProducts = cartService.getCouponProductByCustomerId(customerId);
+		model.addAttribute("customerId", customerId);
+		model.addAttribute("cartCouponProducts", cartCouponProducts);
+		return "cart/cart-coupon";
+	}
+	
+	// 장바구니 쿠폰 적용화면(바로구매)
+	@GetMapping("/coupon/{customerId}/{cartId}")
+	public String getCartCoupon(@PathVariable int customerId, @PathVariable int cartId, Model model) {
+		List<CartCoupon> cartCouponProducts = cartService.getCouponProductByCustomerIdAndCartId(customerId, cartId);
 		model.addAttribute("customerId", customerId);
 		model.addAttribute("cartCouponProducts", cartCouponProducts);
 		return "cart/cart-coupon";

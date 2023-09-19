@@ -77,6 +77,15 @@
 					<span>바로 구매하기</span>
 				</div>
 			</div>
+			<div
+				id= "cart-info" 
+				style= "width: 100%; height: 70px; display:flex; justify-content: space-around; background-color:rgba(0, 0, 0, 0.8); line-height: 70px; margin-top: 10px; border-radius: 5px; font-size: 16px; font-weight: 600; display: none;">
+				<div style="color: white;">장바구니에 상품이 담겼습니다</div>
+				<div style="cursor: pointer">
+					<a th:href="@{/cart}" style="color: #668663; text-decoration: none;">장바구니 가기</a>
+					<span style="margin-left: 30px; color: #dc3545; font-size: 18px; font-weight: bold;" onclick="closeCartInfo()">X</span>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -431,32 +440,52 @@
 			window.alert('whotheFisthatguy');
 		}
 		else{
-			let tag = document.createElement('form');
-			
-			let objId = document.createElement('input');
-			objId.setAttribute('type', 'hidden');
-			objId.setAttribute('name', 'productId');
-			objId.setAttribute('value', hiddenProductId.value);
-			
-			let objCnt = document.createElement('input');
-			objCnt.setAttribute('type', 'hidden');
-			objCnt.setAttribute('name', 'productCnt');
-			objCnt.setAttribute('value', cntInput.value);
-			
+			if(selector == 'cart') {
+				fetch( window.location.origin + "/cart/insert-in-to" , {
+				    method: "POST",
+				    headers: { 
+				        "Content-Type": "application/json",
+				    },
+				    body: JSON.stringify({
+				        productId: hiddenProductId.value,
+				        productCnt: cntInput.value
+				    }),
+				})
+				.then((res) => {
+					document.getElementById("cart-info").style.display = 'flex';
+				});
+			} else {
+				let tag = document.createElement('form');
+				
+				let objId = document.createElement('input');
+				objId.setAttribute('type', 'hidden');
+				objId.setAttribute('name', 'productId');
+				objId.setAttribute('value', hiddenProductId.value);
+				
+				let objCnt = document.createElement('input');
+				objCnt.setAttribute('type', 'hidden');
+				objCnt.setAttribute('name', 'productCnt');
+				objCnt.setAttribute('value', cntInput.value);
+				
 
-			let objSelector = document.createElement('input');
-			objSelector.setAttribute('type','hidden');
-			objSelector.setAttribute('name', 'selector');
-			objSelector.setAttribute('value', selector);
-			
-			tag.appendChild(objId);
-			tag.appendChild(objCnt);
-			tag.appendChild(objSelector);
-			tag.setAttribute('method', 'post');
-			tag.setAttribute('action', '/cart/insert');
-			document.body.appendChild(tag);
-			tag.submit();			
+				let objSelector = document.createElement('input');
+				objSelector.setAttribute('type','hidden');
+				objSelector.setAttribute('name', 'selector');
+				objSelector.setAttribute('value', selector);
+				
+				tag.appendChild(objId);
+				tag.appendChild(objCnt);
+				tag.appendChild(objSelector);
+				tag.setAttribute('method', 'post');
+				tag.setAttribute('action', '/cart/insert');
+				document.body.appendChild(tag);
+				tag.submit();			
+			}	
 		}
+	}
+	
+	function closeCartInfo() {
+		document.getElementById("cart-info").style.display = 'none';
 	}
 
 	function changeReviewPage(productGroupId, page){
