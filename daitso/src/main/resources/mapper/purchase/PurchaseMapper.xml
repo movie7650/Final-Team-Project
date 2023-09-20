@@ -83,6 +83,13 @@
 		   AND pur.customer_id=#{customerId}
 	</select>
 	
+	<!-- 주문번호 카운트 -->
+	<select id="selectPurchaseNumCount" parameterType="int" resultType="int">
+		SELECT COUNT(pur.purchase_num) as "purchaseNumCount"
+		  FROM purchase pur 
+		 WHERE pur.customer_id=#{customerId}
+	</select>
+	
 	<!-- 주문상세조회 -->
 	<select id="selectDetailPurchase" resultType="com.example.daitso.purchase.model.PurchaseDetailCheck">
 		SELECT p.product_nm 							as "productNm",
