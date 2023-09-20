@@ -20,7 +20,7 @@ public class ReviewService implements IReviewService{
 	public void insertReview(Review review) {
 		reviewRepository.insertReview(review);		
 	}
-
+	//내 리뷰 조회하기
 	@Override
 	public List<MypageReviewCheck> selectReviewAll(int customerId) {
 		return reviewRepository.selectReviewAll(customerId);
@@ -35,17 +35,16 @@ public class ReviewService implements IReviewService{
 	public void updateReview(Review review) {
 		reviewRepository.updateReview(review);
 	}
-
+	//내 리뷰 삭제하기
 	@Override
-	public void deleteReview(Review review) {
-		reviewRepository.deleteReview(review);
-		
+	public void deleteReview(int customerId, int reviewId) {
+		 reviewRepository.deleteReview(customerId, reviewId);
 	}
 
 	@Override
-	public List<ReviewProductDetail> selectProductReview(int groupId, int page) {
+	public List<ReviewProductDetail> selectProductReview(int groupId, int page, int customerId) {
 		int start = (page-1)*2 + 1; 
-		return reviewRepository.selectProductReview(groupId, start, start+1);
+		return reviewRepository.selectProductReview(groupId, start, start+1, customerId);
 	}
 
 	@Override
@@ -56,6 +55,13 @@ public class ReviewService implements IReviewService{
 	@Override
 	public int selectProductReviewCount(int groupId) {
 		return reviewRepository.selectProductReviewCount(groupId);
+	}
+
+	@Override
+	public int insertReviewHeart(int reviewId, int customerId) {
+		reviewRepository.insertReviewHeart(reviewId, customerId);
+		int num = reviewRepository.selectReviewHeartCount(reviewId);
+		return num;
 	}
 
 }

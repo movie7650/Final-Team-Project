@@ -83,6 +83,24 @@ public class CartService implements ICartService{
 
 	@Override
 	public void directPurchase(int productId, int customerId, int productCnt) {
-		cartRepository.updateCartCnt(productId, customerId, productCnt);
+		cartRepository.directPurchase(productId, customerId, productCnt);
+	}
+
+	// 바로 구매시 해당 상품 정보들 장바구니 화면에 띄우기
+	@Override
+	public List<CartCheck> getCartByCartIdDirectPurchase() {
+		return cartRepository.getCartByCartIdDirectPurchase();
+	}
+
+	// 쿠폰 적용 대상 상품들 조회(바로구매)
+	@Override
+	public List<CartCoupon> getCouponProductByCustomerIdAndCartId(int customerId, int cartId) {
+		return cartRepository.getCouponProductByCustomerIdAndCartId(customerId, cartId);
+	}
+
+	// 구매하기 전 장바구니에 담긴 물건들 조회(바로구매) 
+	@Override
+	public List<CartPurchase> getCartProductBeforePurchaseByCustomerIdAndCartId(int customerId, int cartId) {
+		return cartRepository.getCartProductBeforePurchaseByCustomerIdAndCartId(customerId, cartId);
 	}
 }

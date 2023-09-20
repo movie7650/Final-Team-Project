@@ -26,5 +26,5 @@ public interface IShippingRepository {
 	void updateShipping(@Param("shippingUpdate") ShippingAdd shippingUpdate, @Param("shippingId") int shippingId, @Param("customerId") int customerId);
 	
 	// 배송지 삭제
-	void deleteShipping(int shippingId);
+	void deleteShipping(@Param("shippingId") int shippingId,@Param("customerId") int customerId);
 }

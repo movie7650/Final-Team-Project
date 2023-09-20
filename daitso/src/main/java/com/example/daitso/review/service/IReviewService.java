@@ -2,6 +2,8 @@ package com.example.daitso.review.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
@@ -16,11 +18,13 @@ public interface IReviewService {
 	
 	void updateReview(Review review);
 	
-	void deleteReview(Review review);
+	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
 
-	List<ReviewProductDetail> selectProductReview(int groupId, int page);
+	List<ReviewProductDetail> selectProductReview(int groupId, int page, int customerId);
 	
 	int selectProductReviewCount(int groupId);
 	
 	int selectProductReviewAvg(int groupId);
+	
+	int insertReviewHeart(int reviewId, int customerId);
 }

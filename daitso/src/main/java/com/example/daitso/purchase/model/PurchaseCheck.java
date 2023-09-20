@@ -18,5 +18,7 @@ public class PurchaseCheck {
 	private Date createDt;
 	private int shippingCompleteCount;
 	private int shippingCount;
+	private int payCoinCount;
+	private int purchaseNumCount;
 	
 }

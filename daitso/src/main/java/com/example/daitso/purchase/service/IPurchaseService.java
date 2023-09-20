@@ -32,4 +32,10 @@ public interface IPurchaseService {
 	//배송완료인 상품 갯수
 	int selectShippingComplete(int customerId);
 	
+	//주문번호 카운트 
+	int selectPurchaseNumCount(int customerId);
+	
+	//입금/결제 상품 갯수
+	int selectPayCoin(int customerId);
+	
 }

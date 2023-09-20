@@ -47,20 +47,20 @@
 				<div class="purchase-success-info-small-box">
 					<div style="display: flex;">
 						<div>주문금액</div>
-						<div th:text="${purchaseSuccess.totalProductPrice}">최준원</div>
+						<div th:text="${purchaseSuccess.totalProductPrice} + ' 원'"></div>
 					</div>
 					<div style="display: flex;">
 						<div>쿠폰할인</div>
-						<div th:text="${purchaseSuccess.discountPrice}">010-1234-5678</div>
+						<div th:text="${purchaseSuccess.discountPrice} + ' 원'"></div>
 					</div>
 					<div style="display: flex;">
 						<div>배송비</div>
-						<div>0원</div>
+						<div>0 원</div>
 					</div>
 					<div class="purchase-success-line"></div>
 					<div style="display: flex;">
 						<div>총 결제금액</div>
-						<div th:text="${purchaseSuccess.totalCost}">문 앞</div>
+						<div th:text="${purchaseSuccess.totalCost} + ' 원'"></div>
 					</div>
 				</div>
 			</div>
@@ -123,5 +123,9 @@
 			});	 
 		}	
 	})
+	
+	sessionStorage.removeItem('couponTotalApplyPrice');
+	sessionStorage.removeItem('couponApplyList');
+	sessionStorage.removeItem('couponCartIdList');
 </script>
 </html>

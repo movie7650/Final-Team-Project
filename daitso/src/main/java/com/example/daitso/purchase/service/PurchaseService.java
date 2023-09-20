@@ -65,5 +65,13 @@ public class PurchaseService implements IPurchaseService {
 		// TODO Auto-generated method stub
 		return purchaseRepository.selectDetailPurchase(customerId, purchaseNum);
 	}
+	@Override
+	public int selectPayCoin(int customerId) {
+		return purchaseRepository.selectPayCoin(customerId);
+	}
+	@Override
+	public int selectPurchaseNumCount(int customerId) {
+		return purchaseRepository.selectPurchaseNumCount(customerId);
+	}
 	
 }

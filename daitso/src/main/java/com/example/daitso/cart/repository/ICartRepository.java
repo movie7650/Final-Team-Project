@@ -49,5 +49,16 @@ public interface ICartRepository {
 	
 	// 구매 성공시 장바구니 상태 'N' 변경
 	void updateCartStatusPurchaseSuccess(@Param("customerId") int customerId, @Param("cartId") int cartId);
+
+	// 바로 구매하기
+	void directPurchase(@Param("productId") int productId, @Param("customerId") int customerId, @Param("productCnt") int productCnt);
 	
+	// 바로 구매시 해당 상품 정보들 장바구니 화면에 띄우기
+	List<CartCheck> getCartByCartIdDirectPurchase();
+	
+	// 쿠폰 적용 대상 상품들 조회(바로구매)
+	List<CartCoupon> getCouponProductByCustomerIdAndCartId(@Param("customerId") int customerId, @Param("cartId") int cartId);
+	
+	// 구매하기 전 장바구니에 담긴 물건들 조회(바로구매)
+    List<CartPurchase> getCartProductBeforePurchaseByCustomerIdAndCartId(@Param("customerId") int customerId, @Param("cartId") int cartId);
 }

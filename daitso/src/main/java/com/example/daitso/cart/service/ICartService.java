@@ -2,6 +2,8 @@ package com.example.daitso.cart.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.example.daitso.cart.model.CartCheck;
 import com.example.daitso.cart.model.CartCoupon;
 import com.example.daitso.cart.model.CartPurchase;
@@ -35,6 +37,14 @@ public interface ICartService {
  	
  	// 바로 구매하기 전 장바구니 업데이트
  	void directPurchase(int productId, int customerId, int productCnt);
- 
+ 	
+ 	// 바로 구매시 해당 상품 정보들 장바구니 화면에 띄우기
+ 	List<CartCheck> getCartByCartIdDirectPurchase();
+
+ 	// 쿠폰 적용 대상 상품들 조회(바로구매)
+	List<CartCoupon> getCouponProductByCustomerIdAndCartId(int customerId, int cartId);
+	
+	// 구매하기 전 장바구니에 담긴 물건들 조회(바로구매)
+    List<CartPurchase> getCartProductBeforePurchaseByCustomerIdAndCartId(@Param("customerId") int customerId, @Param("cartId") int cartId);
 }
 

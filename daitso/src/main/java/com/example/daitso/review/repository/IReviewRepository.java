@@ -22,11 +22,15 @@ public interface IReviewRepository {
 	
 	void updateReview(Review review);
 	
-	void deleteReview(Review review);
+	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
 	
-	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end);
+	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end, @Param("customerId") int customerId);
 	
 	int selectProductReviewCount(int groupId);
 
 	int selectProductReviewAvg(int groupId);
+	
+	void insertReviewHeart(@Param("reviewId") int reviewId, @Param("customerId") int customerId);
+	
+	int selectReviewHeartCount(int reviewId);
 }

@@ -8,7 +8,6 @@
 	
 <div class="review-main">
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
-
 	 <div class="title-review">내 리뷰</div>
 	 <div>
 		 <th:block th:each="mypageReview : ${mypageReviewList}"> 
@@ -29,8 +28,9 @@
 					<div class="my-review-photo-01">이미지3</div>
 				</div><!-- my-review-photo-container -->
 				<div class="my-review-button-container">
-					<div class="my-review-like-count">456 좋아요</div>
-					<button type="submit">삭제</button>
+					<div th:text="|&#9829; ${mypageReview.reviewHeartCount}|" class="my-review-like-count">456 좋아요</div>
+					<input class="review-id" type="hidden" th:value="${mypageReview.reviewId}">
+					<button type="button" onclick="deleteReview(this)">삭제</button>
 				</div><!-- my-review-button-container -->
 			</div><!-- my-review-container -->
 		 </th:block>
@@ -39,5 +39,27 @@
 
 
 	<div th:replace="~{/include/footer :: footer}"></div>
+	
+	<script>
+		function deleteReview(button){
+			var divParent = button.closest("div");
+			var reviewId = divParent.querySelector(".review-id").value;
+			
+			$.ajax({
+			    url:"/mypage/deleteReview",
+			    type:"POST",
+			    data:{
+			    	reviewId:reviewId
+			    },
+			    success: function(result) {
+			        if (result == "success") {
+						location.href="/mypage/review";
+			        } else {
+			            alert("리뷰 삭제가 실패하였습니다.");
+			        }
+			    }
+			});
+		}
+	</script>
 </body>
 </html>

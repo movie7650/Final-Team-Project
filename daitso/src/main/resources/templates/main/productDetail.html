@@ -77,6 +77,15 @@
 					<span>바로 구매하기</span>
 				</div>
 			</div>
+			<div
+				id= "cart-info" 
+				style= "width: 100%; height: 70px; display:flex; justify-content: space-around; background-color:rgba(0, 0, 0, 0.8); line-height: 70px; margin-top: 10px; border-radius: 5px; font-size: 16px; font-weight: 600; display: none;">
+				<div style="color: white;">장바구니에 상품이 담겼습니다</div>
+				<div style="cursor: pointer">
+					<a th:href="@{/cart}" style="color: #668663; text-decoration: none;">장바구니 가기</a>
+					<span style="margin-left: 30px; color: #dc3545; font-size: 18px; font-weight: bold;" onclick="closeCartInfo()">X</span>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -108,6 +117,16 @@
 							</div>
 							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
 							<p>[[${review.reviewContent}]]</p>
+							<div th:class="review-heart+${review.reviewId}">
+								<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" th:if="${review.clickCheck == 0}" th:onclick="heartClick([[${review.reviewId}]])">
+									<img th:src="@{/assets/common/thumbs-up-regular.svg}" style="width:20%; margin-left:10px;">
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요([[${review.reviewHeartCount}]])</span>
+								</div>
+								<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" th:if="${review.clickCheck == 1}">
+									<img th:src="@{/assets/common/thumbs-up-solid.svg}" style="width:20%; margin-left:10px;">
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요([[${review.reviewHeartCount}]])</span>
+								</div>							
+							</div>
 							<hr></hr>
 						</div>
 					</th:block>
@@ -427,36 +446,56 @@
 	}
 	
 	function goToCart(selector){
-		if(customerId == 'whotheFisthatguy'){
-			window.alert('whotheFisthatguy');
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');
 		}
 		else{
-			let tag = document.createElement('form');
-			
-			let objId = document.createElement('input');
-			objId.setAttribute('type', 'hidden');
-			objId.setAttribute('name', 'productId');
-			objId.setAttribute('value', hiddenProductId.value);
-			
-			let objCnt = document.createElement('input');
-			objCnt.setAttribute('type', 'hidden');
-			objCnt.setAttribute('name', 'productCnt');
-			objCnt.setAttribute('value', cntInput.value);
-			
+			if(selector == 'cart') {
+				fetch( window.location.origin + "/cart/insert-in-to" , {
+				    method: "POST",
+				    headers: { 
+				        "Content-Type": "application/json",
+				    },
+				    body: JSON.stringify({
+				        productId: hiddenProductId.value,
+				        productCnt: cntInput.value
+				    }),
+				})
+				.then((res) => {
+					document.getElementById("cart-info").style.display = 'flex';
+				});
+			} else {
+				let tag = document.createElement('form');
+				
+				let objId = document.createElement('input');
+				objId.setAttribute('type', 'hidden');
+				objId.setAttribute('name', 'productId');
+				objId.setAttribute('value', hiddenProductId.value);
+				
+				let objCnt = document.createElement('input');
+				objCnt.setAttribute('type', 'hidden');
+				objCnt.setAttribute('name', 'productCnt');
+				objCnt.setAttribute('value', cntInput.value);
+				
 
-			let objSelector = document.createElement('input');
-			objSelector.setAttribute('type','hidden');
-			objSelector.setAttribute('name', 'selector');
-			objSelector.setAttribute('value', selector);
-			
-			tag.appendChild(objId);
-			tag.appendChild(objCnt);
-			tag.appendChild(objSelector);
-			tag.setAttribute('method', 'post');
-			tag.setAttribute('action', '/cart/insert');
-			document.body.appendChild(tag);
-			tag.submit();			
+				let objSelector = document.createElement('input');
+				objSelector.setAttribute('type','hidden');
+				objSelector.setAttribute('name', 'selector');
+				objSelector.setAttribute('value', selector);
+				
+				tag.appendChild(objId);
+				tag.appendChild(objCnt);
+				tag.appendChild(objSelector);
+				tag.setAttribute('method', 'post');
+				tag.setAttribute('action', '/cart/insert');
+				document.body.appendChild(tag);
+				tag.submit();			
+			}	
 		}
+	}
+	
+	function closeCartInfo() {
+		document.getElementById("cart-info").style.display = 'none';
 	}
 
 	function changeReviewPage(productGroupId, page){
@@ -464,7 +503,7 @@
 		const reviewNone = document.querySelector(".review-none");
 		
 		
-		fetch("/review/" + productGroupId +"/" + page)
+		fetch("/review/" + productGroupId +"/" + page + "/" + customerId)
 		.then(response => response.json())
 		.then(data => {
 			if(data.length == 0){
@@ -493,6 +532,20 @@
 					</div>
 					<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
 					<p>${review.reviewContent}</p>
+					<div class="review-heart${review.reviewId}">
+						${review.clickCheck == 0 ? 
+								`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" onclick="heartClick(${review.reviewId})">
+									<img src="/assets/common/thumbs-up-regular.svg" style="width:20%; margin-left:10px;"></img>
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+								</div>`
+						
+						: 
+							`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" >
+								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;"></img>
+								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+							</div> `
+						}						
+					</div>
 					<hr></hr>
 					`
 					reviewBody.innerHTML += rElement;
@@ -521,10 +574,37 @@
     });
 	
 	function insertInquiry(){
-		if(customerId == 'whotheFisthatguy'){
-			window.alert('whotheFisthatguy');
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');
 		}else{
 			document.querySelector(".inquiry-form").submit();			
+		}
+	}
+	
+	function heartClick(reviewId){
+		const data = {
+				customerId: customerId,
+				reviewId: reviewId
+		};
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');			
+		}else{
+			fetch("/review/heart/update",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data)
+			})
+			.then(response => response.json())
+			.then(data => {
+				const reviewBody = document.querySelector(`.review-heart${reviewId}`);
+				const el = `<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;">
+								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;">
+								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${data})</span>
+							</div>	`
+				reviewBody.innerHTML = el;
+			})
 		}
 	}
 </script>

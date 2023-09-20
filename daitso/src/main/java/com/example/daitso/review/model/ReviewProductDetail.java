@@ -21,4 +21,5 @@ public class ReviewProductDetail {
 	private String customerNm;
 	private String productNm;
 	private String options;
+	private int clickCheck;
 }
