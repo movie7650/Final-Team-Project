@@ -100,7 +100,7 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
-	// 두 번째 카테고리 불러오기
+	// 두 번째 카테고리 불러오기, 'syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
 	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
@@ -109,7 +109,7 @@ public class AdminController {
 		return secondCategories;
 	}
 		
-	// 세 번째 카테고리 불러오기
+	// 세 번째 카테고리 불러오기, 'syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행
 	@GetMapping("/product/third/{categoryId}")
 	@ResponseBody
 	public List<Category> getThirdCategories(@PathVariable int categoryId, Model model) {
@@ -167,7 +167,6 @@ public class AdminController {
 		return "admin/message";
 	}
 	
-	
 	// 상품 삭제하기
 	@PostMapping("/delete")
 	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
@@ -176,7 +175,6 @@ public class AdminController {
 	    }
 	    return "admin/product";
 	}
-	
 	
 	// 상품 등록하기
 	@PostMapping("/product")
@@ -195,8 +193,7 @@ public class AdminController {
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/message";
-	}
-	
+	}	
 	
 	// 상품명으로 상품 검색하기
     @GetMapping("/search-product")
@@ -205,9 +202,8 @@ public class AdminController {
         List<ProductCheck> productList = adminService.searchProductsByName(searchText);
         return productList;
     }
-    
-    
-    // 주문 내역 조회하기(배송상태별), admin-purchase.html 전체 조회
+       
+    // 주문 내역 조회하기(전체 조회 페이지)
     @GetMapping("/purchase")
 	public String selectPurchaseList(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
 			  @RequestParam(name = "page", defaultValue = "1") int page,
@@ -239,7 +235,7 @@ public class AdminController {
 	}
 
     
-	// 주문 내역 조회하기(배송상태별), 데이터 불러오기 위한(purchaselist, 페이지 정보) 
+	// 주문 내역 조회하기(배송상태별, 페이지 정보)
     @GetMapping("/purchases")
     @ResponseBody
     public PageResult<PurchaseList> selectPurchaseLists(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
@@ -256,6 +252,7 @@ public class AdminController {
         
         int totalCount = adminService.selectCountPurchaseList(commonCodeId);
 
+        //페이징된 결과 데이터 넣을 PageResult(페이징된 데이터 목록, 현재 페이지 번호, 총 페이지수 담기)
         PageResult<PurchaseList> result = new PageResult<>();
         result.setData(purchaselist);
         result.setCurrentPage(page);
@@ -264,14 +261,12 @@ public class AdminController {
         return result;
     }
 
-    
     // 배송 상태 변경하기
     @PostMapping("/purchase/change-status")
     public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
         return "redirect:/admin/purchase";
     }	 
-    
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
@@ -294,16 +289,14 @@ public class AdminController {
 
         return result;
     }
-
-    
-    // 주문 상세 내역 조회하기
+  
+    // 주문번호로 주문 상세 내역 조회하기
     @GetMapping("/purchase-details/{purchaseNum}")
     @ResponseBody
     public List<PurchaseList> getPurchaseDetails(@PathVariable String purchaseNum) {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
     }
-    
     
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
@@ -330,8 +323,7 @@ public class AdminController {
         
 	    return "admin/category/admin-category";
   	}
-
-  	
+	
   	// 카테고리 삭제하기
     @PostMapping("/category/delete")
 	public String deleteCategory(@RequestParam int categoryId, Model model) {
@@ -341,14 +333,14 @@ public class AdminController {
 		return "admin/message";
 	}	
   	
-    
+    // 카테고리ID로 카테고리 정보 조회하기
 	@GetMapping("/update/category/{categoryId}")
 	@ResponseBody
 	public CategoryCheck selectCategoryByCategoryId(@PathVariable int categoryId, Model model) {
 		return adminService.selectCategoryByCategoryId(categoryId);
 	}
 	
-
+	// 카테고리 정보 수정하기
  	@PostMapping("/update/category")
  	public String updateCategoryInfo(CategoryCheck categoryCheck, Model model, HttpSession session) { 	    
  		adminService.updateCategoryInfo(categoryCheck);
@@ -360,8 +352,6 @@ public class AdminController {
  		model.addAttribute("searchUrl","/admin/category");
  		return "admin/message";
  	}
-
-
  	
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
@@ -372,14 +362,11 @@ public class AdminController {
 		return "admin/category/category-update";
 	}
 	
-	
 	// 카테고리 수정하기
 	@PostMapping("/category/update")
 	public String updateCategory(Model model, int parentCategoryId, int categoryId) {
 		categoryService.updateCategory(categoryId, parentCategoryId);
 		return updateCategory(model);
 	}
-	
-	
 
 }

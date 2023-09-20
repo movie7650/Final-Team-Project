@@ -2,22 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.purchase.repository.IPurchaseRepository">
 		
-	<select id="selectAllPurchaseList" resultType="com.example.daitso.purchase.model.PurchaseList">
-	    SELECT p.purchase_id     AS  "purchaseId",
-	           r.product_nm      AS  "productNm",
-	           c.customer_nm     AS  "customerNm",
-		       p.purchase_num	 AS  "purchaseNum",
-		       p.create_dt       AS  "createDt",
-	           d.common_code_id  AS  "commonCodeId",
-	           d.common_code_nm  AS  "commonCodeNm"
-	      FROM purchase p
-		  JOIN customer c ON p.customer_id = c.customer_id 
-	      JOIN common_code d ON p.purchase_dv = d.common_code_id
-	      JOIN product r ON r.product_id = p.product_id
-	  ORDER BY p.create_dt
-	<!-- 	 WHERE purchase_dv = #{purchaseDv} -->
-	</select>
-	
 	<!-- 
 		 기능: 구매하기
 		 담당자: 최준원 
@@ -113,6 +97,25 @@
 	</select>
 
 	<!-- 
+		기능: 전체 주문 내역 조회하기
+		담당자: 이세인
+	-->
+	<select id="selectAllPurchaseList" resultType="com.example.daitso.purchase.model.PurchaseList">
+	    SELECT p.purchase_id     AS  "purchaseId",
+	           r.product_nm      AS  "productNm",
+	           c.customer_nm     AS  "customerNm",
+		       p.purchase_num	 AS  "purchaseNum",
+		       p.create_dt       AS  "createDt",
+	           d.common_code_id  AS  "commonCodeId",
+	           d.common_code_nm  AS  "commonCodeNm"
+	      FROM purchase p
+		  JOIN customer c ON p.customer_id = c.customer_id 
+	      JOIN common_code d ON p.purchase_dv = d.common_code_id
+	      JOIN product r ON r.product_id = p.product_id
+	  ORDER BY p.create_dt
+	</select>
+
+	<!-- 
 		기능: 주문 내역 조회하기(배송상태별)
 		담당자: 이세인
 	-->
@@ -127,9 +130,9 @@
 		               d.common_code_nm                              AS  "commonCodeNm",
 		               ROW_NUMBER() OVER (ORDER BY p.create_dt desc) AS "rn"
 		  FROM purchase p
-		  JOIN customer c ON p.customer_id = c.customer_id 
+		  JOIN customer c    ON p.customer_id = c.customer_id 
 		  JOIN common_code d ON p.purchase_dv = d.common_code_id
-		  JOIN product r ON r.product_id = p.product_id
+		  JOIN product r     ON r.product_id  = p.product_id
 	  GROUP BY p.purchase_id, 
 			   r.product_nm, 
 			   c.customer_nm, 
@@ -140,7 +143,7 @@
 	    HAVING 1=1 
 		       <choose>
 				<!-- 전체 조회 -->
-					<when test="(commonCodeId == null or commonCodeId == 0)">	
+				    <when test="(commonCodeId == null or commonCodeId == 0)">	
 						            
 					</when>
 				<!-- commonCodeId에 따라서 -->
@@ -148,13 +151,12 @@
 					 AND d.common_code_id = #{commonCodeId}
 					 </otherwise>
 			  </choose>
-			    )    WHERE "rn" BETWEEN #{offset} + 1 
-	                     AND #{offset} + #{pageSize}
+			   ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 
 
 	<!-- 
-		기능: 주문 내역 개수 조회하기(배송상태별)
+		기능: 주문 내역 개수 조회하기(전체, 배송상태별)
 		담당자: 이세인
 	-->
 	<select id="selectCountPurchaseList">
@@ -172,18 +174,18 @@
 			           d.common_code_id,
 			           d.common_code_nm
 				HAVING 1=1
-					   <choose>
-					       <!-- 전체 조회 -->
-							<when test="(commonCodeId == null or commonCodeId == 0)">	
-					       )
-					       </when>
+				<choose>
+				  <!-- 전체 조회 -->
+				  <when test="(commonCodeId == null or commonCodeId == 0)">	
+				)
+				  </when>
 	
-					       <!-- commonCodeId에 따라서 -->
-							<otherwise>
-							 AND d.common_code_id = #{commonCodeId}
-					       )
-					       </otherwise>
-					   </choose>
+				  <!-- commonCodeId에 따라서 -->
+				  <otherwise>
+				  AND d.common_code_id = #{commonCodeId}
+				)
+				 </otherwise>
+				</choose>
 	 </select>
 
 
@@ -193,7 +195,9 @@
 	-->
 	<update id="changePurchaseStatus" parameterType="com.example.daitso.purchase.model.PurchaseList">
 	    UPDATE purchase
-	       SET purchase_dv = #{commonCodeId}
+	       SET purchase_dv = #{commonCodeId},
+	           modifier = 'admin',
+               modify_dt = systimestamp
 	     WHERE purchase_id = #{purchaseId}
 	</update>
 	
@@ -202,38 +206,40 @@
 		기능: 주문 내역 검색하기 (회원명, 주문번호 선택해서)
 		담당자: 이세인
 	-->
-		<select id="searchPurchaseInfo" resultType="com.example.daitso.purchase.model.PurchaseList">
+	<select id="searchPurchaseInfo" resultType="com.example.daitso.purchase.model.PurchaseList">
 	    SELECT *
-		  FROM( SELECT p.purchase_id                    AS  "purchaseId",
-			   r.product_nm                             AS  "productNm",
-			   c.customer_nm                            AS  "customerNm",
-			   p.purchase_num	                        AS  "purchaseNum",
-			   p.create_dt                              AS  "createDt",
-			   d.common_code_id                         AS  "commonCodeId",
-			   d.common_code_nm                         AS  "commonCodeNm",
-		       ROW_NUMBER() OVER (ORDER BY p.create_dt desc) AS "rn"
-        FROM purchase p
-		 JOIN customer c ON p.customer_id = c.customer_id 
-		 JOIN common_code d ON p.purchase_dv = d.common_code_id
-		 JOIN product r ON r.product_id = p.product_id
-	  GROUP BY p.purchase_id, 
-			   r.product_nm, 
-			   c.customer_nm, 
-			   p.purchase_num, 
-			   p.create_dt,
-	           d.common_code_id,
-	           d.common_code_nm
-	    HAVING 1=1
-	    	<choose>
-		     <when test='searchOption == "customerNm"'>
-				AND INSTR(c.customer_nm,#{searchText}) > 0
-		     </when>
-		     <when test='searchOption == "purchaseNum"'>
-		        AND INSTR(p.purchase_num,#{searchText}) > 0
-		     </when>
-		     </choose>
-			    )    WHERE "rn" BETWEEN #{offset} + 1 
-	                     AND #{offset} + #{pageSize}
+		  FROM( SELECT p.purchase_id                                 AS  "purchaseId",
+					   r.product_nm                                  AS  "productNm",
+					   c.customer_nm                                 AS  "customerNm",
+					   p.purchase_num	                             AS  "purchaseNum",
+					   p.create_dt                                   AS  "createDt",
+					   d.common_code_id                              AS  "commonCodeId",
+					   d.common_code_nm                              AS  "commonCodeNm",
+				       ROW_NUMBER() OVER (ORDER BY p.create_dt desc) AS "rn"
+		         FROM purchase p
+				 JOIN customer c ON p.customer_id = c.customer_id 
+				 JOIN common_code d ON p.purchase_dv = d.common_code_id
+				 JOIN product r ON r.product_id = p.product_id
+			 GROUP BY p.purchase_id, 
+					  r.product_nm, 
+					  c.customer_nm, 
+					  p.purchase_num, 
+					  p.create_dt,
+			          d.common_code_id,
+			          d.common_code_nm
+			   HAVING 1=1
+			 	<choose>
+			 	 <!-- 회원명으로 검색할 때 -->
+			     <when test='searchOption == "customerNm"'>
+				  AND INSTR(c.customer_nm,#{searchText}) > 0
+			     </when>
+			     
+			     <!-- 주문번호로 검색할 때 -->
+			     <when test='searchOption == "purchaseNum"'>
+			        AND INSTR(p.purchase_num,#{searchText}) > 0
+			     </when>
+			    </choose>
+				 )    WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 
 
@@ -242,49 +248,54 @@
 		담당자: 이세인
 	-->
 	<select id="selectCountPurchaseInfo">
-		SELECT COUNT (cnt)
-			  FROM(	SELECT COUNT(*) AS cnt 
-					  FROM purchase p
-	                 JOIN customer c ON p.customer_id = c.customer_id 
-	                 JOIN common_code d ON p.purchase_dv = d.common_code_id
-	                 JOIN product r ON r.product_id = p.product_id
-	              GROUP BY p.purchase_id, 
-	                       r.product_nm, 
-	                       c.customer_nm, 
-	                       p.purchase_num, 
-	                       p.create_dt,
-	                       d.common_code_id,
-	                       d.common_code_nm
-	                HAVING 1=1
-			        <choose>
-					     <when test='searchOption == "customerNm"'>
-							AND INSTR(c.customer_nm,#{searchText}) > 0
-			                )
-					     </when>
-					     <when test='searchOption == "purchaseNum"'>
-					        AND INSTR(p.purchase_num,#{searchText}) > 0
-			                )
-					     </when>
-					</choose>
+	    SELECT COUNT (cnt)
+		  FROM( SELECT COUNT(*) AS cnt 
+				  FROM purchase p
+	              JOIN customer c ON p.customer_id = c.customer_id 
+	              JOIN common_code d ON p.purchase_dv = d.common_code_id
+	              JOIN product r ON r.product_id = p.product_id
+	          GROUP BY p.purchase_id, 
+	                   r.product_nm, 
+	                   c.customer_nm, 
+	                   p.purchase_num, 
+	                   p.create_dt,
+	                   d.common_code_id,
+	                   d.common_code_nm
+	           HAVING 1=1
+			   <choose>
+			   	 <!-- 회원명으로 검색할 때 -->
+			     <when test='searchOption == "customerNm"'>
+				  AND INSTR(c.customer_nm,#{searchText}) > 0
+			     )
+			     </when>
+			     
+			      <!-- 주문번호로 검색할 때 -->
+				 <when test='searchOption == "purchaseNum"'>
+				  AND INSTR(p.purchase_num,#{searchText}) > 0
+			     )
+				 </when>
+		   	   </choose>
 	</select>
 	
 	
-	
-<select id="getPurchaseDetails" resultType="com.example.daitso.purchase.model.PurchaseList">
-    SELECT     p.purchase_id                            AS  "purchaseId",
-			   r.product_nm                             AS  "productNm",
-			   c.customer_nm                            AS  "customerNm",
-			   p.purchase_num	                        AS  "purchaseNum",
-			   p.create_dt                              AS  "createDt",
-			   d.common_code_nm                         AS  "commonCodeNm",
-               p.total_cost                             AS  "totalCost",
-               p.purchase_count                         AS  "purchaseCount",
-               p.purchase_price							AS  "purchasePrice"
-	     FROM purchase p
-		 JOIN customer c ON p.customer_id = c.customer_id 
-		 JOIN common_code d ON p.purchase_dv = d.common_code_id
-		 JOIN product r ON r.product_id = p.product_id
-	     WHERE p.purchase_num = #{purchaseNum}	
-</select>
+	<!--    기능: 주문번호로 주문 상세 내역 조회하기
+			담당자: 이세인
+	-->	
+	<select id="getPurchaseDetails" resultType="com.example.daitso.purchase.model.PurchaseList">
+	    SELECT     p.purchase_id                            AS  "purchaseId",
+				   r.product_nm                             AS  "productNm",
+				   c.customer_nm                            AS  "customerNm",
+				   p.purchase_num	                        AS  "purchaseNum",
+				   p.create_dt                              AS  "createDt",
+				   d.common_code_nm                         AS  "commonCodeNm",
+	               p.total_cost                             AS  "totalCost",
+	               p.purchase_count                         AS  "purchaseCount",
+	               p.purchase_price							AS  "purchasePrice"
+		  FROM purchase p
+		  JOIN customer c ON p.customer_id = c.customer_id 
+		  JOIN common_code d ON p.purchase_dv = d.common_code_id
+		  JOIN product r ON r.product_id = p.product_id
+		 WHERE p.purchase_num = #{purchaseNum}	
+	</select>
 
 </mapper>

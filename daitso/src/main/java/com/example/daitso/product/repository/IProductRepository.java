@@ -36,7 +36,7 @@ public interface IProductRepository {
     // 상품 삭제하기(그룹ID)
     void deleteProductByGroupId(int productGroupId);
 	
-	// 상품ID로 상품 정보 갖고오기
+	// 상품ID로 상품 정보 조회하기
 	Product selectProductId(int productId);
 	
 	// 상품 수정하기
