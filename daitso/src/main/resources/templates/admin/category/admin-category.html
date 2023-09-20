@@ -1,10 +1,88 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<link rel="stylesheet" th:href="@{/css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 <body>
+	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+
+	<!-- 오른쪽 컨텐츠 -->
+	<div id="productTable">
+		<hr class="my-3">
+		<div class="row"
+			style="padding-bottom: 15px; justify-content: flex-end;">
+			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
+				<button class="btn btn-primary" style="background-color: #39594e"data-bs-toggle="modal" data-bs-target="#registerModal"
+					type="button">등록</button>
+			</div>
+		</div>
+
+		<div style="height: 690px;">
+			<table class="table" style="text-align: center;">
+				<thead>
+					<tr>
+						<th></th>
+						<th>카테고리ID</th>
+						<th>카테고리명</th>
+						<th>PATH</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="categorylist : ${categorylist}">
+						<td th:text="${categorylist.rn}"></td>
+						<td th:text="${categorylist.categoryId}"></td>
+						<td th:text="${categorylist.categoryNm}"></td>
+						<td th:text="${categorylist.path}"></td>
+						<td>
+							<div class="btn-group">
+									<button class="btn btn-xs" style="background-color: #aac8b2; color: #ffff"
+										data-bs-toggle="modal" data-bs-target="#" type="button" 
+										>수정</button>
+									<button class="btn btn-xs" style="background-color: red; color: #fff" 
+										type="button" >삭제</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- 페이지 링크 표시 -->
+		<div th:if="${totalCount > 0}">
+			<ul class="pagination" id="pagination">
+				<!-- 이전 페이지 버튼 -->
+				<li th:classappend="${currentPage == 1} ? disabled"><a
+					class="page-link" th:if="${currentPage > 1}"
+					th:href="@{/admin/category(page=${currentPage - 1}, pageSize=${pageSize})}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a></li>
+				<!-- 페이지 번호 설정 -->
+				<li th:each="page : ${#numbers.sequence(1, totalPages)}"
+					class="page-item" th:classappend="${page == currentPage} ? active">
+					<a class="page-link"
+					th:href="@{/admin/category(page=${page}, pageSize=${pageSize})}"
+					th:text="${page}"> </a>
+				</li>
+				<!-- 다음 페이지 버튼 -->
+				<li th:classappend="${currentPage == totalPages} ? disabled"><a
+					class="page-link" th:if="${currentPage < totalPages}"
+					th:href="@{/admin/category(page=${currentPage + 1}, pageSize=${pageSize})}"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
+			</ul>
+		</div>
+
+	</div>
+
+	</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:inline="javascript">
+
+	</script>
 
 </body>
 </html>

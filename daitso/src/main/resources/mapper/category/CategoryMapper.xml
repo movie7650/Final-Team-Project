@@ -102,4 +102,42 @@
 		WHERE rownum <= 6
 	]]>
     </select>
+    
+   
+    <!-- 
+    	기능: 전체 카테고리 조회하기
+    	담당자: 이세인
+     -->
+	<select id="selectAllCategories" resultType="com.example.daitso.category.model.CategoryCheck">
+		SELECT *
+		 FROM( 
+		        SELECT category_id as "categoryId",
+		                category_nm as "categoryNm",
+		                sys_connect_by_path(category_nm, ' > ') as path,
+		                ROW_NUMBER() OVER (ORDER BY category_id) AS "rn",
+		        CONNECT_BY_ROOT category_id AS root_id,
+		        LEVEL AS depth
+		        FROM category
+		        START WITH category_pr_id = 0
+		        CONNECT BY PRIOR category_id = category_pr_id)
+		        WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	</select>
+	    
+	    
+	 <!-- 
+    	기능: 카테고리 개수 조회하기
+    	담당자: 이세인
+     -->  
+	<select id="selectCountCategories">
+		SELECT COUNT(*)
+			    FROM (  SELECT category_id as "categoryId",
+					           category_nm as "categoryNm",
+					           sys_connect_by_path(category_nm, ' > ') as path,
+						       CONNECT_BY_ROOT category_id AS root_id,
+							   LEVEL AS depth
+						  FROM category
+					START WITH category_pr_id = 0
+					CONNECT BY PRIOR category_id = category_pr_id)
+	</select>
+    
 </mapper>

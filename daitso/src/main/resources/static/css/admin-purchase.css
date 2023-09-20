@@ -5,3 +5,7 @@
     vertical-align: top;
     border-top: 1px solid #dee2e6;
 }
+
+.purcahse span, p{
+	font-weight:bold;
+}
