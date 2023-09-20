@@ -17,7 +17,6 @@
 					type="button">등록</button>
 			</div>
 		</div>
-
 		<div style="height: 690px;">
 			<table class="table" style="text-align: center;">
 				<thead>
@@ -30,7 +29,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="categorylist : ${categorylists}">
+					<tr th:each="categorylist : ${categorylist}">
 						<td th:text="${categorylist.rn}"></td>
 						<td th:text="${categorylist.categoryId}"></td>
 						<td th:text="${categorylist.categoryNm}"></td>
@@ -72,6 +71,8 @@
 				</a></li>
 			</ul>
 		</div>
+		
+		
 		
 	<!-- 카테고리 수정 모달 -->
 	<div id="updateCategoryModal" class="modal fade" tabindex="-1" role="dialog">
@@ -145,13 +146,7 @@
                document.getElementById("updateCategoryContent").value = categorylist.categoryContent;
            }); 
    }
-    
-    
-    
-    
-    
-    
-    
+
 	</script>
 
 </body>
