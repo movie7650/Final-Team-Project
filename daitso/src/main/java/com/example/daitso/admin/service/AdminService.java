@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.category.model.Category;
+import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
@@ -144,9 +145,22 @@ public class AdminService implements IAdminService{
 		return purchaseRepository.selectCountPurchaseInfo(searchText, searchOption);
 	}
 
+	// 주문 상세 내역 조회하기
 	@Override
 	public List<PurchaseList> getPurchaseDetails(String purchaseNum) {
 		return purchaseRepository.getPurchaseDetails(purchaseNum);
+	}
+
+	// 전체 카테고리 조회하기
+	@Override
+	public List<CategoryCheck> selectAllCategories(int offset, int pageSize) {
+		return categoryRepository.selectAllCategories(offset, pageSize);
+	}
+
+	// 전체 카테고리 개수 조회하기
+	@Override
+	public int selectCountCategories() {
+		return categoryRepository.selectCountCategories();
 	}
 
 }

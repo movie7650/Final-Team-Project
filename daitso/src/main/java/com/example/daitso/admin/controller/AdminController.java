@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
+import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
@@ -277,6 +278,7 @@ public class AdminController {
         return "redirect:/admin/purchase";
     }	 
     
+    
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
     @ResponseBody
@@ -300,6 +302,7 @@ public class AdminController {
     }
 
     
+    // 주문 상세 내역 조회하기
     @GetMapping("/purchase-details/{purchaseNum}")
     @ResponseBody
     public List<PurchaseList> getPurchaseDetails(@PathVariable String purchaseNum) {
@@ -308,10 +311,34 @@ public class AdminController {
     }
     
     
+    // 전체 카테고리 조회하기
+  	@GetMapping("/category")
+  	public String selectAllCagegory(@RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+        
+      int offset = (page - 1) * pageSize;       
+      
+
+      List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
+      
+       // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountCategories(); 
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+        model.addAttribute("categorylist",categorylist);
+  	 return "admin/category/admin-category";
+  	}
+
     
-    
-	
-	//카테고리 수정하기
+	// 카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {
 		List<Category> list = categoryService.selectAllCategory();
@@ -320,12 +347,14 @@ public class AdminController {
 		return "admin/category/category-update";
 	}
 	
-	//카테고리 수정하기
+	
+	// 카테고리 수정하기
 	@PostMapping("/category/update")
 	public String updateCategory(Model model, int parentCategoryId, int categoryId) {
 		categoryService.updateCategory(categoryId, parentCategoryId);
 		return updateCategory(model);
 	}
+	
 	
 
 }
