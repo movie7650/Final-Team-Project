@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
+import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.repository.IReviewRepository;
 
 @Service
@@ -17,8 +18,8 @@ public class ReviewService implements IReviewService{
 	IReviewRepository reviewRepository;
 
 	@Override
-	public void insertReview(Review review) {
-		reviewRepository.insertReview(review);		
+	public void insertReview(WriteMyReview writeMyReveiw) {
+		reviewRepository.insertReview(writeMyReveiw);		
 	}
 	//내 리뷰 조회하기
 	@Override
@@ -66,6 +67,11 @@ public class ReviewService implements IReviewService{
 	@Override
 	public int selectReviewContentCount(int customerId) {
 		return reviewRepository.selectReviewContentCount(customerId);
+	}
+	//리뷰작성하기-내가주문한 상품 상품정보가져오기
+	@Override
+	public List<WriteMyReview> selectMyPurchase(int customerId, int productId) {
+		return reviewRepository.selectMyPurchase(customerId, productId);
 	}
 
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+
+ <div class="write-review-main">
+ <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+	<div class="write-review-title">리뷰작성하기</div>
+	<div style="margin-top:100px; padding-right:55px;">
+	<th:block th:each="myReviewPurchase : ${MyReviewPurchaseList}">
+	<form th:action="@{/mypage/writeReview}" method="post">
+	<div class="order-list-container">
+				<div class="order-list-container-01">
+					 <div th:text="${myReviewPurchase.purchaseDt}" class="shipping-status">주문날짜</div> 					
+					<div class="purchase-img-001">이미지</div>
+					
+					<div class="purchase-product-inform">
+						<div th:text="|주문번호 : ${myReviewPurchase.purchaseNum}|"class="purchase-number">주문번호</div>
+						<div th:text="|상품명 : ${myReviewPurchase.productNm}|"class="purchase-inform-001">ProductName</div>
+						<div th:text="|수량 : ${myReviewPurchase.purchaseCount}개|"class="purchase-count" >구매수량</div>
+						<div th:text="|상품가격 : ${myReviewPurchase.purchasePrice}|"class="purchase-product-cost">상품가격</div>
+						<div th:text="|총가격 : ${myReviewPurchase.totalCost}|"class="purchase-total-cost">총 가격</div>
+					</div><!-- purchase-product-inform -->
+				</div><!-- order-list-container01 -->	
+			</div><!-- order-list-container -->
+			
+			
+			<div>
+				<div style="float:left; padding-bottom:3px; border-bottom:solid 2px #668663;">평점 및 별점</div>
+				<div class="review-input"><input name="reviewStarPoint" th:text="${reviewStarPoint}" type="number" min="1" max="5" maxlength="1"/></div>
+			</div>
+			
+			
+			<div style="margin-top:20px;">
+				<div style="float:left; border-bottom:solid 2px #668663;">글 제목 :</div>
+				<input name="reviewTitle" th:text="${reviewTitle}" style="margin-left:10px; border:solid 2px #e7e7e7;" type="text" placeholder="제목을 입력하세요"/>
+			</div>
+			
+			<textarea name="reviewContent" th:text="${reviewContent}" class="review-text-area" placeholder="고객님의 소중한리뷰를 여기에 작성해주세요!"></textarea>
+			
+			
+			<div class="insert">
+		        	<input type="file" onchange="addFile(this);" multiple/>
+			</div>
+			
+			<div class="write-review-button-container">
+				<button id="save-button" type="submit">저장하기</button>
+				<button id="cancle-button" type="submit">취소하기</button>
+			</div><!--write-review-button-container  -->
+	</form>
+	</th:block>
+	</div>
+	
+</div><!-- write-review-main -->
+
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>
