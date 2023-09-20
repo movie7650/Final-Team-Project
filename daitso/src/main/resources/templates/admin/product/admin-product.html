@@ -221,13 +221,7 @@
 									style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
 							</div>
 						</div> 
-<!-- 						<div class="row mb-3">
-						<label for="productImageFirst" class="col-sm-2 col-form-label">상품 이미지</label>
-						<div class="col-sm-10">
-							<input type="file" id="productImageFirst"
-								name="productImageFirst" required>
-						</div>
-						</div> -->
+						
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
 								onclick="changeData()" type="submit">저장</button>
@@ -248,7 +242,7 @@
 				<div class="modal-header">
 				<h5 class="modal-title">신규 상품 등록</h5>
 				</div>
-				<form th:action method="post">
+				<form th:action method="post" enctype="multipart/form-data">
 					<div class="modal-body">
 						<div id="searchTextDiv" style="display:flex;">
 							<input id="searchText" style="width:20%;" type="text" onkeypress="if( event.keyCode == 13 ){searchList();}">  
@@ -326,13 +320,17 @@
 						</div>
 
 						<div class="row mb-3">
-							<label for="productImageFirst" class="col-sm-2 col-form-label">상품
-								이미지</label>
+							<label for="productImages" class="col-sm-2 col-form-label">
+								상품 이미지(3개) </label>
 							<div class="col-sm-10">
-								<input type="file" id="productImageFirst"
-									name="productImageFirst" required>
+								<input type="file" id="files" name="files"
+									accept=".gif, .jpg, .png, .jpeg" onchange="fileCheck()"
+									multiple required>
+								<div id="files-error"
+									style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
 							</div>
-						</div>
+						</div> 
+						
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
 								onclick="changeData()" type="submit">저장</button>

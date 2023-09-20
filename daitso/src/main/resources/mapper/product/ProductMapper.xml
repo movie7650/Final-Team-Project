@@ -138,7 +138,7 @@
 		                ROW_NUMBER() OVER (ORDER BY p.product_group_id DESC) AS "rn"
 		           FROM product p
 		           JOIN category c
-					 ON p.category_id = c.category_id
+					 ON p.category_id = c.category_id AND p.status ='Y'
 		       GROUP BY p.product_group_id, 
 		                p.product_nm, 
 		                c.category_pr_id, 
@@ -183,7 +183,7 @@
 		  FROM(	SELECT COUNT(*) AS cnt 
 		          FROM product p 
 			      JOIN category c 
-			        ON p.category_id = c.category_id
+			        ON p.category_id = c.category_id  AND p.status ='Y'
 			  GROUP BY p.product_group_id, 
 			           p.product_nm, 
 			           c.category_pr_id, 
@@ -239,7 +239,7 @@
 	 	       p.product_stock         AS "productStock"
 	   	 FROM  product p 
 		 JOIN  category c 
-		   ON  p.category_id = c.category_id
+		   ON  p.category_id = c.category_id AND p.status = 'Y'
 	    WHERE  p.product_group_id = #{productGroupId}
 	 ORDER BY  p.product_price
 	</select>
@@ -250,9 +250,13 @@
 		담당자: 이세인
 	-->
 	<delete id="deleteProductByGroupId" parameterType="int">
-	    DELETE 
+    UPDATE product
+	   SET status = 'N'
+     WHERE product_group_id = #{productGroupId}
+     
+	    <!-- DELETE 
 	      FROM product 
-	     WHERE product_group_id = #{productGroupId}
+	     WHERE product_group_id = #{productGroupId} -->
 	     
 	<!--DELETE
 		FROM product p
@@ -304,8 +308,8 @@
 		담당자: 이세인
 	-->
 	<delete id="deleteProduct" parameterType="int">
-	    DELETE 
-	      FROM product 
+	    UPDATE product
+	      SET status = 'N' 
 	     WHERE product_id = #{productId}
 	</delete>
 
@@ -362,7 +366,7 @@
 		       			p.product_nm         AS "productNm",
 		        		p.category_id        AS "categoryId"
 		  FROM product p
-		  JOIN category c ON p.category_id = c.category_id
+		  JOIN category c ON p.category_id = c.category_id AND p.status = 'Y'
 		 WHERE INSTR(p.product_nm,#{searchText}) > 0
 	</select>
 

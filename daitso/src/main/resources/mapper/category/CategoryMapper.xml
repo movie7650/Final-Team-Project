@@ -119,8 +119,9 @@
 		        LEVEL AS depth
 		        FROM category
 		        START WITH category_pr_id = 0
-		        CONNECT BY PRIOR category_id = category_pr_id)
-		        WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+		        CONNECT BY PRIOR category_id = category_pr_id  AND status = 'Y'
+		       )
+		 WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 	    
 	    
@@ -130,21 +131,21 @@
      -->  
 	<select id="selectCountCategories">
 		SELECT COUNT(*)
-			    FROM (  SELECT category_id as "categoryId",
+			    FROM ( SELECT category_id as "categoryId",
 					           category_nm as "categoryNm",
 					           sys_connect_by_path(category_nm, ' > ') as path,
 						       CONNECT_BY_ROOT category_id AS root_id,
 							   LEVEL AS depth
 						  FROM category
 					START WITH category_pr_id = 0
-					CONNECT BY PRIOR category_id = category_pr_id)
+					CONNECT BY PRIOR category_id = category_pr_id AND status = 'Y'
+					)
 	</select>
 	
 	
-	
 	<delete id="deleteCategory" parameterType="int">
-	    DELETE 
-	      FROM category
+	    UPDATE category
+	       SET status = 'N'
 	     WHERE category_id = #{categoryId}
 	</delete>
 	
@@ -156,12 +157,12 @@
 	     WHERE category_id = #{categoryId}
 	</select>
 	
-	
 	<update id="updateCategoryInfo" parameterType="com.example.daitso.category.model.CategoryCheck">
 	    UPDATE category
 		   SET category_nm  = #{categoryNm},
 		   	   category_content = #{categoryContent}
 		 WHERE category_id = #{categoryId}
 	</update>
+	
     
 </mapper>
