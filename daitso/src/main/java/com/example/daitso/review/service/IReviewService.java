@@ -20,9 +20,11 @@ public interface IReviewService {
 	
 	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
 
-	List<ReviewProductDetail> selectProductReview(int groupId, int page);
+	List<ReviewProductDetail> selectProductReview(int groupId, int page, int customerId);
 	
 	int selectProductReviewCount(int groupId);
 	
 	int selectProductReviewAvg(int groupId);
+	
+	int insertReviewHeart(int reviewId, int customerId);
 }

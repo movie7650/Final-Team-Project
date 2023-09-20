@@ -42,9 +42,9 @@ public class ReviewService implements IReviewService{
 	}
 
 	@Override
-	public List<ReviewProductDetail> selectProductReview(int groupId, int page) {
+	public List<ReviewProductDetail> selectProductReview(int groupId, int page, int customerId) {
 		int start = (page-1)*2 + 1; 
-		return reviewRepository.selectProductReview(groupId, start, start+1);
+		return reviewRepository.selectProductReview(groupId, start, start+1, customerId);
 	}
 
 	@Override
@@ -55,6 +55,13 @@ public class ReviewService implements IReviewService{
 	@Override
 	public int selectProductReviewCount(int groupId) {
 		return reviewRepository.selectProductReviewCount(groupId);
+	}
+
+	@Override
+	public int insertReviewHeart(int reviewId, int customerId) {
+		reviewRepository.insertReviewHeart(reviewId, customerId);
+		int num = reviewRepository.selectReviewHeartCount(reviewId);
+		return num;
 	}
 
 }

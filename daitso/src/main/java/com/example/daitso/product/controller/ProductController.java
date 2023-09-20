@@ -49,21 +49,21 @@ public class ProductController {
 	//상품 정보 조회하기(리뷰, 문의글 포함)
 	@GetMapping("/{productId}/{groupId}")
 	public String selectProduct(@PathVariable int productId, @PathVariable int groupId, Model model) {
-
+		int customerId = -1;
 		try {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			
-			String customerId = userDetails.getUsername();		
+			customerId = Integer.valueOf(userDetails.getUsername());	
 			model.addAttribute("customerId", customerId);
 		}catch(Exception e) {
-			model.addAttribute("customerId", "whotheFisthatguy");			
+			model.addAttribute("customerId", "whoAreYou");			
 		}
 		
 		
 		Product product = productService.selectProduct(productId);
 		
-		List<ReviewProductDetail> rList = reviewService.selectProductReview(groupId, 1);
+		List<ReviewProductDetail> rList = reviewService.selectProductReview(groupId, 1, customerId);
 
 		int reviewAvg = reviewService.selectProductReviewAvg(groupId);
 		int reviewCnt = reviewService.selectProductReviewCount(groupId);
