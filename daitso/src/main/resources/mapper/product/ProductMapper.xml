@@ -94,6 +94,7 @@
 			 							   FROM category START WITH category_id = #{categoryId} 
 									    CONNECT BY PRIOR category_id = category_pr_id
 							   		   )
+				 AND status = 'Y'
 		        )
 	</select>
 
@@ -372,7 +373,8 @@
 	 -->
 	<select id="selectProductOptionFirst" parameterType="int" resultType="map">
 		SELECT nvl(product_option_first,0) AS optionFirst 
-		FROM product WHERE product_group_id = #{productGroupId}
+		FROM product 
+		WHERE product_group_id = #{productGroupId} AND status = 'Y'
 		GROUP BY product_option_first
 	</select>
 	
@@ -385,7 +387,7 @@
 	<select id="selectProductOptionSecond" resultType="map">
 		SELECT nvl(max(product_option_second),0) AS optionSecond
 		FROM product 
-		WHERE product_group_id=#{productGroupId}
+		WHERE product_group_id=#{productGroupId} AND status='Y'
 		<choose>
 			<when test='productOptionFirst.equals("0")'>
 			</when>
@@ -405,7 +407,7 @@
 	<select id="selectProductOptionThird" resultType="map">
 		SELECT nvl(max(product_option_third),0) AS optionThird
 		FROM product 
-		WHERE product_group_id=#{productGroupId}
+		WHERE product_group_id=#{productGroupId} AND status='Y'
 		<choose>
 			<when test='productOptionFirst.equals("0")'>
 			</when>
@@ -434,7 +436,7 @@
 					(
 					SELECT p.*, rownum as rnum 
 					FROM product p
-					WHERE product_group_id = #{productGroupId}
+					WHERE product_group_id = #{productGroupId} AND status = 'Y'
 					<choose>
 						<when test='productOptionFirst.equals("0")'>
 						</when>
@@ -561,6 +563,7 @@
 	                    	group by p.product_group_id
 					  		) s 
 				ON  p.product_group_id = s.product_group_id
+				WHERE p.status = 'Y'
 				)
 	    	WHERE snum = 1 
 	    	<if test='selector.equals("popular")'>

@@ -23,11 +23,18 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
+import com.example.daitso.inquiry.model.Inquiry;
+import com.example.daitso.inquiry.model.InquiryInfo;
+import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
+import com.example.daitso.inquiry.model.InquirySelect;
+import com.example.daitso.inquiry.service.IInquiryService;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.PageResult;
 import com.example.daitso.purchase.model.PurchaseList;
 import com.example.daitso.purchase.service.IPurchaseService;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -44,12 +51,9 @@ public class AdminController {
 	@Autowired
 	IPurchaseService purchaseService;
 	
-	// 로그인
-	@GetMapping("/login")
-	public String login() {
-		return "admin/login/admin-login";
-	}
-
+	@Autowired
+	IInquiryService inquiryService;
+	
 	// 상품 조회하기(카테고리별)
 	@GetMapping("/product")
 	public String selectProductsByCategory( @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
@@ -131,7 +135,7 @@ public class AdminController {
 		adminService.deleteProductByGroupId(productGroupId);
 		model.addAttribute("message","상품이 삭제되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/message";
+		return "admin/product/message";
 	}	
 	
 	// 상품ID로 상품 정보 갖고오기
@@ -164,7 +168,7 @@ public class AdminController {
 		session.setAttribute("productStock", product.getProductStock());
 		model.addAttribute("message","상품이 수정되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/message";
+		return "admin/product/message";
 	}
 	
 	// 상품 삭제하기
@@ -192,8 +196,10 @@ public class AdminController {
 		adminService.registerProducts(product, files);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/message";
-	}	
+
+	return "admin/message";
+	}
+	
 	
 	// 상품명으로 상품 검색하기
     @GetMapping("/search-product")
@@ -297,31 +303,32 @@ public class AdminController {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
     }
-    
+
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
   	public String selectAllCagegory(@RequestParam(name = "page", defaultValue = "1") int page,
-        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
         
-  		int offset = (page - 1) * pageSize;       
+      int offset = (page - 1) * pageSize;       
       
-  		List<CategoryCheck> categorylists = adminService.selectAllCategories(offset, pageSize);
+
+      List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
       
-	    // 페이징 정보 전달
-		model.addAttribute("currentPage", page);
-		model.addAttribute("pageSize", pageSize);
-	
-		// 총 상품 개수
-		int totalCount = adminService.selectCountCategories(); 
-		    
-		// 총 페이지 수
-		int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-		    
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("totalPages", totalPages);
-	    model.addAttribute("categorylists",categorylists);
+       // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountCategories(); 
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+        model.addAttribute("categorylist",categorylist);
         
-	    return "admin/category/admin-category";
+        return "admin/category/admin-category";
   	}
 	
   	// 카테고리 삭제하기
@@ -353,6 +360,7 @@ public class AdminController {
  		return "admin/message";
  	}
  	
+ 	
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {
@@ -367,6 +375,83 @@ public class AdminController {
 	public String updateCategory(Model model, int parentCategoryId, int categoryId) {
 		categoryService.updateCategory(categoryId, parentCategoryId);
 		return updateCategory(model);
+	}
+
+	// 문의 관리 화면
+	@GetMapping("/inquiry/{inquiryAnsDv}")
+	public String getInquiry(@PathVariable char inquiryAnsDv, Model model) {
+		return getInquiry(inquiryAnsDv, 1, model);
+	}
+	
+	@GetMapping("/inquiry/{inquiryAnsDv}/{page}")
+	public String getInquiry(@PathVariable char inquiryAnsDv, @PathVariable int page, Model model) {
+		
+		model.addAttribute("inquiryAnsDv", inquiryAnsDv);
+		
+		List<InquirySelect> inquiryList = inquiryService.selectInquiryListByInquiryAnsDv(inquiryAnsDv, page);
+		model.addAttribute("inquiryList", inquiryList);
+		
+		int inquiryTotalCount = inquiryService.selectTotalInquiryCountByInquiryAnsDv(inquiryAnsDv);
+		
+		int totalPage = 0;
+		
+		if(inquiryTotalCount > 0) {
+			totalPage = (int)Math.ceil(inquiryTotalCount/10.0); // 총 페이지 개수
+		}
+		
+		int totalPageBlock = (int)Math.ceil(totalPage/10.0);
+		int nowPageBlock = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage = 0;
+		
+		if(totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else if(totalPage == 0) {
+			endPage = 1;
+		}
+		else {
+			endPage= totalPage;
+		}
+		
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		
+		return "admin/inquiry/admin-inquiry";
+	}
+
+	// 문의 답변 화면
+	@GetMapping("/inquiry/complete/{inquiryId}/{inquiryAnsDv}")
+	public String getInquiryComplete(@PathVariable int inquiryId, @PathVariable char inquiryAnsDv, Model model) {
+		
+		model.addAttribute("inquiryId", inquiryId);
+		model.addAttribute("inquiryAnsDv", inquiryAnsDv);
+		
+		if(inquiryAnsDv == 'W') {
+			InquiryInfo inquiryInfo = inquiryService.selectInquiryInfoByInquiryId(inquiryId);
+			model.addAttribute("inquiryInfo", inquiryInfo);
+		} else {
+			InquiryInfoWithAnswer inquiryInfo = inquiryService.selectInquiryInfoWithAnswerByInquiryId(inquiryId);
+			model.addAttribute("inquiryInfo", inquiryInfo);
+		}
+		
+		return "admin/inquiry/admin-inquiry-complete";
+	}
+	
+	// 문의 답변
+	@PostMapping("/inquiry/insert/{inquiryId}")
+	public @ResponseBody String insertInquiry(@PathVariable int inquiryId, @RequestBody String data) {
+		JsonElement element = JsonParser.parseString(data);
+		
+		int productId = Integer.valueOf(element.getAsJsonObject().get("productId").getAsString());
+		String inquiryContent = element.getAsJsonObject().get("inquiryContent").getAsString();
+		
+		inquiryService.insertInquiryComplete(inquiryId, productId, inquiryContent);
+		
+		return null;
 	}
 
 }

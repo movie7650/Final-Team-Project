@@ -28,7 +28,8 @@
 
 	<!-- 주문목록조회  -->
 	<select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
-		SELECT purchase_count					AS	"purchaseCount",
+		SELECT pur.product_id as "productId",
+			   purchase_count					AS	"purchaseCount",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
 			   cc.common_code_nm				AS	"purchaseDv",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
