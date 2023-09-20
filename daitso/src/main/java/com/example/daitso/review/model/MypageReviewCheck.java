@@ -19,4 +19,5 @@ public class MypageReviewCheck {
 	private String reviewImageSecond;
 	private String reviewImageThird;
 	private Date createDt;
+	private int reviewContentCount;
 }
