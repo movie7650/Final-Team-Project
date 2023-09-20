@@ -1,10 +1,73 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<link rel="stylesheet" th:href="@{/css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-purchase.css}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<link rel="stylesheet" th:href="@{/css/admin-inquiry.css}">
 <body>
-
+	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+	
+	<!-- 오른쪽 컨텐츠 -->
+	<div id="productTable" style="position: relative;">
+		<div class="admin-inquiry-title">문의 조회/답변</div>
+		<div class="admin-inquiry-table">
+			<div 
+				th:if="${inquiryAnsDv} == 'W'"
+				style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px;">
+				<div class="admin-inquiry-ready-title" ><a th:href="@{/admin/inquiry/W}" style="color:black; text-decoration: none;">답변 대기 중</a></div>
+				<div class="admin-inquiry-complete-title"><a th:href="@{/admin/inquiry/C}" style="color:black; text-decoration: none;">답변 완료</a></div>
+			</div>
+			<div 
+				th:unless="${inquiryAnsDv} == 'W'"
+				style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px;">
+				<div class="admin-inquiry-complete-title" ><a th:href="@{/admin/inquiry/W}" style="color:black; text-decoration: none;">답변 대기 중</a></div>
+				<div class="admin-inquiry-ready-title"><a th:href="@{/admin/inquiry/C}" style="color:black; text-decoration: none;">답변 완료</a></div>
+			</div>
+			<div class="admin-inquiry-thead">
+				<div>문의 ID</div>
+				<div>상품명</div>
+				<div>문의 내용</div>
+				<div>문의 상태</div>
+			</div>
+			<div class="admin-inquiry-tbody" th:each="inquiry : ${inquiryList}">
+				<div th:text="${inquiry.inquiryId}" style="width: 10%;">문의 ID</div>
+				<div style="width: 20%;"><a th:href="@{/product/__${inquiry.productId}__/__${inquiry.categoryId}__}" th:text="${inquiry.productNm}" style="color:black; text-decoration: none;">상품명</a></div>
+				<div th:text="${inquiry.inquiryContent}" style="width: 45%;">문의 내용</div>
+				<div th:if="${inquiryAnsDv} == 'W'" style="width: 10%; display: flex; align-items: center;" >
+					<div class="admin-inquiry-btn" th:onclick="inquiryComplete([[${inquiry.inquiryId}]], 'W')">문의 답변</div>
+				</div>
+				<div th:unless="${inquiryAnsDv} == 'W'" style="width: 10%; display: flex; align-items: center;" >
+					<div class="admin-inquiry-btn" th:onclick="inquiryComplete([[${inquiry.inquiryId}]], 'C')">답변 보기</div>
+				</div>
+			</div>
+			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px;">
+				<div th:if="${nowPageBlock>1}" style="width: 30px; height: 30px; text-align: center; border: 2px solid gray;">
+					<a th:href="@{/admin/inquiry/__${inquiryAnsDv}__/__${startPage-1}__}">
+						<img th:src="@{/assets/common/left_arrow_gray.svg}" style="width: 12px; height: 12px;">
+					</a>
+				</div>
+				<div th:each="i:${#numbers.sequence(startPage,endPage)}" th:classappend="${i==nowPage}?active" style="margin: 0 10px 0 10px; width: 30px; height: 30px; text-align: center;">
+					<a th:href="@{/admin/inquiry/__${inquiryAnsDv}__/__${i}__}" style="color:black; text-decoration: none; font-size: 16px;">[[${i}]]</a>
+				</div>
+				<div th:if="${nowPageBlock<totalPageBlock}" style="width: 30px; height: 30px; text-align: center; border: 2px solid gray;">
+					<a th:href="@{/admin/inquiry/__${inquiryAnsDv}__/__${endPage+1}__}">
+						<img th:src="@{/assets/common/right_arrow_gray.svg}" style="width: 12px; height: 12px;">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- admin-frame -->
+	</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script type="text/javascript" th:inline="javascript">
+
+	function inquiryComplete(inquiryId, inquiryAnsDv){
+		window.open( window.location.origin + '/admin/inquiry/complete/' + inquiryId + '/' + inquiryAnsDv , '문의 답변', 'width=870px,height=590px,scrollbars=yes');
+	}
+</script>
 </html>
