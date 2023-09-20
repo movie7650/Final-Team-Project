@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.example.daitso.category.model.Category;
+import com.example.daitso.category.model.CategoryCheck;
 
 @Repository
 @Mapper
@@ -30,5 +31,11 @@ public interface ICategoryRepository {
 	
 	// 카테고리 무작위 8개 갖고오기
 	List<Category> selectMainCategory();
+	
+	// 전체 카테고리 조회하기
+	List<CategoryCheck> selectAllCategories(@Param("offset") int offset, @Param("pageSize") int pageSize);
+	
+	// 전체 카테고리 개수 조회하기
+	int selectCountCategories();
 }
 

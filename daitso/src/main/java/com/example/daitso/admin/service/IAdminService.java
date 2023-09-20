@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.daitso.category.model.Category;
+import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.PurchaseList;
@@ -52,12 +54,18 @@ public interface IAdminService {
 	void changePurchaseStatus(int purchaseId, int commonCodeId);	
 		
 	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
-//	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption);
 	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption, int offset, int pageSize);
 	
 	// 검색 결과 개수 조회하기
 	int selectCountPurchaseInfo(String searchText, String searchOption);
 	
+	// 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
+	
+	// 전체 카테고리 조회하기
+	List<CategoryCheck> selectAllCategories(int offset, int pageSize);
+	
+	// 전체 카테고리 개수 조회하기
+	int selectCountCategories();
 
 }
