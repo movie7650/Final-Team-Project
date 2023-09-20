@@ -23,9 +23,12 @@ public class CartService implements ICartService{
 	@Transactional
 	public void insertCartService(int productId, int customerId, int productCnt) {
 		Map<String, Integer> map =  cartRepository.selectCustomerCartProduct(customerId, productId);
+		//장바구니에 추가할 상품이 현재 장바구니에 존재하지 않을 경우 
 		if(map == null) {
-			cartRepository.insertCart(productId, customerId, productCnt);			
+			cartRepository.insertCart(productId, customerId, productCnt);
+		//장바구니에 추가할 상품이 현재 장바구니에 존재할 경우
 		}else {
+			//상품을 구매할 수 있는 최대 개수를 추가할 개수 + 기존에 담겨있는 개수를 한 후 최대 개수보다 적으면 그대로 추가, 크면 최대 개수로 업데이트
 			int maxVal = Integer.parseInt(String.valueOf(map.get("PRODUCTMAXGET")));
 			int productCartVal = Integer.parseInt(String.valueOf(map.get("CARTCOUNT")));
 			if(productCnt + productCartVal <= maxVal) {

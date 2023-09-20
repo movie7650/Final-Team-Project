@@ -44,11 +44,13 @@ public class CategoryService implements ICategoryService{
 		return categoryRepository.selectAllCategory();
 	}
 
+	// 카테고리 계층 업데이트
 	@Override
 	public void updateCategory(int categoryId, int parentCategoryId) {
 		categoryRepository.updateCategory(categoryId, parentCategoryId);
 	}
 
+	// 카테고리 무작위 8개 갖고오기
 	@Override
 	public List<Category> selectMainCategory() {
 		return categoryRepository.selectMainCategory();
