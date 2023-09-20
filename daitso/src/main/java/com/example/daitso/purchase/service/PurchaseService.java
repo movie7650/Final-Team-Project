@@ -69,5 +69,9 @@ public class PurchaseService implements IPurchaseService {
 	public int selectPayCoin(int customerId) {
 		return purchaseRepository.selectPayCoin(customerId);
 	}
+	@Override
+	public int selectPurchaseNumCount(int customerId) {
+		return purchaseRepository.selectPurchaseNumCount(customerId);
+	}
 	
 }
