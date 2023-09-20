@@ -2,54 +2,78 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.review.repository.IReviewRepository">
 
-<!-- 상품별 리뷰 조회 -->
-<select id="selectProductReview" resultType="com.example.daitso.review.model.ReviewProductDetail">
-		SELECT 
-       	review_id AS reviewId,
-		product_id AS productId,
-		product_nm AS productNm,
-		options AS options,
-        customer_nm AS customerNm,
-		review_title AS reviewTitle,
-        NVL(click_check,0) AS clickCheck,
-		review_content AS reviewContent,
-		review_star_point * 20 AS reviewStarPoint,
-		create_dt as createDt,
-		review_image_first AS reviewImageFirst,
-		review_image_second AS reviewImageSecond,
-		review_image_third AS reviewImageThird,
-        review_heart_count AS reviewHeartCount,
-        rnum FROM (
-           			SELECT r.review_id, r.product_id, p.product_nm,
-					p.product_option_first || ' ' || p.product_option_second || ' ' || p.product_option_third AS options,
-					c.customer_nm, r.review_title, r.review_content, r.review_star_point, r.create_dt, click_check,
-					r.review_image_first, r.review_image_second, r.review_image_third, NVL(review_heart_count,0) as review_heart_count, rownum as rnum
-					FROM (
-						SELECT * FROM review ORDER BY review_star_point desc
-						  ) r
-						LEFT JOIN customer c ON r.customer_id = c.customer_id
-						LEFT JOIN product p ON r.product_id = p.product_id
-                        LEFT JOIN(select count(review_id) as review_heart_count , review_id from review_heart group by review_id) s on r.review_id = s.review_id
-                        LEFT JOIN(select count(*) as click_check, review_id  from review_heart where  heart_click_customer_id = #{customerId} group by review_id, heart_click_customer_id) ss on r.review_id = ss.review_id
-						WHERE p.product_group_id = #{groupId} and r.status = 'Y'
-				   )
-   		WHERE rnum between #{start} and #{end}
-</select>
-
-<!-- 상품별 리뷰 개수 조회 -->
-<select id="selectProductReviewCount" parameterType="int" resultType="int">
-	SELECT count(*) FROM review r
-	LEFT JOIN product p ON r.product_id = p.product_id
-	WHERE p.product_group_id = #{groupId}
-</select>
-
-<!-- 상품별 리뷰 평균 조회 -->
-<select id="selectProductReviewAvg" parameterType="int" resultType="int">
-	SELECT NVL(max(avg(review_star_point)) * 20, 0)
-	FROM review r
-	LEFT JOIN product p ON r.product_id = p.product_id
-	WHERE p.product_group_id = #{groupId} AND r.status = 'Y' GROUP BY p.product_group_id
-</select>
+	<!-- 
+		기능: 상품별 리뷰 조회
+		담당자: 나현웅
+	 -->
+	<select id="selectProductReview" resultType="com.example.daitso.review.model.ReviewProductDetail">
+			SELECT 
+	       	review_id AS reviewId,
+			product_id AS productId,
+			product_nm AS productNm,
+			options AS options,
+	        customer_nm AS customerNm,
+			review_title AS reviewTitle,
+	        NVL(click_check,0) AS clickCheck,
+			review_content AS reviewContent,
+			review_star_point * 20 AS reviewStarPoint,
+			create_dt as createDt,
+			review_image_first AS reviewImageFirst,
+			review_image_second AS reviewImageSecond,
+			review_image_third AS reviewImageThird,
+	        review_heart_count AS reviewHeartCount,
+	        rnum FROM (
+	           			SELECT r.review_id, r.product_id, p.product_nm,
+						p.product_option_first || ' ' || p.product_option_second || ' ' || p.product_option_third AS options,
+						c.customer_nm, r.review_title, r.review_content, r.review_star_point, r.create_dt, click_check,
+						r.review_image_first, r.review_image_second, r.review_image_third, NVL(review_heart_count,0) as review_heart_count, rownum as rnum
+						FROM (
+							SELECT * FROM review ORDER BY review_star_point desc
+							  ) r
+							LEFT JOIN customer c ON r.customer_id = c.customer_id
+							LEFT JOIN product p ON r.product_id = p.product_id
+	                        LEFT JOIN(select count(review_id) as review_heart_count , review_id from review_heart group by review_id) s on r.review_id = s.review_id
+	                        LEFT JOIN(select count(*) as click_check, review_id  from review_heart where  heart_click_customer_id = #{customerId} group by review_id, heart_click_customer_id) ss on r.review_id = ss.review_id
+							WHERE p.product_group_id = #{groupId} and r.status = 'Y'
+					   )
+	   		WHERE rnum between #{start} and #{end}
+	</select>
+	
+	<!-- 
+		기능: 상품별 리뷰 개수 조회(페이징 처리를 위한 기능)
+		담당자: 나현웅
+	 -->
+	<select id="selectProductReviewCount" parameterType="int" resultType="int">
+		SELECT count(*) FROM review r
+		LEFT JOIN product p ON r.product_id = p.product_id
+		WHERE p.product_group_id = #{groupId}
+	</select>
+	
+	<!-- 
+		기능: 상품별 리뷰 평균 조회
+		담당자: 나현웅
+	 -->
+	<select id="selectProductReviewAvg" parameterType="int" resultType="int">
+		SELECT NVL(max(avg(review_star_point)) * 20, 0)
+		FROM review r
+		LEFT JOIN product p ON r.product_id = p.product_id
+		WHERE p.product_group_id = #{groupId} AND r.status = 'Y' GROUP BY p.product_group_id
+	</select>
+	
+	<!-- 
+		기능: 리뷰 좋아요 데이터 삽입
+		담당자: 나현웅
+	 -->
+	<insert id="insertReviewHeart">
+		INSERT INTO review_heart (review_id, heart_click_customer_id) VALUES (#{reviewId}, #{customerId})
+	</insert>
+	
+	<!-- 기능: 리뷰 좋아요 개수 조회
+		 담당자: 나현웅
+	 -->
+	<select id="selectReviewHeartCount" resultType="int">
+		select count(*) from review_heart where review_id = #{reviewId}
+	</select>
 
 <!-- 마이페이지 내가 쓴 리뷰 조회  -->
 <select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
@@ -67,16 +91,6 @@ FROM   review re
 left join product p on re.product_id = p.product_id
 left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
 WHERE re.customer_id=#{customerId} 
-</select>
-
-<!-- 리뷰 좋아요 데이터 삽입 -->
-<insert id="insertReviewHeart">
-	INSERT INTO review_heart (review_id, heart_click_customer_id) VALUES (#{reviewId}, #{customerId})
-</insert>
-
-<!-- 리뷰 좋아요 개수 비동기 조회 -->
-<select id="selectReviewHeartCount" resultType="int">
-	select count(*) from review_heart where review_id = #{reviewId}
 </select>
 
 <!-- 마이페이지 내가 쓴 리뷰 삭제하기 -->
