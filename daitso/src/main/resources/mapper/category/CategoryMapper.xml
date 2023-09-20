@@ -139,5 +139,29 @@
 					START WITH category_pr_id = 0
 					CONNECT BY PRIOR category_id = category_pr_id)
 	</select>
+	
+	
+	
+	<delete id="deleteCategory" parameterType="int">
+	    DELETE 
+	      FROM category
+	     WHERE category_id = #{categoryId}
+	</delete>
+	
+	<select id="selectCategoryByCategoryId">
+	 	SELECT category_id			  AS "categoryId",
+	           category_nm            AS "categoryNm",
+	           category_content		  AS "categoryContent"
+		  FROM category
+	     WHERE category_id = #{categoryId}
+	</select>
+	
+	
+	<update id="updateCategoryInfo" parameterType="com.example.daitso.category.model.CategoryCheck">
+	    UPDATE category
+		   SET category_nm  = #{categoryNm},
+		   	   category_content = #{categoryContent}
+		 WHERE category_id = #{categoryId}
+	</update>
     
 </mapper>

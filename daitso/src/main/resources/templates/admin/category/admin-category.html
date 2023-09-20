@@ -30,18 +30,18 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="categorylist : ${categorylist}">
+					<tr th:each="categorylist : ${categorylists}">
 						<td th:text="${categorylist.rn}"></td>
 						<td th:text="${categorylist.categoryId}"></td>
 						<td th:text="${categorylist.categoryNm}"></td>
-						<td th:text="${categorylist.path}"></td>
+						<td style="text-align:left; padding-left:30px;" th:text="${categorylist.path}"></td>
 						<td>
 							<div class="btn-group">
 									<button class="btn btn-xs" style="background-color: #aac8b2; color: #ffff"
-										data-bs-toggle="modal" data-bs-target="#" type="button" 
-										>수정</button>
+										data-bs-toggle="modal" data-bs-target="#updateCategoryModal" type="button"
+										th:onclick = "selectCategoryId([[${categorylist.categoryId}]])">수정</button>
 									<button class="btn btn-xs" style="background-color: red; color: #fff" 
-										type="button" >삭제</button>
+										type="button" th:onclick="deleteCategory([[${categorylist.categoryId}]])">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -72,6 +72,41 @@
 				</a></li>
 			</ul>
 		</div>
+		
+	<!-- 카테고리 수정 모달 -->
+	<div id="updateCategoryModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 800px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">카테고리 수정</h5>
+				</div>
+				<form th:action="@{/admin/update/category}" method="post">
+					<div class="modal-body">
+					<input type="hidden" id="updateCategoryId" name="categoryId" >
+						<div class="row mb-3">
+							<label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
+							<div class="col-sm-10">
+								<input type="text" id="updateCategoryNm" name="categoryNm" autocomplete="off">
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="categoryContent" class="col-sm-2 col-form-label">카테고리 내용</label>
+							<div class="col-sm-10">
+								<textarea id="updateCategoryContent" name="categoryContent" style="height: 200px; width: 510px" autocomplete="off"></textarea>
+							</div>
+						</div>
+						
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								type="submit">저장</button>
+							<button class="btn btn-secondary"
+								th:onclick="|location.href='@{/admin/category}'|" type="button">닫기</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
 	</div>
 
@@ -81,7 +116,42 @@
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
-
+	
+    function deleteCategory(categoryId) {
+        if (!confirm('해당 카테고리를 삭제하시겠습니까?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteForm" action="/admin/category/delete?categoryId=${categoryId}" method="post">
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        setTimeout(() => {
+            document.getElementById('deleteForm').submit();
+        }, 50) //대기시간
+    }  
+    
+    
+    function selectCategoryId(categoryId) {
+        fetch("/admin/update/category/" + categoryId)
+           .then(response => response.json())
+           .then(data => {
+               const categorylist = data;
+               console.log("ddd",categorylist);
+               document.getElementById("updateCategoryId").value = categorylist.categoryId; 
+               document.getElementById("updateCategoryNm").value = categorylist.categoryNm;
+               document.getElementById("updateCategoryContent").value = categorylist.categoryContent;
+           }); 
+   }
+    
+    
+    
+    
+    
+    
+    
 	</script>
 
 </body>
