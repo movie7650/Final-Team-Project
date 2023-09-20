@@ -16,17 +16,23 @@
 		담당자: 나현웅
 	 -->
 	<select id="selectProductInquiry" resultType="com.example.daitso.inquiry.model.InquiryProduct">
-		SELECT p.product_option_first AS productOptionFirst, 
-				p.product_option_second AS productOptionSecond, 
-				nvl(p.product_option_third,0) AS productOptionThird,
-				i.product_id AS productId, 
-				i.customer_id AS customerId,
-				i.inquiry_content AS inquiryContent,
-				i.create_dt AS createDt 
-		FROM inquiry i
-		LEFT JOIN product p on p.product_id = i.product_id
-		WHERE i.product_id in (
-								select product_id from product where product_group_id = #{productGroupId}
-							  )
+		    SELECT p.product_option_first AS productOptionFirst, 
+					p.product_option_second AS productOptionSecond, 
+					nvl(p.product_option_third,0) AS productOptionThird,
+					i.product_id AS productId, 
+					i.customer_id AS customerId,
+					i.inquiry_content AS inquiryContent,
+            		i.inquiry_id AS inquiryId,
+            		i.inquiry_pr_id AS inquiryPrId,
+            		level,
+					i.create_dt AS createDt 
+			FROM inquiry i
+    		LEFT JOIN product p on p.product_id = i.product_id
+    		WHERE EXISTS (
+    						select 1 from product sp where sp.product_id = i.product_id and product_group_id = #{productGroupId}
+    					 )
+		    AND inquiry_ans_dv = 'C'
+    		START WITH inquiry_pr_id is null
+    		CONNECT BY PRIOR inquiry_id = inquiry_pr_id
 	</select>
 </mapper>

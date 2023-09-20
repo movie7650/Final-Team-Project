@@ -9,6 +9,8 @@ import lombok.Setter;
 public class InquiryProduct {
 	private int customerId;
 	private int productId;
+	private int inquiryId;
+	private int inquiryPrId;
 	private String productOptionFirst;
 	private String productOptionSecond;
 	private String productOptionThird;
