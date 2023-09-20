@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
 import com.example.daitso.customercoupon.service.ICustomerCouponService;
@@ -96,6 +98,9 @@ public class MyPageController {
 				point = "0";
 			}
 			model.addAttribute("totalPoint",point + "P");
+			//주문번호 카운트 
+			int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
+			model.addAttribute("purchasenumcount",purchaseNumCount);
 			
 			//구매 목록 출력
 			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
@@ -134,9 +139,9 @@ public class MyPageController {
 			}
 			model.addAttribute("totalPoint",point + "P");
 			
-			//구매 목록 출력
-//			List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
-//			model.addAttribute("purchaseList",purchaseList);
+			//주문번호 카운트 
+			int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
+			model.addAttribute("purchasenumcount",purchaseNumCount);
 			
 			//주문한 상품 상세정보 출력 
 			List<PurchaseDetailCheck> purchaseCheckList = purchaseService.selectDetailPurchase(customerId, purchaseNum);
@@ -279,16 +284,26 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 	}
-	//내가쓴리뷰삭제 get
-	@RequestMapping(value="/deleteReview", method=RequestMethod.GET)
-	public String deleteReview() {
-		return "mypage/review";
-	}
+	
 	//내가쓴 리뷰 post
 	@RequestMapping(value="/deleteReview", method=RequestMethod.POST)
-	public String deleteReview(int customerId, int reviewId) {
-		reviewService.deleteReview(customerId, reviewId);
-		return "redirect:/mypage/review";
+	@ResponseBody
+	public String deleteReview(@RequestParam int reviewId) {
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			//상단 잔여포인트
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			
+			reviewService.deleteReview(customerId, reviewId);
+			return "success";
+		}catch(ClassCastException e) {
+			return "fail";
+		}		
 	}
 	
 	//마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
