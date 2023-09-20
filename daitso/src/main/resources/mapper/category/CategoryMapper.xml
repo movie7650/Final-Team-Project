@@ -109,19 +109,18 @@
     	담당자: 이세인
      -->
 	<select id="selectAllCategories" resultType="com.example.daitso.category.model.CategoryCheck">
-		SELECT *
-		 FROM( 
-		        SELECT category_id as "categoryId",
-		                category_nm as "categoryNm",
-		                sys_connect_by_path(category_nm, ' > ') as path,
-		                ROW_NUMBER() OVER (ORDER BY category_id) AS "rn",
-		        CONNECT_BY_ROOT category_id AS root_id,
-		        LEVEL AS depth
-		        FROM category
-		        START WITH category_pr_id = 0
-		        CONNECT BY PRIOR category_id = category_pr_id  AND status = 'Y'
-		       )
-		 WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	    SELECT *
+		  FROM( SELECT category_id as "categoryId",
+		               category_nm as "categoryNm",
+		               sys_connect_by_path(category_nm, ' > ') as path,
+		               ROW_NUMBER() OVER (ORDER BY category_id) AS "rn",
+			    CONNECT_BY_ROOT category_id AS root_id,
+			     LEVEL AS depth
+			      FROM category
+			     START WITH category_pr_id = 0
+			     CONNECT BY PRIOR category_id = category_pr_id  AND status = 'Y'
+		      )
+		  WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 	    
 	    
@@ -130,25 +129,36 @@
     	담당자: 이세인
      -->  
 	<select id="selectCountCategories">
-		SELECT COUNT(*)
+	    SELECT COUNT(*)
 			    FROM ( SELECT category_id as "categoryId",
-					           category_nm as "categoryNm",
-					           sys_connect_by_path(category_nm, ' > ') as path,
-						       CONNECT_BY_ROOT category_id AS root_id,
-							   LEVEL AS depth
-						  FROM category
+					          category_nm as "categoryNm",
+					          sys_connect_by_path(category_nm, ' > ') as path,
+						      CONNECT_BY_ROOT category_id AS root_id,
+							  LEVEL AS depth
+					     FROM category
 					START WITH category_pr_id = 0
 					CONNECT BY PRIOR category_id = category_pr_id AND status = 'Y'
 					)
 	</select>
 	
 	
+	<!-- 
+    	기능: 카테고리 삭제하기
+    	담당자: 이세인
+     --> 
 	<delete id="deleteCategory" parameterType="int">
 	    UPDATE category
-	       SET status = 'N'
+	       SET status    = 'N',
+	       	   modifier  = 'admin',
+               modify_dt = systimestamp
 	     WHERE category_id = #{categoryId}
 	</delete>
 	
+	
+	<!-- 
+		기능: 카테고리ID로 카테고리 정보 조회하기
+    	담당자: 이세인
+     -->
 	<select id="selectCategoryByCategoryId">
 	 	SELECT category_id			  AS "categoryId",
 	           category_nm            AS "categoryNm",
@@ -157,10 +167,17 @@
 	     WHERE category_id = #{categoryId}
 	</select>
 	
+	
+	<!-- 
+		기능: 카테고리 정보 수정하기
+    	담당자: 이세인
+     -->
 	<update id="updateCategoryInfo" parameterType="com.example.daitso.category.model.CategoryCheck">
 	    UPDATE category
-		   SET category_nm  = #{categoryNm},
-		   	   category_content = #{categoryContent}
+		   SET category_nm      = #{categoryNm},
+		   	   category_content = #{categoryContent},
+		   	   modifier         = 'admin',
+               modify_dt        = systimestamp
 		 WHERE category_id = #{categoryId}
 	</update>
 	
