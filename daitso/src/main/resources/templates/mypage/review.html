@@ -10,8 +10,11 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 	 <div class="title-review">내 리뷰</div>
 	 <div>
+	 	<div th:if="${reviewcontentcount}==0">
+	 		<img style="width:800px; border-radius:10px; margin-right:55px; margin-top:100px;" th:src="@{/assets/mypage/nonereview.JPG}">
+	 	</div>
 		 <th:block th:each="mypageReview : ${mypageReviewList}"> 
-	 <form th:action="@{/mypage/review/reviewId=__${mypageReview.reviewId}__}" method="post">
+	 <form th:action="@{/mypage/review/__${mypageReview.reviewId}__}" method="post">
 		 	
 			<div class="my-review-container">
 			<div style="width:500px;">

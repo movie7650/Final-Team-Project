@@ -26,6 +26,9 @@ public interface IReviewRepository {
 	
 	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end, @Param("customerId") int customerId);
 	
+	//리뷰내용갯수 세기
+	int selectReviewContentCount(int customerId);
+	
 	int selectProductReviewCount(int groupId);
 
 	int selectProductReviewAvg(int groupId);

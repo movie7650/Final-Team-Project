@@ -83,7 +83,14 @@ WHERE re.customer_id=#{customerId}
 <delete id="deleteReview">
 	DELETE 
 	  FROM review  re
-	 WHERE re.customer_id=#{customerId} and re.review_id=#{reviewId};
+	 WHERE re.customer_id=#{customerId} and re.review_id=#{reviewId}
 </delete>
+
+<!--리뷰컨텐트 카운트  -->
+<select id="selectReviewContentCount" resultType="int" parameterType="int">
+	SELECT COUNT(re.review_content) as "reviewContentCount"
+	  FROM review re
+	 WHERE re.customer_id = #{customerId}
+</select>
 
 </mapper>

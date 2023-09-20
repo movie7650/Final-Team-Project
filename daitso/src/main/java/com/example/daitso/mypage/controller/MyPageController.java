@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -279,6 +280,10 @@ public class MyPageController {
 			List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
 			model.addAttribute("mypageReviewList",myReviewList);
 			
+			//리뷰컨텐트 카운트
+			int reviewContentCount = reviewService.selectReviewContentCount(customerId);
+			model.addAttribute("reviewcontentcount",reviewContentCount);
+			
 			return "mypage/review";
 		}catch(ClassCastException e) {
 			return "redirect:/customer/login";
@@ -287,15 +292,13 @@ public class MyPageController {
 	
 	//마이페이지-내리뷰-리뷰삭제
 	@RequestMapping(value="/review/{reviewId}", method=RequestMethod.POST)
-	public String deleteMyReview(int reviewId){
+	public String deleteMyReview(@PathVariable int reviewId){
 		try {
 			
 			//로그인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			
-			
 			
 			//리뷰삭제
 			reviewService.deleteReview(customerId, reviewId);
