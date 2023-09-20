@@ -37,9 +37,6 @@ public interface IAdminService {
 	
 	// 상품 등록하기
 	void registerProducts(ProductCheck product, List<MultipartFile> files);
-	
-	// 상품 등록하기
-//	void registerProducts(ProductCheck product);
 
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
