@@ -24,6 +24,7 @@ import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.service.IPurchaseService;
 import com.example.daitso.review.model.MypageReviewCheck;
+import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.service.IReviewService;
 
 @Controller
@@ -254,7 +255,6 @@ public class MyPageController {
 		}
 	}
 	//마이페이지-리뷰관리 컨트롤러
-	//리뷰 페이지 불러오기
 	@RequestMapping("/review")
 	public String Review(Model model) {
 		try {
@@ -288,6 +288,48 @@ public class MyPageController {
 		}catch(ClassCastException e) {
 			return "redirect:/customer/login";
 		}
+	}
+	//마이페이지-리뷰작성-GET
+	@RequestMapping(value="/writeReview", method=RequestMethod.GET)
+	public String writeReview(int productId,Model model) {
+		try {
+			
+			//로그인
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails)principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			
+			//상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount",shipCompleteCount);
+			//상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount",shipCount01);
+			//상단에 잔여포인트 출력
+			List<Point> points = pointService.selectPoint(customerId);
+			String point = pointService.selectTotalPoint(customerId);
+			if(point == null) {
+				point = "0";
+			}
+			model.addAttribute("points",points);
+			model.addAttribute("totalPoint", point + "P");  
+			//리뷰작성 - 내가 주문한 상품 정보 출력
+			List<WriteMyReview> myReviewPurchaseList = reviewService.selectMyPurchase(customerId, productId);
+			model.addAttribute("MyReviewPurchaseList",myReviewPurchaseList);
+			
+			
+			return "mypage/write-my-review";
+		}catch(ClassCastException e) {
+			return "redirect:/customer/login";
+		}
+		
+	}
+	//마이페이지-리뷰작성-post
+	@RequestMapping(value="/writeReview",method=RequestMethod.POST)
+	public String writeReview(WriteMyReview writeMyReview) {
+		reviewService.insertReview(writeMyReview);
+		return "redirect:/mypage/review";
+		
 	}
 	
 	//마이페이지-내리뷰-리뷰삭제
