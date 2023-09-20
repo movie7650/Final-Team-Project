@@ -36,10 +36,10 @@ public interface IAdminService {
 	void deleteProduct(int productId);
 	
 	// 상품 등록하기
-//	void registerProducts(ProductCheck product, List<MultipartFile> files);
+	void registerProducts(ProductCheck product, List<MultipartFile> files);
 	
 	// 상품 등록하기
-	void registerProducts(ProductCheck product);
+//	void registerProducts(ProductCheck product);
 
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
@@ -67,5 +67,12 @@ public interface IAdminService {
 	
 	// 전체 카테고리 개수 조회하기
 	int selectCountCategories();
+
+	// 카테고리 삭제하기
+	void deleteCategory(int categoryId);
+	
+	CategoryCheck selectCategoryByCategoryId(int categoryId);
+	
+	void updateCategoryInfo(CategoryCheck categoryCheck);
 
 }
