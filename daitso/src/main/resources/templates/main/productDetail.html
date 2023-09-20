@@ -167,7 +167,7 @@
 				</div>
 				<hr style="border: 1px solid"></hr>	
 				<th:block th:each="inquiry : ${inquiryList}">
-					<div class="d-flex">
+					<div class="d-flex" th:if="${inquiry.level == 1}">
 						<div class="d-flex justify-content-center align-items-center" style="flex: 1">
 							<div class="text-center" style="width:35px; height:20px; background-color:black; color:white; font-size:12px">
 								질문
@@ -180,6 +180,26 @@
 									<span class="font-s-13" th:if="${inquiry.productOptionFirst != '0'}">[[${inquiry.productOptionFirst}]]</span>
 									<span class="font-s-13" th:if="${inquiry.productOptionSecond != '0'}">| [[${inquiry.productOptionSecond}]]</span>
 									<span class="font-s-13" th:if="${inquiry.productOptionThird != '0'}">| [[${inquiry.productOptionThird}]]</span>
+								</span>
+								<span style="font-size:12px">[[${inquiry.createDt}]]</span>
+							</div>
+							<div>[[${inquiry.inquiryContent}]]</div>
+						</div>
+					</div>
+					<div class="d-flex" th:if="${inquiry.level == 2}">
+						
+						<div class="d-flex justify-content-center align-items-center" style="flex: 1">
+							<div style="width:30px; height:30px">
+								<img src="/assets/common/comments-regular.svg" style="width:100%; height: 100%">
+							</div>
+							<div class="text-center" style="margin-left: 10px; width:35px; height:20px; background-color: #0d32ff; color:white; font-size:12px">
+								답변
+							</div>
+						</div>
+						<div class="d-flex flex-column" style="flex: 7">
+							<div class="d-flex justify-content-between">
+								<span style="font-size:13px">
+									[관리자]
 								</span>
 								<span style="font-size:12px">[[${inquiry.createDt}]]</span>
 							</div>
