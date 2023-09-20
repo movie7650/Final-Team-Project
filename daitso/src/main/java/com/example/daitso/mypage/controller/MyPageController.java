@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -279,31 +280,33 @@ public class MyPageController {
 			List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
 			model.addAttribute("mypageReviewList",myReviewList);
 			
+			//리뷰컨텐트 카운트
+			int reviewContentCount = reviewService.selectReviewContentCount(customerId);
+			model.addAttribute("reviewcontentcount",reviewContentCount);
+			
 			return "mypage/review";
 		}catch(ClassCastException e) {
 			return "redirect:/customer/login";
 		}
 	}
 	
-	//내가쓴 리뷰 post
-	@RequestMapping(value="/deleteReview", method=RequestMethod.POST)
-	@ResponseBody
-	public String deleteReview(@RequestParam int reviewId) {
+	//마이페이지-내리뷰-리뷰삭제
+	@RequestMapping(value="/review/{reviewId}", method=RequestMethod.POST)
+	public String deleteMyReview(@PathVariable int reviewId){
 		try {
+			
+			//로그인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			//상단 잔여포인트
-			String point = pointService.selectTotalPoint(customerId);
-			if(point == null) {
-				point = "0";
-			}
 			
+			//리뷰삭제
 			reviewService.deleteReview(customerId, reviewId);
-			return "success";
+			return "redirect:/mypage/review";
+			
 		}catch(ClassCastException e) {
-			return "fail";
-		}		
+			return "redirect:/customer/login";
+		}
 	}
 	
 	//마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
