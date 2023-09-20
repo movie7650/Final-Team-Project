@@ -285,25 +285,25 @@ public class MyPageController {
 		}
 	}
 	
-	//내가쓴 리뷰 post
-	@RequestMapping(value="/deleteReview", method=RequestMethod.POST)
-	@ResponseBody
-	public String deleteReview(@RequestParam int reviewId) {
+	//마이페이지-내리뷰-리뷰삭제
+	@RequestMapping(value="/review/{reviewId}", method=RequestMethod.POST)
+	public String deleteMyReview(int reviewId){
 		try {
+			
+			//로그인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails)principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
-			//상단 잔여포인트
-			String point = pointService.selectTotalPoint(customerId);
-			if(point == null) {
-				point = "0";
-			}
 			
+			
+			
+			//리뷰삭제
 			reviewService.deleteReview(customerId, reviewId);
-			return "success";
+			return "redirect:/mypage/review";
+			
 		}catch(ClassCastException e) {
-			return "fail";
-		}		
+			return "redirect:/customer/login";
+		}
 	}
 	
 	//마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러

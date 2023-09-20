@@ -59,7 +59,7 @@ SELECT  	  re.review_title as "reviewTitle",
               re.review_image_second as "reviewImageSecond",
               re.review_image_third   as "reviewImageThird",
               re.create_dt              as "createDt"
-From   review re
+FROM   review re
 left join product p on re.product_id = p.product_id
 left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
 WHERE re.customer_id=#{customerId} 
