@@ -16,6 +16,7 @@ public class InquiryController {
 	@Autowired
 	IInquiryService inquiryService;
 	
+	//문의글 삽입
 	@PostMapping("/insert")
 	public String insertInquiry(int productId, int productGroupId, String size, String color, String other, String content) {
 

@@ -39,6 +39,9 @@ public interface IPurchaseRepository {
 	//입금/결제상품갯수
 	int selectPayCoin(int customerId);
 	
+	//주문번호 카운트 
+	int selectPurchaseNumCount(int customerId);
+	
 	//상세주문조회
 	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId") int customerId, @Param("purchaseNum")String purchaseNum);
 
@@ -55,12 +58,11 @@ public interface IPurchaseRepository {
 	void changePurchaseStatus(@Param("purchaseId") int purchaseId, @Param("commonCodeId") int commonCodeId);
 	
 	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
-//	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption);
 	List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption,@Param("offset") int offset, @Param("pageSize") int pageSize);
 
 	// 검색 결과 개수 조회하기
 	int selectCountPurchaseInfo(String searchText, String searchOption);
 	
-	// 주문 내역 정보 갖고오기
+	// 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 }

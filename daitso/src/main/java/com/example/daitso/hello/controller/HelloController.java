@@ -24,6 +24,7 @@ public class HelloController {
 	@Autowired
 	ICategoryService categoryService;
 	
+	//메인 페이지
 	@GetMapping("")
 	public String hello(Model model) {
 		List<SpecialProduct> list = productService.selectSpecialProduct();

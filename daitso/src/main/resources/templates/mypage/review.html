@@ -10,9 +10,15 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 	 <div class="title-review">내 리뷰</div>
 	 <div>
+	 	<div th:if="${reviewcontentcount}==0">
+	 		<img style="width:800px; border-radius:10px; margin-right:55px; margin-top:100px;" th:src="@{/assets/mypage/nonereview.JPG}">
+	 	</div>
 		 <th:block th:each="mypageReview : ${mypageReviewList}"> 
+	 <form th:action="@{/mypage/review/__${mypageReview.reviewId}__}" method="post">
+		 	
 			<div class="my-review-container">
 			<div style="width:500px;">
+				<!-- <div  th:text="${mypageReview.reviewId}" hidden>리뷰아이디</div> -->
 				<div th:text="|제목: ${mypageReview.reviewTitle}|" class="my-review-title">리뷰제목</div>
 				<div th:text="|상품명: ${mypageReview.productNm}|" class="my-review-product">상품이름</div>
 				<div th:if="${mypageReview.reviewStarPoint}==5" class="my-review-star-point">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
@@ -29,14 +35,17 @@
 				</div><!-- my-review-photo-container -->
 				<div class="my-review-button-container">
 					<div th:text="|&#9829; ${mypageReview.reviewHeartCount}|" class="my-review-like-count">456 좋아요</div>
+					<input class="review-id" type="hidden" th:value="${mypageReview.reviewId}">
 					<button type="submit">삭제</button>
 				</div><!-- my-review-button-container -->
 			</div><!-- my-review-container -->
+		 </form>
 		 </th:block>
 	 </div>	
 </div><!-- review-main -->
 
 
 	<div th:replace="~{/include/footer :: footer}"></div>
+
 </body>
 </html>

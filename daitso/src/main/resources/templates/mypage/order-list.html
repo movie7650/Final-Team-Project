@@ -21,9 +21,9 @@
 		<div class="order-rectangle04"><a th:href="@{/mypage/shippingcomplete}">배송완료</a></div>
 	</div><!-- order-category -->
 	<div style="margin-top:200px; padding-right:55px;">
-	<div style="width:800px;" th:if="${payCoinCount}== 0">
+	<div style="width:800px;" th:if="${purchasenumcount}== 0">
 		<img style="width:800px; border-radius:10px;" th:src="@{/assets/mypage/noneorder.JPG}">
-	</div> 
+	</div>  
 		<th:block>
 			<div th:each="purchase : ${purchaseList}" class="order-list-container">
 				<div class="order-list-container-01">

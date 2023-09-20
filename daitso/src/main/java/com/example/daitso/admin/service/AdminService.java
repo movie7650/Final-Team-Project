@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.category.model.Category;
+import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
@@ -34,25 +35,24 @@ public class AdminService implements IAdminService{
 	S3Service s3Service;
 	
 	// 상품 등록하기
-//	@Transactional
-//	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
-//		List<String> imagePathList = s3Service.upload(files);
-//		product.setProductImageFirst(imagePathList.get(0));
-//		product.setProductImageSecond(imagePathList.get(1));
-//		product.setProductImageThird(imagePathList.get(2));
-//		
-//		// 상품 등록 실패시 s3에 등록된 이미지 삭제
-//		try {
-//			productRepository.registerProducts(product);
-//			product.getProductId();
-//			productRepository.changeProductCode();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			imagePathList.forEach((url) -> {
-//				s3Service.deleteImage(url);	
-//			});
-//		}
-//	}
+	@Transactional
+	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
+		List<String> imagePathList = s3Service.upload(files);
+		product.setProductImageFirst(imagePathList.get(0));
+		product.setProductImageSecond(imagePathList.get(1));
+		product.setProductImageThird(imagePathList.get(2));
+		
+		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+		try {
+			productRepository.registerProducts(product);
+			product.getProductId();
+		} catch(Exception e) {
+			e.printStackTrace();
+			imagePathList.forEach((url) -> {
+				s3Service.deleteImage(url);	
+			});
+		}
+	}
 	
 	// 상품 조회하기(카테고리별)
 	@Override
@@ -96,12 +96,6 @@ public class AdminService implements IAdminService{
 		productRepository.deleteProduct(productId);
 	}
 	
-	// 상품 등록하기
-	@Transactional
-	public void registerProducts(ProductCheck product) {
-		productRepository.registerProducts(product);
-	}
-	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	@Override
 	public List<ProductCheck> searchProductsByName(String searchText) {
@@ -126,11 +120,6 @@ public class AdminService implements IAdminService{
 		purchaseRepository.changePurchaseStatus(purchaseId, commonCodeId);
 	}
 
-	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
-//	@Override
-//	public List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption) {
-//		return purchaseRepository.searchPurchaseInfo(searchText, searchOption);
-//	}
 	
 	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
 	@Override
@@ -144,9 +133,38 @@ public class AdminService implements IAdminService{
 		return purchaseRepository.selectCountPurchaseInfo(searchText, searchOption);
 	}
 
+	// 주문 상세 내역 조회하기
 	@Override
 	public List<PurchaseList> getPurchaseDetails(String purchaseNum) {
 		return purchaseRepository.getPurchaseDetails(purchaseNum);
+	}
+
+	// 전체 카테고리 조회하기
+	@Override
+	public List<CategoryCheck> selectAllCategories(int offset, int pageSize) {
+		return categoryRepository.selectAllCategories(offset, pageSize);
+	}
+
+	// 전체 카테고리 개수 조회하기
+	@Override
+	public int selectCountCategories() {
+		return categoryRepository.selectCountCategories();
+	}
+	
+	// 카테고리 삭제하기
+	@Override
+	public void deleteCategory(int categoryId) {
+		categoryRepository.deleteCategory(categoryId);
+	}
+
+	@Override
+	public CategoryCheck selectCategoryByCategoryId(int categoryId) {
+		return categoryRepository.selectCategoryByCategoryId(categoryId);
+	}
+
+	@Override
+	public void updateCategoryInfo(CategoryCheck categoryCheck) {
+		categoryRepository.updateCategoryInfo(categoryCheck);
 	}
 
 }

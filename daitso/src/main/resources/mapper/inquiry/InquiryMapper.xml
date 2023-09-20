@@ -2,26 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.inquiry.repository.IInquiryRepository">
 
-	<insert id="insertInquiry">
-		INSERT INTO inquiry (inquiry_id, product_id, customer_id, inquiry_content, creator)
-		VALUES (inquiry_seq.nextval, #{pId}, #{cId}, #{content}, #{cId})
-	</insert>
-	
-	<select id="selectProductInquiry" resultType="com.example.daitso.inquiry.model.InquiryProduct">
-		SELECT p.product_option_first AS productOptionFirst, 
-				p.product_option_second AS productOptionSecond, 
-				nvl(p.product_option_third,0) AS productOptionThird,
-				i.product_id AS productId, 
-				i.customer_id AS customerId,
-				i.inquiry_content AS inquiryContent,
-				i.create_dt AS createDt 
-		FROM inquiry i
-		LEFT JOIN product p on p.product_id = i.product_id
-		WHERE i.product_id in (
-								select product_id from product where product_group_id = #{productGroupId}
-							  )
-	</select>
-	
 	<!-- 
 		기능: 문의 답변 상태별 총 문의 개수 조회
 		담당자: 최준원 
@@ -120,5 +100,33 @@
 		      product p
 		WHERE i.product_id = p.product_id
 		  AND i.inquiry_pr_id = #{inquiryId}
+	</select>
+
+	<!-- 
+		기능: 고객 문의글쓰기
+		담당자: 나현웅
+	 -->
+	<insert id="insertInquiry">
+		INSERT INTO inquiry (inquiry_id, product_id, customer_id, inquiry_content, creator)
+		VALUES (inquiry_seq.nextval, #{pId}, #{cId}, #{content}, #{cId})
+	</insert>
+	
+	<!-- 
+		기능: 특정 상품에 대한 문의글 조회
+		담당자: 나현웅
+	 -->
+	<select id="selectProductInquiry" resultType="com.example.daitso.inquiry.model.InquiryProduct">
+		SELECT p.product_option_first AS productOptionFirst, 
+				p.product_option_second AS productOptionSecond, 
+				nvl(p.product_option_third,0) AS productOptionThird,
+				i.product_id AS productId, 
+				i.customer_id AS customerId,
+				i.inquiry_content AS inquiryContent,
+				i.create_dt AS createDt 
+		FROM inquiry i
+		LEFT JOIN product p on p.product_id = i.product_id
+		WHERE i.product_id in (
+								select product_id from product where product_group_id = #{productGroupId}
+							  )
 	</select>
 </mapper>

@@ -22,7 +22,7 @@
 		        <option value="customerNm">회원명</option>
 		        <option value="purchaseNum">주문번호</option>
 		    </select>
-		    <input id="searchText" style="width:15%;" type="text" onkeypress="if( event.keyCode == 13 ){searchList();}"> 
+		    <input id="searchText" style="width:15%;" type="text" onkeypress="if( event.keyCode == 13 ){searchList();}" autocomplete="off"> 
 		    <input type="button" class="btn btn-secondary" style="width:7%; background-color: #aac8b2; border-color: #aac8b2; color: #ffff; margin-left: 5px;" value="검색" 
 		    	   onclick="searchList()"/>
 		</div>
@@ -103,9 +103,10 @@
 				<h5 class="modal-title">주문 내역 조회</h5>
 				</div>
 						<div class="modal-body">
+						<div id="purcahse">
 						 <p>주문 번호 : <span id="purchaseNumSpan"></span></p>
 						 <p>회원명 : <span id="customerNmSpan"></span></p>
-						 <p>총 가격 : <span id="totalCostSpan"></span></p>
+						 </div>
 							<table class="table">
 								<thead>
 									<tr>
@@ -116,8 +117,8 @@
 								</thead>
 								<tbody id="detailTableBody">
 								</tbody>
-								
 							</table>
+							 <p style="text-align:right; padding-right: 20px; font-weight:inherit;">총 가격 : <span id="totalCostSpan" style="font-weight:inherit;"></span></p>
 							
 						</div>
 						<div class="modal-footer">
@@ -274,7 +275,7 @@
 	}
 	
 	
-	 //
+	 // 주문 상세 내역 조회하기
 	 function getPurchaseDetails(purchaseNum) { 
 	 		
 	         fetch("/admin/purchase-details/" + purchaseNum)

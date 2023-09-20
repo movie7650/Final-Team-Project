@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
+import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.inquiry.model.Inquiry;
 import com.example.daitso.inquiry.model.InquiryInfo;
@@ -169,6 +171,7 @@ public class AdminController {
 		return "admin/product/message";
 	}
 	
+	
 	// 상품 삭제하기
 	@PostMapping("/delete")
 	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
@@ -178,18 +181,9 @@ public class AdminController {
 	    return "admin/product";
 	}
 	
-	//  상품 등록하기
-//	@PostMapping("/product")
-//	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-//		adminService.registerProducts(product, files);
-//		model.addAttribute("message","상품이 등록되었습니다.");
-//		model.addAttribute("searchUrl","/admin/product");
-//		return "admin/product/message";
-//	}
-		
 	// 상품 등록하기
 	@PostMapping("/product")
-	public String registerProducts(ProductCheck product, Model model) {
+	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
 		// 입력 필드가 비어 있으면 '-'으로 대체
 	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
 	        product.setProductOptionFirst("-");
@@ -200,10 +194,10 @@ public class AdminController {
 	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
 	        product.setProductOptionThird("-");
 	    }
-		adminService.registerProducts(product);
+		adminService.registerProducts(product, files);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
+	return "admin/message";
 	}
 	
 	
@@ -280,6 +274,7 @@ public class AdminController {
         return "redirect:/admin/purchase";
     }	 
     
+    
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
     @ResponseBody
@@ -303,14 +298,42 @@ public class AdminController {
     }
 
     
+    // 주문 상세 내역 조회하기
     @GetMapping("/purchase-details/{purchaseNum}")
     @ResponseBody
     public List<PurchaseList> getPurchaseDetails(@PathVariable String purchaseNum) {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
     }
+        
+    // 전체 카테고리 조회하기
+  	@GetMapping("/category")
+  	public String selectAllCagegory(@RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+        
+      int offset = (page - 1) * pageSize;       
+      
+
+      List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
+      
+       // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountCategories(); 
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+        model.addAttribute("categorylist",categorylist);
+  	 return "admin/category/admin-category";
+  	}
+
     
-	//카테고리 수정하기
+	// 카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {
 		List<Category> list = categoryService.selectAllCategory();
@@ -319,7 +342,7 @@ public class AdminController {
 		return "admin/category/category-update";
 	}
 	
-	//카테고리 수정하기
+	// 카테고리 수정하기
 	@PostMapping("/category/update")
 	public String updateCategory(Model model, int parentCategoryId, int categoryId) {
 		categoryService.updateCategory(categoryId, parentCategoryId);

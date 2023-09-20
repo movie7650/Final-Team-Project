@@ -9,8 +9,19 @@
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="d-flex justify-content-center align-items-center" style="height: 530px">
 	<div class="d-flex" style="width: 1100px; height:440px">
+		<div class="d-flex flex-column" style="margin-right: 10px">
+			<div class="margin-b-5" style="width:50px; height:50px;">
+				<img class="s-img-first" style="width: 100%; height: 100%" th:src="${product.productImageFirst}">				
+			</div>
+			<div class="margin-b-5" style="width:50px; height:50px;">
+				<img class="s-img-second" style="width: 100%; height: 100%" th:src="${product.productImageSecond}">				
+			</div>
+			<div style="width:50px; height:50px;">
+				<img class="s-img-third" style="width: 100%; height: 100%" th:src="${product.productImageThird}">				
+			</div>
+		</div>
 		<div style="width: 473px; height: 440px;">
-			<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
+			<img class="img-first" style="width: 100%; height: 100%" th:src="${product.productImageFirst}">
 		</div>
 		<div style="margin-left: 77px; width: 500px; height:440px">
 			<h3>[[${product.productNm}]]</h3>
@@ -54,7 +65,7 @@
 						<div class="option-list-other">
 							<select class="option-other select-style" name="others" th:if='!${oListThird[0].OPTIONTHIRD.equals("0")}' th:onchange="optionChange([[${product.productGroupId}]],3)">
 								<th:block th:each="option : ${oListThird}">
-									<option>[[${option.OPTIONTHIRD}]]</option>
+									<option th:selected="${option.OPTIONTHIRD eq product.productOptionThird}">[[${option.OPTIONTHIRD}]]</option>
 								</th:block>
 							</select>
 						</div>
@@ -117,6 +128,16 @@
 							</div>
 							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
 							<p>[[${review.reviewContent}]]</p>
+							<div th:class="review-heart+${review.reviewId}">
+								<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" th:if="${review.clickCheck == 0}" th:onclick="heartClick([[${review.reviewId}]])">
+									<img th:src="@{/assets/common/thumbs-up-regular.svg}" style="width:20%; margin-left:10px;">
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요([[${review.reviewHeartCount}]])</span>
+								</div>
+								<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" th:if="${review.clickCheck == 1}">
+									<img th:src="@{/assets/common/thumbs-up-solid.svg}" style="width:20%; margin-left:10px;">
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요([[${review.reviewHeartCount}]])</span>
+								</div>							
+							</div>
 							<hr></hr>
 						</div>
 					</th:block>
@@ -252,7 +273,23 @@
 	totalPrice.value = fPrice;
 
 
-
+	//이미지 마우스 오버시 메인 이미지 변경
+	const sImgFirst = document.querySelector('.s-img-first');
+	sImgFirst.addEventListener('mouseover',function(){
+		const img = document.querySelector('.img-first');
+		img.src = sImgFirst.src;
+	})
+	const sImgSecond = document.querySelector('.s-img-second');
+	sImgSecond.addEventListener('mouseover',function(){
+		const img = document.querySelector('.img-first');
+		img.src = sImgSecond.src;
+	})
+	const sImgThird = document.querySelector('.s-img-third');
+	sImgThird.addEventListener('mouseover',function(){
+		const img = document.querySelector('.img-first');
+		img.src = sImgThird.src;
+	})
+	
 	function cntBtn(division){
 		if(division == 'plus'){
 			var num = cntInput.value;
@@ -371,6 +408,10 @@
         fetch("/product/change/" + productGroupId + params)
         .then(response => response.json())
         .then(data => {
+        	document.querySelector('.img-first').src = data.productImageFirst;
+        	document.querySelector('.s-img-first').src = data.productImageFirst;
+        	document.querySelector('.s-img-second').src = data.productImageSecond;
+        	document.querySelector('.s-img-third').src = data.productImageThird;
             const product = data;
             const cPrice = product.productPrice;
         	totalPrice.value = cPrice;
@@ -436,8 +477,8 @@
 	}
 	
 	function goToCart(selector){
-		if(customerId == 'whotheFisthatguy'){
-			window.alert('whotheFisthatguy');
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');
 		}
 		else{
 			if(selector == 'cart') {
@@ -493,7 +534,7 @@
 		const reviewNone = document.querySelector(".review-none");
 		
 		
-		fetch("/review/" + productGroupId +"/" + page)
+		fetch("/review/" + productGroupId +"/" + page + "/" + customerId)
 		.then(response => response.json())
 		.then(data => {
 			if(data.length == 0){
@@ -522,6 +563,20 @@
 					</div>
 					<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
 					<p>${review.reviewContent}</p>
+					<div class="review-heart${review.reviewId}">
+						${review.clickCheck == 0 ? 
+								`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" onclick="heartClick(${review.reviewId})">
+									<img src="/assets/common/thumbs-up-regular.svg" style="width:20%; margin-left:10px;"></img>
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+								</div>`
+						
+						: 
+							`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" >
+								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;"></img>
+								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+							</div> `
+						}						
+					</div>
 					<hr></hr>
 					`
 					reviewBody.innerHTML += rElement;
@@ -550,10 +605,37 @@
     });
 	
 	function insertInquiry(){
-		if(customerId == 'whotheFisthatguy'){
-			window.alert('whotheFisthatguy');
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');
 		}else{
 			document.querySelector(".inquiry-form").submit();			
+		}
+	}
+	
+	function heartClick(reviewId){
+		const data = {
+				customerId: customerId,
+				reviewId: reviewId
+		};
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');			
+		}else{
+			fetch("/review/heart/update",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data)
+			})
+			.then(response => response.json())
+			.then(data => {
+				const reviewBody = document.querySelector(`.review-heart${reviewId}`);
+				const el = `<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;">
+								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;">
+								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${data})</span>
+							</div>	`
+				reviewBody.innerHTML = el;
+			})
 		}
 	}
 </script>

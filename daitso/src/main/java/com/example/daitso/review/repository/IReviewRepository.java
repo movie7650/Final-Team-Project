@@ -14,6 +14,7 @@ import com.example.daitso.review.model.ReviewProductDetail;
 @Mapper
 public interface IReviewRepository {
 	
+	// 리뷰 삽입하기
 	void insertReview(Review review);
 	
 	List<MypageReviewCheck> selectReviewAll(int customerId);
@@ -24,9 +25,21 @@ public interface IReviewRepository {
 	
 	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
 	
-	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end);
+	// 특정 상품에 대한 리뷰 조회하기
+	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end, @Param("customerId") int customerId);
 	
+	// 특정 상품에 대한 리뷰 개수 갖고오기
 	int selectProductReviewCount(int groupId);
 
+	//리뷰내용갯수 세기
+	int selectReviewContentCount(int customerId);
+	
+	// 특정 상품에 대한 리뷰 평균 구하기
 	int selectProductReviewAvg(int groupId);
+	
+	// 리뷰 좋아요 삽입하기
+	void insertReviewHeart(@Param("reviewId") int reviewId, @Param("customerId") int customerId);
+	
+	// 리뷰 좋아요 개수 갖고오기
+	int selectReviewHeartCount(int reviewId);
 }
