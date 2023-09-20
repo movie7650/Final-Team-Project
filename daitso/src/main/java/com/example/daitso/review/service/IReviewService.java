@@ -20,6 +20,9 @@ public interface IReviewService {
 	void updateReview(Review review);
 	
 	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
+	
+	//리뷰내용갯수 세기
+	int selectReviewContentCount(int customerId);
 
 	// 특정 상품에 대한 리뷰 조회하기
 	List<ReviewProductDetail> selectProductReview(int groupId, int page, int customerId);

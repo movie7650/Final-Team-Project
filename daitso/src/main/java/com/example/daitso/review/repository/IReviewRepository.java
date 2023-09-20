@@ -31,6 +31,9 @@ public interface IReviewRepository {
 	// 특정 상품에 대한 리뷰 개수 갖고오기
 	int selectProductReviewCount(int groupId);
 
+	//리뷰내용갯수 세기
+	int selectReviewContentCount(int customerId);
+	
 	// 특정 상품에 대한 리뷰 평균 구하기
 	int selectProductReviewAvg(int groupId);
 	

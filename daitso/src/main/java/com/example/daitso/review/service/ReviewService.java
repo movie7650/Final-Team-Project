@@ -63,5 +63,9 @@ public class ReviewService implements IReviewService{
 		int num = reviewRepository.selectReviewHeartCount(reviewId);
 		return num;
 	}
+	@Override
+	public int selectReviewContentCount(int customerId) {
+		return reviewRepository.selectReviewContentCount(customerId);
+	}
 
 }
