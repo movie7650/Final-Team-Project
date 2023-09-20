@@ -42,9 +42,10 @@ public interface ICategoryRepository {
 	// 카테고리 삭제하기
 	void deleteCategory(int categoryId);
 	
-	
+	//
 	CategoryCheck selectCategoryByCategoryId(int categoryId);
 	
+	//
 	void updateCategoryInfo(CategoryCheck categoryCheck);
 
 }

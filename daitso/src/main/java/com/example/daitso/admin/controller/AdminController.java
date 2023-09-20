@@ -167,6 +167,7 @@ public class AdminController {
 		return "admin/message";
 	}
 	
+	
 	// 상품 삭제하기
 	@PostMapping("/delete")
 	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
@@ -176,15 +177,7 @@ public class AdminController {
 	    return "admin/product";
 	}
 	
-	//  상품 등록하기
-//	@PostMapping("/product")
-//	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-//		adminService.registerProducts(product, files);
-//		model.addAttribute("message","상품이 등록되었습니다.");
-//		model.addAttribute("searchUrl","/admin/product");
-//		return "admin/message";
-//	}
-		
+	
 	// 상품 등록하기
 	@PostMapping("/product")
 	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {

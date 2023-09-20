@@ -1,5 +1,7 @@
 package com.example.daitso.product.model;
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +22,11 @@ public class ProductCheck {
 	private String productImageThird;
 	private String productCode;
 	private int subCategoryId;
+	private String status;
+	private Date createDt;
+	private String creator;
+	private Date modifyDt;
+	private String modifier;
 	private int categoryPrId;
 	private int rn;
 	private String categoryNm;

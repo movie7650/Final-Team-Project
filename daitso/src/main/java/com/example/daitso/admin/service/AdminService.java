@@ -96,12 +96,6 @@ public class AdminService implements IAdminService{
 		productRepository.deleteProduct(productId);
 	}
 	
-//	// 상품 등록하기
-//	@Transactional
-//	public void registerProducts(ProductCheck product) {
-//		productRepository.registerProducts(product);
-//	}
-	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	@Override
 	public List<ProductCheck> searchProductsByName(String searchText) {
@@ -126,11 +120,6 @@ public class AdminService implements IAdminService{
 		purchaseRepository.changePurchaseStatus(purchaseId, commonCodeId);
 	}
 
-	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
-//	@Override
-//	public List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption) {
-//		return purchaseRepository.searchPurchaseInfo(searchText, searchOption);
-//	}
 	
 	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
 	@Override
