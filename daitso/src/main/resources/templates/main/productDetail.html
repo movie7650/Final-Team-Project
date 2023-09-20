@@ -117,7 +117,7 @@
 							</div>
 							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
 							<p>[[${review.reviewContent}]]</p>
-							<div class="review-heart">
+							<div th:class="review-heart+${review.reviewId}">
 								<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" th:if="${review.clickCheck == 0}" th:onclick="heartClick([[${review.reviewId}]])">
 									<img th:src="@{/assets/common/thumbs-up-regular.svg}" style="width:20%; margin-left:10px;">
 									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요([[${review.reviewHeartCount}]])</span>
@@ -532,6 +532,20 @@
 					</div>
 					<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
 					<p>${review.reviewContent}</p>
+					<div class="review-heart${review.reviewId}">
+						${review.clickCheck == 0 ? 
+								`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" onclick="heartClick(${review.reviewId})">
+									<img src="/assets/common/thumbs-up-regular.svg" style="width:20%; margin-left:10px;"></img>
+									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+								</div>`
+						
+						: 
+							`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" >
+								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;"></img>
+								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+							</div> `
+						}						
+					</div>
 					<hr></hr>
 					`
 					reviewBody.innerHTML += rElement;
@@ -584,7 +598,7 @@
 			})
 			.then(response => response.json())
 			.then(data => {
-				const reviewBody = document.querySelector('.review-heart');
+				const reviewBody = document.querySelector(`.review-heart${reviewId}`);
 				const el = `<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;">
 								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;">
 								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${data})</span>
