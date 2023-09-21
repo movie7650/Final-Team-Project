@@ -74,7 +74,7 @@
 			</div>
 			<div class="d-flex" style="margin-bottom:20px">
 				<span class="align-self-center">수량</span>
-				<input class="cnt-input" style="margin-left: 10px; border: 1px solid; border-right:none;" type="text" value=1 readonly>
+				<input class="cnt-input" type="number" value=1 autocomplete="off" oninput="changeCnt(value)" style="margin-left: 10px; border: 1px solid; border-right:none;">
 				<div class="d-flex flex-column" style="border: 1px solid; border-left: none;">
 					<button class="cnt-btn" onclick="cntBtn('plus')"><img th:src="@{/assets/common/angle-up-solid.svg}"></button>
 					<button class="cnt-btn" onclick="cntBtn('minus')"><img th:src="@{/assets/common/angle-down-solid.svg}"></button>
@@ -314,10 +314,9 @@
 		if(division == 'plus'){
 			var num = cntInput.value;
 			if(num == product.productMaxGet){
-				window.alert("max holloway");
+				window.alert("최대 수량 초과입니다.");
 			}else{
-
-				var tPrice = (Number(num) + 1) * fPrice
+				var tPrice = (Number(num) + 1) * fPrice;
 				totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
 				totalPrice.value = tPrice;
 				cntInput.value = Number(num) + 1;
@@ -333,6 +332,28 @@
 				totalPrice.value = tPrice;
 				cntInput.value = Number(num) - 1;
 			}
+		}
+	}
+
+	function changeCnt(val){
+		if(val > product.productMaxGet){
+			cntInput.value = product.productMaxGet;
+			var tPrice = product.productMaxGet * fPrice;
+			totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+			totalPrice.value = tPrice;
+			window.alert('최대 수량 초과입니다.')
+		}
+		else if(val <= 0){
+			cntInput.value = 1;
+			var tPrice = fPrice;
+			totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+			totalPrice.value = tPrice;
+			window.alert('1개 이상만 입력해주세요.')
+		}
+		else{
+			var tPrice = val * fPrice;
+			totalPrice.textContent = tPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
+			totalPrice.value = tPrice;
 		}
 	}
 	
