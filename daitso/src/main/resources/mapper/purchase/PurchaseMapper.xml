@@ -29,13 +29,14 @@
 	<!-- 주문목록조회  -->
 	<select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
 		SELECT pur.product_id as "productId",
+			   pur.customer_id as "customerId",
 			   purchase_count					AS	"purchaseCount",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
 			   cc.common_code_nm				AS	"purchaseDv",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
 			   product_nm						AS 	"productNm",
 			   purchase_num						AS	"purchaseNum",
-			   pur.create_dt						AS	"createDt"
+			   pur.create_dt					AS	"createDt"
 			   
 	   	  FROM purchase pur, product p, common_code cc
 	   	 WHERE customer_id=#{customerId} 
