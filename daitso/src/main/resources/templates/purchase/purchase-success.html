@@ -81,7 +81,7 @@
 	} else {
 		couponCartIdList = {}
 	} 
-	
+		
 	cartIdList.forEach((item) => {
 		if(couponCartIdList[item]){
 			fetch( window.location.origin + "/purchase/insert" , {

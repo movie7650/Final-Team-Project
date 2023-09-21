@@ -68,7 +68,7 @@ public class CartController {
 			} else { // 바로 구매하기 눌렀을 경우
 				
 				// 장바구니 조회
-				List<CartCheck> cartList = cartService.getCartByCartIdDirectPurchase();
+				List<CartCheck> cartList = cartService.getCartByCartIdDirectPurchase(customerId);
 				model.addAttribute("cartList", cartList);
 				
 				// 장바구니에 담긴 총 물건 개수 조회

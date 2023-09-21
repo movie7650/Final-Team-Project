@@ -91,8 +91,8 @@ public class CartService implements ICartService{
 
 	// 바로 구매시 해당 상품 정보들 장바구니 화면에 띄우기
 	@Override
-	public List<CartCheck> getCartByCartIdDirectPurchase() {
-		return cartRepository.getCartByCartIdDirectPurchase();
+	public List<CartCheck> getCartByCartIdDirectPurchase(int customerId) {
+		return cartRepository.getCartByCartIdDirectPurchase(customerId);
 	}
 
 	// 쿠폰 적용 대상 상품들 조회(바로구매)

@@ -1,0 +1,35 @@
+#customer-find-container {
+	width: 100vw;
+	background-color: #F8F8F8;
+	display: flex;
+	justify-content: center;
+	padding: 20px 0 20px 0;
+}
+
+#customer-find-box {
+	width: 52%;
+	background-color: white;
+	border: 1px solid #888888;
+	padding: 30px;
+}
+
+#customer-find-title {
+	font-size: 20px;
+	font-weight: 600;
+}
+
+#customer-find-email-title{
+	width: 50%;
+	border: 1px solid #39594E;
+	border-bottom: none;
+	padding: 15px 0 15px 0;
+}
+
+#customer-find-pw-title{
+	width: 50%;
+	border: 1px solid #999999;
+	border-bottom: 1px solid #39594E;
+	background-color: #F8F8F8;
+	color: #555555;
+	padding: 15px 0 15px 0;
+}
