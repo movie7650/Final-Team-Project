@@ -122,7 +122,7 @@ public class PurchaseController {
 	}
 	
 	// 구매 성공시 나오는 화면
-	@GetMapping("/success")
+	@GetMapping("/success/complete")
 	public String getPurchaseSuccess(Model model, RedirectAttributes redirectAttributes, HttpServletRequest request, 
 			@RequestParam int shippingId, @RequestParam List<Integer> cartIdList,
 			@RequestParam String totalProductPrice, @RequestParam String discountPrice) {
@@ -153,15 +153,21 @@ public class PurchaseController {
 															.totalProductPrice(totalProductPrice)
 															.discountPrice(discountPrice)
 															.build();
-			model.addAttribute("purchaseSuccess", purchaseSuccess);
-			model.addAttribute("cartIdList", cartIdList);
+			redirectAttributes.addFlashAttribute("purchaseSuccess", purchaseSuccess);
+			redirectAttributes.addFlashAttribute("cartIdList", cartIdList);
 			
-			return "purchase/purchase-success";
+			return "redirect:/purchase/success";
 		} catch (ClassCastException e) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
 	}
+	
+	@GetMapping("/success")
+	public String getPurchaseSuccess() {
+		return "purchase/purchase-success";
+	}
+	
 	
 	// 구매 
 	@PostMapping("/insert")
