@@ -108,7 +108,7 @@ public class AdminService implements IAdminService{
 		return purchaseRepository.selectPurchaseList(commonCodeId, offset, pageSize);
 	}
 
-	// 주문 내역 개수 조회하기(배송상태별)
+	// 주문 내역 개수 조회하기(전체, 배송상태별)
 	@Override
 	public int selectCountPurchaseList(int commonCodeId) {
 		return purchaseRepository.selectCountPurchaseList(commonCodeId);
@@ -120,7 +120,6 @@ public class AdminService implements IAdminService{
 		purchaseRepository.changePurchaseStatus(purchaseId, commonCodeId);
 	}
 
-	
 	// 주문 내역 검색하기(회원명, 주문번호 선택해서)
 	@Override
 	public List<PurchaseList> searchPurchaseInfo(String searchText, String searchOption, int offset, int pageSize) {
@@ -133,7 +132,7 @@ public class AdminService implements IAdminService{
 		return purchaseRepository.selectCountPurchaseInfo(searchText, searchOption);
 	}
 
-	// 주문 상세 내역 조회하기
+	// 주문번호로 주문 상세 내역 조회하기
 	@Override
 	public List<PurchaseList> getPurchaseDetails(String purchaseNum) {
 		return purchaseRepository.getPurchaseDetails(purchaseNum);
@@ -157,11 +156,13 @@ public class AdminService implements IAdminService{
 		categoryRepository.deleteCategory(categoryId);
 	}
 
+	// 카테고리ID로 카테고리 정보 조회하기
 	@Override
 	public CategoryCheck selectCategoryByCategoryId(int categoryId) {
 		return categoryRepository.selectCategoryByCategoryId(categoryId);
 	}
 
+	// 카테고리 정보 수정하기
 	@Override
 	public void updateCategoryInfo(CategoryCheck categoryCheck) {
 		categoryRepository.updateCategoryInfo(categoryCheck);

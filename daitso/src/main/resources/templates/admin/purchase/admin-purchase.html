@@ -67,7 +67,7 @@
 		<div th:if="${totalCount > 0}">
 			 <ul class="pagination" id="pagination">
 				<!-- 이전 페이지 -->
-				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
+				<li th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
 					<!-- 이전 페이지로 이동하는 링크 -->
 					<a class="page-link"
 					th:href="@{/admin/purchase(page=${currentPage - 1}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
@@ -154,7 +154,7 @@
  	                    var newRow = "<tr>" +
 	                        "<td>" + data.data[i].rn + "</td>" +
 	                        "<td>" + data.data[i].customerNm + "</td>" +
-	                        "<td>" + data.data[i].purchaseNum + "</td>" +
+	                        "<td data-bs-toggle='modal' data-bs-target='#infoModal'>" + data.data[i].purchaseNum + "</td>" +
 	                        "<td>" + data.data[i].productNm + "</td>" +
 	                        "<td>" + data.data[i].createDt + "</td>" +
 	                        "<td>" +

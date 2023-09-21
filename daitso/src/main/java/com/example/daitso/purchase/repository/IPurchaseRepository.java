@@ -45,13 +45,13 @@ public interface IPurchaseRepository {
 	//상세주문조회
 	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId") int customerId, @Param("purchaseNum")String purchaseNum);
 
-	
+	// 전체 주문 내역 조회하기
 	List<PurchaseList> selectAllPurchaseList();
 
 	// 주문 내역 조회하기(배송상태별)
 	List<PurchaseList> selectPurchaseList(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
 	
-	// 주문 내역 개수 조회하기(배송상태별)
+	// 주문 내역 개수 조회하기(전체, 배송상태별)
 	int selectCountPurchaseList(@Param("commonCodeId") int commonCodeId);
 	
 	// 배송 상태 변경하기
@@ -63,6 +63,6 @@ public interface IPurchaseRepository {
 	// 검색 결과 개수 조회하기
 	int selectCountPurchaseInfo(String searchText, String searchOption);
 	
-	// 주문 상세 내역 조회하기
+	// 주문번호로 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 }

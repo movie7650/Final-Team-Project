@@ -129,7 +129,7 @@
 	</div>
 
 	<!-- 기존 상품 등록 모달 -->
-	<div id="registerExistingModal" class="modal fade" tabindex="-1" role="dialog">
+	<div id="registerExistingModal" class="modal fade" tabindex="-1" role="dialog" style="overflow-y: auto;">
 		<div class="modal-dialog" role="document" style="max-width: 700px;">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -137,22 +137,23 @@
 				</div>
 				 <form th:action method="post" enctype="multipart/form-data">
 					<div class="modal-body">
-						<div class="row mb-3">
-							<label for="productGroupId" class="col-sm-2 col-form-label">그룹ID</label>
-							<div class="col-sm-10">
+					
+						<div class="row mb-3" style="height: 30px;">
+							<label for="productGroupId" class="col-sm-2 col-form-label" style=" margin-bottom: 7px;">그룹ID</label>
+							<div class="col-sm">
 							<input type="text" id="getProductGroupId" name="productGroupId" style="font-weight: bold;" readonly="readonly">
 							</div>
 						</div>
-					    <div class="row mb-3">
-							<label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
-							<div class="col-sm-10">
+					    <div class="row mb-3" style="height: 30px;">
+							<label for="categoryNm" class="col-sm-2 col-form-label" style=" margin-bottom: 7px;">카테고리명</label>
+							<div class="col-sm">
 							<input type="text" id="getCategoryNm" name="categoryNm" style="font-weight: bold;" readonly="readonly">
 							</div>
 						</div>
 						<input type="hidden" id="getCategoryId" name="categoryId">
-						<div class="row mb-3">
-							<label for="productNm" class="col-sm-2 col-form-label">상품명</label>
-							<div class="col-sm-10">
+						<div class="row mb-3" style="height: 30px;">
+							<label for="productNm" class="col-sm-2 col-form-label" style=" margin-bottom: 7px;">상품명</label>
+							<div class="col-sm-3">
 							<input type="text" id="getProductNm" name="productNm" style="font-weight: bold;"readonly="readonly">
 							</div>
 						</div>			
@@ -164,7 +165,6 @@
 									style="height: 200px; width: 510px"></textarea>
 							</div>
 						</div>
-
 						<div class="row mb-3">
 							<label for="productOptionFirst" class="col-sm-2 col-form-label">사이즈</label>
 							<div class="col-sm-10">
@@ -172,7 +172,6 @@
 									name="productOptionFirst">
 							</div>
 						</div>
-
 						<div class="row mb-3">
 							<label for="productOptionSecond" class="col-sm-2 col-form-label">색상</label>
 							<div class="col-sm-10">
@@ -180,7 +179,6 @@
 									name="productOptionSecond">
 							</div>
 						</div>
-
 						<div class="row mb-3">
 							<label for="productOptionThird" class="col-sm-2 col-form-label">기타</label>
 							<div class="col-sm-10">
@@ -188,7 +186,6 @@
 									name="productOptionThird">
 							</div>
 						</div>
-
 						<div class="row mb-3">
 							<label for="productPrice" class="col-sm-2 col-form-label"
 								style="color: red;">* 가격</label>
@@ -199,7 +196,6 @@
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div>
-						
 						<div class="row mb-3">
 							<label for="productStock" class="col-sm-2 col-form-label"
 								style="color: red">* 수량</label>
@@ -209,7 +205,6 @@
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div>
-						
  						<div class="row mb-3">
 							<label for="productImages" class="col-sm-2 col-form-label">
 								상품 이미지(3개) </label>
@@ -418,6 +413,44 @@
 		</div>
 	</div>
 
+
+	<!-- 이미지 모달 -->
+	<div id="imageModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 1000px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">이미지</h5>
+				</div>
+				 <div class="row mb-3">
+                    <div class="col-sm-4">
+                        <!-- 첫 번째 이미지 -->
+                       <img id="updateProductImageFirst" alt="img1" width="250" height="300">
+                       <button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
+		  					 id="deleteButton">삭제</button>                 
+                    </div>
+                    <div class="col-sm-4">
+                        <!-- 두 번째 이미지 -->
+                         <img id="updateProductImageSecond" alt="img2" width="250" height="300">
+                         <button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
+		  					 id="deleteButton">삭제</button>                       
+                    </div>
+                    <div class="col-sm-4">
+                        <!-- 세 번째 이미지 -->
+                         <img id="updateProductImageThird" alt="img3"  width="250" height="300">
+                         <button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
+		  					 id="deleteButton">삭제</button>
+                    </div>
+                </div>
+			
+				<div class="modal-footer">
+					<button class="btn btn-secondary"
+						th:onclick="|location.href='@{/admin/product}'|" type="button">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<!-- 그룹별 상품 조회 모달 -->
 	<div id="searchModal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document" style="max-width: 1200px;">
@@ -425,13 +458,12 @@
 				<div class="modal-header">
 					<h5 class="modal-title">그룹별 상품 조회</h5>
 				</div>
-				<!-- <form th:action="@{/admin/search}" method="get"> -->
 					<div class="modal-body">
-						<table class="table">
+						<table class="table" style="text-align: center;">
 							<thead>
 								<tr>
 									<th><input type="checkbox" name='selectall' onclick='selectAll(this)'></th>
-									<th>그룹 ID</th>
+									<th>상품 ID</th>
 									<th>상품코드</th>
 									<th>상품명</th>
 									<th>사이즈</th>
@@ -463,69 +495,23 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 	
-  	//기존 상품 등록시 그룹ID, 카테고리명, 상품명 불러오기
-     function registerExisting() {
-        document.getElementById("getProductGroupId").value = document.getElementById("productGroupId").innerText; //"getProductGroupId"라는 ID를 가진 HTML 요소의 value 속성에 productGroupId 값을 설정합니다.
-        document.getElementById("getCategoryNm").value =  document.getElementById("categoryNm").value;
-        document.getElementById("getProductNm").value =  document.getElementById("productNm").innerText;
-        document.getElementById("getCategoryId").value =  document.getElementById("categoryId").value;
-    } 
-	 	
-     function searchList() {
-    	    var searchText = document.getElementById('searchText').value;
-    	    $.ajax({
-    	        type: "GET",
-    	        url: "/admin/search-product",
-    	        contentType: "application/json",
-    	        data: { searchText: searchText },
-    	        success: function (response) {
-    	            $('#searchTable').empty();
-    	            console.log(response);    	            
-    	            if (response.length == 0) {
-    	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
-    	                $('#searchTable').append(noResultRow);
-    	            } else {
-    	                for (var i = 0; i < response.length; i++) {
-    	                	
-    	                    var addTableRow = "<tr>" +
-    	                        "<td><input type='radio' onchange='getProductCheck(this)' name ='productCheck' value=" + response[i].productGroupId + " class ='productCheckbox' required></td>" +
-    	                        "<td>" + response[i].productGroupId + "</td>" +
-    	                        "<td id = categoryNm" + response[i].productGroupId +">" + response[i].categoryNm + "</td>" +
-    	                        "<td id = productNm" + response[i].productGroupId +">" + response[i].productNm + "</td>" +
-    	                        "<td id='categoryId" + response[i].productGroupId + "' style='display: none;'>" + response[i].categoryId + "</td>" +
-    	                        "</tr>"
-    	                        ;
-
-    	                    $('#searchTable').append(addTableRow);
-    	                }
-    	            }
-    	            return;
-    	        }
-    	    });
-    	}
-     
-     
-     function getProductCheck(item) {
-    	if(item.checked){
-    		document.getElementById("selectProductGroupId").value = item.value;
-    		document.getElementById("selectCategoryNm").value = document.getElementById("categoryNm" + item.value).innerText;
-    		document.getElementById("selectProductNm").value =  document.getElementById("productNm" + item.value).innerText;
-    		document.getElementById("selectCategoryId").value =  document.getElementById("categoryId" + item.value).innerText;
-    		console.log(item.value);
-    	}
-     }
-	
 	// 리로드해도 선택한 값들 유지하려고 (조회 페이지에서 다시 순서대로 클릭 안해도 해당 값들이 나오고 새로고침해도 계속 유지됨)
 	document.addEventListener("DOMContentLoaded", function() {
-
-	    var selectedFirstCategoryId = $("#firstCategory").val();   
+	   
+		// 1) 페이지가 로드될 때, 현재 선택된 첫 번째, 두 번째, 세 번째 카테고리 값을 가져와서 
+		
+		var selectedFirstCategoryId = $("#firstCategory").val();   
 		// HTML 문서 내에 있는 id가 "firstCategory"인 요소의 값을 가져와 selectedFirstCategoryId 변수에 저장
 		// 첫 번째 카테고리의 현재 선택 값을 저장
 	    var selectedSecondCategoryId = $("#secondCategory").val();
 	    var selectedThirdCategoryId = $("#thirdCategory").val();
 
+	    
+	    // 2) 초기 카테고리 설정, 저장된 카테고리 값을 각각의 카테고리 드롭다운 목록에 설정
+	    
 	    $("#firstCategory").val(selectedFirstCategoryId); 
 	    // 첫 번째 카테고리(#firstCategory)의 선택 값을 이전에 저장한 selectedFirstCategoryId 값으로 설정
+	    
 	    // 이렇게 하면 페이지가 로드될 때 사용자가 이전에 선택한 첫 번째 카테고리가 선택된 상태로 표시된다.
 	    getSecondCategories(selectedFirstCategoryId, 'syn');
 	    // 선택한 첫 번째 카테고리(selectedFirstCategoryId)를 기반으로 두 번째 카테고리 값을 업데이트
@@ -533,7 +519,8 @@
 	    $("#secondCategory").val(selectedSecondCategoryId);
 	    // 두 번째 카테고리(#secondCategory)의 선택 값을 이전에 저장한 selectedSecondCategoryId 값으로 설정
 	    // 페이지 로드 시 사용자가 이전에 선택한 두 번째 카테고리가 선택된 상태로 표시
-		getThirdCategories('syn');
+		
+	    getThirdCategories('syn');
 	    $("#thirdCategory").val(selectedThirdCategoryId);
 	    
 		/*if (selectedFirstCategoryId) {
@@ -626,7 +613,7 @@
 		    }
 		}
 		else if(selector == 'unsyn'){
-			console.log("not so bad")
+			console.log("unsyn")
 		    if (!secondCategoryId) {
 		        thirdCategory.empty();
 		        thirdCategory.append('<option value="">전체</option>');
@@ -651,7 +638,7 @@
 		}
 	}   
   	
-	// 카테고리별 상품 "조회" 버튼
+	// 카테고리별 상품 조회하기 ("조회"버튼)
     function searchByCategory() {
 		var firstCategoryId = $("#firstCategory").val(); // id 속성이 "firstCategory"인 요소의 값을 가져와서 firstCategoryId 변수에 저장
         var secondCategoryId = $("#secondCategory").val();
@@ -666,7 +653,8 @@
         if (!thirdCategoryId) {
         	thirdCategoryId = 0;
         } 
-
+		
+        //  URL을 생성하고 페이지를 이동, 선택한 카테고리 값들이 유지되면서 상품 목록이 조회
         var newUrl = "/admin/product";
         if (firstCategoryId !== 0) {
             newUrl += "?firstCategoryId=" + firstCategoryId;
@@ -680,9 +668,48 @@
         window.location.href = newUrl;
         return false;
     }
-	
+	 	
+  	
+ 	// 그룹별 상품 조회하기, productGroupId를 기반으로 서버에서 상품 목록을 가져와 페이지에 동적으로 보여주기(fetch 함수 사용)
+    function selectProductsByGroupId(productGroupId) {
+ 		console.log(productGroupId);
+         fetch("/admin/search/" + productGroupId)
+             .then(response => response.json())
+             .then(data => {
+                 const productTableBody = document.getElementById("productTableBody");
 
-  	// (그룹) 상품 삭제 확인 메시지
+                 productTableBody.innerHTML = "";
+                 data.forEach(product => {
+                     const row = document.createElement("tr");
+                     row.innerHTML = `
+                    	  <td><input type="checkbox" name="productCheckbox" onclick='checkSelectAll()' value="${product.productId}"></td>
+                          <td>${product.productId}</td>
+                          <td>${product.productCode}</td>
+                          <td id="productNm">${product.productNm}</td>
+                          <td>${product.productOptionFirst}</td>
+                          <td>${product.productOptionSecond}</td>
+                          <td>${product.productOptionThird}</td>
+                          <td>${comma(product.productPrice)}</td>
+                          <td>${product.productStock}</td>                        
+                          <td>
+		    				<div class="btn-group">
+		  						<button class="btn btn-xs" style="background-color: #aac8b2; color: #ffff"
+		  							data-bs-toggle="modal" data-bs-target="#imageModal" onclick = "selectProductId(${product.productId})">이미지</button>
+		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
+		   						style="background-color: #39594e; color: #ffff" type="button"
+		   						onclick = "selectProductId(${product.productId})">수정</button>
+		    				</div>
+		    			  </td>
+		    			  <input id="categoryNm" type="hidden" value=${product.categoryNm}></td>
+		    			  <input id="categoryId" type="hidden" value=${product.categoryId}></td>
+		    			  <input id="productGroupId" type="hidden" value=${product.productGroupId}></td>
+                         `;
+                      productTableBody.appendChild(row);
+                  });
+              });
+      }
+    
+  	// (그룹)상품 삭제시 확인 메시지 실행해서 삭제하기(DOMParser 사용해서 문자열 형식의 HTML을 파싱하고, 파싱된 DOM을 생성해서 동적으로 <form> 만들어줌)
     function deleteGroupProduct(productGroupId) {
         if (!confirm('그룹 상품을 삭제하시겠습니까?')) {
             return false;
@@ -697,47 +724,10 @@
         setTimeout(() => {
             document.getElementById('deleteForm').submit();
         }, 50) //대기시간
-    }  	
+    } 
   	
- 	// 그룹별 상품 조회
-    function selectProductsByGroupId(productGroupId) {
- 		console.log(productGroupId);
-         fetch("/admin/search/" + productGroupId)
-             .then(response => response.json())
-             .then(data => {
-                 const productTableBody = document.getElementById("productTableBody");
-
-                 productTableBody.innerHTML = "";
-                 data.forEach(product => {
-                     const row = document.createElement("tr");
-                     row.innerHTML = `
-                    	  <td><input type="checkbox" name="productCheckbox" onclick='checkSelectAll()' value="${product.productId}"></td>
-                          <td id="productGroupId">${product.productGroupId}</td>
-                          <td>${product.productCode}</td>
-                          <td id="productNm">${product.productNm}</td>
-                          <td>${product.productOptionFirst}</td>
-                          <td>${product.productOptionSecond}</td>
-                          <td>${product.productOptionThird}</td>
-                          <td>${comma(product.productPrice)}</td>
-                          <td>${product.productStock}</td>                        
-                          <td>
-		    				<div class="btn-group">
-		  						<button class="btn btn-xs" style="background-color: #aac8b2; color: #ffff">이미지</button>
-		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
-		   						style="background-color: #39594e; color: #ffff" type="button"
-		   						onclick = "selectProductId(${product.productId})">수정</button>
-		    				</div>
-		    			  </td>
-		    			  <input id="categoryNm" type="hidden" value=${product.categoryNm}></td>
-		    			  <input id="categoryId" type="hidden" value=${product.categoryId}></td>
-                         `;
-                      productTableBody.appendChild(row);
-                  });
-              });
-      }
-    
- 	
-    // 상품ID로 상품 정보 갖고와서 상품 수정하기
+  	
+    // 상품 수정을 위한 상품ID로 상품 정보 갖고오기
     function selectProductId(productId) {
          fetch("/admin/update/" + productId)
             .then(response => response.json())
@@ -752,9 +742,13 @@
                 document.getElementById("updateProductOptionThird").value = product.productOptionThird;
                 document.getElementById("updateProductPrice").value = product.productPrice;
                 document.getElementById("updateProductStock").value = product.productStock;
+                
+                document.getElementById("updateProductImageFirst").textContent = product.productImageFirst;
+                document.getElementById("updateProductImageSecond").textContent = product.productImageSecond;
+                document.getElementById("updateProductImageThird").textContent = product.productImageThird;
+                
             }); 
     }
-    
     
     //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function submitForm() {
@@ -772,16 +766,6 @@
             changedPrice.value = priceChanged;
         }
     }
-
-/*     
-    //가격 콤마 제거하고 정수로 변환하여 저장하기
-    function saveData() {
-    	const productPriceInput = document.getElementById("productPrice");
-    	const productPriceValue = uncomma(productPriceInput.value); // 콤마 제거
-    	productPriceInput.value = productPriceValue;
-    	const productPrice = parseInt(productPriceValue); // 정수로 변환
-    }
- */
     
     // number 타입 maxlength 걸어주기
     function maxLengthCheck(object){
@@ -791,29 +775,32 @@
       }
  
     
-    //
-   	function checkSelectAll() {
-  	    const checkboxes = document.querySelectorAll('input[name="productCheckbox"]');
-  	    const selectAll = document.querySelector('input[name="selectall"]');
-
-  	    selectAll.checked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
-  	}
-
-    
-    //
+ 	// 체크 박스 선택, 해제
   	function selectAll(selectAll) {
+  		// productCheckbox 모든 체크 박스 요소들 가져오기
   	    const checkboxes = document.getElementsByName('productCheckbox');
+  		// 각 체크 박스의 checked 속성을 selectAll 값으로 설정해서 모두 선택하거나 해제
   	    checkboxes.forEach((checkbox) => {
   	        checkbox.checked = selectAll.checked;
   	    });
   	}
+ 	
+ 	// 모든 체크 박스가 선택되어 있는지 확인해서 selectAll 체크 박스의 상태 바꾸기
+   	function checkSelectAll() {
+   		 const checkboxes = document.querySelectorAll('input[name="productCheckbox"]');
+   		 
+  		// selectAll 체크 박스 요소 가져오기
+  	    const selectAll = document.querySelector('input[name="selectall"]');
+  	    //Array.from을 사용하여 checkboxes NodeList를 배열로 변환하고, every 함수를 사용해서 모든 체크 박스가 선택되어 있는지 확인
+  	    selectAll.checked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  	}
 
-    
-	// 상품 삭제하기 (개별 선택 삭제, 전체 선택 삭제)
+	// 상품 삭제하기 (체크 박스로 선택해서 개별 선택 삭제, 전체 선택 삭제), 삭제 버튼 클릭시 이벤트 리스너 호출
 	document.getElementById("deleteButton").addEventListener("click", function () {
-	    const selectedProductIds = [];
-	    const productCheckboxes = document.querySelectorAll('input[name="productCheckbox"]');
-
+	    const selectedProductIds = []; //선택된 상품의 아이디를 저장할 배열 생성
+	    const productCheckboxes = document.querySelectorAll('input[name="productCheckbox"]'); // "productCheckbox"인 모든 체크 박스 요소들 선택
+	    
+	    // 체크 박스가 체크되어 있는 경우 selectedProductIds에 추가
 	    productCheckboxes.forEach((checkbox) => {
 	        if (checkbox.checked) {
 	            selectedProductIds.push(checkbox.value);
@@ -885,6 +872,82 @@
         modalBackdrop.style.display = "none";
     }); */
  
+	 // 모달 열기 전에 이미지 URL을 설정
+    $('#imageModal').on('show.bs.modal', function (event) {
+        // 각 이미지에 대한 URL을 가져와서 해당 이미지의 src 속성에 설정
+        var imageUrlFirst = $('#updateProductImageFirst').text();
+        var imageUrlSecond = $('#updateProductImageSecond').text();
+        var imageUrlThird = $('#updateProductImageThird').text(); 
+
+        // 첫 번째 이미지 설정
+        if (imageUrlFirst) {
+            $('#updateProductImageFirst').attr('src', imageUrlFirst);
+        }
+
+        // 두 번째 이미지 설정
+        if (imageUrlSecond) {
+            $('#updateProductImageSecond').attr('src', imageUrlSecond);
+        }
+
+        // 세 번째 이미지 설정
+        if (imageUrlThird) {
+            $('#updateProductImageThird').attr('src', imageUrlThird);
+        }
+    });
+	   
+  	//기존 상품 등록시 그룹ID, 카테고리명, 상품명 불러오기
+     function registerExisting() {
+        document.getElementById("getProductGroupId").value = document.getElementById("productGroupId").value; //"getProductGroupId"라는 ID를 가진 HTML 요소의 value 속성에 productGroupId 값을 설정합니다.
+        document.getElementById("getCategoryNm").value =  document.getElementById("categoryNm").value;
+        document.getElementById("getProductNm").value =  document.getElementById("productNm").innerText;
+        document.getElementById("getCategoryId").value =  document.getElementById("categoryId").value;
+    } 
+	 
+  	 // 신규 상품 등록 시 그룹 상품 검색한 결과 데이터 갖고오기
+     function searchList() {
+    	    var searchText = document.getElementById('searchText').value;
+    	    $.ajax({
+    	        type: "GET",
+    	        url: "/admin/search-product",
+    	        contentType: "application/json",
+    	        data: { searchText: searchText },
+    	        success: function (response) {
+    	            $('#searchTable').empty();
+    	            console.log(response);    	            
+    	            if (response.length == 0) {
+    	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+    	                $('#searchTable').append(noResultRow);
+    	            } else {
+    	                for (var i = 0; i < response.length; i++) {
+    	                	
+    	                    var addTableRow = "<tr>" +
+    	                        "<td><input type='radio' onchange='getProductCheck(this)' name ='productCheck' value=" + response[i].productGroupId + " class ='productCheckbox' required></td>" +
+    	                        "<td>" + response[i].productGroupId + "</td>" +
+    	                        "<td id = categoryNm" + response[i].productGroupId +">" + response[i].categoryNm + "</td>" +
+    	                        "<td id = productNm" + response[i].productGroupId +">" + response[i].productNm + "</td>" +
+    	                        "<td id='categoryId" + response[i].productGroupId + "' style='display: none;'>" + response[i].categoryId + "</td>" +
+    	                        "</tr>"
+    	                        ;
+
+    	                    $('#searchTable').append(addTableRow);
+    	                }
+    	            }
+    	            return;
+    	        }
+    	    });
+    	}
+     
+  	 // 신규 상품 등록시 데이터 불러오기
+     function getProductCheck(item) {
+    	if(item.checked){
+    		document.getElementById("selectProductGroupId").value = item.value;
+    		document.getElementById("selectCategoryNm").value = document.getElementById("categoryNm" + item.value).innerText;
+    		document.getElementById("selectProductNm").value =  document.getElementById("productNm" + item.value).innerText;
+    		document.getElementById("selectCategoryId").value =  document.getElementById("categoryId" + item.value).innerText;
+    		console.log(item.value);
+    	}
+     }
+     
 	// 이미지 파일 개수 제한
     function fileCheck() {
     	var filesInput = document.getElementById("files");
