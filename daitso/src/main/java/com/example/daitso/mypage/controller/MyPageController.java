@@ -351,6 +351,33 @@ public class MyPageController {
 		}
 	}
 
+	// 마이페이지-내문의관리-내문의조회
+	@RequestMapping("/myinquiry")
+	public String myInquiry(Model model) {
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails) principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			// 상단 잔여포인트
+			String point = pointService.selectTotalPoint(customerId);
+			if (point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint", point + "P");
+			// 상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount", shipCompleteCount);
+			// 상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount", shipCount01);
+
+			return "mypage/mypage-inquiry";
+		} catch (ClassCastException e) {
+			return "redirect:/customer/login";
+		}
+
+	}
+
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
 	@RequestMapping("/mycoupon")
 	public String insertCoupon(Model model) {
@@ -473,26 +500,6 @@ public class MyPageController {
 		} catch (ClassCastException e) {
 			return "redirect:/customer/login";
 		}
-	}
-
-	// 마이페이지-내문의관리
-	@RequestMapping("/myinquiry")
-	public String myInquiry(Model model) {
-		try {
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails) principal;
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			// 상단 잔여포인트
-			String point = pointService.selectTotalPoint(customerId);
-			if (point == null) {
-				point = "0";
-			}
-			model.addAttribute("totalPoint", point + "P");
-			return "mypage/mypage-inquiry";
-		} catch (ClassCastException e) {
-			return "redirect:/customer/login";
-		}
-
 	}
 
 }
