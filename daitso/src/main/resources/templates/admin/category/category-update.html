@@ -85,20 +85,30 @@
 		document.body.appendChild(tag);
 		tag.submit();   
 	}
-	
+
 	categoryList.map((data,idx) => {
 		if(data.lv == 1){
-			const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f"><img style="width:50px; height:35px" src="/assets/common/folder-open-solid.svg">${data.categoryNm}</a></li>`
+			const elements = `<li class="li${data.categoryId}">
+								<a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f">
+									<img style="width:50px; height:35px" src="/assets/common/folder-open-solid.svg">${data.categoryNm}
+								</a>
+							  </li>`
 			sortableBox.innerHTML += elements;
 		}
 		else{
 			if(data.lv > categoryList[idx-1].lv){
-				const elements = `<ul class="ul${data.categoryPrId}"><li class="li${data.categoryId}"><a onmouseup="drag(event)" style="font-size:20px; border:1px solid ">└${data.categoryNm}</a></li></ul>`
+				const elements = `<ul class="ul${data.categoryPrId}">
+									<li class="li${data.categoryId}">
+										<a onmouseup="drag(event)" style="font-size:20px; border:1px solid ">└${data.categoryNm}</a>
+									</li>
+								  </ul>`
 				const parent = document.querySelector(`.li${data.categoryPrId}`)
 				parent.innerHTML += elements;
 			}
-			else if(data.lv == categoryList[idx-1].lv){
-				const elements = `<li class="li${data.categoryId}"><a onmouseup="drag(event)" style="font-size:20px; border:1px solid">└${data.categoryNm}</a></li>`
+			else if(data.lv <= categoryList[idx-1].lv){
+				const elements = `<li class="li${data.categoryId}">
+									<a onmouseup="drag(event)" style="font-size:20px; border:1px solid">└${data.categoryNm}</a>
+								  </li>`
 				const parent = document.querySelector(`.ul${data.categoryPrId}`)
 				parent.innerHTML += elements;			
 			}

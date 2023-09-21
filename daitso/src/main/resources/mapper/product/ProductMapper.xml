@@ -609,4 +609,52 @@
 	    END;
 	</update>
 
+
+	<select id="selectSearchProduct" resultType="com.example.daitso.product.model.Product">
+		SELECT product_id AS productId,
+				product_group_id AS productGroupId,
+				category_id AS categoryId,
+				product_image_first AS productImageFirst,
+				product_nm AS productNm,
+				NVL(review_star_point,0) AS reviewStarPoint,
+				NVL(review_count,0) AS reviewCount,
+				product_content AS productContent,
+				product_stock AS productStock,
+				discount_rate AS discountRate,
+				product_price AS productPrice
+		FROM(
+			SELECT product_id, product_group_id, discount_rate, category_id, product_image_first, product_nm, product_content, product_stock,
+					review_star_point, review_count,
+					product_price, rownum as rnum
+			FROM(
+				SELECT p.product_id		AS		product_id,  discount_rate, row_number() over (partition by p.product_group_id order by product_price) snum,
+						p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point, review_count
+				FROM product p
+				LEFT JOIN  (
+							SELECT product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count
+							FROM review r
+							LEFT JOIN product mp ON r.product_id = mp.product_id GROUP BY product_group_id
+							) b
+				ON p.product_group_id = b.product_group_id
+				WHERE instr(p.product_nm,#{searchText}) > 0
+				AND p.status = 'Y'
+				<choose>
+					<when test='sort.equals("normal")'>
+						ORDER BY p.product_id
+					</when>
+					<when test='sort.equals("highPrice")'>
+						ORDER BY p.product_price DESC
+					</when>
+					<when test='sort.equals("lowPrice")'>
+						ORDER BY p.product_price
+					</when>
+					<when test='sort.equals("highRate")'>
+						ORDER BY review_star_point
+					</when>
+				</choose>
+			)
+			WHERE snum = 1
+		)
+		WHERE rnum between #{start} and #{end}
+	</select>
 </mapper>
