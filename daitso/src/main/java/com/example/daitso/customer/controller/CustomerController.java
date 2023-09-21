@@ -121,4 +121,10 @@ public class CustomerController {
 	public @ResponseBody CustomerName getCustomerNmByCustomerId(@PathVariable int customerId) {
 		return customerService.getCustomerNmByCustomerId(customerId);
 	}
+	
+	// 아이디, 비밀번호 찾기 화면
+	@GetMapping("/find")
+	public String getCustomerFind() {
+		return "customer/customer-find";
+	}
 }

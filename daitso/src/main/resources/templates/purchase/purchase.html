@@ -273,7 +273,7 @@
     		paymentWidget.requestPayment({
     	        orderId: orderId,        
     	        orderName: products[0].productNm + " 외 " + products.length +"건",                 
-    	        successUrl: window.location.origin + "/purchase/success?shippingId=" + shippingId +  "&" 
+    	        successUrl: window.location.origin + "/purchase/success/complete?shippingId=" + shippingId +  "&" 
     	        		+ cartIdListUrl.substring(0,cartIdListUrl.length-1) + "&" 
     	        		+ "totalProductPrice=" + totalProductPrice + "&" + "discountPrice=" + discountPrice,  
     	        failUrl: window.location.origin + "/purchase",     

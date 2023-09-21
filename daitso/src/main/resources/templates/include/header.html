@@ -37,6 +37,7 @@
     <link rel="stylesheet" th:href="@{/css/mypage-css/detail-order.css}">
     <link rel="stylesheet" th:href="@{/css/purchase.css}">
     <link rel="stylesheet" th:href="@{/css/shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/customer-find.css}">
     
     <!-- BootStrap -->    
     <link href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -161,7 +162,10 @@
 	    				return res.json();
 	    			})
 	    			.then((json) => {
-	    				document.getElementById("customer-name").innerText = json.customerNm + '님';	
+	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
+	    				if(json.customerNm == '관리자'){
+	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/product');
+	    				}
 	    			})
 	    		}
 	    	})

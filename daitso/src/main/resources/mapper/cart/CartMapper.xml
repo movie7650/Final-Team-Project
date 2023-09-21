@@ -22,9 +22,9 @@
 			   c.cart_count AS "cartCount",
 			   c.checked AS "checked",
 			   p.product_nm AS "productNm",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productRealPrice",
-               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
-               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "productTotalPrice",
+			   TO_CHAR(p.product_price, 'FM999,999,999') AS "productRealPrice",
+		       TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01), 'FM999,999,999') AS "productPrice",
+		       TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count, 'FM999,999,999') AS "productTotalPrice",
 			   p.product_stock AS "productStock",
 			   p.product_option_first AS "productOptionFirst",
 			   p.product_option_second AS "productOptionSecond",
@@ -106,10 +106,10 @@
 		SELECT p.product_id AS "productId",
        		   p.product_image_first AS "productImageFirst",
        		   p.product_nm AS "productNm",
-               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
+               TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01), 'FM999,999,999') AS "productPrice",
                c.cart_id AS "cartId",
                c.cart_count AS "cartCount",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
+			   TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count, 'FM999,999,999') AS "cartPrice",
 			   p.category_id AS "categoryId",
        		   p.product_option_first AS "productOptionFirst",
        		   p.product_option_second AS "productOptionSecond",
@@ -144,10 +144,10 @@
 		SELECT p.product_id AS "productId",
        		   p.product_image_first AS "productImageFirst",
        		   p.product_nm AS "productNm",
-               REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
+               TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01), 'FM999,999,999') AS "productPrice",
                c.cart_id AS "cartId",
                c.cart_count AS "cartCount",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "cartPrice",
+			   TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count, 'FM999,999,999') AS "cartPrice",
 			   p.category_id AS "categoryId",
        		   p.product_option_first AS "productOptionFirst",
        		   p.product_option_second AS "productOptionSecond",
@@ -287,16 +287,16 @@
 		기능: 바로 구매시 해당 상품 정보들 장바구니 화면에 띄우기
 		담당자: 최준원
 	-->
-	<select id="getCartByCartIdDirectPurchase" resultType="com.example.daitso.cart.model.CartCheck">
+	<select id="getCartByCartIdDirectPurchase" resultType="com.example.daitso.cart.model.CartCheck" parameterType="int">
 		SELECT c.cart_id AS "cartId",
 		       c.product_id AS "productId",
 		       p.product_group_id AS "productGroupId",
 		       c.cart_count AS "cartCount",
 		       c.checked AS "checked",
 		       p.product_nm AS "productNm",
-		       REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price)), '(\d{3})','\1,')), '^,','') AS "productRealPrice",
-		       REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01))), '(\d{3})','\1,')), '^,','') AS "productPrice",
-		       REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count)), '(\d{3})','\1,')), '^,','') AS "productTotalPrice",
+		       TO_CHAR(p.product_price, 'FM999,999,999') AS "productRealPrice",
+		       TO_CHAR(p.product_price - (p.product_price * p.discount_rate * 0.01), 'FM999,999,999') AS "productPrice",
+		       TO_CHAR((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count, 'FM999,999,999') AS "productTotalPrice",
 		       p.product_stock AS "productStock",
 		       p.product_option_first AS "productOptionFirst",
 		       p.product_option_second AS "productOptionSecond",
@@ -318,13 +318,16 @@
 		                                                          ELSE GREATEST(create_dt, modify_dt) 
 		                                                          END )
 		                                           FROM cart
-		                                          WHERE status = 'Y' ) 
+		                                          WHERE status = 'Y'
+		                                            AND customer_id = #{customerId} ) 
 		                        OR modify_dt = ( SELECT MAX( CASE WHEN modify_dt IS NULL 
 		                                                         THEN create_dt
 		                                                         ELSE GREATEST(create_dt, modify_dt) 
 		                                                         END )
 		                                          FROM cart
-		                                         WHERE status = 'Y' )
-		                       AND status = 'Y' )
+		                                         WHERE status = 'Y'
+		                                           AND customer_id = #{customerId} )
+		                       AND status = 'Y' 
+		                       AND customer_id = #{customerId} )
     </select>
 </mapper>
