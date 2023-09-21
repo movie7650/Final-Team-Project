@@ -44,7 +44,7 @@ public interface IAdminService {
 	// 주문 내역 조회하기(배송상태별)
 	List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize);
 	
-	// 주문 내역 개수 조회하기(배송상태별)
+	// 주문 내역 개수 조회하기(전체, 배송상태별)
 	int selectCountPurchaseList(int commonCodeId);
 
 	// 배송 상태 변경하기
@@ -56,7 +56,7 @@ public interface IAdminService {
 	// 검색 결과 개수 조회하기
 	int selectCountPurchaseInfo(String searchText, String searchOption);
 	
-	// 주문 상세 내역 조회하기
+	// 주문번호로 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 	
 	// 전체 카테고리 조회하기
@@ -68,8 +68,10 @@ public interface IAdminService {
 	// 카테고리 삭제하기
 	void deleteCategory(int categoryId);
 	
+	// 카테고리ID로 카테고리 정보 조회하기
 	CategoryCheck selectCategoryByCategoryId(int categoryId);
 	
+	// 카테고리 정보 수정하기
 	void updateCategoryInfo(CategoryCheck categoryCheck);
 
 }

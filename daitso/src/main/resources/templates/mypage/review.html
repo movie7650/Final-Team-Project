@@ -18,7 +18,6 @@
 		 	
 			<div class="my-review-container">
 			<div style="width:500px;">
-				<!-- <div  th:text="${mypageReview.reviewId}" hidden>리뷰아이디</div> -->
 				<div th:text="|제목: ${mypageReview.reviewTitle}|" class="my-review-title">리뷰제목</div>
 				<div th:text="|상품명: ${mypageReview.productNm}|" class="my-review-product">상품이름</div>
 				<div th:if="${mypageReview.reviewStarPoint}==5" class="my-review-star-point">&#9733;&#9733;&#9733;&#9733;&#9733;</div>

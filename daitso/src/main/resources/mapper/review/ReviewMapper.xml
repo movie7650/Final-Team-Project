@@ -107,4 +107,27 @@ WHERE re.customer_id=#{customerId}
 	 WHERE re.customer_id = #{customerId}
 </select>
 
+<!-- 리뷰작성하기-내가 주문한 상품정보 불러오기  -->
+<select id="selectMyPurchase" resultType="com.example.daitso.review.model.WriteMyReview">
+	SELECT  p.product_id as "productId",
+			pur.customer_id as "customerId",
+			pur.purchase_num as "purchaseNum",
+            pur.purchase_count as "purchaseCount",
+            REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
+			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price * pur.purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+            pur.create_dt           as"purchaseDt",
+            p.product_nm as "productNm"
+	  FROM  purchase pur, product p
+	 WHERE  customer_id=#{customerId}
+	   AND  pur.product_id=p.product_id
+	   AND  pur.product_id=#{productId}
+</select>
+<!-- 리뷰작성하기-내리뷰작성 -->
+<insert id="insertReview" parameterType="com.example.daitso.review.model.WriteMyReview">
+	INSERT INTO review (review_id, product_id,customer_id,review_content,review_star_point,
+						review_image_first,review_image_second,review_image_third,status,
+						creator,review_title)
+	VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, null, null, null, 'Y', 'admin',#{reviewTitle})   
+</insert>
+
 </mapper>

@@ -104,7 +104,7 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
-	// 두 번째 카테고리 불러오기
+	// 두 번째 카테고리 불러오기, 'syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
 	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
@@ -113,7 +113,7 @@ public class AdminController {
 		return secondCategories;
 	}
 		
-	// 세 번째 카테고리 불러오기
+	// 세 번째 카테고리 불러오기, 'syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행
 	@GetMapping("/product/third/{categoryId}")
 	@ResponseBody
 	public List<Category> getThirdCategories(@PathVariable int categoryId, Model model) {
@@ -171,7 +171,6 @@ public class AdminController {
 		return "admin/product/message";
 	}
 	
-	
 	// 상품 삭제하기
 	@PostMapping("/delete")
 	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
@@ -197,6 +196,7 @@ public class AdminController {
 		adminService.registerProducts(product, files);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
+
 	return "admin/message";
 	}
 	
@@ -208,9 +208,8 @@ public class AdminController {
         List<ProductCheck> productList = adminService.searchProductsByName(searchText);
         return productList;
     }
-    
-    
-    // 주문 내역 조회하기(배송상태별), admin-purchase.html 전체 조회
+       
+    // 주문 내역 조회하기(전체 조회 페이지)
     @GetMapping("/purchase")
 	public String selectPurchaseList(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
 			  @RequestParam(name = "page", defaultValue = "1") int page,
@@ -242,7 +241,7 @@ public class AdminController {
 	}
 
     
-	// 주문 내역 조회하기(배송상태별), 데이터 불러오기 위한(purchaselist, 페이지 정보) 
+	// 주문 내역 조회하기(배송상태별, 페이지 정보)
     @GetMapping("/purchases")
     @ResponseBody
     public PageResult<PurchaseList> selectPurchaseLists(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
@@ -259,6 +258,7 @@ public class AdminController {
         
         int totalCount = adminService.selectCountPurchaseList(commonCodeId);
 
+        //페이징된 결과 데이터 넣을 PageResult(페이징된 데이터 목록, 현재 페이지 번호, 총 페이지수 담기)
         PageResult<PurchaseList> result = new PageResult<>();
         result.setData(purchaselist);
         result.setCurrentPage(page);
@@ -273,7 +273,6 @@ public class AdminController {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
         return "redirect:/admin/purchase";
     }	 
-    
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
@@ -296,16 +295,15 @@ public class AdminController {
 
         return result;
     }
-
-    
-    // 주문 상세 내역 조회하기
+  
+    // 주문번호로 주문 상세 내역 조회하기
     @GetMapping("/purchase-details/{purchaseNum}")
     @ResponseBody
     public List<PurchaseList> getPurchaseDetails(@PathVariable String purchaseNum) {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
     }
-        
+
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
   	public String selectAllCagegory(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -329,10 +327,40 @@ public class AdminController {
 	    model.addAttribute("totalCount", totalCount);
 	    model.addAttribute("totalPages", totalPages);
         model.addAttribute("categorylist",categorylist);
-  	 return "admin/category/admin-category";
+        
+        return "admin/category/admin-category";
   	}
-
-    
+	
+  	// 카테고리 삭제하기
+    @PostMapping("/category/delete")
+	public String deleteCategory(@RequestParam int categoryId, Model model) {
+		adminService.deleteCategory(categoryId);
+		model.addAttribute("message","카테고리가 삭제되었습니다.");
+		model.addAttribute("searchUrl","/admin/category");
+		return "admin/message";
+	}	
+  	
+    // 카테고리ID로 카테고리 정보 조회하기
+	@GetMapping("/update/category/{categoryId}")
+	@ResponseBody
+	public CategoryCheck selectCategoryByCategoryId(@PathVariable int categoryId, Model model) {
+		return adminService.selectCategoryByCategoryId(categoryId);
+	}
+	
+	// 카테고리 정보 수정하기
+ 	@PostMapping("/update/category")
+ 	public String updateCategoryInfo(CategoryCheck categoryCheck, Model model, HttpSession session) { 	    
+ 		adminService.updateCategoryInfo(categoryCheck);
+ 		model.addAttribute("categoryCheck", categoryCheck);
+ 	   	session.setAttribute("categoryId",categoryCheck.getCategoryId());
+ 		session.setAttribute("categoryNm",categoryCheck.getCategoryNm());
+ 		session.setAttribute("categoryContent",categoryCheck.getCategoryContent());
+ 		model.addAttribute("message","카테고리가 수정되었습니다.");
+ 		model.addAttribute("searchUrl","/admin/category");
+ 		return "admin/message";
+ 	}
+ 	
+ 	
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {
@@ -348,7 +376,7 @@ public class AdminController {
 		categoryService.updateCategory(categoryId, parentCategoryId);
 		return updateCategory(model);
 	}
-	
+
 	// 문의 관리 화면
 	@GetMapping("/inquiry/{inquiryAnsDv}")
 	public String getInquiry(@PathVariable char inquiryAnsDv, Model model) {
