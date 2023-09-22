@@ -83,5 +83,8 @@ public interface IProductRepository {
 
 	// 상품 검색
 	List<Product> selectSearchProduct(@Param("searchText") String searchText, @Param("start") int start, @Param("end") int end, @Param("sort") String sort);
+	
+	// 상품 개수 조회(검색시)
+	int selectSearchProductCount(@Param("searchText") String searchText);
 }
 

@@ -39,5 +39,8 @@ public interface IProductService {
 
 	// 상품 검색 조회
 	List<Product> selectSearchProduct(String searchText, int start, String sort);
+	
+	// 상품 개수 조회(검색시)
+	int selectSearchProductCount(String searchText);
 
 }

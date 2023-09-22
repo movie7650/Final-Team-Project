@@ -610,6 +610,10 @@
 	</update>
 
 
+	<!-- 
+		기능: 검색한 이름을 가진 상품 조회
+		담당자: 나현웅
+	 -->
 	<select id="selectSearchProduct" resultType="com.example.daitso.product.model.Product">
 		SELECT product_id AS productId,
 				product_group_id AS productGroupId,
@@ -656,5 +660,15 @@
 			WHERE snum = 1
 		)
 		WHERE rnum between #{start} and #{end}
+	</select>
+	
+	<select id="selectSearchProductCount" resultType="int">
+		SELECT count(*)
+		FROM (
+			SELECT distinct product_group_id
+			FROM product
+			WHERE INSTR(product_nm, #{searchText}) > 0
+		AND status = 'Y'
+		)
 	</select>
 </mapper>
