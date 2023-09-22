@@ -87,4 +87,9 @@ public class ProductService implements IProductService {
 		return productRepository.selectSearchProduct(searchText, start, start+15, sort);
 	}
 
+	@Override
+	public int selectSearchProductCount(String searchText) {
+		return productRepository.selectSearchProductCount(searchText);
+	}
+
 }

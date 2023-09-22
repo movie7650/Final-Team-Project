@@ -164,19 +164,17 @@ public class ProductController {
 	}
 
 	//상품 검색하기
-	@GetMapping("/{searchText}")
-	public String searchProduct(@PathVariable String searchText, @RequestParam(value="sort", required=false, defaultValue="normal") String sort, HttpSession session , Model model){
+	@GetMapping("/search")
+	public String searchProduct(@RequestParam String searchText, @RequestParam(value="sort", required=false, defaultValue="normal") String sort, HttpSession session , Model model){
 		return searchProduct(searchText, 1, session, model, sort);
 	}
 
-	@GetMapping("/{searchText}/{page}/{sort}")
-	public String searchProduct(@PathVariable String searchText, @PathVariable int page ,HttpSession session ,Model model, @PathVariable String sort) {
+	@GetMapping("/search/{page}/{sort}")
+	public String searchProduct(@RequestParam String searchText, @PathVariable int page ,HttpSession session ,Model model, @PathVariable String sort) {
 		session.setAttribute("page", page);
-		/*List<Product> list = productService.selectProductList(searchText, page, sort);
-		List<Category> categoryList = categoryService.selectCategoryList(categoryId);
-		String path = categoryService.selectCategoryPath(categoryId);
+		List<Product> list = productService.selectSearchProduct(searchText, page, sort);
 
-		int listCnt = productService.selectCountProductList(categoryId);
+		int listCnt = productService.selectSearchProductCount(searchText);
 		int totalPage = 0;
 		if(listCnt > 0) {
 			totalPage = (int)Math.ceil(listCnt/16.0);
@@ -191,7 +189,6 @@ public class ProductController {
 		}else {
 			endPage = totalPage;
 		}
-		System.out.println("endPage : " + endPage + "totalPage : " + totalPage + "listCnt : " + listCnt);
 		model.addAttribute("sort", sort);
 		model.addAttribute("totalPageCount", totalPage);
 		model.addAttribute("nowPage", page);
@@ -199,10 +196,10 @@ public class ProductController {
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		model.addAttribute("categoryId", categoryId);
-		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("categoryId", "noCategory");
+		model.addAttribute("categoryList", "noCategory");
 		model.addAttribute("productList", list);
-		model.addAttribute("path", path);*/
+		model.addAttribute("path", searchText);
 
 		return "/main/product";
 	}
