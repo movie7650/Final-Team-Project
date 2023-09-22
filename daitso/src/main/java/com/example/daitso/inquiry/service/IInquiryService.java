@@ -6,6 +6,7 @@ import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquiryProduct;
 import com.example.daitso.inquiry.model.InquirySelect;
+import com.example.daitso.inquiry.model.MyInquirySelect;
 
 public interface IInquiryService {
 	
@@ -31,5 +32,11 @@ public interface IInquiryService {
 
 	// 문의 아이디로 문의 내용 조회 + 문의 답변 보기
 	InquiryInfoWithAnswer selectInquiryInfoWithAnswerByInquiryId(int inquiryId);
+	
+	//내 문의글 조회 
+	List<MyInquirySelect> selectMyInquiry(int customerId);
+	
+	//내 문의글 삭제
+	void deleteMyInquiry(MyInquirySelect myInquirySelect);
 
 }

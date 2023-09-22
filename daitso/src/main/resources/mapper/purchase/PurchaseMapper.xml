@@ -26,7 +26,10 @@
                             				  AND c.cart_id = #{cartId}), #{totalCost}, #{orderRequest}, 401, #{customerId})
 	 </insert>
 
-	<!-- 주문목록조회  -->
+	<!-- 
+			기능: 내 주문목록조회
+			담당자: 윤상영
+		 -->
 	<select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
 		SELECT pur.product_id as "productId",
 			   pur.customer_id as "customerId",
@@ -45,7 +48,10 @@
 	  ORDER BY purchase_id DESC
 	</select>
 	
-	<!--배송중 갯수세기  -->
+	<!-- 
+			기능: 배송중 카운트
+			담당자: 윤상영
+		 -->
 	<select id="selectShipping" parameterType="int" resultType="int">
 		SELECT COUNT(pur.purchase_dv) as "shippingCount"
 		  FROM purchase pur
@@ -53,7 +59,10 @@
 		   AND pur.customer_id=#{customerId}
 	</select>
 	
-	<!--배송완료 갯수세기  -->
+	<!-- 
+			기능: 배송완료 카운트
+			담당자: 윤상영
+		 -->
 	<select id="selectShippingComplete" parameterType="int" resultType="int">
 		SELECT COUNT(pur.purchase_dv) as "shippingCompleteCount"
 		  FROM purchase pur
@@ -61,7 +70,10 @@
 		   AND pur.customer_id=#{customerId}
 	</select>
 	
-	<!-- 입금/결제 갯수세기 -->
+	<!-- 
+			기능: 입금/결제 카운트
+			담당자: 윤상영
+		 -->
 	<select id="selectPayCoin" parameterType="int" resultType="int">
 		SELECT COUNT(pur.purchase_dv) as "payCoinCount"
 		  FROM purchase pur
@@ -69,14 +81,20 @@
 		   AND pur.customer_id=#{customerId}
 	</select>
 	
-	<!-- 주문번호 카운트 -->
+	<!-- 
+			기능: 주문번호 카운트
+			담당자: 윤상영
+		 -->
 	<select id="selectPurchaseNumCount" parameterType="int" resultType="int">
 		SELECT COUNT(pur.purchase_num) as "purchaseNumCount"
 		  FROM purchase pur 
 		 WHERE pur.customer_id=#{customerId}
 	</select>
 	
-	<!-- 주문상세조회 -->
+	<!-- 
+			기능: 주문상세조회
+			담당자: 윤상영
+		 -->
 	<select id="selectDetailPurchase" resultType="com.example.daitso.purchase.model.PurchaseDetailCheck">
 		SELECT p.product_nm 							as "productNm",
 			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",

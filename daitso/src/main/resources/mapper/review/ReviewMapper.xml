@@ -75,59 +75,74 @@
 		select count(*) from review_heart where review_id = #{reviewId}
 	</select>
 
-<!-- 마이페이지 내가 쓴 리뷰 조회  -->
-<select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
-SELECT  	  re.review_title as "reviewTitle",
- 			  re.review_id 	  as "reviewId",
-              NVL(cnt,0) AS "reviewHeartCount", 
-              p.product_nm as "productNm",
-              re.review_star_point as "reviewStarPoint",
-              re.review_content as "reviewContent",
-              re.review_image_first as "reviewImageFirst",
-              re.review_image_second as "reviewImageSecond",
-              re.review_image_third   as "reviewImageThird",
-              re.create_dt              as "createDt"
-FROM   review re
-left join product p on re.product_id = p.product_id
-left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
-WHERE re.customer_id=#{customerId} 
-</select>
+	<!-- 
+			기능: 내가 쓴 리뷰 조회하기
+			담당자: 윤상영
+		 -->
+	<select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
+	SELECT  	  re.review_title as "reviewTitle",
+	 			  re.review_id 	  as "reviewId",
+	              NVL(cnt,0) AS "reviewHeartCount", 
+	              p.product_nm as "productNm",
+	              re.review_star_point as "reviewStarPoint",
+	              re.review_content as "reviewContent",
+	              re.review_image_first as "reviewImageFirst",
+	              re.review_image_second as "reviewImageSecond",
+	              re.review_image_third   as "reviewImageThird",
+	              re.create_dt              as "createDt"
+	FROM   review re
+	left join product p on re.product_id = p.product_id
+	left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
+	WHERE re.customer_id=#{customerId} 
+	</select>
 
-<!-- 마이페이지 내가 쓴 리뷰 삭제하기 -->
-<delete id="deleteReview">
-	DELETE 
-	  FROM review  re
-	 WHERE re.customer_id=#{customerId} and re.review_id=#{reviewId}
-</delete>
+	<!-- 
+			기능: 내가 쓴 리뷰 삭제하기
+			담당자: 윤상영
+		 -->
+	<delete id="deleteReview">
+		DELETE 
+		  FROM review  re
+		 WHERE re.customer_id=#{customerId} and re.review_id=#{reviewId}
+	</delete>
 
-<!--리뷰컨텐트 카운트  -->
-<select id="selectReviewContentCount" resultType="int" parameterType="int">
-	SELECT COUNT(re.review_content) as "reviewContentCount"
-	  FROM review re
-	 WHERE re.customer_id = #{customerId}
-</select>
+	<!-- 
+			기능: 리뷰 내용 카운트
+			담당자: 윤상영
+		 -->
+	<select id="selectReviewContentCount" resultType="int" parameterType="int">
+		SELECT COUNT(re.review_content) as "reviewContentCount"
+		  FROM review re
+		 WHERE re.customer_id = #{customerId}
+	</select>
 
-<!-- 리뷰작성하기-내가 주문한 상품정보 불러오기  -->
-<select id="selectMyPurchase" resultType="com.example.daitso.review.model.WriteMyReview">
-	SELECT  p.product_id as "productId",
-			pur.customer_id as "customerId",
-			pur.purchase_num as "purchaseNum",
-            pur.purchase_count as "purchaseCount",
-            REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price * pur.purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
-            pur.create_dt           as"purchaseDt",
-            p.product_nm as "productNm"
-	  FROM  purchase pur, product p
-	 WHERE  customer_id=#{customerId}
-	   AND  pur.product_id=p.product_id
-	   AND  pur.product_id=#{productId}
-</select>
-<!-- 리뷰작성하기-내리뷰작성 -->
-<insert id="insertReview" parameterType="com.example.daitso.review.model.WriteMyReview">
-	INSERT INTO review (review_id, product_id,customer_id,review_content,review_star_point,
-						review_image_first,review_image_second,review_image_third,status,
-						creator,review_title)
-	VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, null, null, null, 'Y', 'admin',#{reviewTitle})   
-</insert>
+	<!-- 
+			기능: 리뷰작성페이지-내가 주문한 상품 정보 가져오기
+			담당자: 윤상영
+		 -->
+	<select id="selectMyPurchase" resultType="com.example.daitso.review.model.WriteMyReview">
+		SELECT  p.product_id as "productId",
+				pur.customer_id as "customerId",
+				pur.purchase_num as "purchaseNum",
+	            pur.purchase_count as "purchaseCount",
+	            REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
+				   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price * pur.purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+	            pur.create_dt           as"purchaseDt",
+	            p.product_nm as "productNm"
+		  FROM  purchase pur, product p
+		 WHERE  customer_id=#{customerId}
+		   AND  pur.product_id=p.product_id
+		   AND  pur.product_id=#{productId}
+	</select>
+	<!-- 
+				기능: 리뷰 작성하기
+				담당자: 윤상영
+			 -->
+	<insert id="insertReview" parameterType="com.example.daitso.review.model.WriteMyReview">
+		INSERT INTO review (review_id, product_id,customer_id,review_content,review_star_point,
+							review_image_first,review_image_second,review_image_third,status,
+							creator,review_title)
+		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, null, null, null, 'Y', 'admin',#{reviewTitle})   
+	</insert>
 
 </mapper>

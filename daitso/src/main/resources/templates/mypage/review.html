@@ -20,11 +20,11 @@
 			<div style="width:500px;">
 				<div th:text="|제목: ${mypageReview.reviewTitle}|" class="my-review-title">리뷰제목</div>
 				<div th:text="|상품명: ${mypageReview.productNm}|" class="my-review-product">상품이름</div>
-				<div th:if="${mypageReview.reviewStarPoint}==5" class="my-review-star-point">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-				<div th:if="${mypageReview.reviewStarPoint}==4" class="my-review-star-point">&#9733;&#9733;&#9733;&#9733;</div>
-				<div th:if="${mypageReview.reviewStarPoint}==3" class="my-review-star-point">&#9733;&#9733;&#9733;</div>
-				<div th:if="${mypageReview.reviewStarPoint}==2" class="my-review-star-point">&#9733;&#9733;</div>
-				<div th:if="${mypageReview.reviewStarPoint}==1" class="my-review-star-point">&#9733;</div>
+				<div th:if="${mypageReview.reviewStarPoint}==5" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;&#9733;&#9733;&#9733;</div>
+				<div th:if="${mypageReview.reviewStarPoint}==4" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;&#9733;&#9733;</div>
+				<div th:if="${mypageReview.reviewStarPoint}==3" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;&#9733;</div>
+				<div th:if=" ${mypageReview.reviewStarPoint}==2" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;</div>
+				<div th:if="${mypageReview.reviewStarPoint}==1" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;</div>
 				<div th:text="${mypageReview.reviewContent}" class="my-review-content">넘흐예쁘네욤</div>
 			</div>
 				<div class="my-review-photo-container">
