@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div id="customer-find-container">
+	<div id="customer-find-box">
+		<div id="customer-find-title">계정정보 찾기</div>
+		<div style="display:flex; text-align:center; margin-top:30px; font-size: 16px; font-weight: 600;">
+			<div id="customer-find-pw-title"><a th:href="@{/customer/find/email}" style="color:#555555; text-decoration:none;">아이디(이메일) 찾기</a></div>
+			<div id="customer-find-email-title"><a th:href="@{/customer/find/pw}" style="color:black; text-decoration:none;">비밀번호 찾기</a></div>
+		</div>
+		<div style="margin-top:30px; padding: 10px 30px 10px 30px;" id="customer-find-pw-box">
+			<div class="customer-find-info"><span style="font-weight:bold; color:#FF7F00;">*</span>  비밀번호의 경우 <span style="font-weight:600;">암호화 </span> 저장되어 분실 시 찾아드릴 수 없는 정보입니다.</div>
+			<div class="customer-find-info"><span style="font-weight:600;"><span style="font-weight:bold; color:#FF7F00;">*</span>   본인 확인</span>을 통해 비밀번호를 재설정 하실 수 있습니다.</div>
+			<div style="display:flex; border-top: 2px solid #CECECE; margin-top: 30px;">	
+				<div class="customer-find-text">이름</div>
+				<div class="customer-find-input">
+					<input type="text" id="customer-find-input-name">
+					<span id="customer-find-input-name-error">이름을 입력해주세요!</span>
+				</div>
+			</div>
+			<div style="display:flex;">	
+				<div class="customer-find-text" style="display: flex; align-items:center;">
+					<div>아이디(이메일)</div>
+				</div>
+				<div class="customer-find-input">
+					<input type="text" id="customer-find-input-email">
+					<span id="customer-find-input-email-error">아이디(이메일)을 입력해주세요!</span>
+					<div style="margin-top:10px; font-size: 15px; color: #555555;">다있소에 가입된 계정 이메일을 정확히 기입해주시길 바랍니다.</div>
+				</div>
+			</div>
+			<div style="display: flex; justify-content:center; margin-top:100px;">
+				<button id="customer-find-pw-btn" onclick="findPw()" type="submit">비밀번호 찾기</button>
+			</div>
+		</div>
+		<div id="customer-find-pw-email">
+			<div class="customer-find-pw-email-text"><span id="customer-find-email-text"></span>으로 비밀번호 재설정 이메일을 발송하였습니다.</div>
+			<div style="font-size:15px; margin-top: 20px; font-weight: 600;">이메일을 받지 못하셨나요?</div>
+			<div style="font-size:15px;">스팸함을 확인해보시거나, 입력하신 이름과 아이디(이메일)가 쿠팡 회원정보와 일치하는지 확인해주세요.</div>
+			<div style="font-size:15px;">아이디(이메일)를 잊으신 경우, 먼저 아이디(이메일) 찾기를 진행해주세요.</div>
+		</div>
+		<input type="hidden" th:value="${error}" id="error">
+	</div>
+</div>
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+<script>
+	
+	if(document.getElementById("error").value){
+		alert(document.getElementById("error").value);
+	}
+	
+	const customerFindPwBox = document.getElementById("customer-find-pw-box");
+	const customerFindPwEmail = document.getElementById("customer-find-pw-email");
+	const email = document.getElementById("customer-find-input-email");
+	const name = document.getElementById("customer-find-input-name");
+	const emailText = document.getElementById("customer-find-email-text");
+	
+	function findPw() {
+		if(!name.value) {
+			document.getElementById("customer-find-input-name-error").style.visibility = 'visible';
+		} else if(name.value && !email.value) {
+			document.getElementById("customer-find-input-email-error").style.visibility = 'visible';
+			document.getElementById("customer-find-input-name-error").style.visibility = 'hidden';
+		} else {
+			customerFindPwBox.style.display = 'none';
+			customerFindPwEmail.style.display = 'block';
+			emailText.innerText = email.value;
+			
+			fetch( window.location.origin + "/customer/setting-password/email" , {
+			    method: "POST",
+			    headers: { 
+			        "Content-Type": "application/json",
+			    },
+			    body: JSON.stringify({
+			        email: email.value
+			    }),
+			})
+			.then((data) => {
+			});	 	
+		} 
+	}
+</script>
+</html>

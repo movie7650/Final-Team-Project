@@ -135,4 +135,34 @@
     		START WITH inquiry_pr_id is null
     		CONNECT BY PRIOR inquiry_id = inquiry_pr_id
 	</select>
+	<!-- 
+		기능: 내가 쓴 문의 조회하기
+		담당자: 윤상영
+	 -->
+	<select id="selectMyInquiry" resultType="com.example.daitso.inquiry.model.MyInquirySelect" parameterType="int">
+	SELECT p.product_nm 		as "productNm",
+           customer_id 			as "customerId",
+           inquiry_pr_id 		as "inquiryPrId",
+           inquiry_content 		as "inquiryContent",
+           inquiry_ans_dv 		as "inquiryAnsDv",
+           i.create_dt          as "createDt",
+           i.creator            as "creator",
+           inquiry_id           as "inquiryId",
+           i.product_id			as "productId"
+	  FROM inquiry i , product p
+	 WHERE customer_id = #{customerId}
+	   AND p.product_id = i.product_id
+	</select>
+	<!-- 
+		기능: 내가 쓴 문의 삭제하기 
+		담당자: 윤상영
+	 -->
+	 <delete id="deleteMyInquiry" parameterType="com.example.daitso.inquiry.model.MyInquirySelect">
+	  DELETE
+	   FROM inquiry i
+	  WHERE i.customer_id=#{customerId}
+	    AND i.product_id = #{productId}
+         OR i.inquiry_pr_id = #{inquiryId}
+	 </delete>
+	
 </mapper>

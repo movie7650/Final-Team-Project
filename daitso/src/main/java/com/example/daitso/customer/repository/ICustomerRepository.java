@@ -3,6 +3,7 @@ package com.example.daitso.customer.repository;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.customer.model.CustomerInfo;
@@ -34,5 +35,11 @@ public interface ICustomerRepository {
 	
 	//사용자 아이디(이메일) 가져오기
 	public String selectCustomerEmail();
+
+	// 새 비밀번호 설정
+	void settingPassword(@Param("password") String password, @Param("email") String email);
+
+	// 사용자 휴대폰번호로부터 이메일 조회
+	String getCustomerEmailByCustomerTelno(String customerTelno);
 
 }

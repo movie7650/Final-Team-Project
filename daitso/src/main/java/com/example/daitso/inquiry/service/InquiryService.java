@@ -11,6 +11,7 @@ import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquiryProduct;
 import com.example.daitso.inquiry.model.InquirySelect;
+import com.example.daitso.inquiry.model.MyInquirySelect;
 import com.example.daitso.inquiry.repository.IInquiryRepository;
 import com.example.daitso.product.repository.IProductRepository;
 
@@ -72,6 +73,17 @@ public class InquiryService implements IInquiryService {
 	@Override
 	public InquiryInfoWithAnswer selectInquiryInfoWithAnswerByInquiryId(int inquiryId) {
 		return inquiryRepository.selectInquiryInfoWithAnswerByInquiryId(inquiryId);
+	}
+	//내가 작성한 문의글 조회
+	@Override
+	public List<MyInquirySelect> selectMyInquiry(int customerId) {
+		return inquiryRepository.selectMyInquiry(customerId);
+	}
+	
+	//내 문의글 삭제
+	@Override
+	public void deleteMyInquiry(MyInquirySelect myInquirySelect) {
+		inquiryRepository.deleteMyInquiry(myInquirySelect);		
 	}
 
 }

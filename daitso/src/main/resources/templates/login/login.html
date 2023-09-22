@@ -42,7 +42,7 @@
 								</div>
 								<div class="login-find">
 									<div style="margin-top: 1.5px;">
-										<a th:href="@{/customer/find}" style="color:#39594E; text-decoration:none;">아이디/비밀번호 찾기</a>
+										<a th:href="@{/customer/find/email}" style="color:#39594E; text-decoration:none;">아이디/비밀번호 찾기</a>
 									</div>
 								</div>
 							</div>
@@ -69,6 +69,7 @@
 	
 	// 에러 처리
  	const error = [[${error}]];
+	
 	if(error != null){
 		alert(error);	
 	}

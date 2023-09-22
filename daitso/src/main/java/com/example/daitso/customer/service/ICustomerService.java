@@ -27,4 +27,10 @@ public interface ICustomerService {
 	// 사용자 이메일 가져오기 
 	public String selectCustomerEmail();
 
+	// 새 비밀번호 설정
+	void settingPassword(String password, String email);
+    
+	// 사용자 휴대폰번호로부터 이메일 조회
+	String getCustomerEmailByCustomerTelno(String customerTelno);
+
 }
