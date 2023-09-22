@@ -11,7 +11,7 @@ import com.example.daitso.inquiry.model.MyInquirySelect;
 public interface IInquiryService {
 	
 	//문의글 삽입
-	void insertInquiry(int productGroupId, int cId ,String size, String color, String other, String content);
+	int insertInquiry(int productGroupId, int cId ,String size, String color, String other, String content);
 	
 	void selectInquiry(int inquiryId);
 	
