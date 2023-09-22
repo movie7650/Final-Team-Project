@@ -9,14 +9,13 @@
 	padding-bottom:0.5%;
 	font-size:150%;
 	margin-left:165px;
-	margin-top:-660px;
+	margin-top:10px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 .mypage-inquiry-table-container{
-	position:absolute;
-	margin-top:-500px;
-	margin-left:170px;
+	margin-top:100px; 
+	
 }
 .mypage-inquiry-table{
 	text-align:center;
@@ -31,6 +30,7 @@
 .mypage-inquiry-table td{
 	vertical-align: middle;
 	padding-bottom:5px;
+	height:120px;
 	border-bottom:solid 1.5px #e7e7e7;
 }
 .mypage-inquiry-table button{
@@ -38,4 +38,23 @@
 	width:70px;
 	background-color:white;
 	color:#668663;
+}
+.my-inquiry-product-img{
+	margin-top:10px;
+	width:80px; 
+	height:80px; 
+	border:solid 1px blue; 
+	float:left;
+}
+.my-inquiry-content{
+	padding-left:30px; 
+	padding-top:10px; 
+	width:200px; 
+	height:50px; 
+	overflow:hidden; 
+	text-overflow: ellipsis; 
+	white-space:nowrap;
+}
+.my-inquiry-productNm{
+	margin-top:30px;
 }
