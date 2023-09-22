@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
 import com.example.daitso.customercoupon.service.ICustomerCouponService;
+import com.example.daitso.inquiry.model.MyInquirySelect;
+import com.example.daitso.inquiry.service.IInquiryService;
 import com.example.daitso.point.model.Point;
 import com.example.daitso.point.service.IPointService;
 import com.example.daitso.purchase.model.PurchaseCheck;
@@ -38,6 +40,8 @@ public class MyPageController {
 	PasswordEncoder pwEncoder;
 	@Autowired
 	ICustomerCouponService customerCouponService;
+	@Autowired
+	IInquiryService inquiryService;
 
 	// 마이페이지-포인트 컨트롤러
 	@RequestMapping(value = "/mypoint", method = RequestMethod.GET)
@@ -370,6 +374,10 @@ public class MyPageController {
 			// 상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount", shipCount01);
+			//내 문의내역 조회
+			List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
+			model.addAttribute("myinquirylist",myInquiryList);
+			
 
 			return "mypage/mypage-inquiry";
 		} catch (ClassCastException e) {

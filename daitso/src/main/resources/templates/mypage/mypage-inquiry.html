@@ -14,16 +14,21 @@
 	<div class="mypage-inquiry-table-container">
 		<table class="mypage-inquiry-table">
 			<tr>
-				<th>상품명</th>
+				<th>상품정보</th>
 				<th>문의내용</th>
 				<th>문의작성일자</th>
 				<th>상태</th>
 			</tr>
-			<tr>
-				<td><div class="my-inquiry-product-img">이미지</div><div class="my-inquiry-productNm">남성무지반팔티</div></td>
-				<td><div class="my-inquiry-content">이몸이 죽고죽어 일백번 고쳐죽어 백골이 진토되어 넋이라도 있고없고 임향한 일편단심 가실줄이 있으랴</div></td>
-				<td>23-08-01</td>
-				<td><div>답변완료</div><button id="mypage-inquiry-delete">삭제</button></td> 
+			<tr style="font-size:80%;" th:each="myinquiry : ${myinquirylist}">
+				<td><div class="my-inquiry-product-img">이미지</div><div th:text="${myinquiry.productNm}" class="my-inquiry-productNm">남성무지반팔티</div></td>
+				<td><div th:text="${myinquiry.inquiryContent}" class="my-inquiry-content">이몸이 죽고죽어 일백번 고쳐죽어 백골이 진토되어 넋이라도 있고없고 임향한 일편단심 가실줄이 있으랴</div></td>
+				<td th:text="${myinquiry.createDt}">23-08-01</td>
+				<td>
+					<div style="color:red;padding-bottom:5px;" th:if="${myinquiry.inquiryAnsDv}=='W'">답변대기</div>
+					<div style="color:blue;padding-bottom:5px;" th:if="${myinquiry.inquiryAnsDv}=='C'">답변완료</div>
+					<button id="mypage-inquiry-delete">삭제</button>
+				
+				</td> 
 			</tr>	
 		</table><!-- mypage-inquiry-table -->
 	</div><!-- mypage-inquiry-table-container -->

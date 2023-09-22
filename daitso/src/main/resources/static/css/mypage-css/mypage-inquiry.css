@@ -58,3 +58,9 @@
 .my-inquiry-productNm{
 	margin-top:30px;
 }
+
+.mypage-inquiry-table button:hover{
+	color:white;
+	background-color:red;
+	border:none;
+}
