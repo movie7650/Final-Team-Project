@@ -270,9 +270,11 @@ public class AdminController {
 
     // 배송 상태 변경하기
     @PostMapping("/purchase/change-status")
-    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
+    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId, Model model) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        return "redirect:/admin/purchase";
+        model.addAttribute("message","배송상태가 변경되었습니다.");
+		model.addAttribute("searchUrl","/admin/purchase");
+		return "admin/message";
     }	 
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)

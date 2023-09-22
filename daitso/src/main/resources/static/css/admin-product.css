@@ -6,12 +6,14 @@
 }
 
 #productTable {
+	padding-top: 10px;
     padding-left: 50px;
     width: -webkit-fill-available;
 }
 
+/* 기존 상품 등록 모달 input */
 #productOptionFirst, #productOptionSecond,
-	#productOptionThird, #productPrice, #productStock, #productMaxGet {
+	#productOptionThird, #productPrice, #productStock, #productMaxGet{
 	width: 33%;
 	padding: 10px;
 	margin: 5px 0;
@@ -29,8 +31,10 @@
 	box-sizing: border-box;
 }
 
+/* 기존 상품 등록 모달 그룹ID, 카테고리명, 상품명 */
 #getProductGroupId, #getCategoryNm, #getProductNm{
 	border:none;
+	font-weight: bold;
 }
 
 .modal-body input {
