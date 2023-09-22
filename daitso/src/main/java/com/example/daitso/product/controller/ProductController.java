@@ -3,6 +3,8 @@ package com.example.daitso.product.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.daitso.category.model.Category;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -159,5 +161,46 @@ public class ProductController {
 			list.add(productService.selectProductOptionThird(productGroupId, optionFirst, optionSecond));						
 		}
 		return list;
+	}
+
+	//상품 검색하기
+	@GetMapping("/search")
+	public String searchProduct(@RequestParam String searchText, @RequestParam(value="sort", required=false, defaultValue="normal") String sort, HttpSession session , Model model){
+		return searchProduct(searchText, 1, session, model, sort);
+	}
+
+	@GetMapping("/search/{page}/{sort}")
+	public String searchProduct(@RequestParam String searchText, @PathVariable int page ,HttpSession session ,Model model, @PathVariable String sort) {
+		session.setAttribute("page", page);
+		List<Product> list = productService.selectSearchProduct(searchText, page, sort);
+
+		int listCnt = productService.selectSearchProductCount(searchText);
+		int totalPage = 0;
+		if(listCnt > 0) {
+			totalPage = (int)Math.ceil(listCnt/16.0);
+		}
+
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock = (int)(Math.ceil(page/10.0));
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("sort", sort);
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("categoryId", "noCategory");
+		model.addAttribute("categoryList", "noCategory");
+		model.addAttribute("productList", list);
+		model.addAttribute("path", searchText);
+
+		return "/main/product";
 	}
 }
