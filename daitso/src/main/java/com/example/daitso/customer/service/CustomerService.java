@@ -60,5 +60,18 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public String selectCustomerEmail() {
 		return customerRepository.selectCustomerEmail();
+	}
+
+	// 새 비밀번호 설정
+	@Transactional
+	public void settingPassword(String password, String email) {
+		String encryptedPassword = passwordEncoder.encode(password);
+		customerRepository.settingPassword(encryptedPassword, email);
+	}
+
+	// 사용자 휴대폰번호로부터 이메일 조회
+	@Override
+	public String getCustomerEmailByCustomerTelno(String customerTelno) {
+		return customerRepository.getCustomerEmailByCustomerTelno(customerTelno);
 	}	
 }

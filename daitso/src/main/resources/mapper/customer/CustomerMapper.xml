@@ -92,4 +92,31 @@
 		  FROM customer
 		 WHERE customer_id = #{customerId}
     </select>
+    
+    <!-- 
+    	기능: 새 비밀번호 설정
+    	담당자: 최준원
+    -->
+    <update id="settingPassword">
+    	UPDATE customer
+    	   SET customer_pw = #{password},
+    	   	   modifier = ( SELECT customer_id 
+    	   	   				  FROM customer 
+    	   	   				 WHERE customer_email = #{email}
+    	   	   				   AND status = 'Y' ),
+    	   	   modify_dt = SYSTIMESTAMP
+    	 WHERE customer_email = #{email}
+    	   AND status = 'Y'
+    </update>
+    
+    <!-- 
+    	기능: 사용자 휴대폰번호로부터 이메일 조회
+    	담당자: 최준원
+    -->
+    <select id="getCustomerEmailByCustomerTelno" parameterType="String" resultType="String">
+    	SELECT customer_email
+		  FROM customer
+		 WHERE customer_telno = REGEXP_REPLACE(#{customerTelno}, '(.{3})(.+)(.{4})', '\1-\2-\3')
+		   AND status = 'Y'
+    </select>
 </mapper>
