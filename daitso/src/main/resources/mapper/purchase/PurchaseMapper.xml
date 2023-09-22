@@ -130,19 +130,19 @@
 		               d.common_code_id                              AS  "commonCodeId",
 		               d.common_code_nm                              AS  "commonCodeNm",
 		               ROW_NUMBER() OVER (ORDER BY p.create_dt desc) AS "rn"
-		  FROM purchase p
-		  JOIN customer c    ON p.customer_id = c.customer_id 
-		  JOIN common_code d ON p.purchase_dv = d.common_code_id
-		  JOIN product r     ON r.product_id  = p.product_id
-	  GROUP BY p.purchase_id, 
-			   r.product_nm, 
-			   c.customer_nm, 
-			   p.purchase_num, 
-			   p.create_dt,
-	           d.common_code_id,
-	           d.common_code_nm
-	    HAVING 1=1 
-		       <choose>
+				  FROM purchase p
+				  JOIN customer c    ON p.customer_id = c.customer_id 
+				  JOIN common_code d ON p.purchase_dv = d.common_code_id
+				  JOIN product r     ON r.product_id  = p.product_id
+			  GROUP BY p.purchase_id, 
+					   r.product_nm, 
+					   c.customer_nm, 
+					   p.purchase_num, 
+					   p.create_dt,
+			           d.common_code_id,
+			           d.common_code_nm
+			    HAVING 1=1 
+		        <choose>
 				<!-- 전체 조회 -->
 				    <when test="(commonCodeId == null or commonCodeId == 0)">	
 						            
@@ -151,7 +151,7 @@
 					<otherwise>
 					 AND d.common_code_id = #{commonCodeId}
 					 </otherwise>
-			  </choose>
+			    </choose>
 			   ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 

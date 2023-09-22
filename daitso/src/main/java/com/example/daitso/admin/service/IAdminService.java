@@ -74,4 +74,6 @@ public interface IAdminService {
 	// 카테고리 정보 수정하기
 	void updateCategoryInfo(CategoryCheck categoryCheck);
 
+//카테고리 등록하기
+	void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files);
 }

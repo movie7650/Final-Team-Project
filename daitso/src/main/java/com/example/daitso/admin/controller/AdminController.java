@@ -104,7 +104,7 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
-	// 두 번째 카테고리 불러오기, 'syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행
+	// 두 번째 카테고리 불러오기 ('syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행)
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
 	public List<Category> getSecondCategories(@PathVariable int categoryId, Model model) {
@@ -113,7 +113,7 @@ public class AdminController {
 		return secondCategories;
 	}
 		
-	// 세 번째 카테고리 불러오기, 'syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행
+	// 세 번째 카테고리 불러오기, ('syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행)
 	@GetMapping("/product/third/{categoryId}")
 	@ResponseBody
 	public List<Category> getThirdCategories(@PathVariable int categoryId, Model model) {
@@ -135,7 +135,7 @@ public class AdminController {
 		adminService.deleteProductByGroupId(productGroupId);
 		model.addAttribute("message","상품이 삭제되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
+		return "admin/message";
 	}	
 	
 	// 상품ID로 상품 정보 갖고오기
@@ -166,9 +166,10 @@ public class AdminController {
 		session.setAttribute("productOptionThird", product.getProductOptionThird());
 		session.setAttribute("productPrice", product.getProductPrice());
 		session.setAttribute("productStock", product.getProductStock());
+		session.setAttribute("productMaxGet", product.getProductMaxGet());
 		model.addAttribute("message","상품이 수정되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
+		return "admin/message";
 	}
 	
 	// 상품 삭제하기
@@ -359,6 +360,16 @@ public class AdminController {
  		model.addAttribute("searchUrl","/admin/category");
  		return "admin/message";
  	}
+ 	
+ 	
+// 카테고리 등록하기
+	@PostMapping("/category")
+	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart List<MultipartFile> files) {
+		adminService.registerCategories(categoryCheck, files);
+		model.addAttribute("message","카테고리가 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/category");
+	return "admin/message";
+	}
  	
  	
 	// 카테고리 수정하기

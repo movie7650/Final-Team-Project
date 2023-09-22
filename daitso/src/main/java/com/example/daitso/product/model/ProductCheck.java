@@ -30,4 +30,5 @@ public class ProductCheck {
 	private int categoryPrId;
 	private int rn;
 	private String categoryNm;
+	private int productMaxGet;
 }
