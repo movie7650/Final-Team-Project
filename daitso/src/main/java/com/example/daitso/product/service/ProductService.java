@@ -70,7 +70,7 @@ public class ProductService implements IProductService {
 	
 	//매 자정마다 인기상품 및 할인상품 업데이트 시켜주기
 	 //@Scheduled(cron = "0 0 0 * * *")
-	 @Scheduled(cron = "0 54 9 * * *")
+	 @Scheduled(cron = "0 2 10 * * *")
 	 @Transactional
 	public void insertSpecialProduct() {
 		List<Map<String,Integer>> list = productRepository.searchSpecialProduct("popular");
@@ -79,6 +79,17 @@ public class ProductService implements IProductService {
 		List<Map<String,Integer>> sList = productRepository.searchSpecialProduct("sale");
 		productRepository.updateSaleProducts(sList);
 
+	}
+
+	@Override
+	public List<Product> selectSearchProduct(String searchText, int page, String sort) {
+		int start = (page-1)*16 + 1;
+		return productRepository.selectSearchProduct(searchText, start, start+15, sort);
+	}
+
+	@Override
+	public int selectSearchProductCount(String searchText) {
+		return productRepository.selectSearchProductCount(searchText);
 	}
 
 }

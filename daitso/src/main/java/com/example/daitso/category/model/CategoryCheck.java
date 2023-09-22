@@ -24,4 +24,5 @@ public class CategoryCheck {
 	private int rn;
 	private int root_id;
 	private int depth;
+	private String categoryImage;
 }

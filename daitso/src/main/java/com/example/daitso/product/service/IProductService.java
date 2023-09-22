@@ -37,4 +37,10 @@ public interface IProductService {
 	// 인기상품 및 할인상품 업데이트
 	void insertSpecialProduct();
 
+	// 상품 검색 조회
+	List<Product> selectSearchProduct(String searchText, int start, String sort);
+	
+	// 상품 개수 조회(검색시)
+	int selectSearchProductCount(String searchText);
+
 }
