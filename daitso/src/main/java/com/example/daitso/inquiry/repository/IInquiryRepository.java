@@ -45,4 +45,6 @@ public interface IInquiryRepository {
 	//내 문의글 조회 
 	List<MyInquirySelect> selectMyInquiry(int customerId);
 	
+	//내 문의글 삭제
+	void deleteMyInquiry(MyInquirySelect myInquirySelect);
 }

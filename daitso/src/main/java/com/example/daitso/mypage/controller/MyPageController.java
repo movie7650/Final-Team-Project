@@ -356,9 +356,10 @@ public class MyPageController {
 	}
 
 	// 마이페이지-내문의관리-내문의조회
-	@RequestMapping("/myinquiry")
+	@RequestMapping(value="/myinquiry")
 	public String myInquiry(Model model) {
 		try {
+			//로그인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails) principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
@@ -384,6 +385,13 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 
+	}
+	//마이페이지-내문의 삭제
+	@RequestMapping(value="/myinquiry",method=RequestMethod.POST)
+	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId, @RequestParam int productId, @RequestParam int inquiryId) {
+		inquiryService.deleteMyInquiry(myInquirySelect);
+		return "redirect:/mypage/myinquiry";
+		
 	}
 
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
