@@ -375,9 +375,11 @@ public class MyPageController {
 			// 상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount", shipCount01);
+			
 			//내 문의내역 조회
 			List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
 			model.addAttribute("myinquirylist",myInquiryList);
+			
 			
 
 			return "mypage/mypage-inquiry";

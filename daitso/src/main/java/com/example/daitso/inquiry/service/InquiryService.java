@@ -85,5 +85,12 @@ public class InquiryService implements IInquiryService {
 	public void deleteMyInquiry(MyInquirySelect myInquirySelect) {
 		inquiryRepository.deleteMyInquiry(myInquirySelect);		
 	}
+	
+	// 내 InquiryContent 가져오기
+	@Override
+	public String selectInquiryContent(int customerId) {
+		return inquiryRepository.selectInquiryContent(customerId);
+		
+	}
 
 }

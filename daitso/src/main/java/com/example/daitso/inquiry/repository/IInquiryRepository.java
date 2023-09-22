@@ -47,4 +47,7 @@ public interface IInquiryRepository {
 	
 	//내 문의글 삭제
 	void deleteMyInquiry(MyInquirySelect myInquirySelect);
+	
+	//내 InquiryContent 갖고오기
+	String selectInquiryContent(int customerId);
 }

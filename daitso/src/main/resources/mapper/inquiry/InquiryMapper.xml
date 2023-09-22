@@ -163,6 +163,5 @@
 	  WHERE i.customer_id=#{customerId}
 	    AND i.product_id = #{productId}
          OR i.inquiry_pr_id = #{inquiryId}
-	 </delete>
-	
+	 </delete> 	 
 </mapper>
