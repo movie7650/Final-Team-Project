@@ -139,11 +139,6 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 	
-/* 	// 페이지 로드 시 초기 데이터 로딩
-	$(document).ready(function () {
-	    loadData(0, 1); // commonCodeId 0은 전체 주문 목록을 나타냅니다.
-	}); */
-
 	//배송 상태별 데이터 + 페이지
 	function loadData(commonCodeId, page) {
 	    $.ajax({
@@ -158,12 +153,11 @@
 	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
 	                tableBody.append(noResultRow);
 	            } else {
-	            	
-	                for (var i = 0; i < data.data.length; i++) {
+	            	for (var i = 0; i < data.data.length; i++) {	            		
  	                    var newRow = "<tr>" +
 	                        "<td>" + data.data[i].rn + "</td>" +
 	                        "<td>" + data.data[i].customerNm + "</td>" +
-	                        "<td data-bs-toggle='modal' data-bs-target='#infoModal' style='cursor:pointer' >" + data.data[i].purchaseNum + "</td>" +
+	                        "<td class='test' data-bs-toggle='modal' data-bs-target='#infoModal' style='cursor:pointer' onclick='getPurchaseDetails(\"" + data.data[i].purchaseNum + "\")'>" + data.data[i].purchaseNum + "</td>"+
 	                        "<td>" + data.data[i].productNm + "</td>" +
 	                        "<td>" + data.data[i].createDt + "</td>" +
 	                        "<td>" +
@@ -177,7 +171,6 @@
 	                        "</form>" +
 	                        "</td>";
 	                        "</tr>";  
-	                      
 	                    tableBody.append(newRow);
 	                }
 	            }
@@ -211,7 +204,6 @@
 	        }
 	    });
 	}
-
 	
 	//검색한 결과 데이터 + 페이지
 	function searchList(page) {
@@ -231,10 +223,10 @@
 	                tableBody.append(noResultRow);
 	            } else {
 	                for (var i = 0; i < data.data.length; i++) {
-	                    var newRow = "<tr>" +
+	                	 var newRow = "<tr>" +
 	                        "<td>" + data.data[i].rn + "</td>" +
 	                        "<td>" + data.data[i].customerNm + "</td>" +
-	                        "<td>" + data.data[i].purchaseNum + "</td>" +
+	                        "<td class='test' data-bs-toggle='modal' data-bs-target='#infoModal' style='cursor:pointer' onclick='getPurchaseDetails(\"" + data.data[i].purchaseNum + "\")'>" + data.data[i].purchaseNum + "</td>"+
 	                        "<td>" + data.data[i].productNm + "</td>" +
 	                        "<td>" + data.data[i].createDt + "</td>" +
 	                        "<td>" +
@@ -246,9 +238,8 @@
 	                        "<option value='403' " + (data.data[i].commonCodeId === 403 ? 'selected' : '') + ">배송완료</option>" +
 	                        "</select>" +
 	                        "</form>" +
-	                        "</td>" +
-	                        "</tr>";
-	
+	                        "</td>";
+	                        "</tr>";  
 	                    tableBody.append(newRow);
 	                }
 	            }
@@ -286,7 +277,6 @@
 	
 	 // 주문 상세 내역 조회하기
 	 function getPurchaseDetails(purchaseNum) { 
-	 		
 	         fetch("/admin/purchase-details/" + purchaseNum)
 	             .then(response => response.json())
 	             .then(data => {            	 
@@ -314,6 +304,7 @@
 	                  });
 	              });
 	      }
+	 
 	 
 	 
 	// 천 단위로 comma 찍기

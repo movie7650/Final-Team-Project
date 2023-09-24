@@ -21,6 +21,7 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
+import com.example.daitso.config.CommonCode;
 import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquirySelect;
@@ -211,9 +212,29 @@ public class AdminController {
 	    return "admin/product";
 	}
 	
-	// 상품 등록하기
+	// 상품 등록하기 ★
+//	@PostMapping("/product")
+//	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+//		// 입력 필드가 비어 있으면 '-'으로 대체
+//	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+//	        product.setProductOptionFirst("-");
+//	    }
+//	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+//	        product.setProductOptionSecond("-");
+//	    }
+//	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+//	        product.setProductOptionThird("-");
+//	    }
+//		adminService.registerProducts(product, files);
+//		model.addAttribute("message","상품이 등록되었습니다.");
+//		model.addAttribute("searchUrl","/admin/product");
+//
+//	return "admin/message";
+//	}
+	
+	//테스트//
 	@PostMapping("/product")
-	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+	public String registerProducts(ProductCheck product, Model model) {
 		// 입력 필드가 비어 있으면 '-'으로 대체
 	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
 	        product.setProductOptionFirst("-");
@@ -224,11 +245,10 @@ public class AdminController {
 	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
 	        product.setProductOptionThird("-");
 	    }
-		adminService.registerProducts(product, files);
+		adminService.registerProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-
-	return "admin/message";
+		return "admin/product/message";
 	}
 	
 	
@@ -497,4 +517,31 @@ public class AdminController {
 		return null;
 	}
 
+	
+    // 전체 카테고리 조회하기
+  	@GetMapping("/common-code")
+  	public String selectAllCommonCodes(@RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+        
+      int offset = (page - 1) * pageSize;       
+      
+
+      	List<CommonCode> commonCodes = adminService.selectAllCommonCodes(offset, pageSize);
+      
+       // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountCommonCodes(); 
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+        model.addAttribute("commonCodes",commonCodes);
+        
+        return "admin/commoncode/admin-commoncode";
+  	}
 }
