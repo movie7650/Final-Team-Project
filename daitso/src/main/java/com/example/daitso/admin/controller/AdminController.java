@@ -148,7 +148,6 @@ public class AdminController {
 	// 상품 수정하기
 	@PostMapping("/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
-		 
 		// 각 필드를 Jsoup.clean으로 처리
 //	    String productCode = Jsoup.clean(product.getProductCode(), Whitelist.basic());
 //	    String productNm = Jsoup.clean(product.getProductNm(), Whitelist.basic());
