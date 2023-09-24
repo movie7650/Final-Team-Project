@@ -1,23 +1,21 @@
 package com.example.daitso.admin.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.repository.ICategoryRepository;
+import com.example.daitso.config.CommonCode;
+import com.example.daitso.config.repository.ICommonCodeRepository;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.product.repository.IProductRepository;
 import com.example.daitso.purchase.model.PurchaseList;
 import com.example.daitso.purchase.repository.IPurchaseRepository;
-import com.example.daitso.purchase.service.IPurchaseService;
 
 @Service
 public class AdminService implements IAdminService{
@@ -32,26 +30,36 @@ public class AdminService implements IAdminService{
 	IPurchaseRepository purchaseRepository;
 	
 	@Autowired
+	ICommonCodeRepository commonCodeRepository;
+	
+	@Autowired
 	S3Service s3Service;
 	
-	// 상품 등록하기
+	// 상품 등록하기 ★
+//	@Transactional
+//	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
+//		List<String> imagePathList = s3Service.upload(files);
+//		product.setProductImageFirst(imagePathList.get(0));
+//		product.setProductImageSecond(imagePathList.get(1));
+//		product.setProductImageThird(imagePathList.get(2));
+//		
+//		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+//		try {
+//			productRepository.registerProducts(product);
+//			product.getProductId();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			imagePathList.forEach((url) -> {
+//				s3Service.deleteImage(url);	
+//			});
+//		}
+//	}
+	
+	//테스트//
 	@Transactional
-	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
-		List<String> imagePathList = s3Service.upload(files);
-		product.setProductImageFirst(imagePathList.get(0));
-		product.setProductImageSecond(imagePathList.get(1));
-		product.setProductImageThird(imagePathList.get(2));
+	public void registerProducts(ProductCheck product) {
+		productRepository.registerProducts(product);
 		
-		// 상품 등록 실패시 s3에 등록된 이미지 삭제
-		try {
-			productRepository.registerProducts(product);
-			product.getProductId();
-		} catch(Exception e) {
-			e.printStackTrace();
-			imagePathList.forEach((url) -> {
-				s3Service.deleteImage(url);	
-			});
-		}
 	}
 	
 	// 상품 조회하기(카테고리별)
@@ -169,7 +177,7 @@ public class AdminService implements IAdminService{
 	}
 
 
-//카테고리 등록하기
+	//카테고리 등록하기
 	@Transactional
 	public void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files) {
 		List<String> imagePathList = s3Service.upload(files);
@@ -186,4 +194,17 @@ public class AdminService implements IAdminService{
 			});
 		}
 	}
+
+	@Override
+	public List<CommonCode> selectAllCommonCodes(int offset, int pageSize) {
+		return commonCodeRepository.selectAllCommonCodes(offset, pageSize);
+	}
+
+	@Override
+	public int selectCountCommonCodes() {
+		return commonCodeRepository.selectCountCommonCodes();
+	}
+	
+	
+	
 }
