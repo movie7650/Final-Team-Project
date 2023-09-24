@@ -9,3 +9,8 @@
 .purcahse span, p{
 	font-weight:bold;
 }
+
+.test:hover {
+   text-decoration: underline;
+   color: #aac8b2;
+}

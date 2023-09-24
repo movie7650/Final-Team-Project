@@ -3,13 +3,14 @@
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
 <link rel="stylesheet" th:href="@{/css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 
 	<!-- 오른쪽 컨텐츠 -->
-	<div id="productTable">
-		<hr class="my-3">
+	<div id="productTable" style="padding-top: 10px;">
+	<div style="font-weight: 600; margin-top: 20px;">상품관리 > 카테고리 추가/수정/삭제</div>
 		<div class="row"
 			style="padding-bottom: 15px; justify-content: flex-end;">
 			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
@@ -88,6 +89,9 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">카테고리 수정</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    	<i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+						</button>
 					</div>
 					<form th:action="@{/admin/update/category}" method="post">
 						<div class="modal-body">
@@ -111,8 +115,7 @@
 							<div class="modal-footer">
 								<button class="btn btn-primary"
 									style="background-color: #668663" type="submit">저장</button>
-								<button class="btn btn-secondary"
-									th:onclick="|location.href='@{/admin/category}'|" type="button">닫기</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 							</div>
 						</div>
 					</form>
@@ -126,6 +129,9 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">카테고리 등록</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    	<i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+						</button>
 					</div>
 					<form th:action method="post" enctype="multipart/form-data">
 						<div class="modal-body">
@@ -165,8 +171,7 @@
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
 								type="submit">저장</button>
-							<button class="btn btn-secondary"
-								th:onclick="|location.href='@{/admin/category}'|" type="button">닫기</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 						</div>
 					</form>
 				</div>

@@ -5,8 +5,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.daitso.inquiry.model.InquiryInsertDTO;
 import com.example.daitso.inquiry.service.IInquiryService;
 
 @Controller
@@ -18,15 +21,14 @@ public class InquiryController {
 	
 	//문의글 삽입
 	@PostMapping("/insert")
-	public String insertInquiry(int productId, int productGroupId, String size, String color, String other, String content) {
-
+	@ResponseBody
+	public int insertInquiry(@RequestBody InquiryInsertDTO inquiryInsertDTO ) {
+		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails) principal;
-
+		
 		int customerId = Integer.valueOf(userDetails.getUsername());
 		
-		inquiryService.insertInquiry(productGroupId, customerId, size, color, other, content);
-		
-		return "redirect:/product/" + productId + "/" + productGroupId;
+		return inquiryService.insertInquiry(inquiryInsertDTO.getProductGroupId(), customerId, inquiryInsertDTO.getSize(), inquiryInsertDTO.getColor(), inquiryInsertDTO.getOther(), inquiryInsertDTO.getContent());
 	}
 }

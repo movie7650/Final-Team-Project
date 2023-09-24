@@ -25,11 +25,13 @@ public class InquiryService implements IInquiryService {
 	IProductRepository productRepository;
 
 	@Transactional
-	public void insertInquiry(int productGroupId, int cId, String size, String color, String other, String content) {
+	public int insertInquiry(int productGroupId, int cId, String size, String color, String other, String content) {
 		System.out.println("im here" + productGroupId + size + color + other);
 		int pId = productRepository.selectInquiryProductId(productGroupId, size, color, other);
 		if(pId != 0) {
-			inquiryRepository.insertInquiry(pId, cId ,content);
+			return inquiryRepository.insertInquiry(pId, cId ,content);
+		}else {
+			return 0;
 		}
 	}
 

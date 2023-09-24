@@ -148,7 +148,6 @@ public class AdminController {
 	// 상품 수정하기
 	@PostMapping("/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
-		 
 		// 각 필드를 Jsoup.clean으로 처리
 //	    String productCode = Jsoup.clean(product.getProductCode(), Whitelist.basic());
 //	    String productNm = Jsoup.clean(product.getProductNm(), Whitelist.basic());
@@ -270,9 +269,11 @@ public class AdminController {
 
     // 배송 상태 변경하기
     @PostMapping("/purchase/change-status")
-    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
+    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId, Model model) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        return "redirect:/admin/purchase";
+        model.addAttribute("message","배송상태가 변경되었습니다.");
+		model.addAttribute("searchUrl","/admin/purchase");
+		return "admin/message";
     }	 
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
