@@ -32,8 +32,12 @@
 							  ) r
 							LEFT JOIN customer c ON r.customer_id = c.customer_id
 							LEFT JOIN product p ON r.product_id = p.product_id
-	                        LEFT JOIN(select count(review_id) as review_heart_count , review_id from review_heart group by review_id) s on r.review_id = s.review_id
-	                        LEFT JOIN(select count(*) as click_check, review_id  from review_heart where  heart_click_customer_id = #{customerId} group by review_id, heart_click_customer_id) ss on r.review_id = ss.review_id
+	                        LEFT JOIN ( 
+	                        			select count(review_id) as review_heart_count , review_id from review_heart group by review_id
+	                        		  ) s on r.review_id = s.review_id
+	                        LEFT JOIN (
+	                        			select count(*) as click_check, review_id  from review_heart where  heart_click_customer_id = #{customerId} group by review_id, heart_click_customer_id
+	                        		   ) ss on r.review_id = ss.review_id
 							WHERE p.product_group_id = #{groupId} and r.status = 'Y'
 					   )
 	   		WHERE rnum between #{start} and #{end}
