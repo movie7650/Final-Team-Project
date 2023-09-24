@@ -569,7 +569,7 @@
 	function changeReviewPage(productGroupId, page){
 		const reviewBody = document.querySelector(".review-body");
 		const reviewNone = document.querySelector(".review-none");
-		
+		customerId = (customerId == 'whoAreYou') ? -1 : customerId; 
 		
 		fetch("/review/" + productGroupId +"/" + page + "/" + customerId)
 		.then(response => response.json())
