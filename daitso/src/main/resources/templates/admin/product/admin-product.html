@@ -73,7 +73,7 @@
 						<th></th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="categoryTableBody">
 					<tr th:each="product : ${products}">
 						<td th:text="${product.rn}"></td>
 						<td th:text="${product.productGroupId}"></td>
@@ -95,12 +95,12 @@
 
 		<!-- 페이지 링크 표시 -->
 		<div th:if="${totalCount > 0}">
-			<ul class="pagination">
+			 <ul class="pagination" id="pagination">
 				<!-- 이전 페이지 -->
-				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
+				<li th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
 					<!-- 이전 페이지로 이동하는 링크 -->
 					<a class="page-link"
-					th:href="@{/admin/product(page=${currentPage - 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId}, thirdCategoryId=${selectedThirdCategoryId})}"
+					th:href="@{/admin/purchase(page=${currentPage - 1}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a>
 				</li>
@@ -108,7 +108,7 @@
 				<!-- 페이지 번호 링크 -->
 				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}" class="page-item" th:classappend="${page == currentPage} ? active">
 					<a class="page-link"
-					th:href="@{/admin/product(page=${page}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId}, thirdCategoryId=${selectedThirdCategoryId})}"
+					th:href="@{/admin/purchase(page=${page}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
 					th:text="${page}">
 					</a>
 				</li>
@@ -117,12 +117,12 @@
 				<li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled"> <!-- 현재 페이지가 마지막 페이지면 비활성화 -->
 					<!-- 다음 페이지로 이동하는 링크 -->
 					<a class="page-link" 
-					th:href="@{/admin/product(page=${currentPage + 1}, pageSize=${pageSize}, firstCategoryId=${selectedFirstCategoryId}, secondCategoryId=${selectedSecondCategoryId}, thirdCategoryId=${selectedThirdCategoryId})}"
+					th:href="@{/admin/purchase(page=${currentPage + 1}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a>
 				</li>
 			</ul>
-		</div>
+	  </div>
 	</div>
 
 	</div>
@@ -564,36 +564,92 @@
 	
 	<script th:inline="javascript">
 	
-	// 카테고리별 상품 조회하기 ("조회"버튼)
-	    function searchByCategory() {
-			var firstCategoryId = $("#firstCategory").val(); // id 속성이 "firstCategory"인 요소의 값을 가져와서 firstCategoryId 변수에 저장
-	        var secondCategoryId = $("#secondCategory").val();
-	        var thirdCategoryId = $("#thirdCategory").val(); 
-	        
-	        if (!firstCategoryId) {
-	            firstCategoryId = 0;
-	        }
-	        if (!secondCategoryId) {
-	        	secondCategoryId = 0;
-	        }  
-	        if (!thirdCategoryId) {
-	        	thirdCategoryId = 0;
-	        } 
-			
-	        //  URL을 생성하고 페이지를 이동, 선택한 카테고리 값들이 유지되면서 상품 목록이 조회
-	        var newUrl = "/admin/product";
-	        if (firstCategoryId !== 0) {
-	            newUrl += "?firstCategoryId=" + firstCategoryId;
-	            if (secondCategoryId !== 0) {
-	                newUrl += "&secondCategoryId=" + secondCategoryId;
-	                if (thirdCategoryId !== 0) {
-	                    newUrl += "&thirdCategoryId=" + thirdCategoryId;
-	                }
-	            }
-	        }
-	        window.location.href = newUrl;
-	        return false;
-	    } 
+     // 카테고리별 상품 조회하기 ("조회"버튼)
+	 function searchByCategory(page) {
+	     var firstCategoryId = $("#firstCategory").val();
+	     var secondCategoryId = $("#secondCategory").val();
+	     var thirdCategoryId = $("#thirdCategory").val();
+	
+	     if (!firstCategoryId) {
+	         firstCategoryId = 0;
+	     }
+	     if (!secondCategoryId) {
+	         secondCategoryId = 0;
+	     }
+	     if (!thirdCategoryId) {
+	         thirdCategoryId = 0;
+	     }
+	     console.log(firstCategoryId);
+	     console.log(secondCategoryId);
+	     console.log(thirdCategoryId);
+	     
+	     // Ajax 요청을 사용하여 카테고리 선택 값을 서버에 전달
+	     $.ajax({
+	         type: "GET",
+	         url: "/admin/products",
+	         data: {
+	             firstCategoryId: firstCategoryId,
+	             secondCategoryId: secondCategoryId,
+	             thirdCategoryId: thirdCategoryId,
+	             page: page // 페이지 정보 추가
+	         },
+	         success: function (data) {
+	             // 성공한 경우, 서버에서 반환한 JSON 데이터를 처리하고 HTML로 표시
+	             var tableBody = $('#categoryTableBody');
+	             tableBody.empty();
+
+	             if (data.data.length === 0) {
+	                 var noResultRow = "<tr><td colspan='5'>검색 결과가 없습니다.</td></tr>";
+	                 tableBody.append(noResultRow);
+	             } else {
+	                 $.each(data.data, function (index, product) {
+	                     var newRow = "<tr>" +
+	                         "<td>" + product.rn + "</td>" +
+	                         "<td>" + product.productGroupId + "</td>" +
+	                         "<td>" + product.categoryNm + "</td>" +
+	                         "<td>" + product.productNm + "</td>" +
+	                         "<td>" +
+	                         "<div class='btn-group'>" +
+	                         "<button class='btn btn-xs' style='background-color: #d4a373; color: #ffff' " +
+	                         "data-bs-toggle='modal' data-bs-target='#searchModal' type='button' " +
+	                         "onclick='selectProductsByGroupId(" + product.productGroupId + ")'>상세</button>" +
+	                         "<button class='btn btn-xs' style='background-color: red; color: #fff' " +
+	                         "type='button' onclick='deleteGroupProduct(" + product.productGroupId + ")'>삭제</button>" +
+	                         "</div>" +
+	                         "</td>" +
+	                         "</tr>";
+	                     tableBody.append(newRow);
+	                 });
+	             }
+	           	 // 페이징 정보 업데이트
+	             var pagination = $('#pagination');
+	             pagination.empty();
+
+	             // 이전 페이지로 이동하는 링크
+	             var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+	                 "<a class='page-link' onclick='searchByCategory(" + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a>" +
+	                 "</li>";
+	             pagination.append(prevLink);
+
+	             for (var i = 1; i <= data.totalPages; i++) {
+	                 var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                     "<a class='page-link' onclick='searchByCategory(" + i + ")'>" + i + "</a>" +
+	                     "</li>";
+	                 pagination.append(pageLink);
+	             }
+
+	             // 다음 페이지로 이동하는 링크
+	             var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+	                 "<a class='page-link' onclick='searchByCategory(" + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>" +
+	                 "</li>";
+	             pagination.append(nextLink);
+	         },
+	         error: function (error) {
+	             console.log("에러 발생: " + error);
+	         }
+	     });
+	 }
+
 
 
 	// 리로드해도 선택한 값들 유지하려고 (조회 페이지에서 다시 순서대로 클릭 안해도 해당 값들이 나오고 새로고침해도 계속 유지됨)

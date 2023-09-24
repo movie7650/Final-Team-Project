@@ -1,12 +1,10 @@
 package com.example.daitso.admin.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +21,6 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
-import com.example.daitso.inquiry.model.Inquiry;
 import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquirySelect;
@@ -103,6 +100,40 @@ public class AdminController {
 
 	    return "admin/product/admin-product";
 	}
+	
+	@GetMapping("/products")
+	@ResponseBody
+	public PageResult<ProductCheck> selectProductsByCategory(
+	        @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
+	        @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+	        @RequestParam(name = "thirdCategoryId", required = false) Integer thirdCategoryId,
+	        @RequestParam(name = "page", defaultValue = "1") int page,
+	        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+
+	    int offset = (page - 1) * pageSize;
+
+	    if (firstCategoryId == null) {
+	        firstCategoryId = 0; 
+	    }
+	    if (secondCategoryId == null) {
+	        secondCategoryId = 0; 
+	    }
+	    if (thirdCategoryId == null) {
+	        thirdCategoryId = 0;
+	    }
+
+	    List<ProductCheck> products = adminService.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
+
+	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
+	    
+	    PageResult<ProductCheck> result = new PageResult<>();
+        result.setData(products);
+        result.setCurrentPage(page);
+        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize));
+
+        return result;
+	}
+
 	
 	// 두 번째 카테고리 불러오기 ('syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행)
 	@GetMapping("/product/second/{categoryId}")
