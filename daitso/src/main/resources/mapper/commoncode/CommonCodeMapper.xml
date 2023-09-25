@@ -3,52 +3,119 @@
 <mapper namespace="com.example.daitso.config.repository.ICommonCodeRepository">
 
 	<!-- 
-    	기능: 
+    	기능: 최상위 공통코드 조회하기
     	담당자: 이세인
      -->
-	<select id="selectAllCommonCodes" resultType="com.example.daitso.config.CommonCode">
+	<select id="selectAllCommonCodesPr" resultType="com.example.daitso.config.CommonCode">
 	    SELECT *
-		  FROM (
-		    SELECT
-		        common_code_id AS "commonCodeId",
-		        common_code_nm AS "commonCodeNm",
-		        status AS "status",
-		        creator AS "creator",
-		        create_dt AS "createDt",
-		        ROW_NUMBER() OVER (ORDER BY common_code_id) AS "rn"
-		    FROM common_code
-		    WHERE common_code_pr = 1
-		    GROUP BY
-		        common_code_id,
-		        common_code_nm,
-		        status,
-		        creator,
-		        create_dt
-		    HAVING 1 = 1
-		)WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+		  FROM ( SELECT common_code_id                              AS "commonCodeId",
+				        common_code_nm 								AS "commonCodeNm",
+				        status 									    AS "status",
+				        creator 									AS "creator",
+				        create_dt 									AS "createDt",
+				        common_code_pr 								AS "commonCodePr",
+				        ROW_NUMBER() OVER (ORDER BY common_code_id) AS "rn"
+				   FROM common_code
+				  WHERE common_code_pr = 1 AND status = 'Y'
+			   GROUP BY common_code_id,
+				        common_code_nm,
+				        status,
+				        creator,
+				        create_dt,
+				        common_code_pr
+				HAVING  1 = 1
+				)WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 	    
 	 <!-- 
-    	기능: 
+    	기능: 최상위 공통코드 개수 조회하기
     	담당자: 이세인
      -->  
-	<select id="selectCountCommonCodes">
-		SELECT COUNT(*)
-		   FROM ( SELECT common_code_id AS "commonCodeId",
-		                common_code_nm AS "commonCodeNm",
-		                status AS "status",
-		                creator AS "creator",
-		                create_dt AS "createDt"
-		             FROM common_code
-		            WHERE common_code_pr = 1 AND status = 'Y'
-		            GROUP BY
-		                common_code_id,
+	<select id="selectCountCommonCodesPr">
+	    SELECT COUNT(*)
+		  FROM ( SELECT common_code_id   AS "commonCodeId",
+		                common_code_nm   AS "commonCodeNm",
+		                status 			 AS "status",
+		                creator 		 AS "creator",
+		                create_dt 		 AS "createDt",
+		                common_code_pr   AS "commonCodePr"
+		          FROM  common_code
+		         WHERE  common_code_pr = 1 AND status = 'Y'
+		      GROUP BY  common_code_id,
 		                common_code_nm,
 		                status,
 		                creator,
-		                create_dt
-		            HAVING 1 = 1
-				)
+		                create_dt,
+		                common_code_pr
+		        HAVING  1 = 1
+			    )
+	</select>
+	
+	 <!-- 
+    	기능: 최상위 공통코드 삭제하기
+    	담당자: 이세인
+     --> 
+	<delete id="deleteCommonCodePr" parameterType="int">
+        UPDATE common_code
+		   SET status = 'N',
+		   	   modifier = 'admin',
+	           modify_dt = systimestamp
+	     WHERE common_code_id = #{commonCodeId}
+	</delete>
+	
+	 <!-- 
+    	기능: 공통코드 조회하기(최상위 공통코드별)
+    	담당자: 이세인
+     --> 
+	<select id="selectCommonCodesByPr"  resultType="com.example.daitso.config.CommonCode">
+	    SELECT common_code_id     AS "commonCodeId",
+               common_code_nm     AS "commonCodeNm",
+               status 			  AS "status",
+               creator			  AS "creator",
+               create_dt		  AS "createDt"
+          FROM common_code
+         WHERE common_code_pr = #{commonCodeId}
+	  ORDER BY common_code_id
 	</select>
 
+ 	<!-- 
+    	기능: commonCodeId로 공통코드 정보 조회하기
+    	담당자: 이세인
+     --> 
+	<select id="selectCommonCode"  resultType="com.example.daitso.config.CommonCode" parameterType="int">
+	    SELECT  common_code_id    AS "commonCodeId",
+                common_code_nm    AS "commonCodeNm",
+                status 			  AS "status",
+                creator 		  AS "creator",
+                create_dt 		  AS "createDt"
+		  FROM common_code
+	     WHERE common_code_id = #{commonCodeId}
+	</select>
+
+	 <!-- 
+    	기능: 공통코드 수정하기
+    	담당자: 이세인
+     --> 
+	<update id="updateCommonCode" parameterType="com.example.daitso.config.CommonCode" >
+	    UPDATE common_code
+		   SET common_code_id   = #{commonCodeId},
+		   	   common_code_nm   = #{commonCodeNm},
+		       status      		= #{status},
+		       modifier         = 'admin',
+               modify_dt        = systimestamp
+		 WHERE common_code_id   = #{commonCodeId}
+	</update>
+
+	 <!-- 
+    	기능: 공통코드 삭제하기
+    	담당자: 이세인
+     --> 
+	<delete id="deleteCommonCode" parameterType="int">
+	    UPDATE common_code
+	       SET status = 'N',
+	           modifier  = 'admin',
+               modify_dt = systimestamp 
+	     WHERE common_code_id = #{commonCodeId}
+	</delete>
+	
 </mapper>
