@@ -177,22 +177,29 @@ public class AdminService implements IAdminService{
 	}
 
 
-	//카테고리 등록하기
+	//카테고리 등록하기 ★
+//	@Transactional
+//	public void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files) {
+//		List<String> imagePathList = s3Service.upload(files);
+//		categoryCheck.setCategoryImage(imagePathList.get(0));
+//
+//		// 카테고리 등록 실패시 s3에 등록된 이미지 삭제
+//		try {
+//			categoryRepository.registerCategories(categoryCheck);
+//			categoryCheck.getCategoryId();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			imagePathList.forEach((url) -> {
+//				s3Service.deleteImage(url);	
+//			});
+//		}
+//	}
+	
+	//테스트//
 	@Transactional
-	public void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files) {
-		List<String> imagePathList = s3Service.upload(files);
-		categoryCheck.setCategoryImage(imagePathList.get(0));
-
-		// 카테고리 등록 실패시 s3에 등록된 이미지 삭제
-		try {
-			categoryRepository.registerCategories(categoryCheck);
-			categoryCheck.getCategoryId();
-		} catch(Exception e) {
-			e.printStackTrace();
-			imagePathList.forEach((url) -> {
-				s3Service.deleteImage(url);	
-			});
-		}
+	public void registerCategories(CategoryCheck categoryCheck) {
+		categoryRepository.registerCategories(categoryCheck);
+		
 	}
 
 	// 최상위 공통코드 조회하기

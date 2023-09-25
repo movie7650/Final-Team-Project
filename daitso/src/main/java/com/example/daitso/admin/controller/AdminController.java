@@ -356,6 +356,8 @@ public class AdminController {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
     }
+    
+    
 
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
@@ -367,6 +369,10 @@ public class AdminController {
 
       List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
       
+      	// 첫 번째 카테고리 불러오기
+	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+	    model.addAttribute("firstCategories", firstCategories);
+	    
        // 페이징 정보 전달
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("pageSize", pageSize);
@@ -414,10 +420,19 @@ public class AdminController {
  	}
  	
  	
-// 카테고리 등록하기
-	@PostMapping("/category")
-	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart List<MultipartFile> files) {
-		adminService.registerCategories(categoryCheck, files);
+// 카테고리 등록하기 ★
+//	@PostMapping("/category")
+//	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart List<MultipartFile> files) {
+//		adminService.registerCategories(categoryCheck, files);
+//		model.addAttribute("message","카테고리가 등록되었습니다.");
+//		model.addAttribute("searchUrl","/admin/category");
+//	return "admin/message";
+//	}
+ 	
+ 	//테스트
+ 	@PostMapping("/category")
+	public String registerCategories(CategoryCheck categoryCheck, Model model) {
+		adminService.registerCategories(categoryCheck);
 		model.addAttribute("message","카테고리가 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/category");
 	return "admin/message";

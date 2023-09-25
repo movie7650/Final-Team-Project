@@ -181,5 +181,32 @@
 		 WHERE category_id = #{categoryId}
 	</update>
 	
-    
+	
+
+	<insert id="registerCategories" parameterType="com.example.daitso.category.model.CategoryCheck">
+		INSERT INTO category ( category_id,
+		                       category_nm,
+		                       category_content,
+		                       category_pr_id) 
+		  VALUES ( category_seq.NEXTVAL,
+		           #{categoryNm},
+		           #{categoryContent},
+		           #{categoryId} ) 
+		           
+		<!-- INSERT INTO category ( category_id,
+                           category_nm,
+                           category_content,
+                           category_pr_id) 
+		    VALUES ( category_seq.NEXTVAL,
+		             #{categoryNm},
+		             #{categoryContent},
+		             <choose>
+		                 <when test="categoryId == null">
+		                 0
+		                 </when>
+		                 <otherwise>#{categoryId}</otherwise>
+		             </choose> ) -->
+    </insert>
+	
+
 </mapper>
