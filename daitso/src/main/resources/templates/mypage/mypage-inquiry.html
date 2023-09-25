@@ -3,48 +3,104 @@
 <head th:replace="~{/include/header :: header}">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
 
-<div class="mypage-inquiry-main">
- <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
-	<div class="mypage-inquiry-title">내 문의관리</div>
- 
-	<div style="width:800px;margin-right:55px;">
-	<div class="mypage-inquiry-table-container">
-		<table class="mypage-inquiry-table">
-			<tr>
-				<th>상품정보</th>
-				<th>문의내용</th>
-				<th>문의작성일자</th>
-				<th>상태</th>
+	<div class="mypage-inquiry-main">
+		<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+		<div class="mypage-inquiry-title">내 문의관리</div>
+
+		<div style="width: 800px; margin-right: 55px;">
+			<div th:if="${myinquirylist} != null"
+				class="mypage-inquiry-table-container">
+
+				<table class="mypage-inquiry-table">
+					<tr>
+						<th>상품정보</th>
+						<th>문의내용</th>
+						<th>문의작성일자</th>
+						<th>상태</th>
+
+					</tr>
+					<tr style="font-size: 80%;" th:each="myinquiry : ${myinquirylist}">
+						<td><div class="my-inquiry-product-img">이미지</div>
+							<div th:text="${myinquiry.productNm}"
+								class="my-inquiry-productNm">남성무지반팔티</div></td>
+						<td><div th:text="${myinquiry.inquiryContent}" id="btn-modal">문의
+								내용</div></td>
+						<td th:text="${myinquiry.createDt}">23-08-01</td>
+						<td>
+							<div style="color: red; padding-bottom: 5px;"
+								th:if="${myinquiry.inquiryAnsDv}=='W'">답변대기</div>
+							<div style="color: blue; padding-bottom: 5px;"
+								th:if="${myinquiry.inquiryAnsDv}=='C'">답변완료</div>
+							<form th:action="@{/mypage/myinquiry/__${myinquiry.inquiryId}__}"
+								method="post">
+								<button type="submit" class="mypage-inquiry-delete">삭제</button>
+
+								<input type="hidden" name=productId
+									th:value="${myinquiry.productId}" /> 
+									<input type="hidden"
+									name=customerId th:value="${myinquiry.customerId}" /> 
+									<input
+									type="hidden" name=inquiryId th:value="${myinquiry.inquiryId}" />
+							</form>
+						</td>
+
+					</tr>
+				</table>
+				<!-- mypage-inquiry-table -->
+
+			</div>
+			<!-- mypage-inquiry-table-container -->
+			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">문의내역이
+				없습니다.</div> 
 			
-			</tr>
-			<tr style="font-size:80%;" th:each="myinquiry : ${myinquirylist}">
-			<form action="/mypage/myinquiry" method="post">
-			 	<input type="hidden" name=productId th:value="${myinquiry.productId}"/>
-			 	<input type="hidden" name=customerId th:value="${myinquiry.customerId}"/>
-			 	<input type="hidden" name=inquiryId th:value="${myinquiry.inquiryId}"/>
-				<td><div class="my-inquiry-product-img">이미지</div><div th:text="${myinquiry.productNm}" class="my-inquiry-productNm">남성무지반팔티</div></td>
-				<td><div th:text="${myinquiry.inquiryContent}" class="my-inquiry-content">문의 내용</div></td>
-				<td th:text="${myinquiry.createDt}">23-08-01</td>
-				<td>
-					<div style="color:red;padding-bottom:5px;" th:if="${myinquiry.inquiryAnsDv}=='W'">답변대기</div>
-					<div style="color:blue;padding-bottom:5px;" th:if="${myinquiry.inquiryAnsDv}=='C'">답변완료</div>
-					<button  type="submit" class="mypage-inquiry-delete">삭제</button>
-				</td>
-				
-			</form>
-			</tr>	
-		</table><!-- mypage-inquiry-table -->
-	</div><!-- mypage-inquiry-table-container -->
-	
+			<!-- 모달창 시작 -->
+			<div id="container">
+				<div id="lorem-ipsum"></div>
+			</div>
+			<div id="modal" class="modal-overlay">
+				<div class="modal-window">
+					<div class="title">
+						<h2>문의내용</h2>
+					</div>
+					<div class="close-area">X</div>
+					<div class="content">
+						<div>가나다라마바사 아자차카타파하</div>
+					</div>
+					<div class="title2">
+						<h2>답변내용</h2>
+					</div>
+					<div class="reply-content">
+						<p>답변입니다</p>
+					</div>
+				</div>
+			</div><!-- 모달창 끝 -->
+			<script>
+	    const modal = document.getElementById("modal")
+	    const btnModal = document.getElementById("btn-modal")
+	    btnModal.addEventListener("click", e => {
+	        modal.style.display = "flex"
+	    })
+	    const closeBtn = modal.querySelector(".close-area")
+	    closeBtn.addEventListener("click", e => {
+	        modal.style.display = "none"
+	    })
+	    modal.addEventListener("click", e => {
+    const evTarget = e.target
+    if(evTarget.classList.contains("modal-overlay")) {
+        modal.style.display = "none"
+    }
+})
+    </script>
 
+		</div>
+		<!-- style="width:800px;margin-right:55px;"  -->
 
-</div><!-- style="width:800px;margin-right:55px;"  -->
- 
-</div><!-- mypage-inquiry-main -->
-<div th:replace="~{/include/footer :: footer}"></div>
+	</div>
+	<!-- mypage-inquiry-main -->
+	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
 </html>

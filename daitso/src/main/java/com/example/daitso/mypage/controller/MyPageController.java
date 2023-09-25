@@ -375,9 +375,19 @@ public class MyPageController {
 			// 상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount", shipCount01);
+			
 			//내 문의내역 조회
 			List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
 			model.addAttribute("myinquirylist",myInquiryList);
+			
+			//내 문의 status='Y'인것 조회
+			int inquiryStatusY = inquiryService.countInquiryStatusY(customerId);
+			model.addAttribute("myInquiryStatusY",inquiryStatusY);
+			
+			//내 문의 내용 select
+//			String myinquiryContent = inquiryService.selectInquiryContent(inquiryId);
+//			model.addAttribute("myinquirycontent",myinquiryContent);
+			
 			
 
 			return "mypage/mypage-inquiry";
@@ -387,8 +397,8 @@ public class MyPageController {
 
 	}
 	//마이페이지-내문의 삭제
-	@RequestMapping(value="/myinquiry",method=RequestMethod.POST)
-	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId, @RequestParam int productId, @RequestParam int inquiryId) {
+	@RequestMapping(value="/myinquiry/{inquiryId}",method=RequestMethod.POST)
+	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId, @RequestParam int productId, @PathVariable int inquiryId) {
 		inquiryService.deleteMyInquiry(myInquirySelect);
 		return "redirect:/mypage/myinquiry";
 		

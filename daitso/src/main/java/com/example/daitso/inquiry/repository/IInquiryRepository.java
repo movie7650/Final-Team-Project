@@ -22,7 +22,7 @@ public interface IInquiryRepository {
 	void selectInquiry(int inquiryId);
 	
 	//특정 상품에 해당하는 문의글 조회
-	List<InquiryProduct> selectProductInquiry(int productGroupId);
+	List<InquiryProduct> selectProductInquiry(int productGroupId); 
 
 	// 문의 답변 상태별 총 문의 개수 조회
 	int selectTotalInquiryCountByInquiryAnsDv(char inquiryAnsDv);
@@ -47,4 +47,11 @@ public interface IInquiryRepository {
 	
 	//내 문의글 삭제
 	void deleteMyInquiry(MyInquirySelect myInquirySelect);
+	
+	//inquiry status가  Y 인거 갯수
+	int countInquiryStatusY(int customerId);
+	
+	//문의내용 선택하기
+	String selectInquiryContent(int inquiryId);
+	
 }
