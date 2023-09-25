@@ -149,19 +149,39 @@
            i.creator            as "creator",
            inquiry_id           as "inquiryId",
            i.product_id			as "productId"
-	  FROM inquiry i , product p
-	 WHERE customer_id = #{customerId}
-	   AND p.product_id = i.product_id
-	</select>
+	  FROM inquiry i
+	  JOIN product p on p.product_id = i.product_id
+	 WHERE i.customer_id = #{customerId}
+	   AND i.status='Y'
+ 	</select>
 	<!-- 
 		기능: 내가 쓴 문의 삭제하기 
 		담당자: 윤상영
 	 -->
 	 <delete id="deleteMyInquiry" parameterType="com.example.daitso.inquiry.model.MyInquirySelect">
-	  DELETE
-	   FROM inquiry i
-	  WHERE i.customer_id=#{customerId}
-	    AND i.product_id = #{productId}
-         OR i.inquiry_pr_id = #{inquiryId}
-	 </delete> 	 
+	  UPDATE inquiry 
+	  SET status='N'	  
+	  WHERE (inquiry_id = #{inquiryId}
+	  	AND customer_id=#{customerId}
+	    AND product_id = #{productId})
+         OR inquiry_pr_id = #{inquiryId}
+	 </delete>
+	  	<!-- 
+		기능: inquiry status Y 인거 카운트
+		담당자: 윤상영
+	 -->
+	 <select id="countInquiryStatusY" resultType="int" parameterType="int">
+	 	SELECT count( inquiry_content) as "inquiryStatusYCount"
+       	  FROM inquiry i
+       	 WHERE i.customer_id=19
+           AND i.status='Y'
+	 </select>
+	 
+	 <select id="selectInquiryContent" resultType="String" parameterType="int">
+	 	SELECT inquiry_content as "inquiryContent"
+ 		  FROM inquiry
+    	 WHERE inquiry_id=#{inquiryId}
+	 </select>
+	  	
+	  	 
 </mapper>

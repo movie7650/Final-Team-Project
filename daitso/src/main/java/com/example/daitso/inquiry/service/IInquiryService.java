@@ -39,7 +39,10 @@ public interface IInquiryService {
 	//내 문의글 삭제
 	void deleteMyInquiry(MyInquirySelect myInquirySelect);
 	
-	//내 InquiryContent 갖고오기
-	String selectInquiryContent(int customerId);
+	//inquiry status가  Y 인거 갯수
+	int countInquiryStatusY(int customerId);
+	
+	//문의내용 선택하기
+	String selectInquiryContent(int inquiryId);
 
 }
