@@ -3,11 +3,10 @@ package com.example.daitso.admin.service;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
+import com.example.daitso.config.CommonCode;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.PurchaseList;
@@ -35,8 +34,11 @@ public interface IAdminService {
 	// 상품 삭제하기
 	void deleteProduct(int productId);
 	
-	// 상품 등록하기
-	void registerProducts(ProductCheck product, List<MultipartFile> files);
+	// 상품 등록하기 ★
+//	void registerProducts(ProductCheck product, List<MultipartFile> files);
+	
+	//테스트//
+	void registerProducts(ProductCheck product);
 
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
@@ -76,4 +78,11 @@ public interface IAdminService {
 
 //카테고리 등록하기
 	void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files);
+	
+	
+	// 전체 공통코드 조회하기
+	List<CommonCode> selectAllCommonCodes(@Param("offset") int offset, @Param("pageSize") int pageSize);
+		
+	// 전체 공통코드 개수 조회하기
+	int selectCountCommonCodes();
 }

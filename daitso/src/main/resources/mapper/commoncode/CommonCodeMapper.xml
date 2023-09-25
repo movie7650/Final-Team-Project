@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.daitso.config.repository.ICommonCodeRepository">
+
+	<!-- 
+    	기능: 
+    	담당자: 이세인
+     -->
+	<select id="selectAllCommonCodes" resultType="com.example.daitso.config.CommonCode">
+	    SELECT *
+		  FROM (
+		    SELECT
+		        common_code_id AS "commonCodeId",
+		        common_code_nm AS "commonCodeNm",
+		        status AS "status",
+		        creator AS "creator",
+		        create_dt AS "createDt",
+		        ROW_NUMBER() OVER (ORDER BY common_code_id) AS "rn"
+		    FROM common_code
+		    WHERE common_code_pr = 1
+		    GROUP BY
+		        common_code_id,
+		        common_code_nm,
+		        status,
+		        creator,
+		        create_dt
+		    HAVING 1 = 1
+		)WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	</select>
+	    
+	 <!-- 
+    	기능: 
+    	담당자: 이세인
+     -->  
+	<select id="selectCountCommonCodes">
+		SELECT COUNT(*)
+		   FROM ( SELECT common_code_id AS "commonCodeId",
+		                common_code_nm AS "commonCodeNm",
+		                status AS "status",
+		                creator AS "creator",
+		                create_dt AS "createDt"
+		             FROM common_code
+		            WHERE common_code_pr = 1 AND status = 'Y'
+		            GROUP BY
+		                common_code_id,
+		                common_code_nm,
+		                status,
+		                creator,
+		                create_dt
+		            HAVING 1 = 1
+				)
+	</select>
+
+</mapper>

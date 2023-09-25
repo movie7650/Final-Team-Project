@@ -351,6 +351,7 @@
 		   WHERE  product_id = v_product_id;
 		 COMMIT;
 		    END; -->
+		    
 	DECLARE v_product_id NUMBER;
 	BEGIN
 	   IF #{productGroupId} IS NOT NULL THEN
@@ -361,8 +362,8 @@
 	         product_nm,
 	         product_content,
 	         product_image_first,
-	         product_image_second,
-	         product_image_third,
+	        <!--  product_image_second,
+	         product_image_third, -->
 	         product_price,
 	         product_stock,
 	         product_option_first,
@@ -376,8 +377,8 @@
 	         #{productNm},
 	         #{productContent},
 	         #{productImageFirst},
-	         #{productImageSecond},
-	         #{productImageThird},
+	         <!-- #{productImageSecond},
+	         #{productImageThird}, -->
 	         #{productPrice},
 	         #{productStock},
 	         #{productOptionFirst},
@@ -397,8 +398,8 @@
 	      product_nm,
 	      product_content,
 	      product_image_first,
-	      product_image_second,
-	      product_image_third,
+	     <!--  product_image_second,
+	      product_image_third, -->
 	      product_price,
 	      product_stock,
 	      product_option_first,
@@ -412,8 +413,8 @@
 	      #{productNm},
 	      #{productContent},
 	      #{productImageFirst},
-	      #{productImageSecond},
-	      #{productImageThird},
+	     <!--  #{productImageSecond},
+	      #{productImageThird}, -->
 	      #{productPrice},
 	      #{productStock},
 	      #{productOptionFirst},
