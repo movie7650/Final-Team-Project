@@ -57,7 +57,7 @@
 			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">문의내역이
 				없습니다.</div> 
 			
-			<!-- 모달창 시작 -->
+	<!-- 		
 			<div id="container">
 				<div id="lorem-ipsum"></div>
 			</div>
@@ -68,7 +68,7 @@
 					</div>
 					<div class="close-area">X</div>
 					<div class="content">
-						<div>가나다라마바사 아자차카타파하</div>
+						<div th:text="${myinquirycontent}">가나다라마바사 아자차카타파하</div>
 					</div>
 					<div class="title2">
 						<h2>답변내용</h2>
@@ -77,8 +77,9 @@
 						<p>답변입니다</p>
 					</div>
 				</div>
-			</div><!-- 모달창 끝 -->
-			<script>
+			</div>모달창 끝 -->
+			
+	<!-- 		<script>
 	    const modal = document.getElementById("modal")
 	    const btnModal = document.getElementById("btn-modal")
 	    btnModal.addEventListener("click", e => {
@@ -94,7 +95,7 @@
         modal.style.display = "none"
     }
 })
-    </script>
+    </script> -->
 
 		</div>
 		<!-- style="width:800px;margin-right:55px;"  -->

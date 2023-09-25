@@ -1,25 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.daitso.customercoupon.repository.ICustomerCouponRepository">
-
+	<!-- 
+		기능: 사용가능한쿠폰 조회
+		담당자: 윤상영
+	-->
 	<select id="selectUsableCoupon" resultType="com.example.daitso.customercoupon.model.SelectCustomerCoupon">
-		SELECT	coupon_nm AS couponNm,
-				coupon_dscnt_rate AS couponDscntRate, 
-				coupon_epr_dt AS couponEprDt,
-				coupon_use_dv AS couponUseDv
-		FROM	coupon c, customer_coupon cc
-		WHERE 	customer_id=#{customerId} and cc.coupon_id = c.coupon_id and cc.coupon_use_dv=203
+	SELECT  	c.coupon_nm AS couponNm,
+				c.coupon_dscnt_rate AS couponDscntRate, 
+				c.coupon_epr_dt AS couponEprDt,
+                cc.common_code_nm				AS	"couponUseDv"
+		 FROM	 coupon c, customer_coupon cusc, common_code cc
+		WHERE customer_id=#{customerId}
+          AND c.coupon_id = cusc.coupon_id 
+          AND cusc.coupon_use_dv = cc.common_code_id
+		 AND  cusc.coupon_use_dv=203
+          AND cc.status='Y'
 	</select>
-	
+	<!-- 
+		기능: 사용불가한 쿠폰 조회
+		담당자: 윤상영
+	-->
 	<select id="selectBanCoupon" resultType="com.example.daitso.customercoupon.model.SelectCustomerCoupon">
-		SELECT	coupon_nm AS couponNm,
-				coupon_dscnt_rate AS couponDscntRate, 
-				coupon_epr_dt AS couponEprDt,
-				coupon_use_dv AS couponUseDv
-		FROM	coupon c, customer_coupon cc
-		WHERE 	customer_id=#{customerId} and cc.coupon_id = c.coupon_id and cc.coupon_use_dv=201 
+	SELECT  	c.coupon_nm AS couponNm,
+				c.coupon_dscnt_rate AS couponDscntRate, 
+				c.coupon_epr_dt AS couponEprDt,
+                cc.common_code_nm				AS	"couponUseDv"
+		 FROM	 coupon c, customer_coupon cusc, common_code cc
+		WHERE customer_id=#{customerId}
+          AND c.coupon_id = cusc.coupon_id 
+          AND cusc.coupon_use_dv = cc.common_code_id
+		 AND not cusc.coupon_use_dv=203
+          AND cc.status='Y'
 	</select>
-
+	<!-- 
+		기능: 쿠폰번호입력
+		담당자: 윤상영
+	-->
+	<insert id="insertCustomerCoupon" parameterType="String">
+		INSERT INTO customer_coupon(customer_coupon_id,customer_id,coupon_id,coupon_use_dv)
+		values(customer_coupon_seq.nextval,cast(#{customerId} as number(8)),
+		(select distinct c.coupon_id
+		from coupon c
+		where c.coupon_sn = #{allCouponNum}),
+		203)
+	</insert>
+	<!-- 
+		기능: 쿠폰번호 중복입력 방지 - 입력된 번호와 같은번호 카운트 
+		담당자: 윤상영
+	-->
+	
+	
 	
 	
 	<!-- 
