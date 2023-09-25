@@ -7,6 +7,7 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
 <div class="mypage-coupon-main">
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 <div class="mypage-coupon-title">쿠폰등록하기</div>
 
 <div class="coupon-container">
@@ -14,11 +15,13 @@
 		<div class="coupon-insert-title">쿠폰번호입력</div>
 		
 		<div class="coupon-number-input-container">
-			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input type="number" class="coupon-num-01" oninput='maxNum(this, 4)'>
+		<form th:action="@{/mypage/mycoupon}" method="post">
+			<input autocomplete=off name="couponNum1" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input autocomplete=off name="couponNum2" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input autocomplete=off name="couponNum3" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input autocomplete=off name="couponNum4" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
 			<button type="submit">등록하기</button>
+		</form>
 		</div><!-- coupon-number-input-container -->
 		
 	</div><!-- coupon-number-container -->
@@ -66,7 +69,6 @@
 
 </div><!-- coupon-container -->
 </div><!--mypage-coupon-main  -->
-<div class="empty"></div>
 
 
 <div th:replace="~{/include/footer :: footer}"></div>

@@ -358,6 +358,7 @@ public class MyPageController {
 	// 마이페이지-내문의관리-내문의조회
 	@RequestMapping(value="/myinquiry")
 	public String myInquiry(Model model) {
+		
 		try {
 			//로그인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -387,9 +388,6 @@ public class MyPageController {
 			//내 문의 내용 select
 //			String myinquiryContent = inquiryService.selectInquiryContent(inquiryId);
 //			model.addAttribute("myinquirycontent",myinquiryContent);
-			
-			
-
 			return "mypage/mypage-inquiry";
 		} catch (ClassCastException e) {
 			return "redirect:/customer/login";
@@ -401,7 +399,6 @@ public class MyPageController {
 	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId, @RequestParam int productId, @PathVariable int inquiryId) {
 		inquiryService.deleteMyInquiry(myInquirySelect);
 		return "redirect:/mypage/myinquiry";
-		
 	}
 
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
@@ -416,12 +413,19 @@ public class MyPageController {
 			if (point == null) {
 				point = "0";
 			}
+			// 상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount", shipCompleteCount);
+			// 상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount", shipCount01);
 			model.addAttribute("totalPoint", point + "P");
 			// 사용가능한 쿠폰리스트 출력
-			List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService
-					.selectUsableCoupon(customerId);
+			List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon(customerId);
 			model.addAttribute("selectCustomerCouponList", selectUsableCustomerCouponList);
+			
 			return "mypage/insert-coupon";
+			
 
 		} catch (ClassCastException e) {
 			return "redirect:/customer/login";
@@ -441,6 +445,12 @@ public class MyPageController {
 				point = "0";
 			}
 			model.addAttribute("totalPoint", point + "P");
+			// 상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount", shipCompleteCount);
+			// 상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount", shipCount01);
 			// 사용완료 쿠폰리스트 출력
 			List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId);
 			model.addAttribute("banCustomerCouponList", selectBanCustomerCouponList);
@@ -449,6 +459,22 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 
+	}
+	//사용자 쿠폰등록하기 
+	@RequestMapping(value="/mycoupon", method = RequestMethod.POST)
+	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2, @RequestParam String couponNum3, @RequestParam String couponNum4 ) {
+		
+		//로그인
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = (UserDetails) principal;
+		
+		//입력받은 4개의 쿠폰번호 합친다음 insert하기
+		int customerId = Integer.valueOf(userDetails.getUsername());  
+		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
+		 customerCouponService.insertCustomerCoupon(String.valueOf(customerId), allCouponNum);
+		
+		
+		return "redirect:/mypage/mycoupon";
 	}
 
 	// 마이페이지-배송지관리 컨트롤러

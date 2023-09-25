@@ -30,8 +30,8 @@ public class CustomerCouponService implements ICustomerCouponService {
 	}
 	
 	@Override
-	public void insertCustomerCoupon() {
-		customerCouponRepository.insertCustomerCoupon();
+	public void insertCustomerCoupon(String customerId, String allCouponNum) {
+		customerCouponRepository.insertCustomerCoupon(customerId, allCouponNum);
 	}
 	
 	// 매자정마다 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
