@@ -87,5 +87,15 @@ public class InquiryService implements IInquiryService {
 	public void deleteMyInquiry(MyInquirySelect myInquirySelect) {
 		inquiryRepository.deleteMyInquiry(myInquirySelect);		
 	}
+	//내문의 status가 Y 인 개수
+	@Override
+	public int countInquiryStatusY(int customerId) {
+		return inquiryRepository.countInquiryStatusY(customerId);
+	}
+	// inquiryId값에 따른 문의내역과 문의답변 가져오기
+	@Override
+	public String selectInquiryContent(int inquiryId) {
+		return inquiryRepository.selectInquiryContent(inquiryId);
+	}
 
 }
