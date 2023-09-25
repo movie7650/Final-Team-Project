@@ -17,7 +17,7 @@ import com.example.daitso.inquiry.model.MyInquirySelect;
 public interface IInquiryRepository {
 	
 	//문의글 삽입
-	void insertInquiry(@Param("pId") int pId, @Param("cId") int cId, @Param("content") String content);
+	int insertInquiry(@Param("pId") int pId, @Param("cId") int cId, @Param("content") String content);
 	
 	void selectInquiry(int inquiryId);
 	

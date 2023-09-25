@@ -1,12 +1,10 @@
 package com.example.daitso.admin.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +21,7 @@ import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
-import com.example.daitso.inquiry.model.Inquiry;
+import com.example.daitso.config.CommonCode;
 import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquirySelect;
@@ -104,6 +102,40 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
+	@GetMapping("/products")
+	@ResponseBody
+	public PageResult<ProductCheck> selectProductsByCategory(
+	        @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
+	        @RequestParam(name = "secondCategoryId", required = false) Integer secondCategoryId,
+	        @RequestParam(name = "thirdCategoryId", required = false) Integer thirdCategoryId,
+	        @RequestParam(name = "page", defaultValue = "1") int page,
+	        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+
+	    int offset = (page - 1) * pageSize;
+
+	    if (firstCategoryId == null) {
+	        firstCategoryId = 0; 
+	    }
+	    if (secondCategoryId == null) {
+	        secondCategoryId = 0; 
+	    }
+	    if (thirdCategoryId == null) {
+	        thirdCategoryId = 0;
+	    }
+
+	    List<ProductCheck> products = adminService.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
+
+	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
+	    
+	    PageResult<ProductCheck> result = new PageResult<>();
+        result.setData(products);
+        result.setCurrentPage(page);
+        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize));
+
+        return result;
+	}
+
+	
 	// 두 번째 카테고리 불러오기 ('syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행)
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
@@ -148,7 +180,6 @@ public class AdminController {
 	// 상품 수정하기
 	@PostMapping("/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
-		 
 		// 각 필드를 Jsoup.clean으로 처리
 //	    String productCode = Jsoup.clean(product.getProductCode(), Whitelist.basic());
 //	    String productNm = Jsoup.clean(product.getProductNm(), Whitelist.basic());
@@ -181,9 +212,29 @@ public class AdminController {
 	    return "admin/product";
 	}
 	
-	// 상품 등록하기
+	// 상품 등록하기 ★
+//	@PostMapping("/product")
+//	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+//		// 입력 필드가 비어 있으면 '-'으로 대체
+//	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+//	        product.setProductOptionFirst("-");
+//	    }
+//	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+//	        product.setProductOptionSecond("-");
+//	    }
+//	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+//	        product.setProductOptionThird("-");
+//	    }
+//		adminService.registerProducts(product, files);
+//		model.addAttribute("message","상품이 등록되었습니다.");
+//		model.addAttribute("searchUrl","/admin/product");
+//
+//	return "admin/message";
+//	}
+	
+	//테스트//
 	@PostMapping("/product")
-	public String registerProducts(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+	public String registerProducts(ProductCheck product, Model model) {
 		// 입력 필드가 비어 있으면 '-'으로 대체
 	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
 	        product.setProductOptionFirst("-");
@@ -194,11 +245,10 @@ public class AdminController {
 	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
 	        product.setProductOptionThird("-");
 	    }
-		adminService.registerProducts(product, files);
+		adminService.registerProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-
-	return "admin/message";
+		return "admin/product/message";
 	}
 	
 	
@@ -270,9 +320,11 @@ public class AdminController {
 
     // 배송 상태 변경하기
     @PostMapping("/purchase/change-status")
-    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId) {
+    public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId, Model model) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        return "redirect:/admin/purchase";
+        model.addAttribute("message","배송상태가 변경되었습니다.");
+		model.addAttribute("searchUrl","/admin/purchase");
+		return "admin/message";
     }	 
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
@@ -465,4 +517,31 @@ public class AdminController {
 		return null;
 	}
 
+	
+    // 전체 카테고리 조회하기
+  	@GetMapping("/common-code")
+  	public String selectAllCommonCodes(@RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+        
+      int offset = (page - 1) * pageSize;       
+      
+
+      	List<CommonCode> commonCodes = adminService.selectAllCommonCodes(offset, pageSize);
+      
+       // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountCommonCodes(); 
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+        model.addAttribute("commonCodes",commonCodes);
+        
+        return "admin/commoncode/admin-commoncode";
+  	}
 }

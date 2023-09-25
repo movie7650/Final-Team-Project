@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<link rel="stylesheet" th:href="@{/css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<body>
+	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+
+	<!-- 오른쪽 컨텐츠 -->
+	<div id="productTable" style="padding-top: 10px;">
+	<div style="font-weight: 600; margin-top: 20px;">공통코드관리 > 공통코드 추가/수정/삭제</div>
+		<div class="row"
+			style="padding-bottom: 15px; justify-content: flex-end;">
+			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
+				<button class="btn btn-primary" style="background-color: #39594e"
+					data-bs-toggle="modal" data-bs-target="#registerModal"
+					type="button">등록</button>
+			</div>
+		</div>
+		<div style="height: 690px;">
+			<table class="table" style="text-align: center;">
+				<thead>
+					<tr>
+						<th></th>
+						<th>공통코드ID</th>
+						<th>공통코드명</th>
+						<th>사용여부</th>
+						<th>생성자</th>
+						<th>생성일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="commonCodes : ${commonCodes}">
+						<td th:text="${commonCodes.rn}"></td>
+						<td th:text="${commonCodes.commonCodeId}"></td>
+						<td th:text="${commonCodes.commonCodeNm}"></td>
+						<td th:text="${commonCodes.status}"></td>
+						<td th:text="${commonCodes.creator}"></td>
+						<td th:text="${commonCodes.createDt}"></td>
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- 페이지 링크 표시 -->
+		<div th:if="${totalCount > 0}">
+			 <ul class="pagination" id="pagination">
+				<!-- 이전 페이지 -->
+				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
+					<!-- 이전 페이지로 이동하는 링크 -->
+					<a class="page-link"
+					th:href="@{/admin/common-code(page=${currentPage - 1}, pageSize=${pageSize})}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+
+				<!-- 페이지 번호 링크 -->
+				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}" class="page-item" th:classappend="${page == currentPage} ? active">
+					<a class="page-link"
+					th:href="@{/admin/common-code(page=${page}, pageSize=${pageSize})}"
+					th:text="${page}">
+					</a>
+				</li>
+
+				<!-- 다음 페이지 -->
+				<li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled"> <!-- 현재 페이지가 마지막 페이지면 비활성화 -->
+					<!-- 다음 페이지로 이동하는 링크 -->
+					<a class="page-link" 
+					th:href="@{/admin/common-code(page=${currentPage + 1}, pageSize=${pageSize})}"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</div>	  
+		
+		
+
+	</div>
+
+	</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:inline="javascript">
+
+	</script>
+
+</body>
+</html>

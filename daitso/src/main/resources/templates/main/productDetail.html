@@ -222,49 +222,45 @@
 		</div>
 		<hr style="border: 1px solid; margin: 40px 10px 0 10px;"></hr>
 		<div style="margin: 0 10px 0 10px">
-			<form class="inquiry-form" action="/inquiry/insert" method="post">
-			    <div class="d-flex" style="height:120px; border-bottom: 1px solid;">
-			    	<div class="d-flex justify-content-center align-items-center" style="flex:1; border-right: 1px solid;">
-			    		<p>상품옵션</p>
-			    	</div>
-			    	<div class="d-flex flex-column justify-content-center align-items-center" style="flex:6;">			    		
-			    			<input type="hidden" name="productId" th:value="${product.productId}">
-			    			<input type="hidden" name="productGroupId" th:value="${product.productGroupId}">
-				    		<div class="d-flex flex-column" style="width:450px;">
-					    		<select class="inquiry-product-size margin-b-10" name="size" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],1)">
-					    			<th:block th:each="option : ${oListFirst}">			    	
-					    				<option th:if="${option.OPTIONFIRST == '0'}">사이즈옵션 없음</option>
-										<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}" th:if="${option.OPTIONFIRST != '0'}">[[${option.OPTIONFIRST}]]</option>
-									</th:block>
-					    		</select>
-					    		<select class="inquiry-product-color margin-b-10" name="color" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],2)">
-					    			<th:block  th:each="option : ${oListSecond}">
-					    				<option th:if="${option.OPTIONSECOND == '0'}">색상옵션 없음</option>
-										<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}" th:if="${option.OPTIONSECOND != '0'}">[[${option.OPTIONSECOND}]]</option>
-									</th:block>
-					    		</select>
-					    		<select class="inquiry-product-other margin-b-10" name="other" style="width: 200px">
-					    			<th:block th:each="option : ${oListThird}">
-					    				<option th:if="${option.OPTIONTHIRD == '0'}">기타옵션 없음</option>
-										<option th:if="${option.OPTIONTHIRD != '0'}">[[${option.OPTIONTHIRD}]]</option>
-									</th:block>
-					    		</select>
-				    		</div>	
-			    	</div>
-			    </div>
-			    <div class="d-flex" style="height:300px; border-bottom: 1px solid;">
-			    	<div class="d-flex justify-content-center align-items-center" style="flex:1; border-right: 1px solid;">
-			    		<p>문의내용</p>
-			    	</div>
-			    	<div class="d-flex justify-content-center align-items-center" style="flex:6;">
-			    		<input type="text" name="content" style="height:90%; width:450px"> 
-			    	</div>
-			    </div>
-		    </form>
+		    <div class="d-flex" style="height:120px; border-bottom: 1px solid;">
+		    	<div class="d-flex justify-content-center align-items-center" style="flex:1; border-right: 1px solid;">
+		    		<p>상품옵션</p>
+		    	</div>
+		    	<div class="d-flex flex-column justify-content-center align-items-center" style="flex:6;">			    		
+			    		<div class="d-flex flex-column" style="width:450px;">
+				    		<select class="inquiry-product-size margin-b-10" name="size" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],1)">
+				    			<th:block th:each="option : ${oListFirst}">			    	
+				    				<option th:if="${option.OPTIONFIRST == '0'}">사이즈옵션 없음</option>
+									<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}" th:if="${option.OPTIONFIRST != '0'}">[[${option.OPTIONFIRST}]]</option>
+								</th:block>
+				    		</select>
+				    		<select class="inquiry-product-color margin-b-10" name="color" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],2)">
+				    			<th:block  th:each="option : ${oListSecond}">
+				    				<option th:if="${option.OPTIONSECOND == '0'}">색상옵션 없음</option>
+									<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}" th:if="${option.OPTIONSECOND != '0'}">[[${option.OPTIONSECOND}]]</option>
+								</th:block>
+				    		</select>
+				    		<select class="inquiry-product-other margin-b-10" name="other" style="width: 200px">
+				    			<th:block th:each="option : ${oListThird}">
+				    				<option th:if="${option.OPTIONTHIRD == '0'}">기타옵션 없음</option>
+									<option th:if="${option.OPTIONTHIRD != '0'}">[[${option.OPTIONTHIRD}]]</option>
+								</th:block>
+				    		</select>
+			    		</div>	
+		    	</div>
+		    </div>
+		    <div class="d-flex" style="height:300px; border-bottom: 1px solid;">
+		    	<div class="d-flex justify-content-center align-items-center" style="flex:1; border-right: 1px solid;">
+		    		<p>문의내용</p>
+		    	</div>
+		    	<div class="d-flex justify-content-center align-items-center" style="flex:6;">
+		    		<input type="text" class="inquiry-content" name="content" required style="height:90%; width:450px" > 
+		    	</div>
+		    </div>
 		</div>
 		<p style="font-size:13px">* 개인정보(주민번호, 연락처, 주소, 계좌번호, 카드번호 등)가 포함되지 않도록 유의해주세요.</p>
 		<div class="d-flex justify-content-center">
-			<div style="width:100px; height:30px; background-color:#39594e; color:white; margin-right: 5px; cursor: pointer" onclick="insertInquiry()">확인</div>
+			<div style="width:100px; height:30px; background-color:#39594e; color:white; margin-right: 5px; cursor: pointer" th:onclick="insertInquiry([[${product.productGroupId}]])">확인</div>
 			<div style="width:100px; height:30px; border:1px solid; cursor: pointer" onclick="closeModal()">취소</div>
 		</div>
 	</div>
@@ -573,7 +569,7 @@
 	function changeReviewPage(productGroupId, page){
 		const reviewBody = document.querySelector(".review-body");
 		const reviewNone = document.querySelector(".review-none");
-		
+		customerId = (customerId == 'whoAreYou') ? -1 : customerId; 
 		
 		fetch("/review/" + productGroupId +"/" + page + "/" + customerId)
 		.then(response => response.json())
@@ -645,11 +641,43 @@
      }
     });
 	
-	function insertInquiry(){
+	function insertInquiry(productGroupId){
 		if(customerId == 'whoAreYou'){
 			window.alert('whoAreYou');
 		}else{
-			document.querySelector(".inquiry-form").submit();			
+			const content = document.querySelector('.inquiry-content').value;
+			const size = document.querySelector('.inquiry-product-size').value;
+			const color = document.querySelector('.inquiry-product-color').value;
+			const other = document.querySelector('.inquiry-product-other').value;
+			if(content == ''){
+				window.alert("문의글을 작성해주세요");
+			}
+			else{
+				const data = {
+						content: content,
+						size: size,
+						color: color,
+						other: other,
+						productGroupId: productGroupId
+				};
+				fetch("/inquiry/insert",{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data)
+				})
+				.then(response => response.json())
+				.then(data=> {
+					if(data > 0){
+						window.alert("문의가 정상적으로 접수되었습니다. 문의글은 마이페이지에서 확인하거나 관리자가 답변은 완료한 이후에 확인할 수 있습니다.");
+						closeModal();
+					}else{
+						window.alert("문의글이 접수되지 않았습니다. 상품 옵션을 정확하게 선택한 이후에 다시 보내주세요.");
+					}
+				})
+			}
+			
 		}
 	}
 	

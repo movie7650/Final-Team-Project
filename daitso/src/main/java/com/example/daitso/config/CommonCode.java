@@ -16,4 +16,7 @@ public class CommonCode {
 	private String creator;
 	private Date modifyDt;
 	private String modifier;
+	
+	private int rn;
+	private String searchText;
 }

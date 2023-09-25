@@ -180,8 +180,8 @@
 		담당자: 이세인
 	-->
 	<select id="selectCountPurchaseList">
-	    SELECT COUNT (cnt)
-		  FROM(	SELECT COUNT(*) AS cnt 
+	    SELECT COUNT (*)
+		  FROM(	SELECT COUNT(*) 
 				  FROM purchase p
 		          JOIN customer c ON p.customer_id = c.customer_id 
 				  JOIN common_code d ON p.purchase_dv = d.common_code_id
@@ -268,8 +268,8 @@
 		담당자: 이세인
 	-->
 	<select id="selectCountPurchaseInfo">
-	    SELECT COUNT (cnt)
-		  FROM( SELECT COUNT(*) AS cnt 
+	    SELECT COUNT (*)
+		  FROM( SELECT COUNT(*)
 				  FROM purchase p
 	              JOIN customer c ON p.customer_id = c.customer_id 
 	              JOIN common_code d ON p.purchase_dv = d.common_code_id
