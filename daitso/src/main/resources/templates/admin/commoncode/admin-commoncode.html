@@ -27,8 +27,9 @@
 						<th>공통코드ID</th>
 						<th>공통코드명</th>
 						<th>사용여부</th>
-						<th>생성자</th>
-						<th>생성일</th>
+						<th>등록자</th>
+						<th>등록일</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,7 +40,15 @@
 						<td th:text="${commonCodes.status}"></td>
 						<td th:text="${commonCodes.creator}"></td>
 						<td th:text="${commonCodes.createDt}"></td>
-						
+						<td>
+							<div class="btn-group">
+								<button class="btn btn-xs"	style="background-color: #d4a373; color: #ffff"
+									data-bs-toggle="modal" data-bs-target="#searchModal"
+									type="button" th:onclick="selectCommonCodesByPr([[${commonCodes.commonCodeId}]])">상세</button>
+								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
+									type="button" th:onclick="deleteCommonCodePr([[${commonCodes.commonCodeId}]])">삭제</button>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -76,17 +85,225 @@
 			</ul>
 		</div>	  
 		
-		
 
+	<div id="searchModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 850px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">공통코드 상세 조회</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    <i class="fas fa-times"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table" style="text-align: center;">
+						<thead>
+							<tr>
+								<th><input type="checkbox" name='selectall' onclick='selectAll(this)'></th>
+								<th>공통코드ID</th>
+								<th>공통코드명</th>
+								<th>사용여부</th>
+								<th>등록자</th>
+								<th>등록일</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="commonCodeTableBody">
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					 <button class="btn btn-xs" style="background-color: #adb5bd; border-color:#adb5bd; color: #ffff" data-bs-toggle="modal" data-bs-target="#registerExistingModal"
+							  type="button" >추가</button> 
+					<button class="btn btn-xs" style="background-color: red; color: #fff;" type="button" id="deleteButton">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="max-width: 600px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">공통코드 수정</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+					</button>
+				</div>
+				<form th:action="@{/admin/update-common}" method="post">
+					<div class="modal-body">
+						
+						<div class="row mb-3">
+							<label for="updateCommonCodeID" class="col-sm-2 col-form-label">공통코드ID</label>
+							<div class="col-sm-10">
+								<input type="text" id="updateCommonCodeID" 
+									name="commonCodeId" >
+							</div>
+						</div>
+						<div class="row mb-3">
+							<label for="updateCommonCodeNm" class="col-sm-2 col-form-label">공통코드명</label>
+							<div class="col-sm-10">
+								<input type="text" id="updateCommonCodeNm" 
+									name="commonCodeNm" >
+							</div>
+						</div>
+						<div class="row mb-3">
+						    <label for="updateStatus" class="col-sm-2 col-form-label">사용여부</label>
+						    <div class="col-sm-10">
+						        <select id="updateStatus" name="status">
+						            <option value='Y'>Y</option>
+						            <option value='N'>N</option>
+						        </select>
+						    </div>
+						</div>
+
+						
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								type="submit" >저장</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
 	</div>
 
 	</div>
 	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 
+	// 체크 박스 선택, 해제
+  	function selectAll(selectAll) {
+  	    const checkboxes = document.getElementsByName('commonCodeCheckbox');
+  		// 각 체크 박스의 checked 속성을 selectAll 값으로 설정해서 모두 선택하거나 해제
+  	    checkboxes.forEach((checkbox) => {
+  	        checkbox.checked = selectAll.checked;
+  	    });
+  	}
+ 	
+ 	// 모든 체크 박스가 선택되어 있는지 확인해서 selectAll 체크 박스의 상태 바꾸기
+   	function checkSelectAll() {
+   		 const checkboxes = document.querySelectorAll('input[name="commonCodeCheckbox"]');
+   		 
+  		// selectAll 체크 박스 요소 가져오기
+  	    const selectAll = document.querySelector('input[name="selectall"]');
+  	    //Array.from을 사용하여 checkboxes NodeList를 배열로 변환하고, every 함수를 사용해서 모든 체크 박스가 선택되어 있는지 확인
+  	    selectAll.checked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  	}
+ 	
+ 	// 삭제 버튼 클릭시 이벤트 리스너 호출
+   	const deleteButton = document.getElementById("deleteButton"); // deleteButton 요소 가져오기
+   	if (deleteButton) {
+   	    deleteButton.addEventListener("click", function () {
+   	     const selectedCommonCodeIds = [];
+ 	    const commonCodeCheckboxes = document.querySelectorAll('input[name="commonCodeCheckbox"]');
+ 	    
+ 	    commonCodeCheckboxes.forEach((checkbox) => {
+ 	        if (checkbox.checked) {
+ 	        	selectedCommonCodeIds.push(checkbox.value);
+ 	        }
+ 	    });
+ 	
+ 	    if (selectedCommonCodeIds.length === 0) {
+ 	        alert("선택된 공통코드가 없습니다.");
+ 	        return;
+ 	    }
+ 	    
+ 	    if (confirm('해당 공통코드를 삭제하시겠습니까?')) {
+ 	        fetch("/admin/delete-common-code", {
+ 	            method: "POST",
+ 	            headers: {
+ 	                "Content-Type": "application/json",
+ 	            },
+ 	            body: JSON.stringify(selectedCommonCodeIds),
+ 	        })
+ 	        .then((response) => response.json())
+ 	        .then((data) => {
+ 	            alert("공통코드가 삭제되었습니다.");
+ 	            setTimeout(() => {
+ 	                window.location.href = "/admin/common-code";
+ 	            }, 50);
+ 	        })
+ 	        .catch((error) => {
+ 	            console.error("공통코드 삭제 오류:", error);
+ 	        });
+ 	    }
+ 	}); 
+   	}
+
+	var statusValue = commonCode.status;
+	var selectElement = document.getElementById("updateStatus");
+	if (statusValue === 'Y') {
+	    selectElement.value = 'Y';
+	} else if (statusValue === 'N') {
+	    selectElement.value = 'N';
+	}
+
+	
+    function selectCommonCode(commonCodeId) {
+         fetch("/admin/update-common/" + commonCodeId)
+            .then(response => response.json())
+            .then(data => {
+                const commonCode = data;
+                console.log(commonCode);
+                document.getElementById("updateCommonCodeID").value = commonCode.commonCodeId;
+                document.getElementById("updateCommonCodeNm").value = commonCode.commonCodeNm;
+                document.getElementById("updateStatus").value = commonCode.status;
+            }); 
+    }
+
+	 function selectCommonCodesByPr(commonCodeId) {
+	 		console.log(commonCodeId);
+	         fetch("/admin/check/" + commonCodeId)
+	             .then(response => response.json())
+	             .then(data => {
+	                  const commonCodeTableBody = document.getElementById("commonCodeTableBody");
+
+	                 commonCodeTableBody.innerHTML = "";
+	                 data.forEach(commonCode => {
+	                     const row = document.createElement("tr");
+	                     row.innerHTML = `
+	                    	  <td><input type="checkbox" name="commonCodeCheckbox" onclick='checkSelectAll()' value="${commonCode.commonCodeId}"></td>
+	                          <td>${commonCode.commonCodeId}</td>
+	                          <td>${commonCode.commonCodeNm}</td>
+	                          <td>${commonCode.status}</td>
+	                          <td>${commonCode.creator}</td>
+	                          <td>${commonCode.createDt}</td>
+	                          <td>
+			   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
+			   						style="background-color: #adb5bd; color: #ffff" type="button"
+			   						onclick = "selectCommonCode(${commonCode.commonCodeId})">수정</button>
+			   						
+			    			  </td>
+	                         `;
+	                      commonCodeTableBody.appendChild(row);
+	                  });
+	              });
+	      }
+	 
+	 
+	 function deleteCommonCodePr(commonCodeId) {
+	        if (!confirm('공통코드를 삭제하시겠습니까?')) {
+	            return false;
+	        }
+	        const formHtml = `
+	            <form id="deleteForm" action="/admin/delete-common?commonCodeId=${commonCodeId}" method="post">
+	            </form>
+	        `;
+	        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+	        const form = doc.body.firstChild;
+	        document.body.append(form);
+	        setTimeout(() => {
+	            document.getElementById('deleteForm').submit();
+	        }, 50) //대기시간
+	    } 
+	  	
 	</script>
 
 </body>

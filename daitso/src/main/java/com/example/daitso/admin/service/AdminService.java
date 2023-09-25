@@ -195,16 +195,47 @@ public class AdminService implements IAdminService{
 		}
 	}
 
+	// 최상위 공통코드 조회하기
 	@Override
-	public List<CommonCode> selectAllCommonCodes(int offset, int pageSize) {
-		return commonCodeRepository.selectAllCommonCodes(offset, pageSize);
+	public List<CommonCode> selectAllCommonCodesPr(int offset, int pageSize) {
+		return commonCodeRepository.selectAllCommonCodesPr(offset, pageSize);
 	}
 
+	// 최상위 공통코드 개수 조회하기
 	@Override
-	public int selectCountCommonCodes() {
-		return commonCodeRepository.selectCountCommonCodes();
+	public int selectCountCommonCodesPr() {
+		return commonCodeRepository.selectCountCommonCodesPr();
+	}
+
+	// 최상위 공통코드 삭제하기
+	@Override
+	public void deleteCommonCodePr(int commonCodeId) {
+		commonCodeRepository.deleteCommonCodePr(commonCodeId);	
 	}
 	
+	// 공통코드 조회하기(최상위 공통코드별)
+	@Override
+	public List<CommonCode> selectCommonCodesByPr(int commonCodeId) {
+		return commonCodeRepository.selectCommonCodesByPr(commonCodeId);
+	}
+
+	// commonCodeId로 공통코드 정보 조회하기
+	@Override
+	public CommonCode selectCommonCode(int commonCodeId) {
+		return commonCodeRepository.selectCommonCode(commonCodeId);
+	}
+
+	// 공통코드 수정하기
+	@Override
+	public void updateCommonCode(CommonCode commonCode) {
+		commonCodeRepository.updateCommonCode(commonCode);
+	}
+
+	// 공통코드 삭제하기
+	@Override
+	public void deleteCommonCode(int commonCodeId) {
+		commonCodeRepository.deleteCommonCode(commonCodeId);
+	}
 	
 	
 }
