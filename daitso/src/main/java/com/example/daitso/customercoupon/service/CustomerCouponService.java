@@ -30,8 +30,8 @@ public class CustomerCouponService implements ICustomerCouponService {
 	}
 	
 	@Override
-	public void insertCustomerCoupon() {
-		customerCouponRepository.insertCustomerCoupon();
+	public void insertCustomerCoupon(String customerId, String allCouponNum) {
+		customerCouponRepository.insertCustomerCoupon(customerId, allCouponNum);
 	}
 	
 	// 매자정마다 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
@@ -45,5 +45,15 @@ public class CustomerCouponService implements ICustomerCouponService {
 	@Override
 	public List<CartCouponApply> getCouponsByCustomerId(int categoryId, int customerId) {
 		return customerCouponRepository.getCouponsByCustomerId(categoryId, customerId);
+	}
+	//존재하는 쿠폰 카운트
+	@Override
+	public int countExistCouponSn(String customerId, String allCouponNum) {
+		return customerCouponRepository.countExistCouponSn(customerId,allCouponNum);
+	}
+
+	@Override
+	public int countExistCouponId(String allCouponNum) {
+		return customerCouponRepository.countExistCouponId(allCouponNum);
 	}
 }

@@ -18,5 +18,6 @@ public class MyInquirySelect {
 	private Date createDt;
 	private int creator;
 	private int inquiryId;
-	
+	private int inquiryStatusYCount;
+	private String inquiryReply;
 }

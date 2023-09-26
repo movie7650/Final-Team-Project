@@ -22,6 +22,7 @@ import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.config.CommonCode;
+import com.example.daitso.coupon.model.CouponCheck;
 import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquirySelect;
@@ -248,7 +249,7 @@ public class AdminController {
 		adminService.registerProducts(product);
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
-		return "admin/product/message";
+		return "admin/message";
 	}
 	
 	
@@ -322,7 +323,7 @@ public class AdminController {
     @PostMapping("/purchase/change-status")
     public String changePurchaseStatus(@RequestParam int purchaseId, @RequestParam int commonCodeId, Model model) {
         adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        model.addAttribute("message","배송상태가 변경되었습니다.");
+        model.addAttribute("message","배송 상태가 변경되었습니다.");
 		model.addAttribute("searchUrl","/admin/purchase");
 		return "admin/message";
     }	 
@@ -356,6 +357,8 @@ public class AdminController {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
     }
+    
+    
 
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
@@ -367,6 +370,10 @@ public class AdminController {
 
       List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
       
+      	// 첫 번째 카테고리 불러오기
+	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+	    model.addAttribute("firstCategories", firstCategories);
+	    
        // 페이징 정보 전달
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("pageSize", pageSize);
@@ -414,14 +421,140 @@ public class AdminController {
  	}
  	
  	
-// 카테고리 등록하기
-	@PostMapping("/category")
-	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart List<MultipartFile> files) {
-		adminService.registerCategories(categoryCheck, files);
+// 카테고리 등록하기 ★
+//	@PostMapping("/category")
+//	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart List<MultipartFile> files) {
+//		adminService.registerCategories(categoryCheck, files);
+//		model.addAttribute("message","카테고리가 등록되었습니다.");
+//		model.addAttribute("searchUrl","/admin/category");
+//	return "admin/message";
+//	}
+ 	
+ 	//테스트
+ 	@PostMapping("/category")
+	public String registerCategories(CategoryCheck categoryCheck, Model model) {
+		adminService.registerCategories(categoryCheck);
 		model.addAttribute("message","카테고리가 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/category");
 	return "admin/message";
 	}
+ 	
+	
+	// 전체 공통 코드 조회하기
+  	@GetMapping("/common-code")
+  	public String selectAllCommonCodesPr(@RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+        
+      int offset = (page - 1) * pageSize;       
+      
+
+      	List<CommonCode> commonCodes = adminService.selectAllCommonCodesPr(offset, pageSize);
+      
+       // 페이징 정보 전달
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", pageSize);
+
+	    // 총 상품 개수
+	    int totalCount = adminService.selectCountCommonCodesPr(); 
+	    
+	    // 총 페이지 수
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPages", totalPages);
+        model.addAttribute("commonCodes",commonCodes);
+        
+        return "admin/commoncode/admin-commoncode";
+  	}
+  	
+ 	//테스트
+ 	@PostMapping("/common-code")
+	public String registerCommonCodes(CommonCode commonCode, Model model) {
+		adminService.registerCommonCodes(commonCode);
+		model.addAttribute("message","공통코드가 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/common-code");
+	return "admin/message";
+	}
+ 	
+  	// 
+ 	@GetMapping("/check/{commonCodeId}")
+ 	@ResponseBody
+ 	public List<CommonCode> commonCodes (@PathVariable int commonCodeId, Model model) {
+ 		return adminService.selectCommonCodesByPr(commonCodeId);
+ 	}
+ 	
+ 	// 
+ 	@PostMapping("/delete-common")
+ 	public String deleteCommonCodePr(@RequestParam int commonCodeId, Model model) {
+ 		adminService.deleteCommonCodePr(commonCodeId);
+ 		model.addAttribute("message","공통코드가 삭제되었습니다.");
+ 		model.addAttribute("searchUrl","/admin/common-code");
+ 		return "admin/message";
+ 	}	
+  	
+ 	//
+ 	@GetMapping("/update-common/{commonCodeId}")
+ 	@ResponseBody
+ 	public CommonCode selectCommonCode(@PathVariable int commonCodeId, Model model) {
+ 		return adminService.selectCommonCode(commonCodeId);
+ 	}
+
+ 	//
+ 	@PostMapping("/update-common")
+ 	public String updateCommonCode(CommonCode commonCode, Model model, HttpSession session) {
+ 		adminService.updateCommonCode(commonCode);
+ 		model.addAttribute("commonCode", commonCode);
+ 	   	session.setAttribute("commonCodeId", commonCode.getCommonCodeId());
+ 		session.setAttribute("commonCodeNm", commonCode.getCommonCodeNm());
+ 		session.setAttribute("status", commonCode.getStatus());
+ 		model.addAttribute("message","공통코드가 수정되었습니다.");
+ 		model.addAttribute("searchUrl","/admin/common-code");
+ 		return "admin/message";
+ 	}
+ 	
+ 	
+ 	@PostMapping("/delete-common-code")
+ 	public String deleteCommonCode(@RequestBody List<Integer> selectedCommonCodeIds, Model model) {
+ 	    for (Integer commonCodeId : selectedCommonCodeIds) {
+ 	        adminService.deleteCommonCode(commonCodeId);
+ 	    }
+ 	    return "admin/product";
+ 	}
+ 	
+ 	
+ // 
+   	@GetMapping("/coupon")
+   	public String selectAllCoupons(@RequestParam(name = "page", defaultValue = "1") int page,
+             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+         
+       int offset = (page - 1) * pageSize;       
+       
+
+       	List<CouponCheck> couponChecks = adminService.selectAllCoupons(offset, pageSize);
+       
+        // 페이징 정보 전달
+ 	    model.addAttribute("currentPage", page);
+ 	    model.addAttribute("pageSize", pageSize);
+
+ 	    // 총 상품 개수
+ 	    int totalCount = adminService.selectCountCoupons(); 
+ 	    
+ 	    // 총 페이지 수
+ 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+ 	    
+ 	    model.addAttribute("totalCount", totalCount);
+ 	    model.addAttribute("totalPages", totalPages);
+         model.addAttribute("couponChecks",couponChecks);
+         
+         return "admin/coupon/admin-coupon";
+   	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
  	
  	
 	// 카테고리 수정하기
@@ -517,31 +650,4 @@ public class AdminController {
 		return null;
 	}
 
-	
-    // 전체 카테고리 조회하기
-  	@GetMapping("/common-code")
-  	public String selectAllCommonCodes(@RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
-        
-      int offset = (page - 1) * pageSize;       
-      
-
-      	List<CommonCode> commonCodes = adminService.selectAllCommonCodes(offset, pageSize);
-      
-       // 페이징 정보 전달
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("pageSize", pageSize);
-
-	    // 총 상품 개수
-	    int totalCount = adminService.selectCountCommonCodes(); 
-	    
-	    // 총 페이지 수
-	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-	    
-	    model.addAttribute("totalCount", totalCount);
-	    model.addAttribute("totalPages", totalPages);
-        model.addAttribute("commonCodes",commonCodes);
-        
-        return "admin/commoncode/admin-commoncode";
-  	}
 }
