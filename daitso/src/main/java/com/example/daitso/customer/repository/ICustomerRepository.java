@@ -10,6 +10,7 @@ import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSecurity;
 import com.example.daitso.customer.model.CustomerSignUp;
+import com.example.daitso.customer.model.CustomerSignUpWithSocial;
 
 @Repository
 @Mapper
@@ -41,5 +42,14 @@ public interface ICustomerRepository {
 
 	// 사용자 휴대폰번호로부터 이메일 조회
 	String getCustomerEmailByCustomerTelno(String customerTelno);
+	
+	// 회원가입(소셜 로그인)
+	void insertIntoCustomerWithSocial(CustomerSignUpWithSocial customerSignUpWithSocial);
+
+	// 이메일과 로그인 방식으로 사용자 고유번호 갖고오기
+	int findCustomerIdByCustomerEmailAndLoginMethod(@Param("customerEmail") String customerEmail, @Param("loginMethod") String loginMethod);
+
+	// 소셜 로그인 아이디 중복확인
+	Optional<CustomerSecurity> findByCustomerEmailWithSocial(@Param("customerEmail") String customerEmail, @Param("loginMethod") String loginMethod);
 
 }
