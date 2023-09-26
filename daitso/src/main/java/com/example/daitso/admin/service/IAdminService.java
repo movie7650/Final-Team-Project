@@ -111,4 +111,8 @@ public interface IAdminService {
 	
 	//쿠폰
 	int selectCountCoupons();
+	
+	// 
+	void deleteCoupon(int couponId);
+
 }

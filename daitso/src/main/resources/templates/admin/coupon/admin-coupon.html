@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
-<link rel="stylesheet" th:href="@{/css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-coupon.css}">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+ <!-- jQuery 및 jQuery UI 스타일시트 및 스크립트 포함 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
@@ -43,13 +45,14 @@
 						<td>
 							<div class="btn-group">
 								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
-									type="button">삭제</button>
+									type="button" th:onclick="deleteCoupon([[${couponCheck.couponId}]])">삭제</button>
 							</div>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+	
 		
 		<!-- 페이지 링크 표시 -->
 		<div th:if="${totalCount > 0}">
@@ -81,6 +84,44 @@
 				</li>
 			</ul>
 		</div>	  
+		
+		
+		<div id="registerModal" class="modal fade" tabindex="-1" role="dialog" style="overflow-y: auto;">
+		<div class="modal-dialog" role="document" style="max-width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">쿠폰 등록</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+					</button>
+				</div>
+				<!-- 테스트 -->
+				<form th:action method="post">
+					<div class="modal-body">
+						
+						 <div class="row mb-3">
+							    <label for="couponStartDate" class="col-sm-2 col-form-label">쿠폰 발행일:</label>
+							    <input type="text" id="couponStartDate" name="couponStartDate">
+							
+							    <br>
+							
+							    <label for="couponEndDate" class="col-sm-2 col-form-label">쿠폰 만료일:</label>
+							    <input type="text" id="couponEndDate" name="couponEndDate"> 
+						</div> 
+						
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								onclick="changeData()" type="submit">저장</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
 
 	
 	
@@ -91,9 +132,33 @@
 	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script> -->
 	<script th:inline="javascript">
 
+    function deleteCoupon(couponId) {
+        if (!confirm('해당 쿠폰을 삭제하시겠습니까?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteForm" action="/admin/coupon/delete?couponId=${couponId}" method="post">
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        setTimeout(() => {
+            document.getElementById('deleteForm').submit();
+        }, 50) //대기시간
+    }  
 
+    $(function() {
+   	 $.datepicker.setDefaults($.datepicker.regional['ko']);
+       // Datepicker를 사용하여 날짜 입력란을 초기화
+       $("#couponStartDate").datepicker();
+       $("#couponEndDate").datepicker();
+   });
 	</script>
 
 </body>
