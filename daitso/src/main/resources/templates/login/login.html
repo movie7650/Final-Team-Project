@@ -63,6 +63,23 @@
 				</div>
 			</div>
 		</div>
+		<div style="text-align: center; margin-top: 50px; font-size: 15px; color: #888888; font-weight: 500;">SNS계정으로 간편 로그인/회원가입</div>
+		<div style="display: flex; justify-content: center; margin-top: 20px;">
+			<div style="display: flex; width: 500px; justify-content: center; border: 1px solid #919EAB; border-radius: 5px; padding: 17.5px 0 17.5px 0;">
+				<img th:src="@{/assets/common/logo-google.svg}" style="width: 25px; height: 25px;">
+				<div style="height: 25px; text-align: center; line-height: 25px; margin-left: 10px;">
+					<a href="/oauth2/authorization/google" style="font-size: 16px; color: black; font-weight: 600; text-decoration: none;">구글로 로그인하기</a>
+				</div>
+			</div>
+		</div>
+		<div style="display: flex; justify-content: center; margin-top: 10px;">
+			<div style="display: flex; width: 500px; justify-content: center; border: 1px solid #919EAB; border-radius: 5px; padding: 17.5px 0 17.5px 0;">
+				<img th:src="@{/assets/common/logo-naver.svg}" style="width: 25px; height: 25px;">
+				<div style="height: 25px; text-align: center; line-height: 25px; margin-left: 10px;">
+					<a href="/oauth2/authorization/naver" style="font-size: 16px; color: black; font-weight: 600; text-decoration: none;">네이버로 로그인하기</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 <script type="text/javascript" th:inline="javascript">

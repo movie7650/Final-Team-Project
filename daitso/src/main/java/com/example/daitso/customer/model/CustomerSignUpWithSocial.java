@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CustomerSignUp {
+public class CustomerSignUpWithSocial {
 	private String customerEmail;
-	private String customerPw;
 	private String customerNm;
-	private String customerTelno;
+	private String loginMethod;
+	private String customerPw;
 }
