@@ -15,6 +15,7 @@ public class LoginCheckService implements ILogincheckService{
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		int customerId = 0;
 		
+		// 소셜 로그인,내부 로그인 구분
 		if("OAuth2UserDetails".equals(principal.getClass().getSimpleName())) {
 			OAuth2UserDetails OAuth2UserDetails = (OAuth2UserDetails) principal;
 			customerId = OAuth2UserDetails.getCustomerId();
