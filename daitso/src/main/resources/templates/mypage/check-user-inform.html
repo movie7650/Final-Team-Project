@@ -7,8 +7,9 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
 <div class="check-customer-main">
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 <div class="check-customer-inform-title">회원정보확인</div>
-
+<div style="margin-right:101.5px;">
 <div class="update-table-container">
 	<table>
 		<tr>
@@ -16,8 +17,8 @@
 			<th>비밀번호</th>
 		</tr>
 		
-		<tr>
-			<td>hong@naver.com</td>
+		<tr th:each="myInformList : ${myinformlist}">
+			<td th:text="${myInformList.customerEmail}">hong@naver.com</td>
 			<td><input type="password" id="update-password-input" placeholder="비밀번호 입력"></td>
 		</tr>
 		
@@ -25,11 +26,12 @@
 
 	<div class="update-button-container">
 		<button type="submit">확인</button>
-		<button id="update-cancle-button" type="reset">취소</button>
+		<button id="update-cancle-button" th:onclick="|location.href='@{/mypage/orderlist}'|" type="reset">취소</button>
 	</div><!-- update-button-container -->
 
 
 </div><!-- update-table-container -->
+</div>
 </div><!--check-customer-main  -->
 
 

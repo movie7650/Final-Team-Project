@@ -119,4 +119,17 @@
 		 WHERE customer_telno = REGEXP_REPLACE(#{customerTelno}, '(.{3})(.+)(.{4})', '\1-\2-\3')
 		   AND status = 'Y'
     </select>
+    <!-- 
+    	기능: 내정보조회 
+    	담당자: 윤상영
+    -->
+    <select id="selectMyInform" resultType="com.example.daitso.customer.model.CheckMyInform" parameterType="int">
+    	SELECT customer_email as "customerEmail",
+               customer_pw as "customerPW",
+               customer_telno as "customerTelNo",
+               customer_nm as "customerNm"
+		  FROM customer
+         WHERE customer_id =#{customerId}
+    </select>
+    
 </mapper>

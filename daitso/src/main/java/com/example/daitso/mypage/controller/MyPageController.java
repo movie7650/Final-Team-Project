@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.daitso.customer.model.CheckMyInform;
+import com.example.daitso.customer.service.CustomerService;
+import com.example.daitso.customer.service.ICustomerService;
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
 import com.example.daitso.customercoupon.service.ICustomerCouponService;
 import com.example.daitso.inquiry.model.MyInquirySelect;
@@ -42,6 +45,8 @@ public class MyPageController {
 	ICustomerCouponService customerCouponService;
 	@Autowired
 	IInquiryService inquiryService;
+	@Autowired
+	ICustomerService customerService;
 
 	// 마이페이지-포인트 컨트롤러
 	@RequestMapping(value = "/mypoint", method = RequestMethod.GET)
@@ -488,6 +493,60 @@ public class MyPageController {
 		return "redirect:/mypage/mycoupon";
 	}
 
+	// 마이페이지-회원정보확인 컨트롤러
+	@RequestMapping("/checkuser")
+	public String checkIform(Model model) {
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails) principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			// 상단 잔여포인트
+			String point = pointService.selectTotalPoint(customerId);
+			if (point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint", point + "P");
+			// 상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount", shipCompleteCount);
+			// 상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount", shipCount01);
+			
+			List<CheckMyInform> myInformList = customerService.selectMyInform(customerId);
+			model.addAttribute("myinformlist",myInformList);
+			
+			return "mypage/check-user-inform";
+		} catch (ClassCastException e) {
+			return "redirect:/customer/login";
+		}
+	}
+	
+	// 마이페이지-회원정보수정 컨트롤러
+	@RequestMapping("/updateuser")
+	public String updateUser(Model model) {
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = (UserDetails) principal;
+			int customerId = Integer.valueOf(userDetails.getUsername());
+			// 상단 잔여포인트
+			String point = pointService.selectTotalPoint(customerId);
+			if (point == null) {
+				point = "0";
+			}
+			model.addAttribute("totalPoint", point + "P");
+			// 상단에 배송완료 갯수 출력
+			int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+			model.addAttribute("shippingCompleteCount", shipCompleteCount);
+			// 상단에 배송중갯수 출력
+			int shipCount01 = purchaseService.selectShipping(customerId);
+			model.addAttribute("shipCount", shipCount01);
+			
+			return "mypage/update-user-inform";
+		} catch (ClassCastException e) {
+			return "redirect:/customer/login";
+		}
+	}
 	// 마이페이지-배송지관리 컨트롤러
 	@RequestMapping("/myshipping")
 	public String shippingTest(Model model) {
@@ -527,42 +586,5 @@ public class MyPageController {
 
 	}
 
-	// 마이페이지-회원정보확인 컨트롤러
-	@RequestMapping("/checkuser")
-	public String checkIform(Model model) {
-		try {
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails) principal;
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			// 상단 잔여포인트
-			String point = pointService.selectTotalPoint(customerId);
-			if (point == null) {
-				point = "0";
-			}
-			model.addAttribute("totalPoint", point + "P");
-			return "mypage/check-user-inform";
-		} catch (ClassCastException e) {
-			return "redirect:/customer/login";
-		}
-	}
-
-	// 마이페이지-회원정보수정 컨트롤러
-	@RequestMapping("/updateuser")
-	public String updateUser(Model model) {
-		try {
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails) principal;
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			// 상단 잔여포인트
-			String point = pointService.selectTotalPoint(customerId);
-			if (point == null) {
-				point = "0";
-			}
-			model.addAttribute("totalPoint", point + "P");
-			return "mypage/update-user-inform";
-		} catch (ClassCastException e) {
-			return "redirect:/customer/login";
-		}
-	}
 
 }
