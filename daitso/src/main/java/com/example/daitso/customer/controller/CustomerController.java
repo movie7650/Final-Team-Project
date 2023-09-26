@@ -1,8 +1,5 @@
 package com.example.daitso.customer.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -10,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,17 +25,16 @@ import com.example.daitso.customer.model.CustomerLogin;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
 import com.example.daitso.customer.service.ICustomerService;
+import com.example.daitso.oauth.model.OAuth2UserDetails;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import jakarta.activation.DataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
 
@@ -131,12 +128,18 @@ public class CustomerController {
 	
 	// 스프링 시큐리티에서 사용자 정보(사용자 고유번호) 받아오기
 	@GetMapping("/customer-id")
-	public @ResponseBody String getCustomerId(@AuthenticationPrincipal UserDetails customerInfo) throws Exception{
-		if (customerInfo == null) {
-			return "-1";
-		} else {
-			return customerInfo.getUsername();
-		}
+	public @ResponseBody String getCustomerId(){
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if("OAuth2UserDetails".equals(principal.getClass().getSimpleName())) {
+			OAuth2UserDetails oAuth2UserDetails = (OAuth2UserDetails) principal;
+			return String.valueOf(oAuth2UserDetails.getCustomerId());
+		} else if("User".equals(principal.getClass().getSimpleName())) {
+			UserDetails userDetails = (UserDetails) principal;
+			return userDetails.getUsername();
+		} 
+		
+		return "-1";
 	}
 	
 	// 사용자 고유번호로부터 사용자 이름 갖고오기

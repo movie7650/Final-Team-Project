@@ -11,6 +11,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.example.daitso.cart.model.CartCoupon;
 import com.example.daitso.cart.model.CartUpdate;
 import com.example.daitso.cart.model.Tomorrow;
 import com.example.daitso.cart.service.ICartService;
+import com.example.daitso.check.ILogincheckService;
+import com.example.daitso.oauth.model.OAuth2UserDetails;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,51 +44,53 @@ public class CartController {
 	@Autowired
 	ICartService cartService;
 	
+	@Autowired
+	ILogincheckService logincheckService;
+	
 	// 장바구니 조회
 	@GetMapping("")
 	public String getCart(Model model, RedirectAttributes redirectAttributes, String purchaseClassification) {
-		try {
-			// spring security -> 사용자 고유번호 받아오기
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails) principal;
-			
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			model.addAttribute("customerId",customerId);
-
-			// 장바구니 클릭 혹은 장바구니 담기 눌렀을 경우
-			if("cart".equals(purchaseClassification) || purchaseClassification == null) {
-				
-				// 장바구니 조회
-				List<CartCheck> cartList = cartService.getCartByCustomerId(customerId);
-				model.addAttribute("cartList", cartList);
-				
-				// 장바구니에 담긴 총 물건 개수 조회
-				int cartTotalCount = cartService.getCartCountByCustomerId(customerId);
-				model.addAttribute("cartTotalCount", cartTotalCount);
-				
-				model.addAttribute("purchaseClassification", purchaseClassification);
-				
-			} else { // 바로 구매하기 눌렀을 경우
-				
-				// 장바구니 조회
-				List<CartCheck> cartList = cartService.getCartByCartIdDirectPurchase(customerId);
-				model.addAttribute("cartList", cartList);
-				
-				// 장바구니에 담긴 총 물건 개수 조회
-				model.addAttribute("cartTotalCount", 1);
-				
-				model.addAttribute("purchaseClassification", purchaseClassification);
-			}
-			
-			// 내일 날짜 구하기
-			Tomorrow tomorrow = getTomorrowMonthAndDay();
-			model.addAttribute("tomorrow", tomorrow);
-			
-			return "cart/cart";
-		} catch (ClassCastException e) {
+		
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
+		
+		if(customerId == 0) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
+		
+		model.addAttribute("customerId",customerId);
+		
+		// 장바구니 클릭 혹은 장바구니 담기 눌렀을 경우
+		if("cart".equals(purchaseClassification) || purchaseClassification == null) {
+			
+			// 장바구니 조회
+			List<CartCheck> cartList = cartService.getCartByCustomerId(customerId);
+			model.addAttribute("cartList", cartList);
+			
+			// 장바구니에 담긴 총 물건 개수 조회
+			int cartTotalCount = cartService.getCartCountByCustomerId(customerId);
+			model.addAttribute("cartTotalCount", cartTotalCount);
+			
+			model.addAttribute("purchaseClassification", purchaseClassification);
+			
+		} else { // 바로 구매하기 눌렀을 경우
+			
+			// 장바구니 조회
+			List<CartCheck> cartList = cartService.getCartByCartIdDirectPurchase(customerId);
+			model.addAttribute("cartList", cartList);
+			
+			// 장바구니에 담긴 총 물건 개수 조회
+			model.addAttribute("cartTotalCount", 1);
+			
+			model.addAttribute("purchaseClassification", purchaseClassification);
+		}
+		
+		// 내일 날짜 구하기
+		Tomorrow tomorrow = getTomorrowMonthAndDay();
+		model.addAttribute("tomorrow", tomorrow);
+		
+		return "cart/cart";
 	}
 	
 	// 장바구니 수정(개수,총가격)
@@ -186,10 +191,8 @@ public class CartController {
 	@PostMapping("/insert")
 	public String insertCart(Model model, RedirectAttributes redirectAttributes, int productId, int productCnt, String selector) {
 		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails userDetails = (UserDetails)principal;
-
-		int customerId = Integer.parseInt(userDetails.getUsername());
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
 		
 		String purchaseClassification = "";
 			
@@ -205,10 +208,8 @@ public class CartController {
 	@PostMapping("/insert-in-to")
 	public @ResponseBody String insertCart(@RequestBody String data) {
 		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails userDetails = (UserDetails)principal;
-			
-		int customerId = Integer.parseInt(userDetails.getUsername());
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
 		
 		JsonElement element = JsonParser.parseString(data);
 		
