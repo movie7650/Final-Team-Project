@@ -49,8 +49,21 @@
 		기능: 쿠폰번호 중복입력 방지 - 입력된 번호와 같은번호 카운트 
 		담당자: 윤상영
 	-->
-	
-	
+	<select id="countExistCouponSn" resultType="int" parameterType="String">
+		SELECT count(customer_coupon_id) as "existCouponSn"
+		  FROM customer_coupon
+		 WHERE customer_id= cast(#{customerId} as number(8)) 
+		   AND coupon_id = (select coupon_id from coupon where coupon_sn=#{allCouponNum})
+	</select>
+	<!-- 
+		기능: 존재하는 쿠폰의 쿠폰ID 카운트 
+		담당자: 윤상영
+	-->
+	<select id="countExistCouponId" resultType="int" parameterType="string">
+		SELECT count( c.coupon_id) as "couponId"
+		  FROM coupon c , customer_coupon cus
+		 WHERE c.coupon_sn = #{allCouponNum}
+	</select>
 	
 	
 	<!-- 

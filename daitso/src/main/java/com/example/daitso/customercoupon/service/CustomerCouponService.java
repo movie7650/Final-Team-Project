@@ -46,4 +46,14 @@ public class CustomerCouponService implements ICustomerCouponService {
 	public List<CartCouponApply> getCouponsByCustomerId(int categoryId, int customerId) {
 		return customerCouponRepository.getCouponsByCustomerId(categoryId, customerId);
 	}
+	//존재하는 쿠폰 카운트
+	@Override
+	public int countExistCouponSn(String customerId, String allCouponNum) {
+		return customerCouponRepository.countExistCouponSn(customerId,allCouponNum);
+	}
+
+	@Override
+	public int countExistCouponId(String allCouponNum) {
+		return customerCouponRepository.countExistCouponId(allCouponNum);
+	}
 }

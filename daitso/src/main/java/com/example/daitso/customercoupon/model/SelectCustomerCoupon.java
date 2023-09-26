@@ -20,5 +20,6 @@ public class SelectCustomerCoupon {
 	private Date couponEprDt;
 	private String couponUseDv;
 	private String allCouponNum;
+	private int existCounponSn;
 
 }
