@@ -1,5 +1,6 @@
 package com.example.daitso.customer.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.daitso.customer.model.CheckMyInform;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
@@ -73,5 +75,16 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public String getCustomerEmailByCustomerTelno(String customerTelno) {
 		return customerRepository.getCustomerEmailByCustomerTelno(customerTelno);
+	}
+	
+	//내 정보 조회
+	@Override
+	public List<CheckMyInform> selectMyInform(int customerId) {
+		return customerRepository.selectMyInform(customerId);
+	}
+
+	@Override
+	public String selectMyPassword(int customerId) {
+		return customerRepository.selectMyPassword(customerId);
 	}	
 }

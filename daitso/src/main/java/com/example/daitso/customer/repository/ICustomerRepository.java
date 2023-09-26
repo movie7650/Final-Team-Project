@@ -1,11 +1,13 @@
 package com.example.daitso.customer.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.daitso.customer.model.CheckMyInform;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSecurity;
@@ -43,6 +45,13 @@ public interface ICustomerRepository {
 	// 사용자 휴대폰번호로부터 이메일 조회
 	String getCustomerEmailByCustomerTelno(String customerTelno);
 	
+
+	//내정보조회 
+	List<CheckMyInform> selectMyInform(int customerId);
+	
+	//내비밀번호 가져오기
+	String selectMyPassword(int customerId);
+
 	// 회원가입(소셜 로그인)
 	void insertIntoCustomerWithSocial(CustomerSignUpWithSocial customerSignUpWithSocial);
 
@@ -51,5 +60,6 @@ public interface ICustomerRepository {
 
 	// 소셜 로그인 아이디 중복확인
 	Optional<CustomerSecurity> findByCustomerEmailWithSocial(@Param("customerEmail") String customerEmail, @Param("loginMethod") String loginMethod);
+
 
 }

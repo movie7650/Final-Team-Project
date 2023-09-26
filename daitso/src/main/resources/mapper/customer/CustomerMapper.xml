@@ -174,4 +174,19 @@
 		   AND login_method = #{loginMethod}
 		   AND status = 'Y'
     </select>
+    <!-- 
+    	기능: 내정보조회 
+    	담당자: 윤상영
+    -->
+    <select id="selectMyInform" resultType="com.example.daitso.customer.model.CheckMyInform" parameterType="int">
+    	SELECT customer_email as "customerEmail",
+               customer_pw as "customerPW",
+               customer_telno as "customerTelNo",
+               customer_nm as "customerNm"
+		  FROM customer
+         WHERE customer_id =#{customerId}
+    </select>
+    
+    
+    
 </mapper>
