@@ -48,6 +48,9 @@ public interface ICustomerRepository {
 
 	//내정보조회 
 	List<CheckMyInform> selectMyInform(int customerId);
+	
+	//내비밀번호 가져오기
+	String selectMyPassword(int customerId);
 
 	// 회원가입(소셜 로그인)
 	void insertIntoCustomerWithSocial(CustomerSignUpWithSocial customerSignUpWithSocial);

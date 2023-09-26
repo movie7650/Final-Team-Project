@@ -361,11 +361,11 @@ public class MyPageController {
 	}
 
 	// 마이페이지-내문의관리-내문의조회
-	@RequestMapping(value="/myinquiry")
+	@RequestMapping(value = "/myinquiry")
 	public String myInquiry(Model model) {
-		
+
 		try {
-			//로그인
+			// 로그인
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			UserDetails userDetails = (UserDetails) principal;
 			int customerId = Integer.valueOf(userDetails.getUsername());
@@ -381,16 +381,16 @@ public class MyPageController {
 			// 상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount", shipCount01);
-			
-			//내 문의내역 조회
+
+			// 내 문의내역 조회
 			List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
-			model.addAttribute("myinquirylist",myInquiryList);
-			
-			//내 문의 status='Y'인것 조회
+			model.addAttribute("myinquirylist", myInquiryList);
+
+			// 내 문의 status='Y'인것 조회
 			int inquiryStatusY = inquiryService.countInquiryStatusY(customerId);
-			model.addAttribute("myInquiryStatusY",inquiryStatusY);
-			
-			//내 문의 내용 select
+			model.addAttribute("myInquiryStatusY", inquiryStatusY);
+
+			// 내 문의 내용 select
 //			String myinquiryContent = inquiryService.selectInquiryContent(inquiryId);
 //			model.addAttribute("myinquirycontent",myinquiryContent);
 			return "mypage/mypage-inquiry";
@@ -399,9 +399,11 @@ public class MyPageController {
 		}
 
 	}
-	//마이페이지-내문의 삭제
-	@RequestMapping(value="/myinquiry/{inquiryId}",method=RequestMethod.POST)
-	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId, @RequestParam int productId, @PathVariable int inquiryId) {
+
+	// 마이페이지-내문의 삭제
+	@RequestMapping(value = "/myinquiry/{inquiryId}", method = RequestMethod.POST)
+	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId,
+			@RequestParam int productId, @PathVariable int inquiryId) {
 		inquiryService.deleteMyInquiry(myInquirySelect);
 		return "redirect:/mypage/myinquiry";
 	}
@@ -426,11 +428,11 @@ public class MyPageController {
 			model.addAttribute("shipCount", shipCount01);
 			model.addAttribute("totalPoint", point + "P");
 			// 사용가능한 쿠폰리스트 출력
-			List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon(customerId);
+			List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService
+					.selectUsableCoupon(customerId);
 			model.addAttribute("selectCustomerCouponList", selectUsableCustomerCouponList);
-			
+
 			return "mypage/insert-coupon";
-			
 
 		} catch (ClassCastException e) {
 			return "redirect:/customer/login";
@@ -465,31 +467,33 @@ public class MyPageController {
 		}
 
 	}
-	//사용자 쿠폰등록하기 
-	@RequestMapping(value="/mycoupon", method = RequestMethod.POST)
-	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2, @RequestParam String couponNum3, @RequestParam String couponNum4) {
-		
-		//로그인
+
+	// 사용자 쿠폰등록하기
+	@RequestMapping(value = "/mycoupon", method = RequestMethod.POST)
+	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2,
+			@RequestParam String couponNum3, @RequestParam String couponNum4) {
+
+		// 로그인
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails) principal;
-		int customerId = Integer.valueOf(userDetails.getUsername());  
-		
-		//입력받은 4개의 쿠폰번호 합치기
+		int customerId = Integer.valueOf(userDetails.getUsername());
+
+		// 입력받은 4개의 쿠폰번호 합치기
 		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
-		
-		//입력받은 쿠폰번호와 같은 쿠폰번호를 가진 쿠폰 갯수 카운트
-		int existCouponSn = customerCouponService.countExistCouponSn(String.valueOf(customerId),allCouponNum);
-		
-		//입력받는 쿠폰번호와 일치하는 쿠폰의 쿠폰ID 카운트
+
+		// 입력받은 쿠폰번호와 같은 쿠폰번호를 가진 쿠폰 갯수 카운트
+		int existCouponSn = customerCouponService.countExistCouponSn(String.valueOf(customerId), allCouponNum);
+
+		// 입력받는 쿠폰번호와 일치하는 쿠폰의 쿠폰ID 카운트
 		int countCouponId = customerCouponService.countExistCouponId(allCouponNum);
-		
-		//같은 번호의 쿠폰이 없으면 insert
-		if(existCouponSn == 0 && countCouponId !=0) {
+
+		// 같은 번호의 쿠폰이 없으면 insert
+		if (existCouponSn == 0 && countCouponId != 0) {
 			customerCouponService.insertCustomerCoupon(String.valueOf(customerId), allCouponNum);
-		}else{
-			return "redirect:/mypage/mycoupon"; 
+		} else {
+			return "redirect:/mypage/mycoupon";
 		}
-		
+
 		return "redirect:/mypage/mycoupon";
 	}
 
@@ -512,16 +516,30 @@ public class MyPageController {
 			// 상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount", shipCount01);
-			
+
 			List<CheckMyInform> myInformList = customerService.selectMyInform(customerId);
-			model.addAttribute("myinformlist",myInformList);
-			
+			model.addAttribute("myinformlist", myInformList);
+
 			return "mypage/check-user-inform";
 		} catch (ClassCastException e) {
 			return "redirect:/customer/login";
 		}
 	}
-	
+
+	// 마이페이지-개인정보조회- 비밀번호일치 확인
+	@RequestMapping(value = "checkuser", method = RequestMethod.POST)
+	public String checkMyPassword(Model model, @RequestParam String mypassword) {
+
+		// 비밀번호 일치 확인
+		
+		  if(pwEncoder.matches(mypassword, vo.getMemberPassword())){ 
+			  //복호화한 값과 입력받은 값이일치할 때 
+		  }
+		 
+
+		return "/mypage/checkuser";
+	}
+
 	// 마이페이지-회원정보수정 컨트롤러
 	@RequestMapping("/updateuser")
 	public String updateUser(Model model) {
@@ -541,12 +559,13 @@ public class MyPageController {
 			// 상단에 배송중갯수 출력
 			int shipCount01 = purchaseService.selectShipping(customerId);
 			model.addAttribute("shipCount", shipCount01);
-			
+
 			return "mypage/update-user-inform";
 		} catch (ClassCastException e) {
 			return "redirect:/customer/login";
 		}
 	}
+
 	// 마이페이지-배송지관리 컨트롤러
 	@RequestMapping("/myshipping")
 	public String shippingTest(Model model) {
@@ -585,6 +604,5 @@ public class MyPageController {
 		}
 
 	}
-
 
 }

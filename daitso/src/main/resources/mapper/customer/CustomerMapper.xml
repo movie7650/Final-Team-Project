@@ -187,4 +187,6 @@
          WHERE customer_id =#{customerId}
     </select>
     
+    
+    
 </mapper>

@@ -81,5 +81,10 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public List<CheckMyInform> selectMyInform(int customerId) {
 		return customerRepository.selectMyInform(customerId);
+	}
+
+	@Override
+	public String selectMyPassword(int customerId) {
+		return customerRepository.selectMyPassword(customerId);
 	}	
 }
