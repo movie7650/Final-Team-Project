@@ -6,12 +6,15 @@
 <select id="selectAllCoupons" resultType="com.example.daitso.coupon.model.CouponCheck">
 SELECT *
   FROM ( SELECT coupon_id                                   AS "couponId",
-                coupon_sn 					    			AS "couponSn",
+                SUBSTR(coupon_sn, 1, 4) || '-' || 
+   				SUBSTR(coupon_sn, 5, 4) || '-' || 
+    			SUBSTR(coupon_sn, 9, 4) || '-' || 
+    			SUBSTR(coupon_sn, 13, 4)    				AS "couponSn",
                 category_id                                 AS "categoryId",
                 coupon_nm 								    AS "couponNm",
                 coupon_dscnt_rate 							AS "couponDscntRate",
-                TO_CHAR(coupon_pbl_dt) 						AS "couponPblDt",
-                TO_CHAR(coupon_epr_dt) 						AS "couponEprDt",
+                TO_CHAR(coupon_pbl_dt, 'YYYY-MM-DD')        AS "couponPblDt",
+                TO_CHAR(coupon_epr_dt, 'YYYY-MM-DD')     	AS "couponEprDt",
                 status                                      AS "status",
                 ROW_NUMBER() OVER (ORDER BY coupon_id) 		AS "rn"
            FROM coupon
@@ -53,4 +56,19 @@ SELECT *
 					    )
 	</select>
 	
+	
+	
+	<!-- 
+    	기능: 
+    	담당자: 이세인
+     --> 
+	<delete id="deleteCoupon" parameterType="int">
+	    UPDATE coupon
+	       SET status    = 'N',
+	       	   modifier  = 'admin',
+               modify_dt = systimestamp
+	     WHERE coupon_id = #{couponId}
+	</delete>
+	
+
 </mapper>
