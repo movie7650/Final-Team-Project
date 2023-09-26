@@ -31,5 +31,11 @@ public interface ICustomerCouponRepository {
 	
 	// 구매 성공시 사용했던 쿠폰 coupon_use_dv 상태바꾸기
 	void updateCustomerCouponStatusPurchaseSuccess(@Param("customerId") int customerId,@Param("customerCouponId") int customerCouponId);
+	
+	//존재하는 쿠폰 카운트 
+	int countExistCouponSn(@Param("customerId") String customerId, @Param("allCouponNum") String allCouponNum);
+	
+	//존재하는 쿠폰의 ID 카운트
+	int countExistCouponId(@Param("allCouponNum") String allCouponNum);
 
 }
