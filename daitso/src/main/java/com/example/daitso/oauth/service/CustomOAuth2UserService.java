@@ -22,7 +22,6 @@ import com.example.daitso.oauth.model.OAuth2UserDetails;
 import com.example.daitso.oauth.model.OAuthAttributes;
 
 @Service
-@Transactional
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
 
 	@Autowired

@@ -23,7 +23,7 @@ public class LoginCheckService implements ILogincheckService{
 			UserDetails userDetails = (UserDetails) principal;
 			customerId = Integer.valueOf(userDetails.getUsername());
 		} else {
-			return 0;
+			return -1;
 		}
 		return customerId;
 	}

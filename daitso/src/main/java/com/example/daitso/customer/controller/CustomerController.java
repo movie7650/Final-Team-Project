@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.customer.model.CustomerEmail;
 import com.example.daitso.customer.model.CustomerLogin;
 import com.example.daitso.customer.model.CustomerName;
@@ -44,7 +45,10 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 public class CustomerController {
 	
 	@Autowired
-	ICustomerService customerService;	
+	ICustomerService customerService;
+	
+	@Autowired
+	ILogincheckService logincheckService;
 	
 	@Autowired
 	JavaMailSender javaMailSender;
@@ -119,27 +123,18 @@ public class CustomerController {
 		return resultNum;
 	}
 	
-	// 스프링 시큐리티 테스트
-	@GetMapping("/test")
-	public String test(Model model, @AuthenticationPrincipal UserDetails customerInfo) throws Exception{
-		model.addAttribute("customerInfo",customerInfo);
-		return "main";
-	}
-	
 	// 스프링 시큐리티에서 사용자 정보(사용자 고유번호) 받아오기
 	@GetMapping("/customer-id")
 	public @ResponseBody String getCustomerId(){
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		if("OAuth2UserDetails".equals(principal.getClass().getSimpleName())) {
-			OAuth2UserDetails oAuth2UserDetails = (OAuth2UserDetails) principal;
-			return String.valueOf(oAuth2UserDetails.getCustomerId());
-		} else if("User".equals(principal.getClass().getSimpleName())) {
-			UserDetails userDetails = (UserDetails) principal;
-			return userDetails.getUsername();
-		} 
+		// spring security -> 사용자 고유번호 받아오기
+		String customerId = String.valueOf(logincheckService.loginCheck());
 		
-		return "-1";
+		if("-1".equals(customerId)) {
+			return "-1";
+		}
+		
+		return customerId;
 	}
 	
 	// 사용자 고유번호로부터 사용자 이름 갖고오기
