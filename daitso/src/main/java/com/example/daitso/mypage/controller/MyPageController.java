@@ -462,17 +462,28 @@ public class MyPageController {
 	}
 	//사용자 쿠폰등록하기 
 	@RequestMapping(value="/mycoupon", method = RequestMethod.POST)
-	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2, @RequestParam String couponNum3, @RequestParam String couponNum4 ) {
+	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2, @RequestParam String couponNum3, @RequestParam String couponNum4) {
 		
 		//로그인
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = (UserDetails) principal;
-		
-		//입력받은 4개의 쿠폰번호 합친다음 insert하기
 		int customerId = Integer.valueOf(userDetails.getUsername());  
-		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
-		 customerCouponService.insertCustomerCoupon(String.valueOf(customerId), allCouponNum);
 		
+		//입력받은 4개의 쿠폰번호 합치기
+		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
+		
+		//입력받은 쿠폰번호와 같은 쿠폰번호를 가진 쿠폰 갯수 카운트
+		int existCouponSn = customerCouponService.countExistCouponSn(String.valueOf(customerId),allCouponNum);
+		
+		//입력받는 쿠폰번호와 일치하는 쿠폰의 쿠폰ID 카운트
+		int countCouponId = customerCouponService.countExistCouponId(allCouponNum);
+		
+		//같은 번호의 쿠폰이 없으면 insert
+		if(existCouponSn == 0 && countCouponId !=0) {
+			customerCouponService.insertCustomerCoupon(String.valueOf(customerId), allCouponNum);
+		}else{
+			return "redirect:/mypage/mycoupon"; 
+		}
 		
 		return "redirect:/mypage/mycoupon";
 	}

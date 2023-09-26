@@ -16,10 +16,10 @@
 		
 		<div class="coupon-number-input-container">
 		<form th:action="@{/mypage/mycoupon}" method="post">
-			<input autocomplete=off name="couponNum1" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input autocomplete=off name="couponNum2" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input autocomplete=off name="couponNum3" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input autocomplete=off name="couponNum4" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum1" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required eautocomplete=off name="couponNum2" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum3" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum4" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
 			<button type="submit">등록하기</button>
 		</form>
 		</div><!-- coupon-number-input-container -->

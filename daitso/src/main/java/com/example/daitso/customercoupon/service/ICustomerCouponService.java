@@ -2,6 +2,8 @@ package com.example.daitso.customercoupon.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
 import com.example.daitso.cart.model.CartCouponApply;
 
@@ -18,5 +20,11 @@ public interface ICustomerCouponService {
 	
 	// 적용가능한 쿠폰 조회
 	List<CartCouponApply> getCouponsByCustomerId(int categoryId, int customerId);
+	
+	//존재하는 쿠폰 카운트 
+	int countExistCouponSn(@Param("customerId") String customerId, @Param("allCouponNum") String allCouponNum);
+	
+	//존재하는 쿠폰의 ID 카운트
+	int countExistCouponId(@Param("allCouponNum") String allCouponNum);
 	
 }
