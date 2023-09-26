@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.config.CommonCode;
+import com.example.daitso.coupon.model.CouponCheck;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.purchase.model.PurchaseList;
@@ -102,4 +103,12 @@ public interface IAdminService {
     
  	// 공통코드 삭제하기
  	void deleteCommonCode(int commonCodeId);
+ 	
+ 	void registerCommonCodes(CommonCode commonCode);
+ 	
+	//쿠폰
+	List<CouponCheck> selectAllCoupons(@Param("offset") int offset, @Param("pageSize") int pageSize);
+	
+	//쿠폰
+	int selectCountCoupons();
 }

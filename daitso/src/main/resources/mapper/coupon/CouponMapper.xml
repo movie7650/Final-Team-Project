@@ -1,3 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.coupon.CouponMapper"></mapper>
+<mapper namespace="com.example.daitso.coupon.repository.ICouponRepository">
+
+
+<select id="selectAllCoupons" resultType="com.example.daitso.coupon.model.CouponCheck">
+SELECT *
+  FROM ( SELECT coupon_id                                   AS "couponId",
+                coupon_sn 					    			AS "couponSn",
+                category_id                                 AS "categoryId",
+                coupon_nm 								    AS "couponNm",
+                coupon_dscnt_rate 							AS "couponDscntRate",
+                TO_CHAR(coupon_pbl_dt) 						AS "couponPblDt",
+                TO_CHAR(coupon_epr_dt) 						AS "couponEprDt",
+                status                                      AS "status",
+                ROW_NUMBER() OVER (ORDER BY coupon_id) 		AS "rn"
+           FROM coupon
+          WHERE status = 'Y'
+       GROUP BY coupon_id,
+                coupon_sn,
+                category_id,
+                coupon_nm,
+                coupon_dscnt_rate,
+                coupon_pbl_dt,
+                coupon_epr_dt,
+                status
+        HAVING  1 = 1
+        )WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	</select>
+	    
+
+	<select id="selectCountCoupons">
+		SELECT COUNT(*)
+				  FROM ( SELECT coupon_id                    AS "couponId",
+		                        coupon_sn 		   			 AS "couponSn",
+		                        category_id                  AS "categoryId",
+		                        coupon_nm 					 AS "couponNm",
+		                        coupon_dscnt_rate 			 AS "couponDscntRate",
+		                        coupon_pbl_dt 				 AS "couponPblDt",
+		                        coupon_epr_dt 				 AS "couponEprDt",
+		                        status                       AS "status"
+		                  FROM  coupon
+				         WHERE  status = 'Y'
+				     GROUP BY   coupon_id,
+		                        coupon_sn,
+		                        category_id,
+		                        coupon_nm,
+		                        coupon_dscnt_rate,
+		                        coupon_pbl_dt,
+		                        coupon_epr_dt,
+		                        status
+				        HAVING  1 = 1
+					    )
+	</select>
+	
+</mapper>

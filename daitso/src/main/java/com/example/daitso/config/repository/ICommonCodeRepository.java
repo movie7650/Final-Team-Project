@@ -35,4 +35,6 @@ public interface ICommonCodeRepository {
     
  	// 공통코드 삭제하기
  	void deleteCommonCode(int commonCodeId);
+ 	
+ 	void registerCommonCodes(CommonCode commonCode);
 }

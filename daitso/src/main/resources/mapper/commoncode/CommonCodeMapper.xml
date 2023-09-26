@@ -118,4 +118,17 @@
 	     WHERE common_code_id = #{commonCodeId}
 	</delete>
 	
+	
+	
+	<insert id="registerCommonCodes" parameterType="com.example.daitso.config.CommonCode" >
+		INSERT INTO common_code ( common_code_id,
+		                          common_code_nm,
+		                          sort_order,
+		                          common_code_pr) 
+		  VALUES ( #{commonCodeId},
+		           #{commonCodeNm},
+		           #{sortOrder},
+		           #{commonCodePr} ) 	
+    </insert>
+    
 </mapper>
