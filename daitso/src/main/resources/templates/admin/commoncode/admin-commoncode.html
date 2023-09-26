@@ -169,6 +169,69 @@
 		</div>
 	</div>
 	
+		
+		<div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document" style="max-width: 600px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">공통코드 등록</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    	<i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+						</button>
+					</div>
+					 <form th:action method="post">
+						<div class="modal-body">
+							
+							<div class="row m-3">
+							<input type="hidden" id="selectedCommonCodePr" name="commonCodePr">
+							<label for="commonCodePr" class="col-sm-3"	style="padding-left: 15px;">공통코드</label>
+								<div class="col-sm-3">
+									<select id="commonCodePr" name="commonCodePr" style="padding-left: 5px; padding-right: 5px;" onchange="selectCommonCodePr()">
+										<option value="">선택 안함</option>
+										<option th:each="commonCodes : ${commonCodes}"
+											th:value="${commonCodes.commonCodeId}"
+											th:text="${commonCodes.commonCodeId + ' - ' + commonCodes.commonCodeNm}"></option>
+									</select>
+								</div>					
+							</div>
+						
+							    
+							    <div class="row m-3">
+							        <label for="commonCodeNm" class="col-sm-3">공통코드명</label>
+							        <div class="col-sm-6">
+							           <input type="text" id="commonCodeNm" name="commonCodeNm" required>
+							        </div>
+							    </div>
+							
+								<div class="row m-3">
+							        <label for="commonCodeId" class="col-sm-3">공통코드ID</label>
+							        <div class="col-sm-6">
+							           <input type="text" id="commonCodeId" name="commonCodeId" required>
+							        </div>
+							    </div>
+							    
+							    <div class="row m-3">
+							        <label for="sortOrder" class="col-sm-3">분류</label>
+							        <div class="col-sm-6">
+							           <input type="text" id="sortOrder" name="sortOrder" required>
+							        </div>
+							    </div>
+						
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="background-color: #668663"
+								type="submit">저장</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	
+	
 	
 	</div>
 
@@ -178,6 +241,18 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 
+ 	function selectCommonCodePr() {
+	    var selectedCommonCodePr = $("#commonCodePr").val();
+
+	    if (selectedCommonCodePr) {
+	        $("#selectedCommonCodePr").val(selectedCommonCodePr);
+	    } 
+	} 
+ 	 // 빈 문자열
+    if ($("#selectedCommonCodePr").val() === "") {
+        $("#selectedCommonCodePr").val(1);
+    }
+ 	 
 	// 체크 박스 선택, 해제
   	function selectAll(selectAll) {
   	    const checkboxes = document.getElementsByName('commonCodeCheckbox');

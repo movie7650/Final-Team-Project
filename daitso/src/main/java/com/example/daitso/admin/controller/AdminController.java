@@ -22,6 +22,7 @@ import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.config.CommonCode;
+import com.example.daitso.coupon.model.CouponCheck;
 import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquirySelect;
@@ -466,6 +467,15 @@ public class AdminController {
         return "admin/commoncode/admin-commoncode";
   	}
   	
+ 	//테스트
+ 	@PostMapping("/common-code")
+	public String registerCommonCodes(CommonCode commonCode, Model model) {
+		adminService.registerCommonCodes(commonCode);
+		model.addAttribute("message","공통코드가 등록되었습니다.");
+		model.addAttribute("searchUrl","/admin/common-code");
+	return "admin/message";
+	}
+ 	
   	// 
  	@GetMapping("/check/{commonCodeId}")
  	@ResponseBody
@@ -510,6 +520,39 @@ public class AdminController {
  	    }
  	    return "admin/product";
  	}
+ 	
+ 	
+ // 
+   	@GetMapping("/coupon")
+   	public String selectAllCoupons(@RequestParam(name = "page", defaultValue = "1") int page,
+             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+         
+       int offset = (page - 1) * pageSize;       
+       
+
+       	List<CouponCheck> couponChecks = adminService.selectAllCoupons(offset, pageSize);
+       
+        // 페이징 정보 전달
+ 	    model.addAttribute("currentPage", page);
+ 	    model.addAttribute("pageSize", pageSize);
+
+ 	    // 총 상품 개수
+ 	    int totalCount = adminService.selectCountCoupons(); 
+ 	    
+ 	    // 총 페이지 수
+ 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+ 	    
+ 	    model.addAttribute("totalCount", totalCount);
+ 	    model.addAttribute("totalPages", totalPages);
+         model.addAttribute("couponChecks",couponChecks);
+         
+         return "admin/coupon/admin-coupon";
+   	}
+ 	
+ 	
+ 	
+ 	
+ 	
  	
  	
  	

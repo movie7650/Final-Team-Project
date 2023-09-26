@@ -136,14 +136,14 @@
 						<div class="modal-body">
 							
 							<div class="col-sm-8" style="display: flex; align-items: flex-end;">
-							<input type="hidden" id="selectsCategoryId" name="categoryId">
 							<label for="categoryId" class="col-sm-3 col-form-label"	style="padding-left: 10px;">카테고리 경로</label>
+							<input type="hidden" id="selectsCategoryId" name="categoryId">
 								<!-- 첫 번째 카테고리 -->
 								<div class="col-sm-3" style="padding-left: 0px; padding-right: 0px; text-align: center;">
 									<label for="firstCategory"></label> 
 									<select id="firstCategory"	name="firstCategory" 
 										onchange="getSecondCategoriess(this.value, 'unsyn'); updateSelectCategoryId();"
-										style="border-radius: 8px; padding-left: 5px; padding-right: 5px;">
+										style="padding-left: 5px; padding-right: 5px;">
 										<option value="">선택 안함</option>
 										<option th:each="category : ${firstCategories}"
 											th:value="${category.categoryId}"
@@ -155,7 +155,7 @@
 									<label for="secondCategorys"></label> 
 									<select	id="secondCategorys" name="secondCategorys"
 										onchange="getThirdCategoriess('unsyn'); updateSelectCategoryId();"
-										style="border-radius: 8px; padding-left: 5px; padding-right: 5px; width: 167px;">
+										style="padding-left: 5px; padding-right: 5px; width: 167px;">
 										<option value="">선택 안함</option>
 									</select>
 								</div>
@@ -164,7 +164,7 @@
 									style="text-align: center; padding-left: 0px;">
 									<label for="thirdCategorys"></label> 
 									<select	id="thirdCategorys" name="thirdCategorys" onchange="updateSelectCategoryId()"
-										style="border-radius: 8px; padding-left: 10px; padding-right: 5px;">
+										style="padding-left: 10px; padding-right: 5px;">
 										<option value="">선택 안함</option>
 									</select>
 								</div>
@@ -202,9 +202,9 @@
 					</form>
 				</div>
 			</div>
-
-
 		</div>
+		
+		
 	</div>
 
 	</div>

@@ -11,6 +11,8 @@ import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.config.CommonCode;
 import com.example.daitso.config.repository.ICommonCodeRepository;
+import com.example.daitso.coupon.model.CouponCheck;
+import com.example.daitso.coupon.repository.ICouponRepository;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.product.repository.IProductRepository;
@@ -31,6 +33,9 @@ public class AdminService implements IAdminService{
 	
 	@Autowired
 	ICommonCodeRepository commonCodeRepository;
+	
+	@Autowired
+	ICouponRepository couponRepository;
 	
 	@Autowired
 	S3Service s3Service;
@@ -242,6 +247,21 @@ public class AdminService implements IAdminService{
 	@Override
 	public void deleteCommonCode(int commonCodeId) {
 		commonCodeRepository.deleteCommonCode(commonCodeId);
+	}
+
+	@Override
+	public void registerCommonCodes(CommonCode commonCode) {
+		commonCodeRepository.registerCommonCodes(commonCode);
+	}
+
+	@Override
+	public List<CouponCheck> selectAllCoupons(int offset, int pageSize) {
+		return couponRepository.selectAllCoupons(offset, pageSize);
+	}
+
+	@Override
+	public int selectCountCoupons() {
+		return couponRepository.selectCountCoupons();
 	}
 	
 	
