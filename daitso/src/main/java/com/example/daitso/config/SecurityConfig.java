@@ -1,5 +1,6 @@
 package com.example.daitso.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +13,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.example.daitso.oauth.service.CustomOAuth2UserService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+		
+	@Autowired
+	CustomOAuth2UserService customOAuth2UserService;
 	
 	@Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -22,7 +28,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
             	.csrf((csrf) -> csrf
-            		.ignoringRequestMatchers(new AntPathRequestMatcher("/**")))
+            		.ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
             	.formLogin((formLogin) -> formLogin
                         .loginPage("/customer/login")
                         .successHandler(myAuthenticationSuccessHandler()))
@@ -30,7 +36,11 @@ public class SecurityConfig {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/customer/logout"))
                         .logoutSuccessUrl("/customer/login")
                         .invalidateHttpSession(true))
-        ;
+            	.oauth2Login((oauth2Login) -> oauth2Login
+            			.userInfoEndpoint((userInfo) -> userInfo
+            				.userService(customOAuth2UserService)
+            			)
+            		);
         return http.build();
     }
 	
