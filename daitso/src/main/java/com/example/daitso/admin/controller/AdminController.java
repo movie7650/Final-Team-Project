@@ -544,13 +544,20 @@ public class AdminController {
  	    
  	    model.addAttribute("totalCount", totalCount);
  	    model.addAttribute("totalPages", totalPages);
-         model.addAttribute("couponChecks",couponChecks);
+        model.addAttribute("couponChecks",couponChecks);
          
-         return "admin/coupon/admin-coupon";
+       return "admin/coupon/admin-coupon";
    	}
  	
  	
- 	
+ 	// 
+ 	@PostMapping("/coupon/delete")
+ 	public String deleteCoupon(@RequestParam int couponId, Model model) {
+ 		adminService.deleteCoupon(couponId);
+ 		model.addAttribute("message","쿠폰이 삭제되었습니다.");
+ 		model.addAttribute("searchUrl","/admin/coupon");
+ 		return "admin/message";
+ 	}	
  	
  	
  	

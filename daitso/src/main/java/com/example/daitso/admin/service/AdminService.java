@@ -263,6 +263,10 @@ public class AdminService implements IAdminService{
 	public int selectCountCoupons() {
 		return couponRepository.selectCountCoupons();
 	}
-	
+
+	@Override
+	public void deleteCoupon(int couponId) {
+		couponRepository.deleteCoupon(couponId);		
+	}
 	
 }

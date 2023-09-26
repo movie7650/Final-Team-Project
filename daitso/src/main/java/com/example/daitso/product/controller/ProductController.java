@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.category.sevice.ICategoryService;
+import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.inquiry.model.InquiryProduct;
 import com.example.daitso.inquiry.service.IInquiryService;
 import com.example.daitso.product.model.Product;
@@ -43,6 +45,9 @@ public class ProductController {
 	@Autowired
 	IInquiryService inquiryService;
 	
+	@Autowired
+	ILogincheckService logincheckService;
+	
 	@GetMapping("")
 	public String main() {
 		return "/main/main";
@@ -50,18 +55,17 @@ public class ProductController {
 	
 	//상품 정보 조회하기(리뷰, 문의글 포함)
 	@GetMapping("/{productId}/{groupId}")
-	public String selectProduct(@PathVariable int productId, @PathVariable int groupId, Model model) {
-		int customerId = -1;
-		try {
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails)principal;
-			
-			customerId = Integer.valueOf(userDetails.getUsername());	
-			model.addAttribute("customerId", customerId);
-		}catch(Exception e) {
-			model.addAttribute("customerId", "whoAreYou");			
-		}
+	public String selectProduct(@PathVariable int productId, @PathVariable int groupId, Model model, RedirectAttributes redirectAttributes) {
 		
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
+		
+		if(customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+	
+		model.addAttribute("customerId", customerId);
 		
 		Product product = productService.selectProduct(productId);
 		

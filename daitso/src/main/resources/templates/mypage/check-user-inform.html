@@ -11,25 +11,29 @@
 <div class="check-customer-inform-title">회원정보확인</div>
 <div style="margin-right:101.5px;">
 <div class="update-table-container">
+<form th:action="@{/mypage/checkuser}" method="post">
 	<table>
 		<tr>
 			<th>아이디(이메일)</th>
 			<th>비밀번호</th>
 		</tr>
 		
-		<tr th:each="myInformList : ${myinformlist}">
-			<td th:text="${myInformList.customerEmail}">사용자이메일</td>
-			<td><input name="mypassword" type="password" id="update-password-input" placeholder="비밀번호 입력">사용자비밀번호</td>
+		<tr th:each="myinformlist : ${myInformList}">
+			<td th:text="${myinformlist.customerEmail}">사용자이메일</td>
+			<td style="display: none;"><input type="hidden" name="customerPW" th:value="${myinformlist.customerPW}"></td>
+			<td><input name="mypassword" type="password" id="update-password-input" placeholder="비밀번호 입력"></td>
 		</tr>
 		
 	</table>
 
 	<div class="update-button-container">
+	
 		<button type="submit">확인</button>
 		<button id="update-cancle-button" th:onclick="|location.href='@{/mypage/orderlist}'|" type="reset">취소</button>
+	
 	</div><!-- update-button-container -->
 
-
+</form>
 </div><!-- update-table-container -->
 </div>
 </div><!--check-customer-main  -->

@@ -54,7 +54,7 @@ public class CartController {
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 		
-		if(customerId == 0) {
+		if(customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
@@ -210,6 +210,7 @@ public class CartController {
 		
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
+		System.out.println("제발" + customerId);
 		
 		JsonElement element = JsonParser.parseString(data);
 		

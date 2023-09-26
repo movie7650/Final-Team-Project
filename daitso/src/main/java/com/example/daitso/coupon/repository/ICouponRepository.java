@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.daitso.coupon.model.Coupon;
 import com.example.daitso.coupon.model.CouponCheck;
 
 @Repository
@@ -20,5 +19,7 @@ public interface ICouponRepository {
 	int selectCountCoupons();
 	
 	
-
+	// 
+	void deleteCoupon(int couponId);
+	
 }
