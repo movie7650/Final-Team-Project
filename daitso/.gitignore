@@ -34,3 +34,6 @@ build/
 
 ## login ##
 **/application.properties
+
+## social-login ##
+**/application-oauth.properties
