@@ -88,6 +88,7 @@
 			    method: "POST",
 			    headers: { 
 			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
 			    },
 			    body: JSON.stringify({
 			        cartId: item,
@@ -107,6 +108,7 @@
 			    method: "POST",
 			    headers: { 
 			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
 			    },
 			    body: JSON.stringify({
 			        cartId: item,

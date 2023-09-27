@@ -272,6 +272,7 @@
 		    method: "PATCH",
 		    headers: { 
 		        "Content-Type": "application/json",
+		        "X-CSRF-TOKEN": [[${_csrf.token}]]
 		    },
 		    body: JSON.stringify({
 		        cartId: cartId,
@@ -415,6 +416,7 @@
 			    method: "PATCH",
 			    headers: { 
 			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
 			    },
 			    body: JSON.stringify({
 			        checked: checked,
@@ -456,6 +458,7 @@
 				    method: "PATCH",
 				    headers: { 
 				        "Content-Type": "application/json",
+				        "X-CSRF-TOKEN": [[${_csrf.token}]]
 				    },
 				    body: JSON.stringify({
 				        itemList: cartIdList
@@ -480,6 +483,7 @@
 			    method: "PATCH",
 			    headers: { 
 			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
 			    },
 			    body: JSON.stringify({
 			        itemList: soldOutAndStopList

@@ -60,11 +60,6 @@ public class ProductController {
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 		
-		if(customerId == -1) {
-			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
-			return "redirect:/customer/login";
-		}
-	
 		model.addAttribute("customerId", customerId);
 		
 		Product product = productService.selectProduct(productId);
