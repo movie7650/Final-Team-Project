@@ -351,85 +351,84 @@
 		   WHERE  product_id = v_product_id;
 		 COMMIT;
 		    END; -->
-		    
-	DECLARE v_product_id NUMBER;
+	DECLARE v_product_id NUMBER;	    
 	BEGIN
-	   IF #{productGroupId} IS NOT NULL THEN
-	      INSERT INTO product (
-	         product_group_id,
-	         product_id,
-	         category_id,
-	         product_nm,
-	         product_content,
-	         product_image_first,
-	        <!--  product_image_second,
-	         product_image_third, -->
-	         product_price,
-	         product_stock,
-	         product_option_first,
-	         product_option_second,
-	         product_option_third
-	      )
-	      VALUES (
-	         #{productGroupId},
-	         product_seq.NEXTVAL,
-	         #{categoryId},
-	         #{productNm},
-	         #{productContent},
-	         #{productImageFirst},
-	         <!-- #{productImageSecond},
-	         #{productImageThird}, -->
-	         #{productPrice},
-	         #{productStock},
-	         #{productOptionFirst},
-	         #{productOptionSecond},
-	         #{productOptionThird}
-	      )
-	      RETURNING product_id INTO v_product_id;
-	
-	      UPDATE product
-	      SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-	      WHERE product_id = v_product_id;
-	   ELSE
-	      INSERT INTO product (
-	      product_group_id,
-	      product_id,
-	      category_id,
-	      product_nm,
-	      product_content,
-	      product_image_first,
-	     <!--  product_image_second,
-	      product_image_third, -->
-	      product_price,
-	      product_stock,
-	      product_option_first,
-	      product_option_second,
-	      product_option_third
-	   )
-	   VALUES (
-	      product_group_seq.NEXTVAL,
-	      product_seq.NEXTVAL,
-	      #{categoryId},
-	      #{productNm},
-	      #{productContent},
-	      #{productImageFirst},
-	     <!--  #{productImageSecond},
-	      #{productImageThird}, -->
-	      #{productPrice},
-	      #{productStock},
-	      #{productOptionFirst},
-	      #{productOptionSecond},
-	      #{productOptionThird}
-	   )
-	   RETURNING product_id INTO v_product_id;
-	
-	   UPDATE product
-	   SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-	   WHERE product_id = v_product_id;
-	   END IF;
-	
-	   COMMIT;
-	END;    
+    <choose>
+      <when test="productGroupId == null or productGroupId ==0">
+        INSERT INTO product (
+        product_group_id,
+        product_id,
+        category_id,
+        product_nm,
+        product_content,
+        product_image_first,
+        product_price,
+        product_stock,
+        product_option_first,
+        product_option_second,
+        product_option_third,
+        product_max_get
+      )
+      VALUES (
+        product_group_seq.NEXTVAL,
+        product_seq.NEXTVAL,
+        #{categoryId},
+        #{productNm},
+        #{productContent},
+        #{productImageFirst},
+        #{productPrice},
+        #{productStock},
+        #{productOptionFirst},
+        #{productOptionSecond},
+        #{productOptionThird},
+        #{productMaxGet}
+      )
+      RETURNING product_id INTO v_product_id;
+  
+      UPDATE product
+      SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+      WHERE product_id = v_product_id;
+      </when>
+      <otherwise>
+        INSERT INTO product (
+           product_group_id,
+           product_id,
+           category_id,
+           product_nm,
+           product_content,
+           product_image_first,
+           product_price,
+           product_stock,
+           product_option_first,
+           product_option_second,
+           product_option_third,
+           product_max_get
+        )
+        VALUES (
+           #{productGroupId},
+           product_seq.NEXTVAL,
+           #{categoryId},
+           #{productNm},
+           #{productContent},
+           #{productImageFirst},
+           #{productPrice},
+           #{productStock},
+           #{productOptionFirst},
+           #{productOptionSecond},
+           #{productOptionThird},
+           #{productMaxGet}
+        )
+        RETURNING product_id INTO v_product_id;
+    
+        UPDATE product
+        SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+        WHERE product_id = v_product_id;
+      </otherwise> 
+    </choose>
+  
+    COMMIT;
+  END;
+  
     </insert>
 
 

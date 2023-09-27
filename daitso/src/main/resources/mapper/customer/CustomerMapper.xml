@@ -12,6 +12,7 @@
 		  FROM customer
 		 WHERE customer_email = #{customerEmail} 
 		   AND status = 'Y'
+		   AND login_method = 'inside'
     </select>
     
     <!-- 
@@ -24,6 +25,7 @@
 		  FROM customer
 		 WHERE customer_telno = #{customerTelno}
 		   AND status = 'Y'
+		   AND login_method = 'inside'
     </select>
     
    	<!-- 
@@ -46,6 +48,27 @@
     </insert>
     
     <!-- 
+   		기능: 회원가입(사용자로부터 입력받은 정보들 customer 테이블에 저장) -> 소셜 로그인 시
+   		담당자: 최준원
+   	-->
+    <insert id="insertIntoCustomerWithSocial" parameterType="com.example.daitso.customer.model.CustomerSignUpWithSocial">
+        INSERT INTO customer ( customer_id, 
+        					   customer_email, 
+        					   customer_pw, 
+        					   customer_nm, 
+        					   customer_telno, 
+        					   customer_dv,
+        					   login_method )
+        	 VALUES ( customer_seq.nextval, 
+        	 		  #{customerEmail}, 
+        	 		  #{customerPw}, 
+        	 		  #{customerNm}, 
+        	 		  '010-0000-0000', 
+        	 		  101,
+        	 		  #{loginMethod} )
+    </insert>
+     
+    <!-- 
     	기능: 로그인(사용자로부터 입력받은 이메일이 customer 테이블에 있는지 조회)
         담당자: 최준원	
     -->
@@ -58,6 +81,7 @@
 		  FROM customer
 		 WHERE customer_email = #{customerEmail}
 		   AND status = 'Y'
+		   AND login_method = 'inside'
     </select>
     
     <!-- 
@@ -103,10 +127,12 @@
     	   	   modifier = ( SELECT customer_id 
     	   	   				  FROM customer 
     	   	   				 WHERE customer_email = #{email}
-    	   	   				   AND status = 'Y' ),
+    	   	   				   AND status = 'Y' 
+    	   	   				   AND login_method = 'inside'),
     	   	   modify_dt = SYSTIMESTAMP
     	 WHERE customer_email = #{email}
     	   AND status = 'Y'
+    	   AND login_method = 'inside'
     </update>
     
     <!-- 
@@ -117,6 +143,35 @@
     	SELECT customer_email
 		  FROM customer
 		 WHERE customer_telno = REGEXP_REPLACE(#{customerTelno}, '(.{3})(.+)(.{4})', '\1-\2-\3')
+		   AND status = 'Y'
+		   AND login_method = 'inside'
+    </select>
+    
+    <!-- 
+    	기능: 이메일과 로그인 방식으로 사용자 고유번호 갖고오기
+    	담당자: 최준원
+    -->
+    <select id="findCustomerIdByCustomerEmailAndLoginMethod" resultType="int">
+    	SELECT customer_id 
+    	  FROM customer
+		 WHERE customer_email = #{customerEmail} 
+		   AND login_method = #{loginMethod} 
+		   AND status = 'Y'
+    </select>
+    
+    <!-- 
+    	기능: 소셜 로그인 아이디 중복확인
+        담당자: 최준원	
+    -->
+    <select id="findByCustomerEmailWithSocial" resultType="com.example.daitso.customer.model.CustomerSecurity">
+	    SELECT customer_id as customerId, 
+	    	   customer_email as customerEmail, 
+			   customer_pw as customerPw,
+			   customer_nm as customerNm, 
+			   customer_telno as customerTelno
+		  FROM customer
+		 WHERE customer_email = #{customerEmail}
+		   AND login_method = #{loginMethod}
 		   AND status = 'Y'
     </select>
 </mapper>
