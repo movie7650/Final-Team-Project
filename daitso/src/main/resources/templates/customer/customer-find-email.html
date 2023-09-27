@@ -24,6 +24,9 @@
 						<div style="display:flex;">
 							<input id="customer-telno" type="text">
 							<div id="customer-find-email-send-btn" onclick="sendMessage()">인증번호 전송</div>
+							<div 
+								 id="customer-find-email-telno-error"
+								 style="font-size: 14px; color: red; line-height: 30px; margin-left: 10px; display:none;">휴대폰 번호를 입력해주세요.</div>
 						</div>
 						<div id="check-randdom-num" style="margin-top: 10px; display: none;">
 							<input type="text" id="customer-random-num" maxlength="6">
@@ -66,24 +69,30 @@
 	var randomNum = "";
 	
 	function sendMessage() {
-		fetch( window.location.origin + "/customer/send-message" , {
-		    method: "POST",
-		    headers: { 
-		        "Content-Type": "application/json",
-		    },
-		    body: JSON.stringify({
-		        telno: telno.value
-		    }),
-		})
-		.then((res) => {
-			return res.json();
-		})
-		.then((data) => {
-			randomNum = data;
-			sendBtn.style.display = 'none';
-			telno.disabled = 'true'
-			checkNum.style.display = 'flex';
-		});	
+		if(!telno.value) {
+			document.getElementById("customer-find-email-telno-error").style.display = 'block';
+		} else {
+			document.getElementById("customer-find-email-telno-error").style.display = 'none';
+			fetch( window.location.origin + "/customer/send-message" , {
+			    method: "POST",
+			    headers: { 
+			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
+			    },
+			    body: JSON.stringify({
+			        telno: telno.value
+			    }),
+			})
+			.then((res) => {
+				return res.json();
+			})
+			.then((data) => {
+				randomNum = data;
+				sendBtn.style.display = 'none';
+				telno.disabled = 'true'
+				checkNum.style.display = 'flex';
+			});		
+		}
 	}
 	
 	function checkRandomNum() {

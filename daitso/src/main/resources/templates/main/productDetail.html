@@ -97,6 +97,15 @@
 					<span style="margin-left: 30px; color: #dc3545; font-size: 18px; font-weight: bold;" onclick="closeCartInfo()">X</span>
 				</div>
 			</div>
+			<div
+				id= "cart-need-login" 
+				style= "width: 100%; height: 70px; display:flex; justify-content: space-around; background-color:rgba(0, 0, 0, 0.8); line-height: 70px; margin-top: 10px; border-radius: 5px; font-size: 16px; font-weight: 600; display:none;">
+				<div style="color: white;">로그인이 필요한 기능입니다.</div>
+				<div style="cursor: pointer">
+					<a th:href="@{/customer/login}" style="color: #668663; text-decoration: none;">로그인 하러 가기</a>
+					<span style="margin-left: 30px; color: #dc3545; font-size: 18px; font-weight: bold;" onclick="closeCartInfo()">X</span>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -519,51 +528,71 @@
 		}
 		else{
 			if(selector == 'cart') {
+				
 				fetch( window.location.origin + "/cart/insert-in-to" , {
 				    method: "POST",
 				    headers: { 
 				        "Content-Type": "application/json",
+				        "X-CSRF-TOKEN": [[${_csrf.token}]]
 				    },
 				    body: JSON.stringify({
 				        productId: hiddenProductId.value,
 				        productCnt: cntInput.value
 				    }),
 				})
-				.then((res) => {
-					document.getElementById("cart-info").style.display = 'flex';
+				.then(response => response.json())
+				.then((data) => {
+					if(data == "1") {
+						document.getElementById("cart-need-login").style.display = 'flex';	
+					} else {
+						console.log("haha");
+						document.getElementById("cart-info").style.display = 'flex';	
+					}
 				});
 			} else {
-				let tag = document.createElement('form');
-				
-				let objId = document.createElement('input');
-				objId.setAttribute('type', 'hidden');
-				objId.setAttribute('name', 'productId');
-				objId.setAttribute('value', hiddenProductId.value);
-				
-				let objCnt = document.createElement('input');
-				objCnt.setAttribute('type', 'hidden');
-				objCnt.setAttribute('name', 'productCnt');
-				objCnt.setAttribute('value', cntInput.value);
-				
+				if(customerId == -1) {
+					document.getElementById("cart-need-login").style.display = 'flex';	
+				} else {
+					let tag = document.createElement('form');
+					
+					let objId = document.createElement('input');
+					objId.setAttribute('type', 'hidden');
+					objId.setAttribute('name', 'productId');
+					objId.setAttribute('value', hiddenProductId.value);
+					
+					let objCnt = document.createElement('input');
+					objCnt.setAttribute('type', 'hidden');
+					objCnt.setAttribute('name', 'productCnt');
+					objCnt.setAttribute('value', cntInput.value);
+					
 
-				let objSelector = document.createElement('input');
-				objSelector.setAttribute('type','hidden');
-				objSelector.setAttribute('name', 'selector');
-				objSelector.setAttribute('value', selector);
-				
-				tag.appendChild(objId);
-				tag.appendChild(objCnt);
-				tag.appendChild(objSelector);
-				tag.setAttribute('method', 'post');
-				tag.setAttribute('action', '/cart/insert');
-				document.body.appendChild(tag);
-				tag.submit();			
+					let objSelector = document.createElement('input');
+					objSelector.setAttribute('type','hidden');
+					objSelector.setAttribute('name', 'selector');
+					objSelector.setAttribute('value', selector);
+					
+					let objCsrf = document.createElement('input');
+					objCsrf.setAttribute('type','hidden');
+					objCsrf.setAttribute('name', [[${_csrf.parameterName}]]);
+					objCsrf.setAttribute('value', [[${_csrf.token}]]);
+					
+					
+					tag.appendChild(objId);
+					tag.appendChild(objCnt);
+					tag.appendChild(objSelector);
+					tag.appendChild(objCsrf);
+					tag.setAttribute('method', 'post');
+					tag.setAttribute('action', '/cart/insert');
+					document.body.appendChild(tag);
+					tag.submit();				
+				}
 			}	
 		}
 	}
 	
 	function closeCartInfo() {
 		document.getElementById("cart-info").style.display = 'none';
+		document.getElementById("cart-need-login").style.display = 'none';
 	}
 
 	function changeReviewPage(productGroupId, page){

@@ -12,13 +12,14 @@
  <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 	<div class="write-review-title">리뷰작성하기</div>
 	<div style="margin-top:100px; padding-right:55px;">
-	<th:block th:each="myReviewPurchase : ${MyReviewPurchaseList}">
-	<form action="/mypage/writeReview" method="post">
-	<input type="hidden" name="productId" th:value="${myReviewPurchase.productId}">
-	<input type="hidden" name="customerId" th:value="${myReviewPurchase.customerId}">
-	<div class="order-list-container">
-				<div class="order-list-container-01">
-					 <div th:text="${myReviewPurchase.purchaseDt}" class="shipping-status">주문날짜</div> 					
+		<th:block th:each="myReviewPurchase : ${MyReviewPurchaseList}">
+			<form action="/mypage/writeReview" method="post">
+				<input type="hidden" name="productId" th:value="${myReviewPurchase.productId}">
+				<input type="hidden" name="customerId" th:value="${myReviewPurchase.customerId}">
+				<input type="hidden" name="purchaseNum" th:value="${myReviewPurchase.purchaseNum}">
+				<div class="order-list-container">
+					<div class="order-list-container-01">
+					<div th:text="${myReviewPurchase.purchaseDt}" class="shipping-status">주문날짜</div> 					
 					<div class="purchase-img-001">이미지</div>
 					
 					<div class="purchase-product-inform">
@@ -54,9 +55,10 @@
 				<button id="save-button" type="submit">저장하기</button>
 				<button id="cancle-button"  type="button" th:onclick="|location.href='@{/mypage/orderlist}'|">취소하기</button>
 			</div><!--write-review-button-container  -->
-	</form>
+	
+		</form>
 	</th:block>
-	</div>
+</div>
 	
 </div><!-- write-review-main -->
 
