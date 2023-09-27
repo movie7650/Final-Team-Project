@@ -70,8 +70,8 @@ public class ReviewService implements IReviewService{
 	}
 	//리뷰작성하기-내가주문한 상품 상품정보가져오기
 	@Override
-	public List<WriteMyReview> selectMyPurchase(int customerId, int productId) {
-		return reviewRepository.selectMyPurchase(customerId, productId);
+	public List<WriteMyReview> selectMyPurchase(int customerId, int productId, String purchaseNum) {
+		return reviewRepository.selectMyPurchase(customerId, productId,purchaseNum);
 	}
 
 }

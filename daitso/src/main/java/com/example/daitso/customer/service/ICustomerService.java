@@ -1,7 +1,9 @@
 package com.example.daitso.customer.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.example.daitso.customer.model.CheckMyInform;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
@@ -32,5 +34,11 @@ public interface ICustomerService {
     
 	// 사용자 휴대폰번호로부터 이메일 조회
 	String getCustomerEmailByCustomerTelno(String customerTelno);
+	
+	//내정보조회 
+	List<CheckMyInform> selectMyInform(int customerId);
+	
+	//내비밀번호 가져오기
+	String selectMyPassword(int customerId);
 
 }
