@@ -11,34 +11,8 @@
     width: -webkit-fill-available;
 }
 
-/* 기존 상품 등록 모달 input */
-#productOptionFirst, #productOptionSecond,
-	#productOptionThird, #productPrice, #productStock, #productMaxGet{
-	width: 33%;
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-#productContent {
-	width: 100%;
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-/* 기존 상품 등록 모달 그룹ID, 카테고리명, 상품명 */
-#getProductGroupId, #getCategoryNm, #getProductNm{
-	border:none;
-	font-weight: bold;
-}
 
 .modal-body input {
-	width: 80%;
 	padding: 10px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
@@ -50,14 +24,9 @@
 	background-color: tan;
 }
 
-div.col-sm-10 {
-	padding-top: 7px;
-	padding-bottom: 7px;
-}
 
 .pagination {
 	justify-content: center;
-	padding-top: 10px;
 }
 
 .pagination li a {

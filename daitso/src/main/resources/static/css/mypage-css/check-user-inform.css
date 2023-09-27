@@ -9,14 +9,14 @@
 	padding-bottom:0.5%;
 	font-size:150%;
 	margin-left:165px;
-	margin-top:-660px;
+	margin-top:10px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
 .update-table-container{
-	position:absolute;
-	margin-top:-580px;
-	margin-left:165px;
+	margin-top:100px;
+	
+
 }
 
 .update-table-container tr{
@@ -41,7 +41,7 @@
 	border-top:solid 1px #e7e7e7;
 	border-right:solid 1px #e7e7e7;
 	border-bottom:solid 1px #e7e7e7;
-	width:655px;
+	width:550px;
 	height:50px;
 	padding-top:1.5%;
 	padding-left:2%;
@@ -51,8 +51,9 @@
 	outline:none;
 }
 .update-button-container{
-	width:855px;
-	padding-left:75%;
+	width:300px;
+	float:right;
+	padding-left:80px;
 }
 .update-button-container button{
 	margin-top:5%;

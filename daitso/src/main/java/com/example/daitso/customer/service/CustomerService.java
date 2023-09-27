@@ -1,5 +1,6 @@
 package com.example.daitso.customer.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.daitso.customer.model.CheckMyInform;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSignUp;
@@ -73,5 +75,41 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public String getCustomerEmailByCustomerTelno(String customerTelno) {
 		return customerRepository.getCustomerEmailByCustomerTelno(customerTelno);
+	}
+	
+	//내 정보 조회
+	@Override
+	public List<CheckMyInform> selectMyInform(int customerId) {
+		return customerRepository.selectMyInform(customerId);
+	}
+	//내 비밀번호가져오기
+	@Override
+	public String selectMyPassword(int customerId) {
+		return customerRepository.selectMyPassword(customerId);
+	}
+	// 내 아이디(이메일) 가져오기
+	@Override
+	public String selectMyEmail(int customerId) {
+		return customerRepository.selectMyEmail(customerId);
+	}
+	//내 이름 가져오기
+	@Override
+	public String selectMyName(int customerId) {
+		return customerRepository.selectMyName(customerId);
+	}
+	//내 전화번호 가져오기
+	@Override
+	public String selectMyTelNo(int customerId) {
+		return customerRepository.selectMyTelNo(customerId);
+	}
+	//내이름 변경하기
+	@Override
+	public void updateMyName(int customerId, String newName) {
+		customerRepository.updateMyName(customerId, newName);
+	}
+
+	@Override
+	public void updateMyEmail(int customerId, String newEmail) {
+		customerRepository.updateMyEmail(customerId, newEmail);
 	}	
 }

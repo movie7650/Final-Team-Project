@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
-<link rel="stylesheet" th:href="@{/css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-category.css}">
 <link rel="stylesheet" th:href="@{/css/admin-frame2.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <body>
@@ -9,7 +9,7 @@
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 
 	<!-- 오른쪽 컨텐츠 -->
-	<div id="productTable" style="padding-top: 10px;">
+	<div id="table" style="padding-top: 10px;">
 	<div style="font-weight: 600; margin-top: 20px;">상품관리 > 카테고리 추가/수정/삭제</div>
 		<div class="row"
 			style="padding-bottom: 15px; justify-content: flex-end;">
@@ -41,7 +41,7 @@
 							<div class="btn-group">
 								<button class="btn btn-xs"
 									style="background-color: #adb5bd;; color: #ffff"
-									data-bs-toggle="modal" data-bs-target="#updateCategoryModal"
+									data-bs-toggle="modal" data-bs-target="#updateModal"
 									type="button"
 									th:onclick="selectCategoryId([[${categorylist.categoryId}]])">수정</button>
 								<button class="btn btn-xs"
@@ -81,14 +81,14 @@
 
 
 		<!-- 카테고리 수정 모달 -->
-		<div id="updateCategoryModal" class="modal fade" tabindex="-1"
+		<div id="updateModal" class="modal fade" tabindex="-1"
 			role="dialog">
 			<div class="modal-dialog" role="document" style="max-width: 800px;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">카테고리 수정</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					    	<i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+					    	<i class="fas fa-times"></i>
 						</button>
 					</div>
 					<form th:action="@{/admin/update/category}" method="post">
@@ -134,50 +134,50 @@
 					<!-- <form th:action method="post" enctype="multipart/form-data"> -->
 					 <form th:action method="post">
 						<div class="modal-body">
-							
-							<div class="col-sm-8" style="display: flex; align-items: flex-end;">
-							<label for="categoryId" class="col-sm-3 col-form-label"	style="padding-left: 10px;">카테고리 경로</label>
-							<input type="hidden" id="selectsCategoryId" name="categoryId">
-								<!-- 첫 번째 카테고리 -->
-								<div class="col-sm-3" style="padding-left: 0px; padding-right: 0px; text-align: center;">
-									<label for="firstCategory"></label> 
-									<select id="firstCategory"	name="firstCategory" 
-										onchange="getSecondCategoriess(this.value, 'unsyn'); updateSelectCategoryId();"
-										style="padding-left: 5px; padding-right: 5px;">
-										<option value="">선택 안함</option>
-										<option th:each="category : ${firstCategories}"
-											th:value="${category.categoryId}"
-											th:text="${category.categoryNm}"></option>
-									</select>
-								</div>
-								<!-- 두 번째 카테고리 -->
-								<div class="col-sm-5">
-									<label for="secondCategorys"></label> 
-									<select	id="secondCategorys" name="secondCategorys"
-										onchange="getThirdCategoriess('unsyn'); updateSelectCategoryId();"
-										style="padding-left: 5px; padding-right: 5px; width: 167px;">
-										<option value="">선택 안함</option>
-									</select>
-								</div>
-								<!-- 세 번째 카테고리 -->
-								<div class="col-sm-3"
-									style="text-align: center; padding-left: 0px;">
-									<label for="thirdCategorys"></label> 
-									<select	id="thirdCategorys" name="thirdCategorys" onchange="updateSelectCategoryId()"
-										style="padding-left: 10px; padding-right: 5px;">
-										<option value="">선택 안함</option>
-									</select>
-								</div>
+							<div style="display: flex;">
+								<label for="categoryId" class="col-sm-2 col-form-label">경로 선택</label>
+								<input type="hidden" id="selectsCategoryId" name="categoryId">
+									<div>
+									<!-- 첫 번째 카테고리 -->
+									<div>
+										<label for="firstCategory" style="padding-right: 10px; padding-left: 10px; text-align: center;">첫 번째 카테고리</label> 
+										<select id="firstCategory"	name="firstCategory" 
+											onchange="getSecondForRegister(this.value, 'unsyn'); updateSelectCategoryId();"
+											style="padding-left: 5px; padding-right: 5px;">
+											<option value="">최상위 카테고리</option>
+											<option th:each="category : ${firstCategories}"
+												th:value="${category.categoryId}"
+												th:text="${category.categoryNm}"></option>
+										</select>
+									</div>
+									<!-- 두 번째 카테고리 -->
+									<div>
+										<label for="secondCategorys"  style="padding-right: 10px; padding-left: 10px;">두 번째 카테고리</label> 
+										<select	id="secondCategorys" name="secondCategorys"
+											onchange="getThirdForRegister('unsyn'); updateSelectCategoryId();"
+											style="padding-left: 5px; padding-right: 5px; width: 167px;">
+											<option value="">선택 안함</option>
+										</select>
+									</div>
+									<!-- 세 번째 카테고리 -->
+									<div >
+										<label for="thirdCategorys"  style="padding-right: 10px; padding-left: 10px;">세 번째 카테고리</label> 
+										<select	id="thirdCategorys" name="thirdCategorys" onchange="updateSelectCategoryId()"
+											style="padding-left: 10px; padding-right: 5px;">
+											<option value="">선택 안함</option>
+										</select>
+									</div>
+									</div>
 							</div>
 							
-								<div class="row m-3">
+								<div>
 							        <label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
 							        <input type="text" id="categoryNm" name="categoryNm" placeholder="등록할 카테고리 이름을 입력하세요." required>
 							    </div>
 							
-							    <div class="row m-3">
+							    <div style="display:flex;">
 							        <label for="categoryContent" class="col-sm-2 col-form-label">상세 내용</label>
-							        <div class="col-sm-10">
+							        <div class="col-sm-10" style="padding-left: 5px;">
 							            <textarea id="categoryContent" name="categoryContent" style="height: 200px; width: 510px"></textarea>
 							        </div>
 							    </div>
@@ -192,6 +192,12 @@
 									style="margin: 0 0 10px 0; color: red; font-size: 16px; display: none;"></div>
 							</div>
 						</div> -->
+						<div style="display:flex;">
+							<label for="productImageFirst" class="col-sm-2 col-form-label">이미지</label>
+							<div class="col-sm-10">
+								<input type="file" id="categoryImage" name="categoryImage" required>
+							</div>
+						</div>
 						
 						</div>
 						<div class="modal-footer">
@@ -214,7 +220,7 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 	
-	
+	// 카테고리 등록시 선택한 카테고리 정보 갖고오기
  	function updateSelectCategoryId() {
 	    var selectedFirstCategory = $("#firstCategory").val();
 	    var selectedSecondCategory = $("#secondCategorys").val();
@@ -230,34 +236,17 @@
 	        $("#selectsCategoryId").val(0); // 모든 카테고리가 선택되지 않았을 때 0 할당
 	    }
 	} 
- 	 // 빈 문자열
-    if ($("#selectsCategoryId").val() === "") {
-        $("#selectsCategoryId").val(0);
-    }
-
-/* 	function updateSelectCategoryId() {
-		
-		var selectedFirstCategory = $("#firstCategory").val();
-	    var selectedSecondCategory = $("#secondCategorys").val();
-	    var selectedThirdCategory = $("#thirdCategorys").val();
-	    
-	    if (selectedThirdCategory) {
-	        $("#selectsCategoryId").val(selectedThirdCategory);
-	    } else if(selectedSecondCategory) {
-	        $("#selectsCategoryId").val(selectedSecondCategory);
-	    } else {
-	    	 $("#selectsCategoryId").val(selectedFirstCategory);
+	 	// 빈 문자열일 경우 값에 0 넣어주기 (최상위 카테고리로)
+	    if ($("#selectsCategoryId").val() === "") {
+	        $("#selectsCategoryId").val(0);
 	    }
-	}  */
 	
-	
-	
-	// !!!!두 번째 카테고리 불러오기
-	function getSecondCategoriess(firstCategoryId, selector) {
+	// 카테고리 등록시 두 번째 카테고리 불러오기
+	function getSecondForRegister(firstCategoryId, selector) {
 	    var secondCategorys = $("#secondCategorys");
 	    secondCategorys.empty(); // 조회하고 다시 조회하면 이전 값 붙어서 안 나오게 비워줘야함
 	    secondCategorys.append('<option value="">선택 안함</option>');
-	    getThirdCategoriess('unsyn');
+	    getThirdForRegister('unsyn');
 	    if(selector == 'unsyn'){
 		    // 첫 번째 카테고리가 "전체"로 선택된 경우 처리 종료
 		    if (firstCategoryId === "") {
@@ -278,8 +267,8 @@
 
 	const thirdCategoryNum = /*[[${selectedThirdCategoryId}]]*/ null;
 	
-	// !!!!세 번째 카테고리 불러오기
-	function getThirdCategoriess(selector) {
+	// 카테고리 등록시 세 번째 카테고리 불러오기
+	function getThirdForRegister(selector) {
 	    var thirdCategorys = $("#thirdCategorys");
 	    var secondCategoryIds = $("#secondCategorys").val(); // 두 번째 카테고리의 값을 가져옴
 	  	 if(selector == 'unsyn'){
@@ -308,7 +297,7 @@
 		}
 	}   
 	
-	
+	// 카테고리 삭제시 확인 메시지 실행해서 삭제하기
     function deleteCategory(categoryId) {
         if (!confirm('해당 카테고리를 삭제하시겠습니까?')) {
             return false;
@@ -325,9 +314,9 @@
         }, 50) //대기시간
     }  
     
-    
+    // 카테고리 수정을 위한 카테고리ID로 카테고리 정보 갖고오기
     function selectCategoryId(categoryId) {
-        fetch("/admin/update/category/" + categoryId)
+        fetch("/admin/category/update/" + categoryId)
            .then(response => response.json())
            .then(data => {
                const categorylist = data;
@@ -337,8 +326,7 @@
                document.getElementById("updateCategoryContent").value = categorylist.categoryContent;
            }); 
    }
-
-    
+   
 	</script>
 
 </body>

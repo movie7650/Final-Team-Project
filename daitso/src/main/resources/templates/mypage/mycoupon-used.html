@@ -16,10 +16,10 @@
 		
 		<div class="coupon-number-input-container">
 		<form th:action="@{/mypage/mycoupon}" method="post">
-			<input autocomplete=off name="couponNum1" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input autocomplete=off name="couponNum2" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input autocomplete=off name="couponNum3" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
-			<input autocomplete=off name="couponNum4" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum1" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum2" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum3" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
+			<input required autocomplete=off name="couponNum4" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
 			<button type="submit">등록하기</button>
 		</form>
 		</div><!-- coupon-number-input-container -->
@@ -27,13 +27,17 @@
 	</div><!-- coupon-number-container -->
 	
 	<!-- 4자리만 입력가능하게 하는 JS -->
-	<script>
+	<script th:inline="javascript">
 	function maxNum(el, maxlength) {
 		  if(el.value.length > maxlength)  {
 		    el.value 
 		      = el.value.substr(0, maxlength);
 		  }
 		}
+	const error = [[${error}]];
+	   if(error){
+		   alert(error);
+	   }	
 	</script>
 	
 	<div class="coupon-table-container">
@@ -65,10 +69,6 @@
 	</div><!-- coupon-table-container -->
 </div><!-- coupon-container -->
 </div><!-- mypage-coupon-main -->
-
-
-<div class="empty"></div>
-
 
 <div th:replace="~{/include/footer :: footer}"></div>
 

@@ -137,6 +137,7 @@
 		 WHERE  customer_id=#{customerId}
 		   AND  pur.product_id=p.product_id
 		   AND  pur.product_id=#{productId}
+		   AND  pur.purchase_num = #{purchaseNum}
 	</select>
 	<!-- 
 				기능: 리뷰 작성하기

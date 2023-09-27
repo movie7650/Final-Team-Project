@@ -36,6 +36,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 @Controller
 @RequestMapping("/cart")
@@ -54,7 +56,7 @@ public class CartController {
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 		
-		if(customerId == 0) {
+		if(customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
@@ -194,6 +196,11 @@ public class CartController {
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 		
+		if(customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+		
 		String purchaseClassification = "";
 			
 		if(selector.equals("purchase")) {
@@ -206,19 +213,24 @@ public class CartController {
 	
 	// 장바구니 추가
 	@PostMapping("/insert-in-to")
-	public @ResponseBody String insertCart(@RequestBody String data) {
-		
+	public @ResponseBody String insertCart(@RequestBody String data, RedirectAttributes redirectAttributes) {
+			
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
+		
+		if(customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "로그인 해주세요!");
+			return "1";
+		}
 		
 		JsonElement element = JsonParser.parseString(data);
 		
 		int productId = Integer.valueOf(element.getAsJsonObject().get("productId").getAsString());
 		int	productCnt = Integer.valueOf(element.getAsJsonObject().get("productCnt").getAsString());
-		
+		System.out.println("----------------------------");
 		cartService.insertCartService(productId, customerId, productCnt);
 
-		return null;
+		return "2";
 	}
 	
 	// 장바구니 쿠폰 적용화면

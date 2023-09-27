@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.example.daitso.oauth.service.CustomOAuth2UserService;
@@ -27,8 +29,11 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-            	.csrf((csrf) -> csrf
-            		.ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
+				/*
+				 * .csrf((csrf) -> csrf .ignoringRequestMatchers(new
+				 * AntPathRequestMatcher("/**")))
+				 */
+            	.csrf((csrf) -> csrf.csrfTokenRepository(sessionCsrfRepository()))
             	.formLogin((formLogin) -> formLogin
                         .loginPage("/customer/login")
                         .successHandler(myAuthenticationSuccessHandler()))
@@ -58,6 +63,21 @@ public class SecurityConfig {
 	@Bean
 	public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
 	    return new MySimpleUrlAuthenticationSuccessHandler();
+	}
+	
+	@Bean
+	HttpSessionCsrfTokenRepository sessionCsrfRepository() {
+		HttpSessionCsrfTokenRepository csrfRepository = new HttpSessionCsrfTokenRepository();
+
+		// HTTP 헤더에서 토큰을 인덱싱하는 문자열 설정
+		csrfRepository.setHeaderName("X-CSRF-TOKEN");
+		// URL 파라미터에서 토큰에 대응되는 변수 설정
+		csrfRepository.setParameterName("_csrf");
+		// 세션에서 토큰을 인덱싱 하는 문자열을 설정. 기본값이 무척 길어서 오버라이딩 하는 게 좋아요.
+		// 기본값: "org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN"
+		csrfRepository.setSessionAttributeName("CSRF_TOKEN");
+
+		return csrfRepository;
 	}
 	
 }

@@ -63,9 +63,23 @@ public class AdminService implements IAdminService{
 	//테스트//
 	@Transactional
 	public void registerProducts(ProductCheck product) {
+		 if (isDuplicateProduct(product)) {
+	            // 중복 상품이 이미 존재하므로 등록을 막음
+			 throw new RuntimeException("상품이 중복되었습니다.");
+	        }
+
 		productRepository.registerProducts(product);
 		
 	}
+	
+	// ★
+	@Override
+	public boolean isDuplicateProduct(ProductCheck product) {
+		// 중복 체크 로직 구현
+        int count = productRepository.countDuplicateProducts(product);
+        return count > 0;
+	}
+	
 	
 	// 상품 조회하기(카테고리별)
 	@Override
@@ -93,13 +107,14 @@ public class AdminService implements IAdminService{
 
 	// 상품ID로 상품 정보 갖고오기
 	@Override
-	public Product selectProductId(int productId) {
-		return productRepository.selectProductId(productId);
+	public Product selectProductById(int productId) {
+		return productRepository.selectProductById(productId);
 	}
 	
 	// 상품 수정하기
 	@Override
 	public void updateProduct(Product product) {
+		
 		productRepository.updateProduct(product);
 	}
 
@@ -115,6 +130,7 @@ public class AdminService implements IAdminService{
 		return productRepository.searchProductsByName(searchText);
 	}
 
+	
 	// 주문 내역 조회하기(배송상태별)
 	@Override
 	public List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize) {
@@ -249,20 +265,42 @@ public class AdminService implements IAdminService{
 		commonCodeRepository.deleteCommonCode(commonCodeId);
 	}
 
+	
+	
 	@Override
 	public void registerCommonCodes(CommonCode commonCode) {
 		commonCodeRepository.registerCommonCodes(commonCode);
 	}
 
+	
+	// 전체 쿠폰 조회하기
 	@Override
 	public List<CouponCheck> selectAllCoupons(int offset, int pageSize) {
 		return couponRepository.selectAllCoupons(offset, pageSize);
 	}
 
+	// 전체 쿠폰 개수 조회하기
 	@Override
 	public int selectCountCoupons() {
 		return couponRepository.selectCountCoupons();
 	}
-	
+
+	// 쿠폰 삭제하기
+	@Override
+	public void deleteCoupon(int couponId) {
+		couponRepository.deleteCoupon(couponId);		
+	}
+
+	// 쿠폰 등록하기
+	@Override
+	public void registerCoupons(CouponCheck couponCheck) {
+		couponRepository.registerCoupons(couponCheck);		
+	}
+
+	//쿠폰 일련번호 중복 확인하기 (해당 쿠폰 일련번호가 데이터베이스에 이미 존재하는지 확인하고, 중복되지 않으면 true를 반환하고 중복된 경우 false를 반환)
+	public boolean isCouponSnUnique(String couponSn) {
+        int count = couponRepository.countByCouponSn(couponSn);
+        return count == 0; // 0이면 중복되지 않음, 1 이상이면 중복됨
+    }
 	
 }

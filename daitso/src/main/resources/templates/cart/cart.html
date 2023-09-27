@@ -193,7 +193,7 @@
 						</div>
 						<div th:if="${!cartList.isEmpty()}" class="cart-btn">
 							<div class="cart-shop">
-								<a th:href="@{/customer/test}"
+								<a th:href="@{/}"
 									style="text-decoration: none; color: #39594E;">계속 쇼핑하기</a>
 							</div>
 							<div class="cart-purchase">
@@ -210,7 +210,7 @@
 								<div>각 상품에서 구매할 옵션을 선택하시고, <span style="color:#256B04; margin: 0 5px 0 5px; font-weight: 600">구매하기</span> 버튼을 눌러 보세요!</div>
 								<div>선택한 옵션을 모두 장바구니에 담을 수 있습니다.</div>
 								<div>	
-									<div class="cart-no-product-btn"><a th:href="@{/customer/test}" style="color: white; font-size: 19px; text-decoration: none">계속 쇼핑하기</a></div>
+									<div class="cart-no-product-btn"><a th:href="@{/}" style="color: white; font-size: 19px; text-decoration: none">계속 쇼핑하기</a></div>
 								</div>
 							</div>
 						</div>
@@ -272,6 +272,7 @@
 		    method: "PATCH",
 		    headers: { 
 		        "Content-Type": "application/json",
+		        "X-CSRF-TOKEN": [[${_csrf.token}]]
 		    },
 		    body: JSON.stringify({
 		        cartId: cartId,
@@ -415,6 +416,7 @@
 			    method: "PATCH",
 			    headers: { 
 			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
 			    },
 			    body: JSON.stringify({
 			        checked: checked,
@@ -456,6 +458,7 @@
 				    method: "PATCH",
 				    headers: { 
 				        "Content-Type": "application/json",
+				        "X-CSRF-TOKEN": [[${_csrf.token}]]
 				    },
 				    body: JSON.stringify({
 				        itemList: cartIdList
@@ -480,6 +483,7 @@
 			    method: "PATCH",
 			    headers: { 
 			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
 			    },
 			    body: JSON.stringify({
 			        itemList: soldOutAndStopList

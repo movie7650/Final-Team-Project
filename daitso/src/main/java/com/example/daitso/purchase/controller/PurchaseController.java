@@ -24,6 +24,7 @@ import com.example.daitso.cart.controller.CartController;
 import com.example.daitso.cart.model.CartPurchase;
 import com.example.daitso.cart.model.Tomorrow;
 import com.example.daitso.cart.service.ICartService;
+import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.service.ICustomerService;
 import com.example.daitso.purchase.model.PurchaseInsert;
@@ -68,47 +69,49 @@ public class PurchaseController {
 	@Autowired
 	IPurchaseService purchaseService;
 	
+	@Autowired
+	ILogincheckService logincheckService;
+	
 	/*
 	 *  구매 화면 
 	 *  cartId -> 0이면 장바구니에서 구매, 0이 아니면 바로 구매
 	 */
 	@GetMapping("/{cartId}")
 	public String getPurchase(@PathVariable int cartId, Model model, RedirectAttributes redirectAttributes) {
-		try {
-			// spring security -> 사용자 고유번호 받아오기
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails) principal;
-			
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			model.addAttribute("customerId", customerId);
-			
-			if(cartId == 0) {
-				List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerId(customerId);
-				model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
-			} else {
-				List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerIdAndCartId(customerId, cartId);
-				model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
-			}
-			
-			Tomorrow tommorrow = cartController.getTomorrowMonthAndDay();
-			model.addAttribute("tommorrow", tommorrow);
-			
-			CustomerInfo customerInfo = customerService.getCustomerInfoByCustomerId(customerId);
-			model.addAttribute("customerInfo", customerInfo);
-			
-			if(customerInfo.getShippingId() != 0) {
-				ShippingInfo shipping = shippingService.getShippingInfoByShippingId(customerInfo.getShippingId());
-				model.addAttribute("shipping", shipping);
-			} else if(customerInfo.getRecentShippingId() != 0) {
-				ShippingInfo recentShipping = shippingService.getShippingInfoByShippingId(customerInfo.getRecentShippingId());
-				model.addAttribute("recentShipping", recentShipping);
-			}
-
-			return "purchase/purchase";
-		} catch (ClassCastException e) {
+		
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
+		
+		if(customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
+		
+		model.addAttribute("customerId", customerId);
+		
+		if(cartId == 0) {
+			List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerId(customerId);
+			model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
+		} else {
+			List<CartPurchase> cartProductsBeforePurchase = cartService.getCartProductBeforePurchaseByCustomerIdAndCartId(customerId, cartId);
+			model.addAttribute("cartProductsBeforePurchase", cartProductsBeforePurchase);
+		}
+		
+		Tomorrow tommorrow = cartController.getTomorrowMonthAndDay();
+		model.addAttribute("tommorrow", tommorrow);
+		
+		CustomerInfo customerInfo = customerService.getCustomerInfoByCustomerId(customerId);
+		model.addAttribute("customerInfo", customerInfo);
+		
+		if(customerInfo.getShippingId() != 0) {
+			ShippingInfo shipping = shippingService.getShippingInfoByShippingId(customerInfo.getShippingId());
+			model.addAttribute("shipping", shipping);
+		} else if(customerInfo.getRecentShippingId() != 0) {
+			ShippingInfo recentShipping = shippingService.getShippingInfoByShippingId(customerInfo.getRecentShippingId());
+			model.addAttribute("recentShipping", recentShipping);
+		}
+
+		return "purchase/purchase";
 	}
 	
 	// 주문번호 생성
@@ -126,41 +129,38 @@ public class PurchaseController {
 	public String getPurchaseSuccess(Model model, RedirectAttributes redirectAttributes, HttpServletRequest request, 
 			@RequestParam int shippingId, @RequestParam List<Integer> cartIdList,
 			@RequestParam String totalProductPrice, @RequestParam String discountPrice) {
-		try {
 			
-			// spring security -> 사용자 고유번호 받아오기
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			UserDetails userDetails = (UserDetails) principal;
-			
-			int customerId = Integer.valueOf(userDetails.getUsername());
-			
-			String purchaseNum = request.getParameter("orderId");
-			String totalCost = request.getParameter("amount");
-			
-			ShippingInfo shippingInfo = shippingService.getShippingInfoByShippingId(shippingId);
-			
-			
-			PurchaseSuccess purchaseSuccess = PurchaseSuccess.builder()
-															.customerId(customerId)
-															.shippingId(shippingId)
-															.shippingReceiverNm(shippingInfo.getShippingReceiverNm())
-															.shippingReceiverTelno(shippingInfo.getShippingReceiverTelno())
-															.shippingRoadNmAddr(shippingInfo.getShippingRoadNmAddr())
-															.shippingDaddr(shippingInfo.getShippingDaddr())
-															.shippingDmnd(shippingInfo.getShippingDmnd())
-															.purchaseNum(purchaseNum)
-															.totalCost(totalCost.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","))
-															.totalProductPrice(totalProductPrice)
-															.discountPrice(discountPrice)
-															.build();
-			redirectAttributes.addFlashAttribute("purchaseSuccess", purchaseSuccess);
-			redirectAttributes.addFlashAttribute("cartIdList", cartIdList);
-			
-			return "redirect:/purchase/success";
-		} catch (ClassCastException e) {
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
+		
+		if(customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
+		
+		String purchaseNum = request.getParameter("orderId");
+		String totalCost = request.getParameter("amount");
+		
+		ShippingInfo shippingInfo = shippingService.getShippingInfoByShippingId(shippingId);
+		
+		
+		PurchaseSuccess purchaseSuccess = PurchaseSuccess.builder()
+														.customerId(customerId)
+														.shippingId(shippingId)
+														.shippingReceiverNm(shippingInfo.getShippingReceiverNm())
+														.shippingReceiverTelno(shippingInfo.getShippingReceiverTelno())
+														.shippingRoadNmAddr(shippingInfo.getShippingRoadNmAddr())
+														.shippingDaddr(shippingInfo.getShippingDaddr())
+														.shippingDmnd(shippingInfo.getShippingDmnd())
+														.purchaseNum(purchaseNum)
+														.totalCost(totalCost.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","))
+														.totalProductPrice(totalProductPrice)
+														.discountPrice(discountPrice)
+														.build();
+		redirectAttributes.addFlashAttribute("purchaseSuccess", purchaseSuccess);
+		redirectAttributes.addFlashAttribute("cartIdList", cartIdList);
+		
+		return "redirect:/purchase/success";
 	}
 	
 	@GetMapping("/success")

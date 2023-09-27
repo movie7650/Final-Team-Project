@@ -7,9 +7,11 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
 
 <div class="update-customer-main">
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 <div class="update-customer-title">회원정보수정</div>
-
+<div style="margin-right:102px;">
 <div class="update-table-container-01">
+<form th:action="@{/mypage/updateuser}" method="post">
 	<table class="update-table">
 		<tr>
 			<th>아이디(이메일)</th>
@@ -21,21 +23,24 @@
 		</tr>
 		
 		<tr>
-			<td>hong@naver.com
-				<input type="text" id="change-email-input" hidden><button type="submit" hidden>확인</button>
+			<td>
+				<div style="float:left;" th:text="${MyEmail}">이메일</div>
+				<input autocomplete=off name="newEmail" type="email" id="change-email-input" hidden><button type="submit" hidden>확인</button>
 				<button id="change-email" onclick="showEmailInput()" type="button">이메일변경</button>
 			</td>
-			<td>홍길동
-			<input type="text" id="change-name-input" hidden><button type="submit" hidden>확인</button>
-			<button  id="change-name" onclick="showNameInput()" type="button">이름변경</button>
+			<td>
+				<div style="float:left;" th:text="${MyName}">이름	</div>
+				<input autocomplete=off name="newName" type="text" id="change-name-input" hidden><button type="submit" hidden>확인</button>
+				<button  id="change-name" onclick="showNameInput()" type="button">이름변경</button>
 			</td>
-			<td>010-1234-1234
-			<input type="text" id="change-phonenumber-input" hidden><button type="submit" hidden>확인</button>
-			<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
+			<td>
+				<div style="float:left;" th:text="${MyTelNo}">전화번호</div>
+				<input name="newTelNO" type="text" id="change-phonenumber-input" hidden><button type="submit" hidden>확인</button>
+				<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
 			</td>
-			<td><input type="password"></td>
-			<td><input type="password"></td>
-			<td><input type="password"><button type="button">변경확인</button></td>
+			<td><input name="nowPassword" type="password"></td>
+			<td><input name="newPassword" type="password"></td>
+			<td><input name="checkNewPassword" type="password"><button type="button">변경확인</button></td>
 		</tr>
 	</table>
 			<script>
@@ -51,10 +56,11 @@
 			</script>
 	<div class="update-user-button-container">
 		<button type="submit" id="update-user-bottom-button">저장하기</button>
-		<button type="submit" id="update-user-bottom-button">취소하기</button>
+		<button th:onclick="#" id="update-user-bottom-button01">취소하기</button>
 	</div><!--update-user-button-container  -->
-</div><!-- update-table-container -->
-
+</form>
+</div><!-- update-table-container-01 -->
+</div>
 
 </div><!-- update-customer-main -->
 

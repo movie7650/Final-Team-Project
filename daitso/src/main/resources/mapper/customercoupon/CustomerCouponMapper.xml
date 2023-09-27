@@ -50,7 +50,7 @@
 		담당자: 윤상영
 	-->
 	<select id="countExistCouponSn" resultType="int" parameterType="String">
-		SELECT count(customer_coupon_id) as "existCouponSn"
+		SELECT count(*) 
 		  FROM customer_coupon
 		 WHERE customer_id= cast(#{customerId} as number(8)) 
 		   AND coupon_id = (select coupon_id from coupon where coupon_sn=#{allCouponNum})
@@ -60,9 +60,9 @@
 		담당자: 윤상영
 	-->
 	<select id="countExistCouponId" resultType="int" parameterType="string">
-		SELECT count( c.coupon_id) as "couponId"
-		  FROM coupon c , customer_coupon cus
-		 WHERE c.coupon_sn = #{allCouponNum}
+		SELECT count(*) 
+		  FROM coupon 
+		 WHERE coupon_sn = #{allCouponNum}
 	</select>
 	
 	

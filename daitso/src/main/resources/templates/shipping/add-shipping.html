@@ -56,7 +56,8 @@
 								   th:field="*{shippingReceiverTelno}"
 								   id="ship-telno" 
 								   onkeyup="checkShippingTelno(this)"
-								   type="text" style="padding: 0 10px 0 10px; width: 100%; height: 55px; outline: none; border: 1px solid #CECECE;" placeholder="휴대폰 번호 (010-xxxx-xxxx)">
+								   type="text" style="padding: 0 10px 0 10px; width: 100%; height: 55px; outline: none; border: 1px solid #CECECE;" placeholder="휴대폰 번호"
+								   maxlength="13">
 						</div>
 					</div>
 					<div id="ship-error-telno" class="ship-error"></div>
@@ -272,20 +273,14 @@
 	}
 	
 	function checkShippingTelno(item) {
-		var patternPhone = /^01([0|1|6|7|8|9])-[0-9]{3,4}-[0-9]{4}$/;
 		if(!item.value) {
 			document.getElementById("ship-telno").style.border = '1px solid red';
 			document.getElementById("ship-error-telno").style.display = 'block';
 			document.getElementById("ship-error-telno").innerText='휴대폰 번호를 입력해주세요.'
 		} else {
-			if(patternPhone.test(item.value)){
-				document.getElementById("ship-telno").style.border = '1px solid #CECECE';
-				document.getElementById("ship-error-telno").style.display = 'none';
-			} else {
-				document.getElementById("ship-error-telno").innerText='형식에 맞는 휴대폰 번호를 입력하세요.';
-				document.getElementById("ship-telno").style.border = '1px solid red';
-				document.getElementById("ship-error-telno").style.display = 'block';
-			}
+			document.getElementById("ship-telno").style.border = '1px solid #CECECE';
+			document.getElementById("ship-error-telno").style.display = 'none';
+			item.value = autoHypenPhone(item.value);
 		}
 	}
 	
@@ -296,6 +291,36 @@
 		} else {
 			document.getElementById("ship-normal").value = '302';	
 		}
+	}
+	
+	// 휴대폰 번호 자동 하이픈
+	var autoHypenPhone = function(str){
+	    str = str.replace(/[^0-9]/g, '');
+	    var tmp = '';
+	    if( str.length < 4){
+	        return str;
+	    }else if(str.length < 7){
+	        tmp += str.substr(0, 3);
+	        tmp += '-';
+	        tmp += str.substr(3);
+	        return tmp;
+	    }else if(str.length < 11){
+	        tmp += str.substr(0, 3);
+	        tmp += '-';
+	        tmp += str.substr(3, 3);
+	        tmp += '-';
+	        tmp += str.substr(6);
+	        return tmp;
+	    }else{              
+	        tmp += str.substr(0, 3);
+	        tmp += '-';
+	        tmp += str.substr(3, 4);
+	        tmp += '-';
+	        tmp += str.substr(7);
+	        return tmp;
+	    }
+
+	    return str;
 	}
 	
 </script>
