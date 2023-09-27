@@ -24,10 +24,10 @@ public interface IProductRepository {
 	// 상품 상세 정보 조회하기
 	Product selectProduct(@Param("productId") int productId);
 
-	// 상품 조회하기(카테고리별)
+	// 상품 조회하기(카테고리별)(관리자 페이지)
     List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
     
-    // 상품 개수 조회하기(카테고리별)
+    // 상품 개수 조회하기(카테고리별)(관리자 페이지)
     int selectCountProducts(int firstCategoryId, int secondCategoryId, int thirdCategoryId);
     
     // 상품 조회하기(그룹ID별)
@@ -37,7 +37,7 @@ public interface IProductRepository {
     void deleteProductByGroupId(int productGroupId);
 	
 	// 상품ID로 상품 정보 조회하기
-	Product selectProductId(int productId);
+	Product selectProductById(int productId);
 	
 	// 상품 수정하기
 	void updateProduct(Product product);
@@ -47,6 +47,10 @@ public interface IProductRepository {
     
     // 상품 등록하기
 	void registerProducts(ProductCheck product);
+	
+	// ★ 중복 상품 카운트를 반환하는 메서드
+    int countDuplicateProducts(ProductCheck product);
+	
 	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);

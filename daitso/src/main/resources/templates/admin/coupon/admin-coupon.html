@@ -5,18 +5,18 @@
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
  <!-- jQuery 및 jQuery UI 스타일시트 및 스크립트 포함 -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 
 	<!-- 오른쪽 컨텐츠 -->
-	<div id="productTable" style="padding-top: 10px;">
+	<div id="table" style="padding-top: 10px;">
 	<div style="font-weight: 600; margin-top: 20px;">쿠폰관리 > 쿠폰 등록/수정/삭제</div>
 		<div class="row"
 			style="padding-bottom: 15px; justify-content: flex-end;">
 			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
-				<button class="btn btn-primary" style="background-color: #39594e"
+				<button class="btn btn-primary" style="background-color: #adb5bd; border-color:#adb5bd;"
 					data-bs-toggle="modal" data-bs-target="#registerModal"
 					type="button">등록</button>
 			</div>
@@ -85,7 +85,7 @@
 			</ul>
 		</div>	  
 		
-		
+		<!-- 쿠폰 등록 모달 -->
 		<div id="registerModal" class="modal fade" tabindex="-1" role="dialog" style="overflow-y: auto;">
 		<div class="modal-dialog" role="document" style="max-width: 700px;">
 			<div class="modal-content">
@@ -95,23 +95,75 @@
 					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
 					</button>
 				</div>
-				<!-- 테스트 -->
-				<form th:action method="post">
-					<div class="modal-body">
+				 
+				 <form action="/admin/coupon" method="POST" onsubmit="return generateAndSubmitCoupon()">
+                	<input type="hidden" id="couponSn" name="couponSn" value="">
+					<div class="modal-body">		
+						<div style="display: flex; align-items: flex-end; padding-bottom: 10px;">
+							<label for="categoryId" class="col-form-label">대상 카테고리</label>
+							<input type="hidden" id="selectsCategoryId" name="categoryId">
+								<div style="display: flex; align-items: flex-end; padding-bottom: 10px;">
+								<!-- 첫 번째 카테고리 -->
+								<div class="col-sm-3" style="padding-left: 10px; padding-right: 0px; text-align: center;">
+									<label for="firstCategory"></label> 
+									<select id="firstCategory"	name="firstCategory" 
+										onchange="getSecondForRegister(this.value, 'unsyn'); updateSelectCategoryId();"
+										style="padding-left: 5px; padding-right: 5px;">
+										<option value="">전체</option>
+										<option th:each="category : ${firstCategories}"
+											th:value="${category.categoryId}"
+											th:text="${category.categoryNm}"></option>
+									</select>
+								</div>
+								<!-- 두 번째 카테고리 -->
+								<div class="col-sm-6">
+									<label for="secondCategorys"></label> 
+									<select	id="secondCategorys" name="secondCategorys"
+										onchange="getThirdForRegister('unsyn'); updateSelectCategoryId();"
+										style="padding-left: 5px; padding-right: 5px; width: 167px;">
+										<option value="">선택안함</option>
+									</select>
+								</div>
+								<!-- 세 번째 카테고리 -->
+								<div class="col-sm-3"
+									style="text-align: center; padding-left: 0px;">
+									<label for="thirdCategorys"></label> 
+									<select	id="thirdCategorys" name="thirdCategorys" onchange="updateSelectCategoryId()"
+										style="padding-left: 10px; padding-right: 5px;">
+										<option value="">선택안함</option>
+									</select>
+								</div>
+								</div>
+							</div>
+							
+						<div class="row mb-3" style="display: flex; align-items: center;">
+								<label for="couponNm" class="col-sm-2 col-form-label">쿠폰명</label>
+								<div class="col-sm-10" style="padding-left: 0px;">
+									<input type="text" id="couponNm" name="couponNm" 
+										autocomplete="off">
+								</div>
+							</div>
+							
+						<div class="row mb-3" style="display: flex; align-items: center;">
+							<label for="couponDscntRate" class="col-sm-2 col-form-label">쿠폰 할인율(%)</label>
+							<div class="col-sm-10" style="padding-left: 0px;">
+								<input type="number" min="1" max="100"
+								id="couponDscntRate" name="couponDscntRate" style="width: 13%;"	autocomplete="off">
+							</div>
+						</div>
+							
+							
+						<div class="row mb-3">
+						    <label for="couponPblDt" class="col-sm-2 col-form-label">쿠폰 발행일</label>
+						    <input type="text" id="couponPblDt" name="couponPblDt" autocomplete="off" style="width: 20%;" required>
 						
-						 <div class="row mb-3">
-							    <label for="couponStartDate" class="col-sm-2 col-form-label">쿠폰 발행일:</label>
-							    <input type="text" id="couponStartDate" name="couponStartDate">
-							
-							    <br>
-							
-							    <label for="couponEndDate" class="col-sm-2 col-form-label">쿠폰 만료일:</label>
-							    <input type="text" id="couponEndDate" name="couponEndDate"> 
+						    <label for="couponEprDt" class="col-sm-2 col-form-label">쿠폰 만료일</label>
+						    <input type="text" id="couponEprDt" name="couponEprDt" autocomplete="off" style="width: 20%;" required> 
 						</div> 
 						
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #668663"
-								onclick="changeData()" type="submit">저장</button>
+								 type="submit">저장</button>
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 						</div>
 
@@ -120,9 +172,6 @@
 			</div>
 		</div>
 	</div>
-	
-	
-
 	
 	
 	
@@ -134,9 +183,174 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script>
 	<script th:inline="javascript">
 
+/* 	function generateAndSubmitCoupon() {
+	    var couponSn = generateRandomCouponSn();
+	    document.getElementById("couponSn").value = couponSn;
+	    document.querySelector("form").submit();
+	}
+
+	function generateRandomCouponSn() {
+	    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+	    var couponSn = "";
+	    var length = 16;
+	    
+	    for (var i = 0; i < length; i++) {
+	        var randomIndex = Math.floor(Math.random() * characters.length);
+	        couponSn += characters.charAt(randomIndex);
+	    }
+	    
+	    return couponSn;
+	} */
+	
+	// 0 다음에 다른 숫자 입력되지 않게 하기
+	var inputElement = document.getElementById("couponDscntRate");
+
+	inputElement.addEventListener("input", function () {
+	    var inputValue = this.value;
+	    
+	    if (inputValue.startsWith('0')) {
+	        // 입력값에서 0을 제외한 숫자만 추출하여 다시 설정
+	        this.value = inputValue.replace(/^0+/, '');
+	    }
+	});
+
+	// 쿠폰 중복 확인 후 등록하기
+	function generateAndSubmitCoupon() {
+	    var maxAttempts = 3; // 최대 시도 횟수
+	    var attempts = 0;
+
+	    function tryGenerateCoupon() {
+	        var couponSn = generateRandomCouponSn();
+	        document.getElementById("couponSn").value = couponSn;
+
+	        // 서버로 중복 검사 요청 보내기
+	        checkCouponUniqueness(couponSn)
+	            .then(function (isUnique) {
+	                if (isUnique) {
+	                    // 중복되지 않은 쿠폰 번호인 경우 폼 제출
+	                    document.querySelector("form").submit();
+	                } else {
+	                    attempts++;
+	                    if (attempts < maxAttempts) {
+	                        // 최대 시도 횟수에 도달하지 않으면 다시 시도
+	                        tryGenerateCoupon();
+	                    } else {
+	                        // 최대 시도 횟수를 초과한 경우 오류 메시지 표시
+	                        alert("쿠폰 생성 시도 횟수를 초과했습니다. 다시 시도해주세요.");
+	                    }
+	                }
+	            });
+	    }
+	    tryGenerateCoupon();
+	}
+
+	// 쿠폰 일련번호 등록하기
+	function generateRandomCouponSn() {
+	    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+	    var couponSn = "";
+	    var length = 16;
+
+	    for (var i = 0; i < length; i++) {
+	        var randomIndex = Math.floor(Math.random() * characters.length);
+	        couponSn += characters.charAt(randomIndex);
+	    }
+
+	    return couponSn;
+	}
+
+	// 서버로 중복 검사 요청 보내기
+	function checkCouponUniqueness(couponSn) {
+	    return fetch('/admin/checkCouponUniqueness?couponSn=' + couponSn)
+	        .then(function (response) {
+	            if (response.ok) {
+	                return response.json();
+	            } else {
+	                throw new Error('서버 오류');
+	            }
+	        });
+	}
+	
+	// 쿠폰 등록시 선택한 카테고리 정보 갖고오기
+	function updateSelectCategoryId() {
+	    var selectedFirstCategory = $("#firstCategory").val();
+	    var selectedSecondCategory = $("#secondCategorys").val();
+	    var selectedThirdCategory = $("#thirdCategorys").val();
+	    
+	    if (selectedThirdCategory) {
+	        $("#selectsCategoryId").val(selectedThirdCategory);
+	    } else if (selectedSecondCategory) {
+	        $("#selectsCategoryId").val(selectedSecondCategory);
+	    } else if (selectedFirstCategory) {
+	        $("#selectsCategoryId").val(selectedFirstCategory);
+	    } else {
+	        $("#selectsCategoryId").val(0); // 모든 카테고리가 선택되지 않았을 때 0 할당
+	    }
+	} 
+ 	 // 빈 문자열
+    if ($("#selectsCategoryId").val() === "") {
+        $("#selectsCategoryId").val(0);
+    }
+	
+	// 쿠폰 등록시 두 번째 카테고리 불러오기
+	function getSecondForRegister(firstCategoryId, selector) {
+	    var secondCategorys = $("#secondCategorys");
+	    secondCategorys.empty(); // 조회하고 다시 조회하면 이전 값 붙어서 안 나오게 비워줘야함
+	    secondCategorys.append('<option value="">전체</option>');
+	    getThirdForRegister('unsyn');
+	    if(selector == 'unsyn'){
+		    // 첫 번째 카테고리가 "전체"로 선택된 경우 처리 종료
+		    if (firstCategoryId === "") {
+		        return;
+		    }
+		    $.ajax({
+		        type: "GET",
+		        url: "/admin/product/second/" + firstCategoryId,
+		        success: function (data) {
+		            // 선택된 첫 번째 카테고리의 하위 카테고리 목록을 추가
+		            for (var i = 0; i < data.length; i++) {
+	            		secondCategorys.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+		            }
+		        }
+		    });
+		} 
+	} 
+
+	const thirdCategoryNum = /*[[${selectedThirdCategoryId}]]*/ null;
+	
+	// 쿠폰 등록시 세 번째 카테고리 불러오기
+	function getThirdForRegister(selector) {
+	    var thirdCategorys = $("#thirdCategorys");
+	    var secondCategoryIds = $("#secondCategorys").val(); // 두 번째 카테고리의 값을 가져옴
+	  	 if(selector == 'unsyn'){
+			console.log("unsyn!!!!")
+		    if (!secondCategoryIds) {
+		        thirdCategorys.empty();
+		        thirdCategorys.append('<option value="">전체</option>');
+		    } else {
+		        $.ajax({
+		            type: "GET",
+		            url: "/admin/product/third/" + secondCategoryIds,
+		            success: function (data) {
+		                thirdCategorys.empty();
+		                thirdCategorys.append('<option value="">전체</option>');
+		                for (var i = 0; i < data.length; i++)  {
+			                if (thirdCategoryNum == data[i].categoryId) {
+			                	thirdCategorys.append('<option value="' + data[i].categoryId + '" selected>' + data[i].categoryNm + '</option>');
+			                } else {
+			                	thirdCategorys.append('<option value="' + data[i].categoryId + '">' + data[i].categoryNm + '</option>');	
+			                }
+		                }
+		                console.log(secondCategoryIds);
+		            }
+		        });
+		    }
+		}
+	}   
+	
+	// 쿠폰 삭제시 확인 메시지 실행해서 삭제하기
     function deleteCoupon(couponId) {
         if (!confirm('해당 쿠폰을 삭제하시겠습니까?')) {
             return false;
@@ -153,13 +367,16 @@
         }, 50) //대기시간
     }  
 
+	 // Datepicker를 사용해서 날짜 입력받기
     $(function() {
    	 $.datepicker.setDefaults($.datepicker.regional['ko']);
-       // Datepicker를 사용하여 날짜 입력란을 초기화
-       $("#couponStartDate").datepicker();
-       $("#couponEndDate").datepicker();
+       $("#couponPblDt").datepicker();
+       $("#couponEprDt").datepicker();
    });
-	</script>
+
+
+	 
+  </script>
 
 </body>
 </html>
