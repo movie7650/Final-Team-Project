@@ -187,11 +187,13 @@
 		INSERT INTO category ( category_id,
 		                       category_nm,
 		                       category_content,
-		                       category_pr_id) 
-		  VALUES ( category_seq.NEXTVAL,
-		           #{categoryNm},
-		           #{categoryContent},
-		           #{categoryId} ) 
+		                       category_pr_id,
+		                       category_image) 
+	         VALUES ( category_seq.NEXTVAL,
+		             #{categoryNm},
+		             #{categoryContent},
+		             #{categoryId},
+		             #{categoryImage} ) 
 		           
 		<!-- INSERT INTO category ( category_id,
                            category_nm,
