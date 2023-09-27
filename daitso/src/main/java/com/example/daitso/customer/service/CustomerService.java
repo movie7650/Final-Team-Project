@@ -82,9 +82,34 @@ public class CustomerService implements ICustomerService {
 	public List<CheckMyInform> selectMyInform(int customerId) {
 		return customerRepository.selectMyInform(customerId);
 	}
-
+	//내 비밀번호가져오기
 	@Override
 	public String selectMyPassword(int customerId) {
 		return customerRepository.selectMyPassword(customerId);
+	}
+	// 내 아이디(이메일) 가져오기
+	@Override
+	public String selectMyEmail(int customerId) {
+		return customerRepository.selectMyEmail(customerId);
+	}
+	//내 이름 가져오기
+	@Override
+	public String selectMyName(int customerId) {
+		return customerRepository.selectMyName(customerId);
+	}
+	//내 전화번호 가져오기
+	@Override
+	public String selectMyTelNo(int customerId) {
+		return customerRepository.selectMyTelNo(customerId);
+	}
+	//내이름 변경하기
+	@Override
+	public void updateMyName(int customerId, String newName) {
+		customerRepository.updateMyName(customerId, newName);
+	}
+
+	@Override
+	public void updateMyEmail(int customerId, String newEmail) {
+		customerRepository.updateMyEmail(customerId, newEmail);
 	}	
 }

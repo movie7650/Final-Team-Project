@@ -3,24 +3,19 @@ package com.example.daitso.mypage.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-import com.example.daitso.customer.model.CheckMyInform;
-import com.example.daitso.customer.service.CustomerService;
-import com.example.daitso.customer.service.ICustomerService;
-
 import com.example.daitso.check.ILogincheckService;
-
+import com.example.daitso.customer.model.CheckMyInform;
+import com.example.daitso.customer.service.ICustomerService;
 import com.example.daitso.customercoupon.model.SelectCustomerCoupon;
 import com.example.daitso.customercoupon.service.ICustomerCouponService;
 import com.example.daitso.inquiry.model.MyInquirySelect;
@@ -486,17 +481,17 @@ public class MyPageController {
 	
 	//사용자 쿠폰등록하기 
 	@RequestMapping(value="/mycoupon", method = RequestMethod.POST)
-	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2, @RequestParam String couponNum3, @RequestParam String couponNum4) {
+	public String insertCustomerCoupon(@RequestParam String couponNum1, @RequestParam String couponNum2, @RequestParam String couponNum3, @RequestParam String couponNum4,RedirectAttributes redirectAttributes) {
 		
 		//로그인
 		int customerId = logincheckService.loginCheck();
 		
 		//입력받은 4개의 쿠폰번호 합치기
 		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
-
+		System.out.println("###########################3" + allCouponNum );
 		// 입력받은 쿠폰번호와 같은 쿠폰번호를 가진 쿠폰 갯수 카운트
 		int existCouponSn = customerCouponService.countExistCouponSn(String.valueOf(customerId), allCouponNum);
-
+		
 		// 입력받는 쿠폰번호와 일치하는 쿠폰의 쿠폰ID 카운트
 		int countCouponId = customerCouponService.countExistCouponId(allCouponNum);
 
@@ -504,6 +499,7 @@ public class MyPageController {
 		if (existCouponSn == 0 && countCouponId != 0) {
 			customerCouponService.insertCustomerCoupon(String.valueOf(customerId), allCouponNum);
 		} else {
+			redirectAttributes.addFlashAttribute("error","이미 등록된 쿠폰이거나 없는 쿠폰입니다.");
 			return "redirect:/mypage/mycoupon";
 		}
 
@@ -556,7 +552,7 @@ public class MyPageController {
 	}
 
 	// 마이페이지-회원정보수정 컨트롤러
-	@RequestMapping("/updateuser")
+	@GetMapping("/updateuser")
 	public String updateUser(Model model, RedirectAttributes redirectAttributes) {
 		
 		// spring security -> 사용자 고유번호 받아오기
@@ -581,7 +577,52 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
+		
+		//내 아이디(이메일) 가져오기
+		String myEmail = customerService.selectMyEmail(customerId);
+		model.addAttribute("MyEmail",myEmail);
+		
+		//내 이름 가져오기
+		String myName = customerService.selectMyName(customerId);
+		model.addAttribute("MyName",myName);
+		
+		//내 전화번호 가져오기
+		String myTelNo = customerService.selectMyTelNo(customerId);
+		model.addAttribute("MyTelNo",myTelNo);
+		
 		return "mypage/update-user-inform";
+	}
+	//회원정보수정- 이름수정
+	@RequestMapping(value="/updateuser", method=RequestMethod.POST)
+	public String updateMyInform(@RequestParam(defaultValue="") String newName,@RequestParam(defaultValue="") String newEmail,RedirectAttributes redirectAttributes) {
+		System.out.println("--------------");
+		
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
+		
+		if(customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+		//입력된 이름으로 변경
+		if(newName != null && !newName.equals("")) {
+			customerService.updateMyName(customerId, newName);
+			return "redirect:/mypage/updateuser"; 
+		}
+		if(newEmail != null && !newEmail.equals("")) {
+			customerService.updateMyEmail(customerId, newEmail);
+			return "redirect:/mypage/updateuser";
+		}
+		else{
+			newName=customerService.selectMyName(customerId);
+			newEmail=customerService.selectMyEmail(customerId);
+			
+			customerService.updateMyName(customerId, newName); 
+			customerService.updateMyEmail(customerId, newEmail);
+			
+			return "redirect:/mypage/updateuser";
+		}
+		
 	}
 	
 	// 마이페이지-배송지관리 컨트롤러
