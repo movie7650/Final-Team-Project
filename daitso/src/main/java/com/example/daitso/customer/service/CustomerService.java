@@ -124,4 +124,10 @@ public class CustomerService implements ICustomerService {
 	public void updateMyTelNO(int customerId, String newTelNO) {
 		customerRepository.updateMyTelNO(customerId, newTelNO);
 	}
+
+	@Override
+	public void updateMyPassword(int customerId, String newPassword) {
+		customerRepository.updateMyPassword(customerId, newPassword);
+		
+	}
 }

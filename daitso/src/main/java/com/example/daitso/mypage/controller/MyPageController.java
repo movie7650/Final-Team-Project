@@ -366,7 +366,7 @@ public class MyPageController {
 		reviewService.deleteReview(customerId, reviewId);
 		return "redirect:/mypage/review";
 	}
-
+	//내 문의내역 조회
 	@RequestMapping(value = "/myinquiry")
 	public String myInquiry(Model model, RedirectAttributes redirectAttributes) {
 
@@ -413,7 +413,7 @@ public class MyPageController {
 	}
 
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
-	@RequestMapping("/mycoupon")
+	@GetMapping("/mycoupon")
 	public String insertCoupon(Model model, RedirectAttributes redirectAttributes) {
 
 		// spring security -> 사용자 고유번호 받아오기
@@ -447,7 +447,7 @@ public class MyPageController {
 	}
 
 	// 마이페이지-쿠폰등록 및 쿠폰사용완료리스트 컨트롤러
-	@RequestMapping("/mycoupon-used")
+	@GetMapping("/mycoupon-used")
 	public String usedCoupon(Model model, RedirectAttributes redirectAttributes) {
 
 		// spring security -> 사용자 고유번호 받아오기
@@ -487,10 +487,9 @@ public class MyPageController {
 
 		// 로그인
 		int customerId = logincheckService.loginCheck();
-
+		
 		// 입력받은 4개의 쿠폰번호 합치기
 		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
-		System.out.println("###########################3" + allCouponNum);
 		// 입력받은 쿠폰번호와 같은 쿠폰번호를 가진 쿠폰 갯수 카운트
 		int existCouponSn = customerCouponService.countExistCouponSn(String.valueOf(customerId), allCouponNum);
 
@@ -599,8 +598,8 @@ public class MyPageController {
 	@RequestMapping(value = "/updateuser", method = RequestMethod.POST)
 	public String updateMyInform(@RequestParam(defaultValue = "") String newEmail,
 			@RequestParam(defaultValue = "") String newName, @RequestParam(defaultValue = "") String newTelNO,
-			RedirectAttributes redirectAttributes) {
-		System.out.println("--------------");
+			@RequestParam(defaultValue = "") String nowPassword,@RequestParam(defaultValue = "")String newPassword,
+			@RequestParam(defaultValue = "") String checkNewPassword,RedirectAttributes redirectAttributes) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -619,19 +618,27 @@ public class MyPageController {
 			customerService.updateMyEmail(customerId, newEmail);
 			return "redirect:/mypage/updateuser";
 		}
+		//입력된 전화번호로 변경
 		if (newTelNO != null && !newTelNO.equals("")) {
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
-
-		else {
+		//비밀번호 변경
+		if(pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId)) && newPassword.equals(checkNewPassword)) {
+			newPassword = pwEncoder.encode(newPassword);
+			customerService.updateMyPassword(customerId, newPassword);
+			System.out.println(newPassword + "###########################" + nowPassword);
+			return "redirect:/mypage/updateuser";
+		} else {
 			newEmail = customerService.selectMyEmail(customerId);
 			newName = customerService.selectMyName(customerId);
 			newTelNO = customerService.selectMyTelNo(customerId);
+			newPassword = customerService.selectMyPassword(customerId);
 
 			customerService.updateMyEmail(customerId, newEmail);
 			customerService.updateMyName(customerId, newName);
 			customerService.updateMyTelNO(customerId, newTelNO);
+			customerService.updateMyPassword(customerId, newPassword);
 
 			return "redirect:/mypage/updateuser";
 		}
