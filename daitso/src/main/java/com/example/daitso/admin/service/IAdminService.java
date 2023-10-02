@@ -27,7 +27,7 @@ public interface IAdminService {
 	void deleteProductByGroupId(int productGroupId);
     
 	// 상품ID로 상품 정보 갖고오기
-	Product selectProductId(int productId);
+	Product selectProductById(int productId);
 	
 	// 상품 수정하기
 	void updateProduct(Product product);
@@ -44,6 +44,7 @@ public interface IAdminService {
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
 
+	
 	// 주문 내역 조회하기(배송상태별)
 	List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize);
 	
@@ -62,6 +63,7 @@ public interface IAdminService {
 	// 주문번호로 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 	
+	
 	// 전체 카테고리 조회하기
 	List<CategoryCheck> selectAllCategories(int offset, int pageSize);
 	
@@ -79,9 +81,12 @@ public interface IAdminService {
 
 //카테고리 등록하기 ★
 //	void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files);
-	
 	//테스트//
 	void registerCategories(CategoryCheck categoryCheck);
+	
+	// ★ 중복 상품
+	boolean isDuplicateProduct(ProductCheck product);
+	
 	
 	// 최상위 공통코드 조회하기
 	List<CommonCode> selectAllCommonCodesPr(@Param("offset") int offset, @Param("pageSize") int pageSize);
@@ -106,13 +111,19 @@ public interface IAdminService {
  	
  	void registerCommonCodes(CommonCode commonCode);
  	
-	//쿠폰
+	// 전체 쿠폰 조회하기
 	List<CouponCheck> selectAllCoupons(@Param("offset") int offset, @Param("pageSize") int pageSize);
 	
-	//쿠폰
+	// 전체 쿠폰 개수 조회하기
 	int selectCountCoupons();
 	
-	// 
+	// 쿠폰 삭제하기
 	void deleteCoupon(int couponId);
 
+	// 쿠폰 등록하기
+	void registerCoupons(CouponCheck couponCheck);
+	
+	// 쿠폰 일련번호 중복 확인하기
+	boolean isCouponSnUnique(String couponSn);
+	
 }

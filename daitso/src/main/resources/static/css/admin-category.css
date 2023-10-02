@@ -38,7 +38,7 @@
 }
 
 .modal-body input {
-	width: 80%;
+	width: 45%;
 	padding: 10px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
@@ -87,8 +87,3 @@ div.col-sm-10 {
 	z-index: 3;
 	border-color: #39594e;
 }
-
-
-/*   #thirdCategory {
-    display: none;
-} */ 

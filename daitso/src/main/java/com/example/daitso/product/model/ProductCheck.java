@@ -27,6 +27,7 @@ public class ProductCheck {
 	private String creator;
 	private Date modifyDt;
 	private String modifier;
+	
 	private int categoryPrId;
 	private int rn;
 	private String categoryNm;

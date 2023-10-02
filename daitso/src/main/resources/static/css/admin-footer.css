@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+.footer {
+  	display: flex;
+  	justify-content: center;
+  	background-color: #7b7a7a;
+}
+
+.footer-box{
+	display: flex;
+  	margin-top: 5%;
+  	margin-bottom: 5%;
+  	width: 90%;
+}
+
+.footer-logo {
+  	width: 10%;
+  	margin: 0 141px 52px 0;
+}
+
+.footer-logo-img {
+	width:100%;
+	height:50%;
+}
+
+.footer-text{
+	color:white;
+	font-family: 'Playfair Display';
+  	font-size: 15px;
+  	font-weight: normal;
+  	font-stretch: normal;
+  	font-style: normal;
+}

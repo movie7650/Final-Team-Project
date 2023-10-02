@@ -37,3 +37,6 @@ build/
 
 ## social-login ##
 **/application-oauth.properties
+
+## stt ##
+keys/

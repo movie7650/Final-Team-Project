@@ -1,10 +1,12 @@
 package com.example.daitso.admin.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,7 +76,8 @@ public class AdminController {
 	    if (thirdCategoryId == null) {
 	    	thirdCategoryId = 0;
 	    }
-
+	    
+	    // 카테고리별 조회 상품
 	    List<ProductCheck> products = adminService.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
 	    model.addAttribute("products", products);
 	   	    
@@ -82,7 +85,7 @@ public class AdminController {
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
 	    
-	    // 선택한 카테고리 정보 전달
+	    // 선택한 카테고리ID 정보 전달
 	    model.addAttribute("selectedFirstCategoryId", firstCategoryId);
 	    model.addAttribute("selectedSecondCategoryId", secondCategoryId);
 	    model.addAttribute("selectedThirdCategoryId", thirdCategoryId);
@@ -103,6 +106,7 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
+	// 상품 조회하기(JSON-카테고리별,페이징)
 	@GetMapping("/products")
 	@ResponseBody
 	public PageResult<ProductCheck> selectProductsByCategory(
@@ -124,19 +128,20 @@ public class AdminController {
 	        thirdCategoryId = 0;
 	    }
 
+	    // 카테고리별 조회 상품
 	    List<ProductCheck> products = adminService.selectProductsByCategory(firstCategoryId, secondCategoryId, thirdCategoryId, offset, pageSize);
-
+	   
+	    // 총 상품 개수
 	    int totalCount = adminService.selectCountProducts(firstCategoryId, secondCategoryId, thirdCategoryId);
 	    
 	    PageResult<ProductCheck> result = new PageResult<>();
-        result.setData(products);
-        result.setCurrentPage(page);
-        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize));
+        result.setData(products); // 카테고리별 조회 상품
+        result.setCurrentPage(page); // 페이지
+        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize)); // 총 페이지 수 (총 상품 개수/ 페이지 크기)
 
         return result;
 	}
 
-	
 	// 두 번째 카테고리 불러오기 ('syn' 및 'unsyn' 값을 인수로 받아 다른 동작 수행)
 	@GetMapping("/product/second/{categoryId}")
 	@ResponseBody
@@ -156,14 +161,14 @@ public class AdminController {
 	}
 	
 	// 상품 조회하기(그룹ID별)
-	@GetMapping("/search/{productGroupId}")
+	@GetMapping("/product/check/{productGroupId}")
 	@ResponseBody
 	public List<ProductCheck> product (@PathVariable int productGroupId, Model model) {
 		return adminService.selectProductsByGroupId(productGroupId);
 	}
 	
 	// 상품 삭제하기(그룹)
-	@PostMapping("/delete-group")
+	@PostMapping("/product/delete-group")
 	public String deleteProductByGroupId(@RequestParam int productGroupId, Model model) {
 		adminService.deleteProductByGroupId(productGroupId);
 		model.addAttribute("message","상품이 삭제되었습니다.");
@@ -172,14 +177,14 @@ public class AdminController {
 	}	
 	
 	// 상품ID로 상품 정보 갖고오기
-	@GetMapping("/update/{productId}")
+	@GetMapping("/product/update/{productId}")
 	@ResponseBody
-	public Product selectProductId(@PathVariable int productId, Model model) {
-		return adminService.selectProductId(productId);
+	public Product selectProductById(@PathVariable int productId, Model model) {
+		return adminService.selectProductById(productId);
 	}
 
 	// 상품 수정하기
-	@PostMapping("/update")
+	@PostMapping("/product/update")
 	public String updateProduct(Product product, Model model, HttpSession session) {
 		// 각 필드를 Jsoup.clean으로 처리
 //	    String productCode = Jsoup.clean(product.getProductCode(), Whitelist.basic());
@@ -205,7 +210,7 @@ public class AdminController {
 	}
 	
 	// 상품 삭제하기
-	@PostMapping("/delete")
+	@PostMapping("/product/delete")
 	public String deleteSelectedProducts(@RequestBody List<Integer> selectedProductIds, Model model) {
 	    for (Integer productId : selectedProductIds) {
 	        adminService.deleteProduct(productId);
@@ -250,17 +255,17 @@ public class AdminController {
 		model.addAttribute("message","상품이 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/product");
 		return "admin/message";
-	}
-	
+	}	
 	
 	// 상품명으로 상품 검색하기
-    @GetMapping("/search-product")
+    @GetMapping("/product/search")
     @ResponseBody
     public List<ProductCheck> searchProducts(@RequestParam("searchText") String searchText) {
         List<ProductCheck> productList = adminService.searchProductsByName(searchText);
         return productList;
     }
        
+    
     // 주문 내역 조회하기(전체 조회 페이지)
     @GetMapping("/purchase")
 	public String selectPurchaseList(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
@@ -358,7 +363,6 @@ public class AdminController {
         return purchaselist;
     }
     
-    
 
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
@@ -367,7 +371,6 @@ public class AdminController {
         
       int offset = (page - 1) * pageSize;       
       
-
       List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
       
       	// 첫 번째 카테고리 불러오기
@@ -401,7 +404,7 @@ public class AdminController {
 	}	
   	
     // 카테고리ID로 카테고리 정보 조회하기
-	@GetMapping("/update/category/{categoryId}")
+	@GetMapping("/category/update/{categoryId}")
 	@ResponseBody
 	public CategoryCheck selectCategoryByCategoryId(@PathVariable int categoryId, Model model) {
 		return adminService.selectCategoryByCategoryId(categoryId);
@@ -419,7 +422,6 @@ public class AdminController {
  		model.addAttribute("searchUrl","/admin/category");
  		return "admin/message";
  	}
- 	
  	
 // 카테고리 등록하기 ★
 //	@PostMapping("/category")
@@ -522,7 +524,7 @@ public class AdminController {
  	}
  	
  	
- // 
+ 	// 전체 쿠폰 조회하기
    	@GetMapping("/coupon")
    	public String selectAllCoupons(@RequestParam(name = "page", defaultValue = "1") int page,
              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
@@ -532,6 +534,10 @@ public class AdminController {
 
        	List<CouponCheck> couponChecks = adminService.selectAllCoupons(offset, pageSize);
        
+       	// 첫 번째 카테고리 불러오기
+	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+	    model.addAttribute("firstCategories", firstCategories);
+	    
         // 페이징 정보 전달
  	    model.addAttribute("currentPage", page);
  	    model.addAttribute("pageSize", pageSize);
@@ -549,8 +555,7 @@ public class AdminController {
        return "admin/coupon/admin-coupon";
    	}
  	
- 	
- 	// 
+ 	// 쿠폰 삭제하기
  	@PostMapping("/coupon/delete")
  	public String deleteCoupon(@RequestParam int couponId, Model model) {
  		adminService.deleteCoupon(couponId);
@@ -559,11 +564,30 @@ public class AdminController {
  		return "admin/message";
  	}	
  	
- 	
- 	
- 	
- 	
- 	
+ 	// 쿠폰 등록하기
+	@PostMapping("/coupon")
+	public String registerCoupons(@RequestParam("couponSn") String couponSn, CouponCheck couponCheck, Model model) {
+		 if (adminService.isCouponSnUnique(couponSn)) {
+		     couponCheck.setCouponSn(couponSn);
+		     adminService.registerCoupons(couponCheck);
+		        model.addAttribute("message", "쿠폰이 등록되었습니다.");
+		 } else {
+		     model.addAttribute("message", "쿠폰 등록에 실패하였습니다. 다시 시도해주세요.");
+		 }
+		 model.addAttribute("searchUrl", "/admin/coupon");
+		 return "admin/message";
+	}
+	
+	// 쿠폰 중복 확인하기
+	@PostMapping("/checkCouponUniqueness")
+	@ResponseBody
+	public ResponseEntity<Boolean> checkCouponUniqueness(@RequestParam("couponSn") String couponSn) {
+	    boolean isUnique = adminService.isCouponSnUnique(couponSn);
+	    return ResponseEntity.ok(isUnique);
+	}
+
+	
+	
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {

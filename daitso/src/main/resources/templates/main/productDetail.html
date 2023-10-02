@@ -276,6 +276,7 @@
 </div>
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script th:src="@{/js/mic.js}"></script>
 <script th:inline="javascript">
 	const body = document.querySelector("body");
 	const modal = document.querySelector(".modal");
@@ -575,8 +576,7 @@
 					objCsrf.setAttribute('type','hidden');
 					objCsrf.setAttribute('name', [[${_csrf.parameterName}]]);
 					objCsrf.setAttribute('value', [[${_csrf.token}]]);
-					
-		
+
 					tag.appendChild(objId);
 					tag.appendChild(objCnt);
 					tag.appendChild(objSelector);
