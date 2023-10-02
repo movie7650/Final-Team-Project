@@ -62,5 +62,8 @@ public interface ICustomerService {
 
 	// 내 전화번호 변경하기
 	void updateMyTelNO(@Param("customerId") int customerId, @Param("newTelNO") String newTelNO);
+	
+	//내 비밀번호 변경하기
+	void updateMyPassword(@Param("customerId") int customerId, @Param("newPassword") String newPassword);
 
 }

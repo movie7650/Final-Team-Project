@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.ProductCheck;
@@ -24,6 +25,7 @@ public interface IProductRepository {
 	// 상품 상세 정보 조회하기
 	Product selectProduct(@Param("productId") int productId);
 
+	
 	// 상품 조회하기(카테고리별)(관리자 페이지)
     List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
     
@@ -37,7 +39,7 @@ public interface IProductRepository {
     void deleteProductByGroupId(int productGroupId);
 	
 	// 상품ID로 상품 정보 조회하기
-	Product selectProductById(int productId);
+	Product selectProductByProductId(int productId);
 	
 	// 상품 수정하기
 	void updateProduct(Product product);
@@ -46,14 +48,24 @@ public interface IProductRepository {
     void deleteProduct(int productId);
     
     // 상품 등록하기
-	void registerProducts(ProductCheck product);
+	void registerProduct(ProductCheck product);
 	
-	// ★ 중복 상품 카운트를 반환하는 메서드
+	// 상품 등록시 중복된 상품의 개수를 반환하기
     int countDuplicateProducts(ProductCheck product);
-	
+    
+    // 상품 수정시 중복된 상품의 개수를 반환하기 -> 상품 수정은 옵션 변경 못 하도록 변경함
+//    int countDuplicateProducts(Product product);
 	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	List<ProductCheck> searchProductsByName(String searchText);
+	
+	// 상품 이미지 정보 삭제하기
+	void deleteProductImages(int productId, boolean deleteFirstImage, boolean deleteSecondImage, boolean deleteThirdImage);
+	
+	// 상품 이미지 수정하기
+//	void updateProductImages(int productId, List<String> imageUrls);
+	void updateProductImages(int productId, int selector, String imageUrl);
+	
 	
 	// 상품 첫 번째 옵션 조회
 	List<String> selectProductOptionFirst(int productGroupId);

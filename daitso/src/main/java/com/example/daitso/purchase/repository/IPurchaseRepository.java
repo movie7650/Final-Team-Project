@@ -65,4 +65,7 @@ public interface IPurchaseRepository {
 	
 	// 주문번호로 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
+	
+	// 상품구매시 제고 업테이트
+	void updateProductStockInPurchase(int cartId);
 }
