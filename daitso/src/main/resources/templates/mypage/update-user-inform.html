@@ -25,17 +25,17 @@
 		<tr>
 			<td>
 				<div style="float:left;" th:text="${MyEmail}">이메일</div>
-				<input autocomplete=off name="newEmail" type="email" id="change-email-input" hidden><button type="submit" hidden>확인</button>
+				<input autocomplete=off name="newEmail" type="email" id="change-email-input" hidden>
 				<button id="change-email" onclick="showEmailInput()" type="button">이메일변경</button>
 			</td>
 			<td>
 				<div style="float:left;" th:text="${MyName}">이름	</div>
-				<input autocomplete=off name="newName" type="text" id="change-name-input" hidden><button type="submit" hidden>확인</button>
+				<input autocomplete=off name="newName" type="text" id="change-name-input" hidden>
 				<button  id="change-name" onclick="showNameInput()" type="button">이름변경</button>
 			</td>
 			<td>
 				<div style="float:left;" th:text="${MyTelNo}">전화번호</div>
-				<input name="newTelNO" type="text" id="change-phonenumber-input" hidden><button type="submit" hidden>확인</button>
+				<input autocomplete=off maxlength="13" oninput="oninputPhone(this)" name="newTelNO" type="text" id="change-phonenumber-input" hidden>
 				<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
 			</td>
 			<td><input name="nowPassword" type="password"></td>
@@ -52,6 +52,11 @@
 				}
 				function showPhoneNumberInput(){
 					document.getElementById("change-phonenumber-input").removeAttribute("hidden");
+				}
+				function oninputPhone(target) {
+				    target.value = target.value
+				        .replace(/[^0-9]/g, '')
+				        .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
 				}
 			</script>
 	<div class="update-user-button-container">

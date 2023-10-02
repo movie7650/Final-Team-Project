@@ -262,7 +262,7 @@
 		기능: 상품ID로 상품 정보 조회하기
 		담당자: 이세인
 	-->
-	<select id="selectProductById" resultType="com.example.daitso.product.model.Product" parameterType="int">
+	<select id="selectProductById" resultType="com.example.daitso.product.model.Product" parameterType="int"> 
 	    SELECT product_group_id        AS "productGroupId",
 	           product_code            AS "productCode",
 	           product_id			   AS "productId",

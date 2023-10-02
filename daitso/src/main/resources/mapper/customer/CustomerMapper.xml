@@ -240,5 +240,15 @@
 		   SET customer_email=#{newEmail}
 		 WHERE customer_id=#{customerId}
     </update>
+     <!-- 
+    	기능: 내 전화번호 변경하기
+    	담당자: 윤상영
+    -->
+    <update id="updateMyTelNO">
+    	UPDATE customer
+		   SET customer_telno=#{newTelNO}
+		 WHERE customer_id=#{customerId}
+    </update>
+    
     
 </mapper>
