@@ -227,7 +227,6 @@ public class CartController {
 		
 		int productId = Integer.valueOf(element.getAsJsonObject().get("productId").getAsString());
 		int	productCnt = Integer.valueOf(element.getAsJsonObject().get("productCnt").getAsString());
-		System.out.println("----------------------------");
 		cartService.insertCartService(productId, customerId, productCnt);
 
 		return "2";

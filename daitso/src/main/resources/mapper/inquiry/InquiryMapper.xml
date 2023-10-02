@@ -170,7 +170,7 @@
 		기능: inquiry status Y 인거 카운트
 		담당자: 윤상영
 	 -->
-	 <select id="countInquiryStatusY" resultType="int" parameterType="int">
+	 <select id="countInquiryStatusY" resultType="int" parameterType="int"> 
 	 	SELECT count( inquiry_content) as "inquiryStatusYCount"
        	  FROM inquiry i
        	 WHERE i.customer_id=19

@@ -9,5 +9,5 @@ public class CheckMyInform {
 	private String customerEmail;
 	private String customerPW;
 	private String customerTelNo;
-
+	private String customerNM;
 }

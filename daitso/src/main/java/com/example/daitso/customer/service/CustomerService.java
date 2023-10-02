@@ -19,16 +19,16 @@ public class CustomerService implements ICustomerService {
 
 	@Autowired
 	ICustomerRepository customerRepository;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	// 이메일 중복체크
 	@Override
 	public Optional<Integer> checkEmailDuplicated(String customerEmail) {
 		return customerRepository.checkEmailDuplicated(customerEmail);
 	}
-	
+
 	// 휴대폰 중복체크
 	@Override
 	public Optional<Integer> checkTelnoDuplicated(String customerTelno) {
@@ -37,12 +37,12 @@ public class CustomerService implements ICustomerService {
 
 	// 회원가입
 	@Transactional
-	public void insertIntoCustomer(CustomerSignUp customerSignUp){
-		
+	public void insertIntoCustomer(CustomerSignUp customerSignUp) {
+
 		// 비밀번호 암호화
 		String encryptedPassword = passwordEncoder.encode(customerSignUp.getCustomerPw());
 		customerSignUp.setCustomerPw(encryptedPassword);
-		
+
 		customerRepository.insertIntoCustomer(customerSignUp);
 	}
 
@@ -57,8 +57,8 @@ public class CustomerService implements ICustomerService {
 	public CustomerInfo getCustomerInfoByCustomerId(int customerId) {
 		return customerRepository.getCustomerInfoByCustomerId(customerId);
 	}
-	
-	//사용자 이메일 가져오기 
+
+	// 사용자 이메일 가져오기
 	@Override
 	public String selectCustomerEmail() {
 		return customerRepository.selectCustomerEmail();
@@ -76,15 +76,58 @@ public class CustomerService implements ICustomerService {
 	public String getCustomerEmailByCustomerTelno(String customerTelno) {
 		return customerRepository.getCustomerEmailByCustomerTelno(customerTelno);
 	}
-	
-	//내 정보 조회
+
+	// 내 정보 조회
 	@Override
 	public List<CheckMyInform> selectMyInform(int customerId) {
 		return customerRepository.selectMyInform(customerId);
 	}
 
+	// 내 비밀번호가져오기
 	@Override
 	public String selectMyPassword(int customerId) {
 		return customerRepository.selectMyPassword(customerId);
-	}	
+	}
+
+	// 내 아이디(이메일) 가져오기
+	@Override
+	public String selectMyEmail(int customerId) {
+		return customerRepository.selectMyEmail(customerId);
+	}
+
+	// 내 이름 가져오기
+	@Override
+	public String selectMyName(int customerId) {
+		return customerRepository.selectMyName(customerId);
+	}
+
+	// 내 전화번호 가져오기
+	@Override
+	public String selectMyTelNo(int customerId) {
+		return customerRepository.selectMyTelNo(customerId);
+	}
+
+	// 내이름 변경하기
+	@Override
+	public void updateMyName(int customerId, String newName) {
+		customerRepository.updateMyName(customerId, newName);
+	}
+
+	// 내 아이디(이메일) 변경하기
+	@Override
+	public void updateMyEmail(int customerId, String newEmail) {
+		customerRepository.updateMyEmail(customerId, newEmail);
+	}
+
+	// 내 전화번호 변경하기
+	@Override
+	public void updateMyTelNO(int customerId, String newTelNO) {
+		customerRepository.updateMyTelNO(customerId, newTelNO);
+	}
+
+	@Override
+	public void updateMyPassword(int customerId, String newPassword) {
+		customerRepository.updateMyPassword(customerId, newPassword);
+		
+	}
 }
