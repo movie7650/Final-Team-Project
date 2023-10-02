@@ -15,14 +15,15 @@
 
 .product-path-bar{
 	height: 30px;
-	background-color: #dadada;
+	background-color: #fafafa;
 	display:flex;
-	align-items:center
+	align-items:center;
+	justify-content:center;
 }
 
 .product-sidebar{
 	margin: 15px 10px 0 0;
-	width: 100px;
+	width: 200px;
 	display: flex;
 	justify-content: center;
 }
@@ -194,4 +195,12 @@
 }
 .carousel-btn:focus{ 	
     outline:none;
+}
+.a-sort{
+	cursor: pointer;
+	text-decoration: none;
+	color: black;
+}
+.a-sort:link{
+	text-decoration: none;
 }

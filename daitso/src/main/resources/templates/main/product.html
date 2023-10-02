@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>카테고리별 상품 리스트</title>
-<style>
-
-</style>
 </head>
 <div th:replace="~{/include/header :: header}"></div>
 <body>
@@ -16,22 +13,22 @@
 		</div>
 		<div class="product-path-bar">
 			<th:block th:if="${categoryId == 'noCategory'}">
-				<span style="margin-left:20%">전체 > [[${path}]]</span>		
+				<span style="width:1215px">전체 > [[${path}]]</span>		
 			</th:block>
 			<th:block th:if="${categoryId != 'noCategory'}">
-				<span style="margin-left:20%">전체 [[${path}]]</span>		
+				<span style="width:1215px">전체 [[${path}]]</span>		
 			</th:block>
 		</div>
 		<div class="d-flex justify-content-center">
 			<th:block th:if="${categoryList != 'noCategory'}">
 				<div class="product-sidebar">
 					<div>
-						<div style="border: solid 2px #dedede">
+						<div style="width:200px; border: 1px solid #eee">
 						<ul>
 							<th:block th:each="list : ${categoryList}">
-								<p style="text-align:center; border-bottom: solid 2px #dedede" th:if="${list.lv == 1}">[[${list.categoryNm}]]</p>
-								<li th:class="list+${list.categoryId} + ' ' + font-s-13 + ' ' + margin-b-5"  th:if="${list.lv == 2}">
-									<a class="text-dark" th:href="@{/category/{id}(id=${list.categoryId})}">[[${list.categoryNm}]] 
+								<p style="margin-left:10px; border-bottom: solid 1px #eee" th:if="${list.lv == 1}">[[${list.categoryNm}]]</p>
+								<li th:class="list+${list.categoryId} + ' ' + font-s-13 + ' ' + margin-b-5"  th:if="${list.lv == 2}" style="margin-left:20px">
+									<a th:class="a+${list.categoryId}" th:href="@{/category/{id}(id=${list.categoryId})}" style="color: black">[[${list.categoryNm}]] 
 										<a th:class="show-btn+${list.categoryId}"  th:onclick="showDownCategory([[${list.categoryId}]], [[${list.lv}]])" th:if="${list.isLeaf == 0}">
 											<img style="width:10px" th:src="@{/assets/common/angle-down-solid.svg}"></img>
 										</a>
@@ -48,16 +45,16 @@
 			</th:block>
 			<div>
 				<th:block th:if="${categoryId != 'noCategory'}">
-					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#dadada; font-size:12px">
-						<a th:href="@{'/category/' + ${categoryId} + '?sort=lowPrice'}" style="cursor: pointer; margin-left: 20px">낮은 가격순</a>
+					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#fafafa; font-size:12px">
+						<a class="a-sort" th:href="@{'/category/' + ${categoryId} + '?sort=lowPrice'}" style="margin-left: 20px">낮은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
-						<a style="cursor: pointer" th:href="@{'/category/' + ${categoryId} + '?sort=highPrice'}">높은 가격순</a>
+						<a class="a-sort" th:href="@{'/category/' + ${categoryId} + '?sort=highPrice'}">높은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
-						<a style="cursor: pointer" th:href="@{'/category/' + ${categoryId} + '?sort=highRate'}">평점순</a>
+						<a class="a-sort" th:href="@{'/category/' + ${categoryId} + '?sort=highRate'}">평점순</a>
 					</div>				
 				</th:block>
 				<th:block th:if="${categoryId == 'noCategory'}">
-					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#dadada; font-size:12px">
+					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#fafafa; font-size:12px">
 						<a th:href="@{'/product/search' + '?sort=lowPrice&searchText='+ ${path}}" style="cursor: pointer; margin-left: 20px">낮은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
 						<a style="cursor: pointer" th:href="@{'/product/search' + '?sort=highPrice&searchText=' + ${path}}">높은 가격순</a>
@@ -104,9 +101,16 @@
 	
 	/*<![CDATA[*/
     var cList = /*[[${categoryList}]]*/
+    cId = /*[[${categoryId}]]*/
     /*]]>*/
 	pList =/*[[${productList}]]*/
-
+	test = document.querySelector(`.a${cId}`);
+    if(test){
+	    test.style.color="red";
+	    test.style.fontWeight="bold";    	
+    }
+    showDownCategory(cId, 2);
+	
 	function goProductDetail(id, groupId){
 		let tag = document.createElement('form');
 		
@@ -117,7 +121,7 @@
 	}
 	
 	function showDownCategory(categoryId, lv){
-		
+		console.log(categoryId, lv);
 		var showBtn = document.querySelector(`.show-btn${categoryId}`);
 		var hiddenBtn = document.querySelector(`.hidden-btn${categoryId}`);
 		var lbody = document.querySelector(`.list${categoryId}`);
@@ -127,13 +131,12 @@
 		lbody.innerHTML += frame;
 		var mbody = document.querySelector(`.down-ul${categoryId}-lv${lv}`);
 		
-		
 		cList.forEach(list => {
 			if(list.categoryPrId == categoryId){
 				var span = document.createElement('span');
 				var category = `
 						<li class="list${list.categoryId} font-s-13">
-							<a class="text-dark" href="/category/${list.categoryId}">${list.categoryNm}
+							<a class="a${list.categoryId}" href="/category/${list.categoryId}" style="color: black">${list.categoryNm}
 								${list.isLeaf == 0 ?  
 									`<a class="show-btn${list.categoryId} text-secondary-emphasis" onclick="showDownCategory(${list.categoryId}, ${list.lv})"> 
 									 	<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
@@ -166,7 +169,7 @@
 		var downUl = document.querySelector(`.down-ul${categoryId}-lv${lv}`);
 		showBtn.style.display = "inline";
 		hiddenBtn.style.display = "none";
-		downUl.innerHTML = "";
+		downUl.remove();
 		
 	}
 </script>
