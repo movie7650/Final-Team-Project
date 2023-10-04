@@ -83,7 +83,6 @@
     	        		a.style.fontSize = '18px';
     	        		a.setAttribute('href', '/category/'+data.categoryId);
     	        		a.setAttribute('id', 'a');
-    	        		a.setAttribute('class', 'korea');
     	        	
     	        		a.addEventListener('mouseover', () => {
     	        	   		a.style.color = '#39594e';
@@ -172,48 +171,6 @@
 	    	.catch(function(error) {
 	    	      console.log(error);
 	    	}); 
-    	    
-    	 	// 번역
-    		const locale = navigator.language || navigator.userLanguage;
-    	 	const csrf_token = "[[${_csrf.token}]]";
-    	 	
-    		if(locale != "ko") {
-    			// 번역(text)
-    			document.querySelectorAll(".korea").forEach((item) => {
-    				fetch( window.location.origin + "/translate" , {
-    				    method: "POST",
-    				    headers: { 
-    				        "Content-Type": "application/json",
-    				        "X-CSRF-TOKEN": csrf_token
-    				    },
-    				    body: JSON.stringify({
-    				        text: item.innerText
-    				    }),
-    				})
-    				.then((res) => res.json())
-    				.then((data) => {
-    					item.innerText = data.message.result.translatedText;
-    				});
-    			})
-
-    			// 번역(placeholder)
-    			document.querySelectorAll(".korea-input").forEach((item) => {
-    				fetch( window.location.origin + "/translate" , {
-    				    method: "POST",
-    				    headers: { 
-    				        "Content-Type": "application/json",
-    				        "X-CSRF-TOKEN": csrf_token
-    				    },
-    				    body: JSON.stringify({
-    				        text: item.placeholder
-    				    }),
-    				})
-    				.then((res) => res.json())
-    				.then((data) => {
-    					item.placeholder = data.message.result.translatedText;
-    				}); 
-    			}) 		
-    		} 
     }
     </script>
 </head>
