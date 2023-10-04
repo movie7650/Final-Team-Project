@@ -56,4 +56,9 @@ public class CustomerCouponService implements ICustomerCouponService {
 	public int countExistCouponId(String allCouponNum) {
 		return customerCouponRepository.countExistCouponId(allCouponNum);
 	}
+	//사용가능한 쿠폰 갯수 count
+	@Override
+	public int countUsableCustomerCoupon(int customerId) {
+		return customerCouponRepository.countUsableCustomerCoupon(customerId);
+	}
 }
