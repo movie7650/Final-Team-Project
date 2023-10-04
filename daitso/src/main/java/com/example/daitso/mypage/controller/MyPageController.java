@@ -28,6 +28,9 @@ import com.example.daitso.purchase.service.IPurchaseService;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.service.IReviewService;
+import com.example.daitso.shipping.model.MypageReceiverShipping;
+import com.example.daitso.shipping.service.IShippingService;
+import com.example.daitso.shipping.service.ShippingService;
 
 @Controller
 @RequestMapping("/mypage")
@@ -49,6 +52,8 @@ public class MyPageController {
 	ICustomerService customerService;
 	@Autowired
 	ILogincheckService logincheckService;
+	@Autowired
+	IShippingService shippingService;
 
 	// 마이페이지-포인트 컨트롤러
 	@RequestMapping(value = "/mypoint", method = RequestMethod.GET)
@@ -645,7 +650,7 @@ public class MyPageController {
 
 	}
 
-	// 마이페이지-배송지관리 컨트롤러
+	// 마이페이지-배송지관리-배송지목록출력
 	@RequestMapping("/myshipping")
 	public String shippingTest(Model model, RedirectAttributes redirectAttributes) {
 
@@ -656,18 +661,35 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-
+		
 		// 상단 잔여포인트
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
+		
+		// 상단에 배송완료 갯수 출력
+		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+		model.addAttribute("shippingCompleteCount", shipCompleteCount);
+
+		// 상단에 배송중갯수 출력
+		int shipCount01 = purchaseService.selectShipping(customerId);
+		model.addAttribute("shipCount", shipCount01);
+		
+		//마이페이지-배송지관리-배송지리스트 출력
+		List<MypageReceiverShipping> mypageReceiverShippingList = shippingService.selectMyShippingInfo(customerId);
+		model.addAttribute("myshippinglist",mypageReceiverShippingList);
+		
+		//shipping_status가 Y인거 갯수 
+		int countShippingStatusY = shippingService.selectShippingStatusY(customerId);
+		model.addAttribute("countshippingstatusy",countShippingStatusY);
+		
 		return "mypage/my-shipping";
 	}
 
 	// 마이페이지-배송지관리-배송지추가 컨트롤러
-	@RequestMapping("/addshipping")
+	@GetMapping("/addshipping")
 	public String addShipping(Model model, RedirectAttributes redirectAttributes) {
 
 		// spring security -> 사용자 고유번호 받아오기
@@ -684,7 +706,100 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
+		// 상단에 배송완료 갯수 출력
+		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+		model.addAttribute("shippingCompleteCount", shipCompleteCount);
+
+		// 상단에 배송중갯수 출력
+		int shipCount01 = purchaseService.selectShipping(customerId);
+		model.addAttribute("shipCount", shipCount01);
+		
 		return "mypage/add-shipping";
 	}
+	
+	//마이페이지-배송지관리-배송지추가 post
+	@RequestMapping(value="/addshipping", method = RequestMethod.POST)
+	public String insertMyshipping(Model model,RedirectAttributes redirectAttributes, 
+									@RequestParam String shippingReceiverNM, @RequestParam String shippingRoadNMAddr,
+									@RequestParam String shippingDaddr, @RequestParam String shippingReceiverTelNO,
+									@RequestParam String shippingDmnd, @RequestParam(defaultValue = "302") int shippingDv) {
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
 
+		if (customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+		if(shippingService.countShippingDv301(customerId)>0) {
+			shippingDv = 302;
+			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd,shippingDv);  
+			return "redirect:/mypage/myshipping";
+		}else {
+			shippingDv = 301;
+			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+			return "redirect:/mypage/myshipping";
+		}
+	}
+	//마이페이지-배송지관리-배송지수정
+	@RequestMapping(value="/updateshippingaddr", method = RequestMethod.GET)
+	public String updateShippingAddr(Model model,RedirectAttributes redirectAttributes,@RequestParam int shippingId) {
+		// spring security -> 사용자 고유번호 받아오기
+		int customerId = logincheckService.loginCheck();
+
+		if (customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+
+		// 상단 잔여포인트
+		String point = pointService.selectTotalPoint(customerId);
+		if (point == null) {
+			point = "0";
+		}
+		model.addAttribute("totalPoint", point + "P");
+		
+		// 상단에 배송완료 갯수 출력
+		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+		model.addAttribute("shippingCompleteCount", shipCompleteCount);
+
+		// 상단에 배송중갯수 출력
+		int shipCount01 = purchaseService.selectShipping(customerId);
+		model.addAttribute("shipCount", shipCount01);
+		
+		//선택한 shippingId에 맞는 배송지정보 가져오기 
+		List<MypageReceiverShipping> shippingIdInfo = shippingService.selectShippingIdInfo(shippingId);
+		model.addAttribute("shippingIdInfoList", shippingIdInfo);
+		
+		return "mypage/my-shipping-update";
+	}
+	//배송지ID에 따른 배송지 수정하기 
+	@RequestMapping(value="/updateshippingaddr", method=RequestMethod.POST)
+	public String updateShippingIdInfo(@RequestParam int shippingId,@RequestParam String shippingReceiverNM,
+									   @RequestParam String shippingRoadNMAddr, @RequestParam String shippingDaddr,
+									   @RequestParam String shippingReceiverTelNO, @RequestParam String shippingDmnd,
+									   @RequestParam(defaultValue = "302") int shippingDv,RedirectAttributes redirectAttributes) {
+		
+		int customerId = logincheckService.loginCheck();
+
+		if (customerId == -1) {
+			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+			return "redirect:/customer/login";
+		}
+		if(shippingService.countShippingDv301(customerId)>0) {
+			shippingDv = 302;	
+			shippingService.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+			return "redirect:/mypage/myshipping";
+		}else {
+			shippingDv = 301;
+			shippingService.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+			return "redirect:/mypage/myshipping";
+		}
+	}
+	//배송지 삭제
+	@RequestMapping(value="/deleteshipping", method = RequestMethod.POST)
+	public String deleteShipping(@RequestParam int shippingId) {
+		shippingService.deleteMyshipping(shippingId);
+		return "redirect:/mypage/myshipping";
+	}
+	
 }
