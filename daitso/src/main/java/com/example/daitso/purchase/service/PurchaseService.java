@@ -41,6 +41,7 @@ public class PurchaseService implements IPurchaseService {
 	@Transactional
 	public void insertPurchase(PurchaseInsert purchaseInsert) {
 		 purchaseRepository.insertPurchase(purchaseInsert);
+		 purchaseRepository.updateProductStockInPurchase(purchaseInsert.getCartId());
 		 cartRepository.updateCartStatusPurchaseSuccess(purchaseInsert.getCustomerId(), purchaseInsert.getCartId());
 		 if(purchaseInsert.getCustomerCouponId() != 0) {
 			 customerCouponRepository.updateCustomerCouponStatusPurchaseSuccess(purchaseInsert.getCustomerId(), purchaseInsert.getCustomerCouponId());

@@ -317,5 +317,14 @@
 		  JOIN product r ON r.product_id = p.product_id
 		 WHERE p.purchase_num = #{purchaseNum}	
 	</select>
+	
+	<!--    기능: 상품구매시 제고 업테이트
+			담당자: 최준원
+	-->	
+	<update id="updateProductStockInPurchase" parameterType="int">
+		UPDATE product
+		   SET product_stock = product_stock - ( SELECT cart_count FROM cart WHERE cart_id = #{cartId} )
+		 WHERE product_id = ( SELECT product_id FROM cart WHERE cart_id = #{cartId} )
+	</update>
 
 </mapper>

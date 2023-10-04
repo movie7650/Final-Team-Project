@@ -17,6 +17,7 @@
 				<input type="hidden" name="productId" th:value="${myReviewPurchase.productId}">
 				<input type="hidden" name="customerId" th:value="${myReviewPurchase.customerId}">
 				<input type="hidden" name="purchaseNum" th:value="${myReviewPurchase.purchaseNum}">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<div class="order-list-container">
 					<div class="order-list-container-01">
 					<div th:text="${myReviewPurchase.purchaseDt}" class="shipping-status">주문날짜</div> 					
@@ -38,14 +39,12 @@
 				<div class="review-input"><input required onfocus="this.blur()" name="reviewStarPoint" th:text="${reviewStarPoint}" type="number" min="1" max="5" maxlength="1"/></div>
 			</div>
 			
-			
 			<div style="margin-top:20px;">
 				<div style="float:left; border-bottom:solid 2px #668663;">글 제목 :</div>
 				<input required name="reviewTitle" autocomplete="off" th:text="${reviewTitle}" style="margin-left:10px; border:solid 2px #e7e7e7;" type="text" placeholder="제목을 입력하세요"/>
 			</div>
 			
 			<textarea required name="reviewContent" th:text="${reviewContent}" class="review-text-area" placeholder="고객님의 소중한리뷰를 여기에 작성해주세요!"></textarea>
-			
 			
 			<div class="insert">
 		        	<input type="file" onchange="addFile(this);" multiple/>

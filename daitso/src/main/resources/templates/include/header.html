@@ -62,7 +62,6 @@
     	    		// 서버에서 주는 json데이터가 출력 됨
     	        	let datas = json;
     	        	datas.map(function(data) {
-    	        		console.log(`${data.categoryNm}`); 
     	        		const div1 = document.createElement('div');
     	        		div1.setAttribute('id', 'header-category-first')
     	        		const div2 = document.createElement('div');
@@ -84,7 +83,7 @@
     	        		a.style.fontWeight = 'bold';
     	        		a.style.fontSize = '18px';
     	        		a.setAttribute('href', '/category/'+data.categoryId);
-    	        		a.setAttribute('id', 'a');		
+    	        		a.setAttribute('id', 'a');
     	        	
     	        		a.addEventListener('mouseover', () => {
     	        	   		a.style.color = '#39594e';
@@ -109,7 +108,6 @@
 		     	        		div3.setAttribute('id', 'header-category-second')
 		     	        		div3.style.marginLeft = '40px';
     		     		       	datas.map(function(data) {
-    		     	        		//console.log(`${data.categoryNm}`);
     		     	        		const span = document.createElement('span');
     		     	        		span.style.marginRight = '18px';
     		     	        		const a = document.createElement('a');
@@ -125,6 +123,7 @@
     		    	        		a.style.fontSize = '14px';
     		    	        		a.setAttribute('href', '/category/'+data.categoryId);
     		    	        		a.setAttribute('id', 'a');
+    		    	        		a.setAttribute('class', 'korea');
     		    	        		
     		    	        		a.addEventListener('mouseover', () => {
     		    	        	   		a.style.color = '#8BBA66';
@@ -156,7 +155,6 @@
 	        	return res.json(); 
 	    	})
 	    	.then((json) => {
-	    		console.log(json);
 	    		let customerId = json;
 	    		if(json !== -1) {
 	    			fetch( window.location.origin + '/customer/customer-nm/' + customerId)
@@ -173,8 +171,7 @@
 	    	})
 	    	.catch(function(error) {
 	    	      console.log(error);
-	    	});
-	    	
+	    	}); 
     }
     </script>
 </head>

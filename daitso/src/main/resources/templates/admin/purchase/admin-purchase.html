@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
-<link rel="stylesheet" th:href="@{/css/admin-product.css}">
-<link rel="stylesheet" th:href="@{/css/admin-purchase.css}">
-<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-purchase.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
@@ -304,8 +304,7 @@
 	                  });
 	              });
 	      }
-	 
-	 
+
 	 
 		// 천 단위로 comma 찍기
 	    function inputNumberFormat(obj) {
