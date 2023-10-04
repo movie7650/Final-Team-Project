@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
-<link rel="stylesheet" th:href="@{/css/admin-category.css}">
-<link rel="stylesheet" th:href="@{/css/admin-frame2.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-category.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-frame2.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
@@ -304,6 +304,7 @@
         }
         const formHtml = `
             <form id="deleteForm" action="/admin/category/delete?categoryId=${categoryId}" method="post">
+            <input type="hidden" name=` + [[${_csrf.parameterName}]] + ` value=` + [[${_csrf.token}]] + ` /> 
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');

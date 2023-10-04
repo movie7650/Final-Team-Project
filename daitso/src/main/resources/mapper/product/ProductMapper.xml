@@ -262,7 +262,7 @@
 		기능: 상품ID로 상품 정보 조회하기
 		담당자: 이세인
 	-->
-	<select id="selectProductById" resultType="com.example.daitso.product.model.Product" parameterType="int"> 
+	<select id="selectProductByProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
 	    SELECT product_group_id        AS "productGroupId",
 	           product_code            AS "productCode",
 	           product_id			   AS "productId",
@@ -287,18 +287,79 @@
 	-->
 	<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
 	    UPDATE product
-		   SET product_option_first  = #{productOptionFirst},
-		   	   product_option_second = #{productOptionSecond},
-		   	   product_option_third  = #{productOptionThird},
-		   	   product_price         = #{productPrice},
+		   SET product_price         = #{productPrice},
 		       product_stock         = #{productStock},
 		       product_max_get       = #{productMaxGet},
 		       modifier              = 'admin',
                modify_dt             = systimestamp
 		 WHERE product_id = #{productId}
 	</update>
+	<!--<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
+		    UPDATE product
+			   SET product_option_first  = #{productOptionFirst},
+			   	   product_option_second = #{productOptionSecond},
+			   	   product_option_third  = #{productOptionThird},
+			   	   product_price         = #{productPrice},
+			       product_stock         = #{productStock},
+			       product_max_get       = #{productMaxGet},
+			       modifier              = 'admin',
+	               modify_dt             = systimestamp
+			 WHERE product_id = #{productId}
+		</update> -->
 
 
+	<!-- 
+		기능: 상품 이미지 정보 삭제하기
+		담당자: 이세인
+	-->
+    <update id="deleteProductImages" parameterType="int">
+        UPDATE product
+          <set>
+	        <if test="deleteFirstImage">
+	        		  product_image_first = NULL,
+	        </if>
+	        <if test="deleteSecondImage">
+	        		  product_image_second = NULL,
+	        </if>
+	        <if test="deleteThirdImage">
+	        		  product_image_third = NULL
+	        </if>
+         </set>
+         WHERE product_id = #{productId}
+    </update>
+    
+    
+	<!-- 
+			기능: 상품 이미지 정보 삭제하기
+			담당자: 이세인
+		-->
+	
+	<update id="updateProductImages">
+	    UPDATE product
+	       SET
+		    <choose>
+		        <when test="selector == 1">
+		            product_image_first = #{imageUrl}
+		        </when>
+		        <when test="selector == 2">
+		            product_image_second = #{imageUrl}
+		        </when>
+		        <when test="selector == 3">
+		            product_image_third = #{imageUrl}
+		        </when>
+		    </choose>
+	    WHERE product_id = #{productId}
+	</update>
+	<!-- 	<update id="updateProductImages">
+		    UPDATE product
+			   SET
+			    <if test="uploadFirstImage != null">product_image_first = #{imageUrls},</if>
+			    <if test="uploadSecondImage != null">product_image_second = #{imageUrls},</if>
+			    <if test="uploadThirdImage != null">product_image_third = #{imageUrls}</if>
+			  WHERE product_id = #{productId}
+		</update> -->
+    
+    
 	<!-- 
 		기능: 상품 삭제하기
 		담당자: 이세인
@@ -316,127 +377,100 @@
 		기능: 상품 등록하기(상품 등록을 하고, 해당 상품에 상품 코드를 생성하기)
 		담당자: 이세인
 	-->
-	<insert id="registerProducts" parameterType="com.example.daitso.product.model.ProductCheck">
-	    <!-- DECLARE v_product_id NUMBER;
-		  BEGIN		  
-		 INSERT INTO product ( product_group_id,
-							   product_id,
-							   category_id,
-						       product_nm,
-					     	   product_content,
-						       product_image_first,
-						       product_image_second,
-						       product_image_third,
-							   product_price,
-							   product_stock,
-							   product_option_first,
-							   product_option_second,
-							   product_option_third ) 
-			  VALUES ( #{productGroupId},
-			           product_seq.NEXTVAL,
-			           #{categoryId},
-			           #{productNm},
-			           #{productContent},
-			           #{productImageFirst},
-			           #{productImageSecond},
-			           #{productImageThird},
-			           #{productPrice},
-			           #{productStock},
-			           #{productOptionFirst},
-			           #{productOptionSecond},
-			           #{productOptionThird} )		         
-       RETURNING  product_id INTO v_product_id;
-          UPDATE  product
-		     SET  product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-		   WHERE  product_id = v_product_id;
-		 COMMIT;
-		    END; -->
-	DECLARE v_product_id NUMBER;	    
-	BEGIN
-    <choose>
-      <when test="productGroupId == null or productGroupId ==0">
-        INSERT INTO product ( product_group_id,
-					          product_id,
-					          category_id,
-					          product_nm,
-					          product_content,
-					          product_image_first,
-					          product_price,
-					          product_stock,
-					          product_option_first,
-					          product_option_second,
-					          product_option_third,
-					          product_max_get
-					         )
-		     VALUES ( product_group_seq.NEXTVAL,
-				      product_seq.NEXTVAL,
-				      #{categoryId},
-				      #{productNm},
-				      #{productContent},
-		              #{productImageFirst},
-			          #{productPrice},
-			          #{productStock},
-			          #{productOptionFirst},
-			          #{productOptionSecond},
-			          #{productOptionThird},
-			          #{productMaxGet} )
-      RETURNING product_id INTO v_product_id;
-  
-      UPDATE product
-	     SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-       WHERE product_id = v_product_id;
-      </when>
-      <otherwise>
-        INSERT INTO product (
-           product_group_id,
-           product_id,
-           category_id,
-           product_nm,
-           product_content,
-           product_image_first,
-           product_price,
-           product_stock,
-           product_option_first,
-           product_option_second,
-           product_option_third,
-           product_max_get
-        )
-        VALUES (
-           #{productGroupId},
-           product_seq.NEXTVAL,
-           #{categoryId},
-           #{productNm},
-           #{productContent},
-           #{productImageFirst},
-           #{productPrice},
-           #{productStock},
-           #{productOptionFirst},
-           #{productOptionSecond},
-           #{productOptionThird},
-           #{productMaxGet}
-        )
-        RETURNING product_id INTO v_product_id;
-    
-        UPDATE product
-        SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-        WHERE product_id = v_product_id;
-      </otherwise> 
-    </choose>
-  
-    COMMIT;
-  END;
-    </insert>
+	<insert id="registerProduct" parameterType="com.example.daitso.product.model.ProductCheck">
+		  DECLARE
+		    v_product_id NUMBER;
+		  BEGIN
+		    IF (#{productGroupId} IS NULL OR #{productGroupId} = 0) THEN
+		      INSERT INTO product (
+		        product_group_id,
+		        product_id,
+		        category_id,
+		        product_nm,
+		        product_content,
+		        product_image_first,
+		        product_price,
+		        product_stock,
+		        product_option_first,
+		        product_option_second,
+		        product_option_third,
+		        product_max_get
+		      )
+		      VALUES (
+		        product_group_seq.NEXTVAL,
+		        product_seq.NEXTVAL,
+		        #{categoryId},
+		        #{productNm},
+		        #{productContent},
+		        #{productImageFirst},
+		        #{productPrice},
+		        #{productStock},
+		        #{productOptionFirst},
+		        #{productOptionSecond},
+		        #{productOptionThird},
+		        #{productMaxGet}
+		      )
+		      RETURNING product_id INTO v_product_id;
+		
+		      UPDATE product
+		         SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+		       WHERE product_id = v_product_id;
+		    ELSE
+		      INSERT INTO product (
+		        product_group_id,
+		        product_id,
+		        category_id,
+		        product_nm,
+		        product_content,
+		        product_image_first,
+		        product_price,
+		        product_stock,
+		        product_option_first,
+		        product_option_second,
+		        product_option_third,
+		        product_max_get
+		      )
+		      VALUES (
+		        #{productGroupId},
+		        product_seq.NEXTVAL,
+		        #{categoryId},
+		        #{productNm},
+		        #{productContent},
+		        #{productImageFirst},
+		        #{productPrice},
+		        #{productStock},
+		        #{productOptionFirst},
+		        #{productOptionSecond},
+		        #{productOptionThird},
+		        #{productMaxGet}
+		      )
+		      RETURNING product_id INTO v_product_id;
+		
+		      UPDATE product
+		         SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+		       WHERE product_id = v_product_id;
+		    END IF;
+		
+		    COMMIT;
+		  END;
+	</insert>
 
-<select id="countDuplicateProducts" resultType="int">
-    SELECT COUNT(*) FROM product
-    WHERE product_nm = #{productNm}
-    AND product_group_id = #{productGroupId}
-    AND product_option_first = #{productOptionFirst}
-    AND product_option_second = #{productOptionSecond}
-    AND product_option_third = #{productOptionThird}
-</select>
-    
 
+	<!-- 
+		기능: 중복된 상품의 개수를 반환하기
+		담당자: 이세인
+	-->
+	<select id="countDuplicateProducts" resultType="int">
+	    SELECT COUNT(*) 
+	      FROM product
+	     WHERE product_nm = #{productNm}
+	       AND product_group_id = #{productGroupId}
+	       AND product_option_first = #{productOptionFirst}
+	       AND product_option_second = #{productOptionSecond}
+	       AND product_option_third = #{productOptionThird}
+	</select>
+    
+    
 	<!-- 
 		기능: 상품명으로 그룹 상품 조회하기
 		담당자: 이세인

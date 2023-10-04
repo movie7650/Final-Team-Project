@@ -1,12 +1,15 @@
 package com.example.daitso.admin.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.daitso.admin.exceptions.DuplicateProductException;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.config.CommonCode;
@@ -42,7 +45,7 @@ public class AdminService implements IAdminService{
 	
 	// 상품 등록하기 ★
 //	@Transactional
-//	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
+//	public void registerProduct(ProductCheck product, List<MultipartFile> files) {
 //		List<String> imagePathList = s3Service.upload(files);
 //		product.setProductImageFirst(imagePathList.get(0));
 //		product.setProductImageSecond(imagePathList.get(1));
@@ -50,7 +53,7 @@ public class AdminService implements IAdminService{
 //		
 //		// 상품 등록 실패시 s3에 등록된 이미지 삭제
 //		try {
-//			productRepository.registerProducts(product);
+//			productRepository.registerProduct(product);
 //			product.getProductId();
 //		} catch(Exception e) {
 //			e.printStackTrace();
@@ -62,24 +65,33 @@ public class AdminService implements IAdminService{
 	
 	//테스트//
 	@Transactional
-	public void registerProducts(ProductCheck product) {
+	public void registerProduct(ProductCheck product) {
+		// 중복 상품이 존재하면 등록을 막기 위해 RuntimeException 발생
+//		if (isDuplicateProduct(product)) {
+//			 throw new RuntimeException("상품이 중복되었습니다.");
+//	    	}
 		 if (isDuplicateProduct(product)) {
-	            // 중복 상품이 이미 존재하므로 등록을 막음
-			 throw new RuntimeException("상품이 중복되었습니다.");
-	        }
-
-		productRepository.registerProducts(product);
+		        throw new DuplicateProductException("상품이 중복되었습니다.");
+		    }
+		productRepository.registerProduct(product);
 		
 	}
 	
-	// ★
+	// 상품 등록시 상품의 중복 여부를 확인하기 
 	@Override
 	public boolean isDuplicateProduct(ProductCheck product) {
-		// 중복 체크 로직 구현
+		// 중복 상품이 존재하면(중복된 상품의 개수가 0보다 크면) true, 그렇지 않으면 false
         int count = productRepository.countDuplicateProducts(product);
         return count > 0;
 	}
 	
+	// 상품 수정시 상품의 중복 여부를 확인하기 -> 변경함
+//	@Override
+//	public boolean isDuplicateProduct(Product product) {
+//		// 중복 상품이 존재하면(중복된 상품의 개수가 0보다 크면) true, 그렇지 않으면 false
+//        int count = productRepository.countDuplicateProducts(product);
+//        return count > 0;
+//	}
 	
 	// 상품 조회하기(카테고리별)
 	@Override
@@ -107,14 +119,18 @@ public class AdminService implements IAdminService{
 
 	// 상품ID로 상품 정보 갖고오기
 	@Override
-	public Product selectProductById(int productId) {
-		return productRepository.selectProductById(productId);
+	public Product selectProductByProductId(int productId) {
+		return productRepository.selectProductByProductId(productId);
 	}
 	
 	// 상품 수정하기
 	@Override
 	public void updateProduct(Product product) {
-		
+		// -> 변경함
+//		// 중복 상품이 존재하면 등록을 막기 위해 RuntimeException 발생
+//		if (isDuplicateProduct(product)) {
+//			throw new RuntimeException("상품이 중복되었습니다.");
+//		}
 		productRepository.updateProduct(product);
 	}
 
@@ -128,6 +144,18 @@ public class AdminService implements IAdminService{
 	@Override
 	public List<ProductCheck> searchProductsByName(String searchText) {
 		return productRepository.searchProductsByName(searchText);
+	}
+
+	// 상품 이미지 정보 삭제하기
+	@Override
+	 public void deleteProductImages(int productId, boolean deleteFirstImage, boolean deleteSecondImage, boolean deleteThirdImage) {
+		 productRepository.deleteProductImages(productId, deleteFirstImage, deleteSecondImage, deleteThirdImage);
+	 }
+	
+	// 상품 이미지 수정하기
+	@Override
+	public void updateProductImages(int productId, int selector, String imageUrl) {
+		productRepository.updateProductImages(productId, selector, imageUrl);
 	}
 
 	
@@ -273,6 +301,8 @@ public class AdminService implements IAdminService{
 	}
 
 	
+	
+	
 	// 전체 쿠폰 조회하기
 	@Override
 	public List<CouponCheck> selectAllCoupons(int offset, int pageSize) {
@@ -302,5 +332,5 @@ public class AdminService implements IAdminService{
         int count = couponRepository.countByCouponSn(couponSn);
         return count == 0; // 0이면 중복되지 않음, 1 이상이면 중복됨
     }
-	
+
 }
