@@ -17,5 +17,9 @@
     
     <!-- JS -->
 	<script type="text/javascript"></script>
+	<script>
+		const csrf_token = "[[${_csrf.token}]]";
+	</script>
+	<script th:inline="javascript" th:src="@{/js/translate.js}"></script>
 </head>
 </html>
