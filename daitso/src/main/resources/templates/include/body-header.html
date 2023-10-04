@@ -4,9 +4,9 @@
 <div th:fragment="bodyHeader">
 	<div class="header-login-and-sign-up">
 		<div>
-			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/sign-up}" class="korea">회원가입</a></span>
-			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/login}" class="korea">로그인</a></span>
-			<span sec:authorize="isAuthenticated()"><a th:href="@{/customer/logout}" class="korea">로그아웃</a></span>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/sign-up}">회원가입</a></span>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/login}">로그인</a></span>
+			<span sec:authorize="isAuthenticated()"><a th:href="@{/customer/logout}">로그아웃</a></span>
 			<span sec:authorize="isAuthenticated()"><a id="customer-name"></a></span>
 		</div>
 	</div>
@@ -16,7 +16,7 @@
 				<div id="header-category">
 					<div class="header-category-box">
 						<img class="header-category-img" th:src="@{/assets/header/category.svg}">
-						<div class="header-category-content korea">카테고리</div>
+						<div class="header-category-content">카테고리</div>
 					</div>
 				</div>
 				<div id="header-category-list">
@@ -29,7 +29,7 @@
 				<div class="header-search-box">
 					<form class="header-search-form" action="/product/search" method="get">
 						<div class="header-search-input">
-                        	<input id="search-product" type="text" name="searchText" placeholder="다있소 매장상품을 검색해보세요!" class="korea-input">
+                        	<input id="search-product" type="text" name="searchText" placeholder="다있소 매장상품을 검색해보세요!">
                     	</div>
                     	<div class="header-search-submit">
                         	<button class="header-search-btn" type="submit"><img th:src="@{/assets/header/search.svg}"></button>
@@ -44,8 +44,8 @@
 				<div class="header-mydaitso-box">
 					<img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}">
 					<div class="header-mydaitso-content">
-						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;" class="korea">마이다있소</a>
-						<a sec:authorize="isAuthenticated()" th:href="@{/mypage/orderlist}" style="color:black; text-decoration: none;" class="korea">마이다있소</a>
+						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;">마이다있소</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/mypage/orderlist}" style="color:black; text-decoration: none;">마이다있소</a>
 					</div>
 				</div>
 			</div>
@@ -53,8 +53,8 @@
 				<div class="header-cart-box">
 					<img class="header-cart-img" th:src="@{/assets/header/cart.svg}">
 					<div class="header-cart-content">
-						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;" class="korea">장바구니</a>
-						<a sec:authorize="isAuthenticated()" th:href="@{/cart}" style="color:black; text-decoration: none;" class="korea">장바구니</a>
+						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;">장바구니</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/cart}" style="color:black; text-decoration: none;">장바구니</a>
 					</div>
 				</div>
 			</div>				
