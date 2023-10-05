@@ -8,9 +8,6 @@
 <body>
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 	<div class="product-body">
-		<div>
-			<img style="width: 100%;" th:src="@{/images/mainImages.png}">		
-		</div>
 		<div class="product-path-bar">
 			<th:block th:if="${categoryId == 'noCategory'}">
 				<span style="width:1215px">전체 > [[${path}]]</span>		
@@ -76,8 +73,11 @@
 			</div>
 		</div>
 		<div class="d-block">
-		<div class="d-flex justify-content-center mb-4">
+			<div th:if='${categoryId != "noCategory"}' class="d-flex justify-content-center mb-4">
 				<div th:replace="~{/include/product-paging :: product-paging}"></div>			
+			</div>
+			<div th:if='${categoryId == "noCategory"}' class="d-flex justify-content-center mb-4">
+				<div th:replace="~{/include/product-search-paging :: product-search-paging}"></div>			
 			</div>
 		</div>
 			

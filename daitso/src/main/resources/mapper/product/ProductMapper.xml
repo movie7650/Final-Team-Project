@@ -763,8 +763,10 @@
 							LEFT JOIN product mp ON r.product_id = mp.product_id GROUP BY product_group_id
 							) b
 				ON p.product_group_id = b.product_group_id
-				WHERE instr(p.product_nm,#{searchText}) > 0
-				AND p.status = 'Y'
+				WHERE  p.status = 'Y'
+				<if test='searchText != ""'>
+					AND instr(p.product_nm,#{searchText}) > 0			
+				</if>
 				<choose>
 					<when test='"normal".equals(sort)'>
 						ORDER BY p.product_id
@@ -794,8 +796,10 @@
 		FROM (
 			SELECT distinct product_group_id
 			FROM product
-			WHERE INSTR(product_nm, #{searchText}) > 0
-		AND status = 'Y'
+			WHERE status = 'Y'
+		<if test='searchText != ""'>
+			AND instr(product_nm,#{searchText}) > 0			
+		</if>
 		)
 	</select>
 </mapper>

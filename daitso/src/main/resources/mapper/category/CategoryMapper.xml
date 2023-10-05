@@ -7,24 +7,26 @@
 		담당자 : 나현웅
 	-->
     <select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
-	SELECT category_id AS categoryId, 
- 	    	category_pr_id AS categoryPrId,
-		    category_nm AS categoryNm, 
-		    level AS lv,
-		    CONNECT_BY_ISLEAF AS isLeaf
-	FROM category 
-	WHERE CONNECT_BY_ROOT category_nm = 
+		SELECT category_id AS categoryId, 
+	 	    	category_pr_id AS categoryPrId,
+			    category_nm AS categoryNm, 
+			    level AS lv,
+			    CONNECT_BY_ISLEAF AS isLeaf
+		FROM category 
+		WHERE status = 'Y'
+		<if test="categoryId != -1">
+			AND CONNECT_BY_ROOT category_nm = 
 							      ( 
 							   	  SELECT CONNECT_BY_ROOT category_nm as root
 							      FROM category 
 								  WHERE category_id = #{categoryId}
 						          START WITH category_pr_id = 0
 					    		  CONNECT BY PRIOR category_id = category_pr_id
-			          			  )
-	AND status = 'Y' 
-	START WITH category_pr_id = 0
-	CONNECT BY PRIOR category_id = category_pr_id
-	ORDER SIBLINGS BY category_nm
+			          			  ) 
+		</if>
+		START WITH category_pr_id = 0
+		CONNECT BY PRIOR category_id = category_pr_id
+		ORDER SIBLINGS BY category_nm
 	</select>
 	
 	<!-- 
@@ -32,12 +34,12 @@
 		담당자 : 나현웅
 	 -->
 	<select id="selectCategoryPath" parameterType="int" resultType="String">
-	SELECT sys_connect_by_path(category_nm, ' > ') as path
-    FROM category 
-    WHERE category_id = #{categoryId}
-    START WITH category_pr_id = 0
-    CONNECT BY PRIOR category_id = category_pr_id	
-    ORDER SIBLINGS BY category_nm
+		SELECT sys_connect_by_path(category_nm, ' > ') as path
+	    FROM category 
+	    WHERE category_id = #{categoryId}
+	    START WITH category_pr_id = 0
+	    CONNECT BY PRIOR category_id = category_pr_id	
+	    ORDER SIBLINGS BY category_nm
 	</select>
 	
 	<!-- 
