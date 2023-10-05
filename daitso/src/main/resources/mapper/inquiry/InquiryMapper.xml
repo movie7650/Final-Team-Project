@@ -43,6 +43,7 @@
 				WHERE i.product_id = p.product_id 
                   AND i.inquiry_ans_dv = #{inquiryAnsDv}
                   AND i.inquiry_pr_id IS NULL
+                  AND i.status = 'Y'
 		          <choose>
 					<when test="inquiryAnsDv == 'W'"> ORDER BY i.inquiry_id DESC </when>
 					<otherwise> ORDER BY i.modify_dt DESC </otherwise>

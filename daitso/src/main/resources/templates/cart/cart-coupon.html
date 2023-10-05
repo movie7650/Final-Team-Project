@@ -14,7 +14,7 @@
 				</div>
 				<div th:each="cartCouponProduct : ${cartCouponProducts}" class="cart-coupon-tbody">
 					<div id="cart-coupon-1" style="display: flex; align-items:center;">
-						<img src="image.jpg" style="width:100px; height:100px;">
+						<img th:src="${cartCouponProduct.productImageFirst}" style="width:100px; height:100px;">
 						<div style="width: 250px; display: flex; flex-direction: column; justify-content: center;">
 							<div class="cart-coupon-product-name" style="margin-left:10px; height: 20px; font-weight: 500;" th:text="${cartCouponProduct.productNm}"></div>
 							<div
@@ -59,6 +59,7 @@
 						<div
 						th:unless="${cartCouponProduct.couponUseCount} != 0"
 						th:id="'cart-coupon-choose-btn-' + ${cartCouponProduct.productId}" 
+						class="cart-coupon-not-apply"
 						style="color:#777777; background-color: #FAFAFA;">불 가</div>
 					</div> 
 					<div id="cart-coupon-4">
@@ -73,8 +74,13 @@
 					<div>- 할인/적립(%) 쿠폰은 적립금할인 등을 제외한 실제 결제금액에 적용됩니다.</div>
 					<div>- 해당 상품에 대한 쿠폰은 해당 상품만 구매시 적용이 가능합니다.</div>
 				</div>
-				<div class="cart-coupon-complete-btn">
-					<div onclick="cartCouponComplete()">쿠폰 적용</div>
+				<div style="display: flex; justify-content: center;">
+					<div class="cart-coupon-complete-btn">
+						<div onclick="cartCouponComplete()">쿠폰 적용</div>
+					</div>
+					<div class="cart-coupon-exit-btn">
+						<div onclick="exitCouponComplete()">닫기</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -107,12 +113,18 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
 	
+    var applyNotCount = 0;
 	var couponTotalApplyPrice = 0;
 	var couponCheckStatusList = {};
 	var couponCheckPriceList = {};
 	var couponCheckApplyPriceList = {};
 	var couponDuplicatedCheck = {};
 	var couponCartIdList = {};
+	var cartCouponProducts = /*[[${cartCouponProducts}]]*/
+	
+	document.querySelectorAll(".cart-coupon-not-apply").forEach(() => {
+		applyNotCount += 1;
+	})
 	
 	function isDuplicated(customerCouponId){
 		for(key in couponDuplicatedCheck){
@@ -282,7 +294,7 @@
 		cartCouponApplyPrice.style.color = 'black';
 		cartCouponApplyPrice.style.fontWeight = '400';
 	}
-	
+		
 	// 쿠폰 적용
 	function cartCouponComplete(){
 		var couponApplyList = [];
@@ -296,6 +308,11 @@
 				couponApplyList.push(couponDuplicatedCheck[key]);
 			}
 		}
+		
+		if(applyNotCount == cartCouponProducts.length) {
+			alert("적용하실 쿠폰이 없습니다.");
+		    return;
+		}		
 		
 		if(!couponDuplicatedCheck || count == Object.keys(couponDuplicatedCheck).length){
 			alert("적용하실 쿠폰을 선택해주세요.");
@@ -314,6 +331,14 @@
 			}	
 		} 
 	}
+	
+	// 창 닫기
+	function exitCouponComplete() {
+		window.close();
+	}
+	
+	
+	
 	
 </script>
 </html>
