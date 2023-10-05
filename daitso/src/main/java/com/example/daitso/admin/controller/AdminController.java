@@ -721,7 +721,7 @@ public class AdminController {
 	public String getInquiry(@PathVariable char inquiryAnsDv, @PathVariable int page, Model model) {
 		
 		model.addAttribute("inquiryAnsDv", inquiryAnsDv);
-		
+			
 		List<InquirySelect> inquiryList = inquiryService.selectInquiryListByInquiryAnsDv(inquiryAnsDv, page);
 		model.addAttribute("inquiryList", inquiryList);
 		
