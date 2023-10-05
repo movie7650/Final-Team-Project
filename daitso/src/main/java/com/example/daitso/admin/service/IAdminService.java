@@ -98,6 +98,7 @@ public interface IAdminService {
 	//테스트//
 //	void registerCategories(CategoryCheck categoryCheck);
 	
+	void updateCategoryImage(int categoryId, String imageUrl);
 	
 	
 	// 최상위 공통코드 조회하기

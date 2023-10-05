@@ -1195,7 +1195,7 @@
 	                for (var i = 0; i < response.length; i++) {
 	                    var productGroupId = response[i].productGroupId; 
 	                    var addTableRow = "<tr>" +
-	                        "<td  data-bs-toggle='modal' data-bs-target='#registerOriginalModal' onclick='registerExistings(" + productGroupId + ")' id='productGroupId" + productGroupId + "'>" + productGroupId + "</td>" +
+	                        "<td data-bs-toggle='modal' data-bs-target='#registerOriginalModal' onclick='registerExistings(" + productGroupId + ")' id='productGroupId" + productGroupId + "' style='cursor: pointer; background-color: aliceblue;'>" + productGroupId + "</td>" +
 	                        "<td id='categoryNm" + productGroupId + "'>" + response[i].categoryNm + "</td>" +
 	                        "<td id='productNm" + productGroupId + "'>" + response[i].productNm + "</td>" +
 	                        "<td id='categoryId" + productGroupId + "' style='display: none;'>" + response[i].categoryId + "</td>" +
