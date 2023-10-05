@@ -676,6 +676,7 @@
 			const size = document.querySelector('.inquiry-product-size').value;
 			const color = document.querySelector('.inquiry-product-color').value;
 			const other = document.querySelector('.inquiry-product-other').value;
+			console.log(content, size, color, other, productGroupId)
 			if(content == ''){
 				window.alert("문의글을 작성해주세요");
 			}
@@ -691,6 +692,7 @@
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/json',
+						"X-CSRF-TOKEN": [[${_csrf.token}]]
 					},
 					body: JSON.stringify(data)
 				})
@@ -720,6 +722,7 @@
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
+					"X-CSRF-TOKEN": [[${_csrf.token}]]
 				},
 				body: JSON.stringify(data)
 			})

@@ -9,43 +9,46 @@
 <div class="add-shipping-main">
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 
-<div class="shipping-title">배송지추가하기</div>
+<div class="shipping-title">배송지수정하기</div>
 <div style=" margin-right:55px; margin-top:20px;">
-<form th:action="@{/mypage/addshipping}" method="post">
-<div class="post-inform-container">
+<div class="post-inform-container" th:each="shippingIdInfo : ${shippingIdInfoList}">
+<form th:action="@{/mypage/updateshippingaddr}" method="post">
 	<div class="post-receiver-container">
 		<img th:src="@{/assets/mypage/receiverName.JPG}">
-		<input autocomplete=off required name="shippingReceiverNM" type="text" placeholder="받는 사람">
+		<input autocomplete=off required name="shippingReceiverNM" type="text" th:value="${shippingIdInfo.shippingReceiverNM}">
 	</div><!-- post-receiver-container -->
-	
+	<input type="hidden" name="shippingId" th:value="${shippingIdInfo.shippingId}">
 	<div class="post-address-input">
 		<img th:src="@{/assets/mypage/postLocation.JPG}">
 		<input autocomplete=off required type="text" id="shipping-post-number" placeholder="우편번호" readonly>
-		<input autocomplete=off required name="shippingRoadNMAddr" type="text" id="shipping-receiver-address" placeholder="주소" readonly>
-		<input autocomplete=off required name="shippingDaddr" type="text" id="shipping-address-detail" placeholder="상세주소">
+		<input autocomplete=off required name="shippingRoadNMAddr" type="text" th:value="${shippingIdInfo.shippingRoadNMAddr}" id="shipping-receiver-address" placeholder="주소" readonly>
+		<input autocomplete=off required name="shippingDaddr" type="text" th:value="${shippingIdInfo.shippingDaddr}" id="shipping-address-detail" placeholder="상세주소">
 		<input autocomplete=off type="text" id="shipping-address-referto" placeholder="참고사항">
 		<input required type="button" id="find-post-button" onclick="kakaoPost()" value="검색">		
 	</div><!-- post-address-input -->
 	
 	<div class="shipping-receiver-phonenumber">
 		<img th:src="@{/assets/mypage/phoneNum.JPG}">
-		<input required name="shippingReceiverTelNO" type="text" placeholder="전화번호 입력">
+		<input required name="shippingReceiverTelNO" type="text" th:value="${shippingIdInfo.shippingReceiverTelNO}" placeholder="전화번호 입력">
 	</div><!-- shipping-receiver-phonenumber -->
 	
 	<div class="shipping-receiver-request">
 		<img th:src="@{/assets/mypage/request.JPG}">
-		<input required name="shippingDmnd" type="text" placeholder="요청사항">
+		<input required name="shippingDmnd" type="text" th:value="${shippingIdInfo.shippingDmnd}" placeholder="요청사항">
 	</div><!-- shipping-receiver-request -->
 	<div style="margin-top:5px; margin-left:10px;">
 	<label><input  type="checkbox" name="shippingDv" value=301>기본배송지로 설정</label>
 	</div>
 	<div class="shipping-button-container">
 		<button id="add-shipping-button" type="submit">저장하기</button>
-		<button id="cancle-add-shipping" th:onclick="|location.href='@{/mypage/myshipping}'|" >취소하기</button>
 	</div><!-- shipping-button-container -->
 	
-</div><!-- post-inform-container -->
 </form>
+        <form th:action="@{/mypage/deleteshipping}" method="post">
+        	<input type="hidden" name="shippingId" th:value="${shippingIdInfo.shippingId}">
+		<button id="delete-add-shipping" type="submit" >삭제하기</button>
+		</form>
+</div><!-- post-inform-container -->
 </div>
 <!-- 카카오 도로명주소 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
