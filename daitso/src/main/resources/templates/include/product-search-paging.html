@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="product-search-paging">
+<nav aria-label="Page navigation">
+<ul class="pagination1">
+	<li th:if="${nowPageBlock>1}">
+		<a th:href="@{'/product/search/__${startPage-1}__/__${sort}__?searchText=' + ${path}}" aria-label="Previous">◀</a>
+	</li>
+	
+	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:if="${i != 0}" th:classappend="${i==nowPage}?active">
+		<a th:href="@{'/product/search/__${i}__/__${sort}__?searchText=' + ${path}}">[[${i}]]</a>
+	</li>
+	
+	<li th:if="${nowPageBlock<totalPageBlock}">
+		<a th:href="'@{/product/search/__${endPage+1}__/__${sort}__?searchText=' + ${path}}" aria-label="Next">▶</a>
+	</li>
+</ul>
+</nav>
+</div>
