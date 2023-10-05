@@ -36,9 +36,10 @@ public interface IAdminService {
 	void deleteProduct(int productId);
 	
 	// 상품 등록하기 ★
-//	void registerProduct(ProductCheck product, List<MultipartFile> files);
+	void registerProduct(ProductCheck product, List<MultipartFile> files);
+	
 	//테스트//
-	void registerProduct(ProductCheck product);
+//	void registerProduct(ProductCheck product);
 	
 	// 상품 등록시 상품의 중복 여부를 확인하기
     boolean isDuplicateProduct(ProductCheck product);
