@@ -13,9 +13,9 @@
 	 	<div th:if="${reviewcontentcount}==0">
 	 		<img style="width:800px; border-radius:10px; margin-right:55px; margin-top:100px;" th:src="@{/assets/mypage/nonereview.JPG}">
 	 	</div>
+		 	<div style="margin-top:100px;">
 		 <th:block th:each="mypageReview : ${mypageReviewList}"> 
 	 <form th:action="@{/mypage/review/__${mypageReview.reviewId}__}" method="post">
-		 	
 			<div class="my-review-container">
 			<div style="width:500px;">
 				<div th:text="|제목: ${mypageReview.reviewTitle}|" class="my-review-title">리뷰제목</div>
@@ -23,9 +23,9 @@
 				<div th:if="${mypageReview.reviewStarPoint}==5" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;&#9733;&#9733;&#9733;</div>
 				<div th:if="${mypageReview.reviewStarPoint}==4" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;&#9733;&#9733;</div>
 				<div th:if="${mypageReview.reviewStarPoint}==3" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;&#9733;</div>
-				<div th:if=" ${mypageReview.reviewStarPoint}==2" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;</div>
+				<div th:if="${mypageReview.reviewStarPoint}==2" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;&#9733;</div>
 				<div th:if="${mypageReview.reviewStarPoint}==1" class="my-review-star-point"><span>별점 및 평점 :</span> &#9733;</div>
-				<div th:text="${mypageReview.reviewContent}" class="my-review-content">넘흐예쁘네욤</div>
+				<div style="font-weight: bold; margin-top:5px; " th:text="${mypageReview.reviewContent}" class="my-review-content">넘흐예쁘네욤</div>
 			</div>
 				<div class="my-review-photo-container">
 					<div class="my-review-photo-01">이미지1</div>
@@ -40,6 +40,7 @@
 			</div><!-- my-review-container -->
 		 </form>
 		 </th:block>
+			</div>
 	 </div>	
 </div><!-- review-main -->
 

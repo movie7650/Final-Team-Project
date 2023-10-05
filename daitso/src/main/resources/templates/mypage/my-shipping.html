@@ -22,11 +22,8 @@
 		<div style="margin-top:10px;"><button type="submit" th:onclick="|location.href='@{/mypage/updateshippingaddr}?shippingId=__${mypageshippinglist.shippingId}__'|">수정</button></div>
 	</div><!-- address-container -->
 	
-	<div class="add-address-container">
-	
-		<a  th:href="@{/mypage/addshipping}">배송지 추가하기</a>
-	
-	</div><!-- add-address-container -->
+	<input type="button" value="배송지 추가하기" th:onclick="|location.href='@{/mypage/addshipping}'|"class="add-address-container">
+	<!-- add-address-container -->
 </div>
 </div><!--shipping-main  -->
 

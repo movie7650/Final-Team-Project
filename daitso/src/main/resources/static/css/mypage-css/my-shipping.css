@@ -58,13 +58,13 @@
 	text-align:center;
 	width:800px;
 	border:solid 1.5px #668663;
-	padding-top:1%;
+	padding-top:0.5%;
  	box-shadow: 2px 2px 2px 2px gray;
+ 	background-color: white;
+ 	color:#668663;
+ 	
 }
-.add-address-container a{
-	color:#39594E;
-	
-}
+
 .base-address{
 	border:solid 2px blue;
 	width:100px;

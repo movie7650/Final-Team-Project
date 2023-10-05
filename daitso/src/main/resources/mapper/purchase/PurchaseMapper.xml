@@ -34,9 +34,9 @@
 		SELECT pur.product_id as "productId",
 			   pur.customer_id as "customerId",
 			   purchase_count					AS	"purchaseCount",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
+			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
 			   cc.common_code_nm				AS	"purchaseDv",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+			   TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
 			   product_nm						AS 	"productNm",
 			   purchase_num						AS	"purchaseNum",
 			   pur.create_dt					AS	"createDt"
@@ -97,10 +97,10 @@
 		 -->
 	<select id="selectDetailPurchase" resultType="com.example.daitso.purchase.model.PurchaseDetailCheck">
 		SELECT p.product_nm 							as "productNm",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
+			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
 	           pur.purchase_num 						as "purchaseNum",
 	           pur.purchase_count 						as "purchaseCount",
-			   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(purchase_price * purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+			   TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
 	           sh.shipping_receiver_nm 					as "shippingReceiverNm",
 	           sh.shipping_receiver_telno 				as "shippingReceiverTelno",
 	           sh.shipping_road_nm_addr 				as "shippingRoadNmAddr",
