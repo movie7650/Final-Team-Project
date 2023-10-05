@@ -35,7 +35,7 @@
 			category_id AS categoryId, 
 	        product_image_first AS productImageFirst, 
 			product_nm AS productNm, 
-			NVL(review_star_point,0) AS reviewStarPoint, 
+			review_star_point AS reviewStarPoint, 
 	        NVL(review_count,0) AS reviewCount,
 			product_content AS productContent, 
 			product_stock AS productStock, 
@@ -47,7 +47,7 @@
 	    			product_price, rownum as rnum
 	    	FROM(
 	    		SELECT p.product_id		AS		product_id,  discount_rate, row_number() over (partition by p.product_group_id order by product_price) snum,
-					   p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point, review_count
+					   p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(review_star_point,0) AS review_star_point, review_count
 				FROM product p
 	            LEFT JOIN  (
 	                        select product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count 
@@ -60,24 +60,24 @@
 									   	CONNECT BY PRIOR category_id = category_pr_id
 									  )
 				 AND p.status = 'Y'
-				 <choose>
-				 	<when test='sort.equals("normal")'>
-						 ORDER BY p.product_id			 	
-				 	</when>
-				 	<when test='sort.equals("highPrice")'>
-				 		ORDER BY p.product_price DESC
-				 	</when>
-				 	<when test='sort.equals("lowPrice")'>
-				 		ORDER BY p.product_price
-				 	</when>
-				 	<when test='sort.equals("highRate")'>
-				 		ORDER BY review_star_point
-				 	</when>
-				 </choose>
 	            )
 	        WHERE snum = 1
 	    ) 
 	    WHERE rnum between #{start} and #{end}
+	    <choose>
+		 	<when test='"normal".equals(sort)'>
+				 ORDER BY product_id			 	
+		 	</when>
+		 	<when test='"highPrice".equals(sort)'>
+		 		ORDER BY product_price DESC
+		 	</when>
+		 	<when test='"lowPrice".equals(sort)'>
+		 		ORDER BY product_price
+		 	</when>
+		 	<when test='"highRate".equals(sort)'>
+		 		ORDER BY review_star_point DESC
+		 	</when>
+		</choose>
 	</select>
 
 	<!-- 
@@ -512,7 +512,7 @@
 		FROM product 
 		WHERE product_group_id=#{productGroupId} AND status='Y'
 		<choose>
-			<when test='productOptionFirst.equals("0")'>
+			<when test='"0".equals(productOptionFirst)'>
 			</when>
 			<otherwise>
 				AND product_option_first = #{productOptionFirst}
@@ -532,14 +532,14 @@
 		FROM product 
 		WHERE product_group_id=#{productGroupId} AND status='Y'
 		<choose>
-			<when test='productOptionFirst.equals("0")'>
+			<when test='"0".equals(productOptionFirst)'>
 			</when>
 			<otherwise>
 				AND product_option_first = #{productOptionFirst}
 			</otherwise>
 		</choose>
 		<choose>
-			<when test='productOptionSecond.equals("0")'>
+			<when test='"0".equals(productOptionSecond)'>
 			</when>
 			<otherwise>
 				AND product_option_second = #{productOptionSecond}
@@ -561,21 +561,21 @@
 					FROM product p
 					WHERE product_group_id = #{productGroupId} AND status = 'Y'
 					<choose>
-						<when test='productOptionFirst.equals("0")'>
+						<when test='"0".equals(productOptionFirst)'>
 						</when>
 						<otherwise>
 							AND product_option_first = #{productOptionFirst}
 						</otherwise>
 					</choose>
 					<choose>
-						<when test='productOptionSecond.equals("0")'>
+						<when test='"0".equals(productOptionSecond)'>
 						</when>
 						<otherwise>
 							AND product_option_second = #{productOptionSecond}
 						</otherwise>
 					</choose>
 					<choose>
-						<when test='productOptionThird.equals("0")'>
+						<when test='"0".equals(productOptionThird)'>
 						</when>
 						<otherwise>
 								AND product_option_third = #{productOptionThird}
@@ -596,7 +596,7 @@
 		FROM product
 		WHERE product_group_id = #{productGroupId} and status='Y'
 		<choose>
-			<when test='size.equals("사이즈옵션 없음")'>
+			<when test='"사이즈옵션 없음".equals(size)'>
 				and product_option_first is null
 			</when>
 			<otherwise>
@@ -604,7 +604,7 @@
 			</otherwise>
 		</choose>
 		<choose>
-			<when test='color.equals("색상옵션 없음")'>
+			<when test='"색상옵션 없음".equals(color)'>
 				and product_option_second is null
 			</when>
 			<otherwise>
@@ -612,7 +612,7 @@
 			</otherwise>
 		</choose>
 		<choose>
-			<when test='other.equals("기타옵션 없음")'>
+			<when test='"기타옵션 없음".equals(other)'>
 				and product_option_third is null
 			</when>
 			<otherwise>
@@ -689,10 +689,10 @@
 				WHERE p.status = 'Y'
 				)
 	    	WHERE snum = 1 
-	    	<if test='selector.equals("popular")'>
+	    	<if test='"popular".equals(selector)'>
 		    	ORDER BY pSum DESC   	
 	    	</if>
-	    	<if test='selector.equals("sale")'>
+	    	<if test='"sale".equals(selector)'>
 		    	ORDER BY pSum    	
 	    	</if>
 	    	  ) 
@@ -766,16 +766,16 @@
 				WHERE instr(p.product_nm,#{searchText}) > 0
 				AND p.status = 'Y'
 				<choose>
-					<when test='sort.equals("normal")'>
+					<when test='"normal".equals(sort)'>
 						ORDER BY p.product_id
 					</when>
-					<when test='sort.equals("highPrice")'>
+					<when test='"highPrice".equals(sort)'>
 						ORDER BY p.product_price DESC
 					</when>
-					<when test='sort.equals("lowPrice")'>
+					<when test='"lowPrice".equals(sort)'>
 						ORDER BY p.product_price
 					</when>
-					<when test='sort.equals("highRate")'>
+					<when test='"highRate".equals(sort)'>
 						ORDER BY review_star_point
 					</when>
 				</choose>
@@ -785,6 +785,10 @@
 		WHERE rnum between #{start} and #{end}
 	</select>
 	
+	<!-- 
+		기능: 검색된 상품 개수 조회
+		담당자: 나현웅
+	 -->
 	<select id="selectSearchProductCount" resultType="int">
 		SELECT count(*)
 		FROM (

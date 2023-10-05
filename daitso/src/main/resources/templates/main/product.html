@@ -42,11 +42,11 @@
 				</th:block>
 				<th:block th:if="${categoryId == 'noCategory'}">
 					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#fafafa; font-size:12px">
-						<a th:href="@{'/product/search' + '?sort=lowPrice&searchText='+ ${path}}" style="cursor: pointer; margin-left: 20px">낮은 가격순</a>
+						<a class="a-sort" th:href="@{'/product/search' + '?sort=lowPrice&searchText='+ ${path}}" style="cursor: pointer; margin-left: 20px">낮은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
-						<a style="cursor: pointer" th:href="@{'/product/search' + '?sort=highPrice&searchText=' + ${path}}">높은 가격순</a>
+						<a class="a-sort" style="cursor: pointer" th:href="@{'/product/search' + '?sort=highPrice&searchText=' + ${path}}">높은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
-						<a style="cursor: pointer" th:href="@{'/product/search' + '?sort=highRate&searchText=' + ${path}}">평점순</a>
+						<a class="a-sort" style="cursor: pointer" th:href="@{'/product/search' + '?sort=highRate&searchText=' + ${path}}">평점순</a>
 					</div>				
 				</th:block>
 				<div class="product-large-box">
