@@ -44,38 +44,41 @@ public class AdminService implements IAdminService{
 	S3Service s3Service;
 	
 	// 상품 등록하기 ★
-//	@Transactional
-//	public void registerProduct(ProductCheck product, List<MultipartFile> files) {
-//		List<String> imagePathList = s3Service.upload(files);
-//		product.setProductImageFirst(imagePathList.get(0));
-//		product.setProductImageSecond(imagePathList.get(1));
-//		product.setProductImageThird(imagePathList.get(2));
-//		
-//		// 상품 등록 실패시 s3에 등록된 이미지 삭제
-//		try {
-//			productRepository.registerProduct(product);
-//			product.getProductId();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			imagePathList.forEach((url) -> {
-//				s3Service.deleteImage(url);	
-//			});
-//		}
-//	}
+	@Transactional
+	public void registerProduct(ProductCheck product, List<MultipartFile> files) {
+		List<String> imagePathList = s3Service.upload(files);
+		product.setProductImageFirst(imagePathList.get(0));
+		product.setProductImageSecond(imagePathList.get(1));
+		product.setProductImageThird(imagePathList.get(2));
+		
+		if (isDuplicateProduct(product)) {
+	        throw new DuplicateProductException("상품이 중복되었습니다.");
+	    }
+		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+		try {
+			productRepository.registerProduct(product);
+			product.getProductId();
+		} catch(Exception e) {
+			e.printStackTrace();
+			imagePathList.forEach((url) -> {
+				s3Service.deleteImage(url);	
+			});
+		}
+	}
 	
 	//테스트//
-	@Transactional
-	public void registerProduct(ProductCheck product) {
-		// 중복 상품이 존재하면 등록을 막기 위해 RuntimeException 발생
-//		if (isDuplicateProduct(product)) {
-//			 throw new RuntimeException("상품이 중복되었습니다.");
-//	    	}
-		 if (isDuplicateProduct(product)) {
-		        throw new DuplicateProductException("상품이 중복되었습니다.");
-		    }
-		productRepository.registerProduct(product);
-		
-	}
+//	@Transactional
+//	public void registerProduct(ProductCheck product) {
+//		// 중복 상품이 존재하면 등록을 막기 위해 RuntimeException 발생
+////		if (isDuplicateProduct(product)) {
+////			 throw new RuntimeException("상품이 중복되었습니다.");
+////	    	}
+//		 if (isDuplicateProduct(product)) {
+//		        throw new DuplicateProductException("상품이 중복되었습니다.");
+//		    }
+//		productRepository.registerProduct(product);
+//		
+//	}
 	
 	// 상품 등록시 상품의 중복 여부를 확인하기 
 	@Override

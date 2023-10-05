@@ -288,24 +288,29 @@ public class AdminController {
 	}
 	
 	// 상품 등록하기 ★
-//	@PostMapping("/product")
-//	public String registerProduct(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-//		// 입력 필드가 비어 있으면 '-'으로 대체
-//	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
-//	        product.setProductOptionFirst("-");
-//	    }
-//	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
-//	        product.setProductOptionSecond("-");
-//	    }
-//	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
-//	        product.setProductOptionThird("-");
-//	    }
-//		adminService.registerProduct(product, files);
-//		model.addAttribute("message","상품이 등록되었습니다.");
-//		model.addAttribute("searchUrl","/admin/product");
-//
-//	return "admin/message";
-//	}
+	@PostMapping("/product")
+	public String registerProduct(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+		// 입력 필드가 비어 있으면 '-'으로 대체
+	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+	        product.setProductOptionFirst("-");
+	    }
+	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+	        product.setProductOptionSecond("-");
+	    }
+	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+	        product.setProductOptionThird("-");
+	    }
+	    
+	    try {
+	    	adminService.registerProduct(product, files);
+	        model.addAttribute("message", "상품이 등록되었습니다.");
+	    } catch (DuplicateProductException e) {
+	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
+	    }
+	    
+	    model.addAttribute("searchUrl", "/admin/product");
+	    return "admin/message";
+	}
 	
 	//테스트//
 //	@PostMapping("/product")
@@ -325,27 +330,27 @@ public class AdminController {
 //		model.addAttribute("searchUrl","/admin/product");
 //		return "admin/message";
 //	}	
-	@PostMapping("/product")
-	public String registerProduct(ProductCheck product, Model model) {
-	    // 입력 필드가 비어 있으면 '-'으로 대체
-	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
-	        product.setProductOptionFirst("-");
-	    }
-	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
-	        product.setProductOptionSecond("-");
-	    }
-	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
-	        product.setProductOptionThird("-");
-	    }
-	    
-	    try {
-	        adminService.registerProduct(product);
-	        model.addAttribute("message", "상품이 등록되었습니다.");
-	    } catch (DuplicateProductException e) {
-	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
-	    }
-	    model.addAttribute("searchUrl", "/admin/product");
-	    return "admin/message";
+//	@PostMapping("/product")
+//	public String registerProduct(ProductCheck product, Model model) {
+//	    // 입력 필드가 비어 있으면 '-'으로 대체
+//	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+//	        product.setProductOptionFirst("-");
+//	    }
+//	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+//	        product.setProductOptionSecond("-");
+//	    }
+//	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+//	        product.setProductOptionThird("-");
+//	    }
+//	    
+//	    try {
+//	        adminService.registerProduct(product);
+//	        model.addAttribute("message", "상품이 등록되었습니다.");
+//	    } catch (DuplicateProductException e) {
+//	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
+//	    }
+//	    model.addAttribute("searchUrl", "/admin/product");
+//	    return "admin/message";
 	    
 //	    // 중복 상품 검사
 //	    boolean isDuplicate = adminService.isDuplicateProduct(product);
@@ -362,7 +367,7 @@ public class AdminController {
 //	    }
 //	    model.addAttribute("searchUrl", "/admin/product");
 //	    return "admin/message";
-	}
+//	}
 
 	@ExceptionHandler(DuplicateProductException.class)
     public String handleDuplicateProductException(DuplicateProductException e, Model model) {
