@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.daitso.admin.service.S3Service;
 import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.customer.model.CheckMyInform;
 import com.example.daitso.customer.service.ICustomerService;
@@ -53,6 +54,8 @@ public class MyPageController {
 	ILogincheckService logincheckService;
 	@Autowired
 	IShippingService shippingService;
+	@Autowired
+	S3Service s3Service;
 
 	// 마이페이지-포인트 컨트롤러
 	@RequestMapping(value = "/mypoint", method = RequestMethod.GET)

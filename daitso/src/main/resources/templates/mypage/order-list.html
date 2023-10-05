@@ -27,7 +27,10 @@
 		<th:block>
 			<div th:each="purchase : ${purchaseList}" class="order-list-container">
 				<div class="order-list-container-01">
-					 <div class="shipping-status" th:text="|주문날짜: ${purchase.createDt}|">주문날자</div> 
+					 <div class="shipping-status" th:text="|주문날짜: ${purchase.createDt}|">주문날짜</div> 
+						<div style="color:blue; font-weight: bold;" th:if="${purchase.purchaseDv} == '배송완료'">배송완료</div>
+						<div style="color:red; font-weight: bold;" th:if="${purchase.purchaseDv} == '배송중'">배송중</div>
+						<div style="color:orange; font-weight: bold;" th:if="${purchase.purchaseDv} == '입금/결제'">입금/결제</div>
 					<!-- <div class="shipping-date">&bull;8/2(금)도착</div> -->
 					
 					<div class="purchase-img-001">이미지</div>

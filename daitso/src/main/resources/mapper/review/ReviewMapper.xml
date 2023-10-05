@@ -129,8 +129,8 @@
 				pur.customer_id as "customerId",
 				pur.purchase_num as "purchaseNum",
 	            pur.purchase_count as "purchaseCount",
-	            REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price)), '(\d{3})','\1,')), '^,','')					AS	"purchasePrice",
-				   REGEXP_REPLACE(REVERSE(REGEXP_REPLACE(REVERSE(TO_CHAR(pur.purchase_price * pur.purchase_count)), '(\d{3})','\1,')), '^,','')	AS "totalCost",
+	            TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
+				TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
 	            pur.create_dt           as"purchaseDt",
 	            p.product_nm as "productNm"
 		  FROM  purchase pur, product p
