@@ -82,6 +82,10 @@
 		ORDER SIBLINGS BY category_nm
     </select>
     
+    <!-- 
+    	기능: drag&drop을 사용해 카테고리 수정 시 부모 카테고리 컬럼 수정
+    	담당자: 나현웅
+     -->
     <update id="updateCategory">
     	UPDATE category SET category_pr_id = #{parentCategoryId} where category_id = #{categoryId}
     </update>
