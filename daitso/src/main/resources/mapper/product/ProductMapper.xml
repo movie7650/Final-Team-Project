@@ -642,7 +642,8 @@
 				category_id AS categoryId, 
 				product_price AS productPrice,  
 				NVL(average,0) AS reviewStarPoint, 
-				NVL(cnt,0) AS rCnt
+				NVL(cnt,0) AS rCnt,
+				product_image_first AS productImageFirst
 		FROM special_product sp 
 		LEFT JOIN product p ON sp.product_id = p.product_id
 		LEFT JOIN (
@@ -665,7 +666,8 @@
 	            category_id AS categoryId,
 	            product_price AS productPrice,
 	            NVL(average,0) AS reviewStarPoint, 
-				NVL(cnt,0) AS reviewCount
+				NVL(cnt,0) AS reviewCount,
+                product_image_first AS productImageFirst
 		FROM product p  
 		LEFT JOIN (
 					SELECT product_group_id, round(avg(review_star_point) * 20,0) as average, count(product_group_id) as cnt
