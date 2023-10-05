@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +65,8 @@ public class AdminController {
 	
 	@Autowired
 	S3Service s3Service;
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	// 상품 조회하기(카테고리별)
 	@GetMapping("/product")
@@ -477,7 +482,7 @@ public class AdminController {
   	@GetMapping("/category")
   	public String selectAllCagegory(@RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
-        
+       	
       int offset = (page - 1) * pageSize;       
       
       List<CategoryCheck> categorylist = adminService.selectAllCategories(offset, pageSize);
@@ -486,7 +491,7 @@ public class AdminController {
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
 	    
-       // 페이징 정보 전달
+       // 페이징 정보 전달 
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("pageSize", pageSize);
 
@@ -527,38 +532,29 @@ public class AdminController {
  	   	session.setAttribute("categoryId",categoryCheck.getCategoryId());
  		session.setAttribute("categoryNm",categoryCheck.getCategoryNm());
  		session.setAttribute("categoryContent",categoryCheck.getCategoryContent());
+ 		session.setAttribute("categoryImage",categoryCheck.getCategoryImage());
  		model.addAttribute("message","카테고리가 수정되었습니다.");
  		model.addAttribute("searchUrl","/admin/category");
  		return "admin/message";
  	}
  	
-// 카테고리 등록하기 ★
-//	@PostMapping("/category")
-//	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart List<MultipartFile> files) {
-//		adminService.registerCategories(categoryCheck, files);
-//		model.addAttribute("message","카테고리가 등록되었습니다.");
-//		model.addAttribute("searchUrl","/admin/category");
-//	return "admin/message";
-//	}
- 	
- 	//테스트
- 	@PostMapping("/category")
-	public String registerCategories(CategoryCheck categoryCheck, Model model) {
-		adminService.registerCategories(categoryCheck);
+ 	// 카테고리 등록하기 ★
+	@PostMapping("/category")
+	public String registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart MultipartFile file) {
+		adminService.registerCategories(categoryCheck, file);
 		model.addAttribute("message","카테고리가 등록되었습니다.");
 		model.addAttribute("searchUrl","/admin/category");
 	return "admin/message";
-	}
- 	
 	
+	}
+ 		
 	// 전체 공통 코드 조회하기
   	@GetMapping("/common-code")
   	public String selectAllCommonCodesPr(@RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
         
       int offset = (page - 1) * pageSize;       
-      
-
+     
       	List<CommonCode> commonCodes = adminService.selectAllCommonCodesPr(offset, pageSize);
       
        // 페이징 정보 전달
@@ -695,6 +691,7 @@ public class AdminController {
 // 	    return ResponseEntity.ok(isUnique);
 // 	}
 
+ 	
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
 	public String updateCategory(Model model) {

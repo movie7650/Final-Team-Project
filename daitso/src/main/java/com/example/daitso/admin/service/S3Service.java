@@ -110,12 +110,38 @@ public class S3Service {
 
             String imageUrl = amazonS3Client.getUrl(bucket, originalName).toString(); 
             return imageUrl;
+            
         } catch (SdkClientException | IOException e) {
             log.info("S3 등록 실패");
             e.printStackTrace();
             throw new RuntimeException("S3 등록 실패");
         }
     }
+
+//    public String uploads(MultipartFile file) {
+//        try {
+//            String originalName = file.getOriginalFilename();
+//            long size = file.getSize();
+//            System.out.println(originalName);
+//            
+//            ObjectMetadata objectMetaData = new ObjectMetadata();
+//            objectMetaData.setContentType(file.getContentType());
+//            objectMetaData.setContentLength(size);
+//            
+//            // S3에 업로드
+//            amazonS3Client.putObject(
+//                new PutObjectRequest(bucket, originalName, file.getInputStream(), objectMetaData)
+//                    .withCannedAcl(CannedAccessControlList.PublicRead)
+//            );
+//            
+//            String imagePath = amazonS3Client.getUrl(bucket, originalName).toString(); // 접근 가능한 URL 가져오기
+//            return imagePath;
+//            
+//        } catch (SdkClientException | IOException e) {
+//            log.error("S3 등록 실패", e);
+//            throw new RuntimeException("S3 등록 실패", e);
+//        }
+//    }
 
 
 }
