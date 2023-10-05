@@ -529,27 +529,25 @@
 		}
 		else{
 			if(selector == 'cart') {
-				
-				fetch( window.location.origin + "/cart/insert-in-to" , {
-				    method: "POST",
-				    headers: { 
-				        "Content-Type": "application/json",
-				        "X-CSRF-TOKEN": [[${_csrf.token}]]
-				    },
-				    body: JSON.stringify({
-				        productId: hiddenProductId.value,
-				        productCnt: cntInput.value
-				    }),
-				})
-				.then(response => response.json())
-				.then((data) => {
-					if(data == "1") {
-						document.getElementById("cart-need-login").style.display = 'flex';	
-					} else {
-						console.log("haha");
+				if(customerId == -1) {
+					document.getElementById("cart-need-login").style.display = 'flex';	
+				} else {
+					fetch( window.location.origin + "/cart/insert-in-to" , {
+					    method: "POST",
+					    headers: { 
+					        "Content-Type": "application/json",
+					        "X-CSRF-TOKEN": [[${_csrf.token}]]
+					    },
+					    body: JSON.stringify({
+					        productId: hiddenProductId.value,
+					        productCnt: cntInput.value
+					    }),
+					})
+					.then(response => response.json())
+					.then((data) => {
 						document.getElementById("cart-info").style.display = 'flex';	
-					}
-				});
+					});	
+				}
 			} else {
 				if(customerId == -1) {
 					document.getElementById("cart-need-login").style.display = 'flex';	
