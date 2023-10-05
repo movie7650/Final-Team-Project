@@ -18,4 +18,5 @@ public class Category {
 	private String modifier;
 	private int lv;
 	private int isLeaf;
+	private String categoryImage;
 }
