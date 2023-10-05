@@ -51,17 +51,10 @@ public class CartController {
 	
 	// 장바구니 조회
 	@GetMapping("")
-	public String getCart(Model model, RedirectAttributes redirectAttributes, String purchaseClassification) {
+	public String getCart(Model model, RedirectAttributes redirectAttributes, String purchaseClassification, HttpServletRequest request) {
 		
-		// spring security -> 사용자 고유번호 받아오기
-		int customerId = logincheckService.loginCheck();
-		
-		if(customerId == -1) {
-			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
-			return "redirect:/customer/login";
-		}
-		
-		model.addAttribute("customerId",customerId);
+		// 로그인 인터셉터를 통한 customerId 갖고오기
+		int customerId = (Integer)request.getAttribute("customerId");
 		
 		// 장바구니 클릭 혹은 장바구니 담기 눌렀을 경우
 		if("cart".equals(purchaseClassification) || purchaseClassification == null) {
@@ -191,15 +184,10 @@ public class CartController {
 	
 	//바로 구매하기
 	@PostMapping("/insert")
-	public String insertCart(Model model, RedirectAttributes redirectAttributes, int productId, int productCnt, String selector) {
+	public String insertCart(Model model, RedirectAttributes redirectAttributes, int productId, int productCnt, String selector, HttpServletRequest request) {
 		
-		// spring security -> 사용자 고유번호 받아오기
-		int customerId = logincheckService.loginCheck();
-		
-		if(customerId == -1) {
-			redirectAttributes.addFlashAttribute("error", "로그인 해주세요!");
-			return "redirect:/customer/login";
-		}
+		// 로그인 인터셉터를 통한 customerId 갖고오기
+		int customerId = (Integer)request.getAttribute("customerId");
 		
 		String purchaseClassification = "";
 			
@@ -208,20 +196,15 @@ public class CartController {
 			purchaseClassification = "purchase";
 		}
 		
-		return getCart(model, redirectAttributes, purchaseClassification);
+		return getCart(model, redirectAttributes, purchaseClassification, request);
 	}
 	
 	// 장바구니 추가
 	@PostMapping("/insert-in-to")
-	public @ResponseBody String insertCart(@RequestBody String data, RedirectAttributes redirectAttributes) {
+	public @ResponseBody String insertCart(@RequestBody String data, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 			
-		// spring security -> 사용자 고유번호 받아오기
-		int customerId = logincheckService.loginCheck();
-		
-		if(customerId == -1) {
-			redirectAttributes.addFlashAttribute("error", "로그인 해주세요!");
-			return "1";
-		}
+		// 로그인 인터셉터를 통한 customerId 갖고오기
+		int customerId = (Integer)request.getAttribute("customerId");		
 		
 		JsonElement element = JsonParser.parseString(data);
 		
@@ -229,7 +212,7 @@ public class CartController {
 		int	productCnt = Integer.valueOf(element.getAsJsonObject().get("productCnt").getAsString());
 		cartService.insertCartService(productId, customerId, productCnt);
 
-		return "2";
+		return "1";
 	}
 	
 	// 장바구니 쿠폰 적용화면
