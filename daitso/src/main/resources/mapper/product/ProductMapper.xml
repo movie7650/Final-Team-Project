@@ -236,7 +236,10 @@
 		       p.product_option_third   AS "productOptionThird",
 		       p.product_price          AS "productPrice",
 	 	       p.product_stock          AS "productStock",
-	 	       p.product_max_get        AS "productMaxGet"
+	 	       p.product_max_get        AS "productMaxGet",
+               p.product_image_first	AS "productImageFirst",
+			   p.product_image_second	AS "productImageSecond",
+			   p.product_image_third	AS "productImageThird"
 	   	 FROM  product p 
 		 JOIN  category c 
 		   ON  p.category_id = c.category_id AND p.status = 'Y'

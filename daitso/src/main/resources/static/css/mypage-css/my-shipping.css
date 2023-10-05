@@ -9,7 +9,7 @@
 	padding-bottom:0.5%;
 	font-size:150%;
 	margin-left:165px;
-	margin-top:-660px;
+	margin-top:10px;
 	width:855px;
 	border-bottom:solid 3px #668663;
 }
@@ -43,27 +43,46 @@
 	
 }
 .address-container{
-	position:absolute;
-	margin-left:165px;
-	margin-top:-600px;
+	margin-top:20px;
+	height:200px;
 	border:solid 1.5px #668663;
-	width:855px;
+	width:800px;
 	border-radius:10px;
-	
+	padding-left:20px;
+	padding-top:10px;
 }
 .add-address-container{
-	height:5%;
+	margin-top:20px;
+	height:40px;
 	border-radius:10px;
 	text-align:center;
-	width:855px;
+	width:800px;
 	border:solid 1.5px #668663;
-	position:absolute;
-	margin-left:165px;
-	margin-top:-350px;
-	padding-top:0.5%;
+	padding-top:1%;
  	box-shadow: 2px 2px 2px 2px gray;
 }
 .add-address-container a{
 	color:#39594E;
 	
+}
+.base-address{
+	border:solid 2px blue;
+	width:100px;
+	border-radius:10px;
+	text-align: center;
+	color:blue;
+}
+.nomal-address{
+	border:solid 2px gray;
+	width:100px;
+	border-radius:10px;
+	text-align: center;
+	color:gray;
+}
+.address-container button{
+	border:none;
+	background-color: #668663;
+	color:white;
+	border-radius:10px;
+	width:50px;
 }

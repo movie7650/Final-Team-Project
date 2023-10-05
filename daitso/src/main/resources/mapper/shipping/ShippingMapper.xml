@@ -146,5 +146,105 @@
 			   modify_dt = SYSTIMESTAMP
 	     WHERE shipping_id = #{shippingId}
 	</update>
-
+	<!-- 
+		기능: 마이페이지-배송지관리-배송지조회
+	 	담당자: 윤상영
+	 -->
+	 <select id="selectMyShippingInfo" resultType="com.example.daitso.shipping.model.MypageReceiverShipping" parameterType="int">
+	 	SELECT  cc.common_code_nm				AS "shippingDv", 
+            	ship.shipping_receiver_nm 		AS "shippingReceiverNM",
+            	ship.shipping_receiver_telno 	AS "shippingReceiverTelNO",
+           		ship.shipping_dmnd 				AS "shippingDmnd",
+           		ship. shipping_road_nm_addr 	AS "shippingRoadNMAddr",
+            	ship.shipping_daddr  			AS "shippingDaddr",
+            	ship.shipping_id				AS "shippingId"
+            	
+		   FROM shipping ship, common_code cc
+		  WHERE ship.customer_id=#{customerId}
+			AND ship.shipping_dv = cc.common_code_id
+			AND ship.status='Y'
+	 </select>
+	<!-- 
+		기능: shipping_status가 Y 인것 개수 
+	 	담당자: 윤상영
+	 -->
+	 <select id="selectShippingStatusY" resultType="int" parameterType="int">
+	 	SELECT count(*) 
+	 	  FROM shipping
+		 WHERE customer_id=#{customerId}
+		   AND status='Y'
+	 </select>
+	<!-- 
+		기능: 마이페이지-배송지관리 배송지 추가하기
+	 	담당자: 윤상영
+	 -->
+	 <insert id="insertMyshipping">
+	 	INSERT INTO shipping (shipping_id, 
+                                    customer_id, 
+                                    shipping_receiver_nm, 
+                                    shipping_receiver_telno, 
+                                    shipping_dmnd, 
+                                    shipping_road_nm_addr, 
+                                    shipping_daddr, 
+                                    shipping_dv)
+						VALUES (shipping_seq.nextval,
+				              #{customerId},
+				              #{shippingReceiverNM},
+				              #{shippingReceiverTelNO},
+				              #{shippingDmnd},
+				              #{shippingRoadNMAddr},
+				              #{shippingDaddr},
+				              #{shippingDv})
+	 </insert>
+	 <!-- 
+		기능: shippingDv가 301(기본배송지)인것의 개수
+	 	담당자: 윤상영
+	 -->
+	 <select id="countShippingDv301" resultType="int" parameterType="int">
+	 	SELECT count(*) 
+		  FROM shipping
+		 WHERE customer_id=#{customerId}
+		   AND shipping_dv =301
+		   AND status='Y'
+	 </select>
+	  <!-- 
+		기능: shippingId에 따른 배송정보가져오기
+	 	담당자: 윤상영
+	 -->
+	 <select id="selectShippingIdInfo" resultType="com.example.daitso.shipping.model.MypageReceiverShipping" parameterType="int">
+	 	 SELECT cc.common_code_nm				AS "shippingDv", 
+            	ship.shipping_receiver_nm 		AS "shippingReceiverNM",
+            	ship.shipping_receiver_telno 	AS "shippingReceiverTelNO",
+           		ship.shipping_dmnd 				AS "shippingDmnd",
+           		ship. shipping_road_nm_addr 	AS "shippingRoadNMAddr",
+            	ship.shipping_daddr  			AS "shippingDaddr",
+            	ship.shipping_id				AS "shippingId"
+		   FROM shipping ship , common_code cc
+		  WHERE shipping_id = #{shippingId}
+			AND ship.shipping_dv = cc.common_code_id
+			AND ship.status='Y'
+	 </select>
+	 <!-- 
+		기능: shippingId에 따른 배송지 수정
+	 	담당자: 윤상영
+	 -->
+	 <update id="updateShippingIdInfo">
+	 	UPDATE  shipping
+       	   SET  shipping_dv = #{shippingDv}, 
+                shipping_receiver_nm = #{shippingReceiverNM},
+                shipping_receiver_telno = #{shippingReceiverTelNO},
+                shipping_dmnd = #{shippingDmnd},
+                shipping_road_nm_addr = #{shippingRoadNMAddr},
+                shipping_daddr = #{shippingDaddr}
+		 WHERE  shipping_id=#{shippingId}  
+	 </update>
+	  <!-- 
+		기능: shippingId에 따른 배송지 삭제
+	 	담당자: 윤상영
+	 -->
+	 <delete id="deleteMyshipping" parameterType="int">
+	 	DELETE 
+	 	  FROM shipping
+		 WHERE shipping_id=#{shippingId}
+	 </delete>
 </mapper>

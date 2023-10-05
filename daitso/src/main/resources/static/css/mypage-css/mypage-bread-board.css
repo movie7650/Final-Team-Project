@@ -38,18 +38,18 @@
 }
 
 .top-rectangle-02 {
-	width: 220px;
+	width: 300px;
 	height: 142px;
 	padding: 52px 7px;
 	border-left: solid 1px #aac8b2;
 	background-color: #e8c369;
 }
 .rectangle-title {
-  margin-top:-20%;
+  margin-top:-15%;
   width: 159px;
   height: 47px;
   font-family: Inter;
-  font-size: 100%;
+  font-size: 130%;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;

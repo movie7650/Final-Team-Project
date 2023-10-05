@@ -93,9 +93,9 @@ public interface IAdminService {
 	void updateCategoryInfo(CategoryCheck categoryCheck);
 
 //카테고리 등록하기 ★
-//	void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files);
+	void registerCategories(CategoryCheck categoryCheck, MultipartFile file);
 	//테스트//
-	void registerCategories(CategoryCheck categoryCheck);
+//	void registerCategories(CategoryCheck categoryCheck);
 	
 	
 	
