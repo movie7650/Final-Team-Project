@@ -220,5 +220,10 @@
 		             </choose> ) -->
     </insert>
 	
+	<update id="updateCategoryImage">
+	    UPDATE category
+	       SET category_image = #{imageUrl}
+	    WHERE category_id = #{categoryId}
+	</update>
 
 </mapper>

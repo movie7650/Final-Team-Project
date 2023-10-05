@@ -552,6 +552,26 @@ public class AdminController {
 	return "admin/message";
 	
 	}
+	
+	// 
+	@PostMapping("/updateCategoryImage")
+	public ResponseEntity<?> updateCategoryImage( @RequestParam int categoryId,
+	                                              @RequestParam(required = false) MultipartFile uploadCategoryImage) {
+		 try {
+	        String imageUrl = null;
+	        
+	        if (uploadCategoryImage != null) {
+	            imageUrl = s3Service.uploadSingle(uploadCategoryImage); // 첫 번째 이미지 업로드
+	        	System.out.println("uploadCategoryImage imageUrl: " + imageUrl);
+	        }
+	        adminService.updateCategoryImage(categoryId, imageUrl);   
+	        
+	        return ResponseEntity.ok().build();
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
  		
 	// 전체 공통 코드 조회하기
   	@GetMapping("/common-code")
