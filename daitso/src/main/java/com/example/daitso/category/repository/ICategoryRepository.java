@@ -51,5 +51,6 @@ public interface ICategoryRepository {
 	// 카테고리 등록하기
 	void registerCategories(CategoryCheck categoryCheck);
 
+	void updateCategoryImage(int categoryId, String imageUrl);
 }
 

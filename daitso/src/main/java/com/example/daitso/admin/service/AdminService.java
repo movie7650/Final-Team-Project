@@ -245,6 +245,13 @@ public class AdminService implements IAdminService{
 //		
 //	}
 
+	@Override
+	public void updateCategoryImage(int categoryId, String imageUrl) {
+		categoryRepository.updateCategoryImage(categoryId, imageUrl);
+	}
+	
+	
+
 	// 최상위 공통코드 조회하기
 	@Override
 	public List<CommonCode> selectAllCommonCodesPr(int offset, int pageSize) {

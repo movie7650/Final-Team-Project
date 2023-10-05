@@ -10,13 +10,13 @@
 <div class="d-flex justify-content-center align-items-center" style="height: 530px">
 	<div class="d-flex" style="width: 1100px; height:440px">
 		<div class="d-flex flex-column" style="margin-right: 10px">
-			<div class="margin-b-5" style="width:50px; height:50px;">
+			<div class="margin-b-5" th:if="${product.productImageFirst != null}" style="width:50px; height:50px;">
 				<img class="s-img-first" style="width: 100%; height: 100%" th:src="${product.productImageFirst}">				
 			</div>
-			<div class="margin-b-5" style="width:50px; height:50px;">
+			<div class="margin-b-5" th:if="${product.productImageSecond != null}" style="width:50px; height:50px;">
 				<img class="s-img-second" style="width: 100%; height: 100%" th:src="${product.productImageSecond}">				
 			</div>
-			<div style="width:50px; height:50px;">
+			<div style="width:50px; height:50px;" th:if="${product.productImageThird != null}">
 				<img class="s-img-third" style="width: 100%; height: 100%" th:src="${product.productImageThird}">				
 			</div>
 		</div>
@@ -53,7 +53,7 @@
 					<div class="d-flex margin-b-10">
 						<span style="margin-right: 10px;">색상</span>
 						<div class="option-list-color">
-							<select class="option-color select-style" name="color" th:if='!${oListSecond[0].OPTIONSECOND.equals("0")}' th:onchange="optionChange([[${product.productGroupId}]],2)">
+							<select class="option-color select-style" name="color" th:if='!${"0".equals(oListSecond[0].OPTIONSECOND)}' th:onchange="optionChange([[${product.productGroupId}]],2)">
 								<th:block  th:each="option : ${oListSecond}">
 									<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}">[[${option.OPTIONSECOND}]]</option>
 								</th:block>
@@ -457,8 +457,8 @@
         .then(data => {
         	document.querySelector('.img-first').src = data.productImageFirst;
         	document.querySelector('.s-img-first').src = data.productImageFirst;
-        	document.querySelector('.s-img-second').src = data.productImageSecond;
-        	document.querySelector('.s-img-third').src = data.productImageThird;
+        	if(document.querySelector('.s-img-second')) document.querySelector('.s-img-second').src = data.productImageSecond;
+        	if(document.querySelector('.s-img-third')) document.querySelector('.s-img-third').src = data.productImageThird;
             const product = data;
             const cPrice = product.productPrice;
         	totalPrice.value = cPrice;

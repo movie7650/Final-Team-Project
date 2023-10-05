@@ -170,17 +170,20 @@
 	    AND product_id = #{productId})
          OR inquiry_pr_id = #{inquiryId}
 	 </delete>
-	  	<!-- 
+  	<!-- 
 		기능: inquiry status Y 인거 카운트
 		담당자: 윤상영
 	 -->
 	 <select id="countInquiryStatusY" resultType="int" parameterType="int"> 
 	 	SELECT count( inquiry_content) as "inquiryStatusYCount"
        	  FROM inquiry i
-       	 WHERE i.customer_id=19
+       	 WHERE i.customer_id=#{customerId}
            AND i.status='Y'
 	 </select>
-	 
+ 	<!-- 
+		기능: 문의고유아이디에 따른 문의 내용 가져오기
+		담당자: 윤상영
+	 -->
 	 <select id="selectInquiryContent" resultType="String" parameterType="int">
 	 	SELECT inquiry_content as "inquiryContent"
  		  FROM inquiry
