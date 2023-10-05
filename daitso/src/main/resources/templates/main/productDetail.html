@@ -457,8 +457,8 @@
         .then(data => {
         	document.querySelector('.img-first').src = data.productImageFirst;
         	document.querySelector('.s-img-first').src = data.productImageFirst;
-        	document.querySelector('.s-img-second').src = data.productImageSecond;
-        	document.querySelector('.s-img-third').src = data.productImageThird;
+        	if(document.querySelector('.s-img-second')) document.querySelector('.s-img-second').src = data.productImageSecond;
+        	if(document.querySelector('.s-img-third')) document.querySelector('.s-img-third').src = data.productImageThird;
             const product = data;
             const cPrice = product.productPrice;
         	totalPrice.value = cPrice;
