@@ -50,7 +50,7 @@
 					<th:block th:each="list : ${productList}">
 						<div style="width: 212px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]], [[${list.productGroupId}]])">
 							<div style="width: 212px; height: 212px;">
-								<img style="width: 100%; height: 100%" th:src="@{/images/mainImages.png}">
+								<img style="width: 100%; height: 100%" th:src="${list.productImageFirst}">
 							</div>
 							<div style="width: 212px;">
 								<p class="font-s-13" th:if='${list.discountRate != 0}' style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:0px">지금 10% 할인중</p>
