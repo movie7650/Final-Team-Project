@@ -47,7 +47,7 @@
 }
 
 .modal-header{
-	background-color: tan;
+	background-color: #c4d8ff;
 }
 
 div.col-sm-10 {
@@ -77,13 +77,17 @@ div.col-sm-10 {
 
 .pagination li a:hover, .pagination1 li a:focus {
 	color: #fff;
-	border: 1px solid #39594e;
-	background-color: #39594e;
+	border: 1px solid #1a385d;
+	background-color: #1a385d;
 }
 
 .page-item.active .page-link {
 	color: black;
 	background-color: #fff;
 	z-index: 3;
-	border-color: #39594e;
+	border-color: #1a385d;
+}
+
+input{
+	accent-color:aliceblue;
 }

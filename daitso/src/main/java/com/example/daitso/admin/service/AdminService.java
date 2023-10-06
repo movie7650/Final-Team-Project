@@ -251,6 +251,12 @@ public class AdminService implements IAdminService{
 	}
 	
 	
+	@Override
+	public void deleteCategoryImage(int categoryId, boolean deleteCategoryImage) {
+		categoryRepository.deleteCategoryImage(categoryId, deleteCategoryImage);
+		
+	}
+	
 
 	// 최상위 공통코드 조회하기
 	@Override
@@ -333,5 +339,7 @@ public class AdminService implements IAdminService{
         int count = couponRepository.countByCouponSn(couponSn);
         return count == 0; // 0이면 중복되지 않음, 1 이상이면 중복됨
     }
+
+
 
 }
