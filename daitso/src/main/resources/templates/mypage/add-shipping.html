@@ -29,7 +29,7 @@
 	
 	<div class="shipping-receiver-phonenumber">
 		<img th:src="@{/assets/mypage/phoneNum.JPG}">
-		<input required name="shippingReceiverTelNO" type="text" placeholder="전화번호 입력">
+		<input required name="shippingReceiverTelNO" type="text"  maxlength="13" oninput="oninputPhone(this)" placeholder="전화번호 입력">
 	</div><!-- shipping-receiver-phonenumber -->
 	
 	<div class="shipping-receiver-request">
@@ -50,6 +50,12 @@
 <!-- 카카오 도로명주소 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+//전화번호 입력
+function oninputPhone(target) {
+    target.value = target.value
+        .replace(/[^0-9]/g, '')
+        .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
+}
     function kakaoPost() {
         new daum.Postcode({
             oncomplete: function(data) {

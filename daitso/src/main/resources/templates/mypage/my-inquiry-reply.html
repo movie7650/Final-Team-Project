@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+</head>
+<body style="background-color:#e7e7e7;">
+<div style="width:80%;; margin-left:10%; margin-top:2%;">
+	<div class="my-inquiry-content-title">내 문의내용</div>
+	<div th:text="${myinquiry}" class="inquiryId-content"></div>
+	<div th:text="|작성일자 : ${myinquirytime}|"></div>
+	<div style="margin-top:2%;">
+		<div class="my-inquiry-pr-content">답변내용</div>
+		<div th:text="${myprinquiry}" class="inquiryPrId-content"></div>
+		<div th:text="|작성일자 : ${myinquiryreplytime}|"></div>
+	</div>
+	<div>
+		<input id="close-inquiry-window" type="button" onclick="closeTabClick();" value="닫기">
+	</div>
+</div>
+
+<script>
+	function closeTabClick() {
+    	window.close();
+	}
+</script>
+
+</body>
+</html>

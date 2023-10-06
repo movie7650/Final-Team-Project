@@ -163,6 +163,7 @@
 		  WHERE ship.customer_id=#{customerId}
 			AND ship.shipping_dv = cc.common_code_id
 			AND ship.status='Y'
+			order by decode(shipping_dv,301,1) asc
 	 </select>
 	<!-- 
 		기능: shipping_status가 Y 인것 개수 

@@ -1,0 +1,51 @@
+@charset "UTF-8";
+
+.my-inquiry-content-title{
+	background-color:#668663;
+	color:white;
+	height:50px;
+	font-size:150%;
+	padding-left:10px;
+	padding-top:5px;
+	border-radius:10px 10px 0px 0px;
+	box-shadow: 2px 2px 2px 2px gray;
+	
+}
+.inquiryId-content{
+	height:150px;
+	font-weight: bold;
+	font-size: 130%;
+	border-radius:0px 0px 10px 10px;
+	background-color:white;
+	box-shadow: 2px 2px 2px 2px gray;
+}
+.my-inquiry-pr-content{
+	background-color:#a5c2f2;
+	color:white;
+	height:50px;
+	font-size:150%;
+	padding-left:10px;
+	padding-top:5px;
+	border-radius:10px 10px 0px 0px;
+		box-shadow: 2px 2px 2px 2px gray;
+	
+}
+.inquiryPrId-content{
+	height:150px;
+	font-weight: bold;
+	font-size: 130%;
+	border-radius:0px 0px 10px 10px;
+	background-color:white;
+	box-shadow: 2px 2px 2px 2px gray;
+	
+	
+}
+#close-inquiry-window{
+	width:150px;
+	height:50px;
+	background-color:white;
+	border:solid 2px #668663;
+	border-radius:10px;
+	float:right;
+	margin-top:10px;
+}

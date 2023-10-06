@@ -73,5 +73,11 @@ public class ReviewService implements IReviewService{
 	public List<WriteMyReview> selectMyPurchase(int customerId, int productId, String purchaseNum) {
 		return reviewRepository.selectMyPurchase(customerId, productId,purchaseNum);
 	}
+	
+	//customerId와 productId와 purchaseNum에 따른 리뷰 갯수 카운트
+	@Override
+	public int countCusProPurId(int customerId, int productId, String purchaseNum) {
+		return reviewRepository.countCusProPurId(customerId, productId, purchaseNum);
+	}
 
 }

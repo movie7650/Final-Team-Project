@@ -35,7 +35,7 @@
 			</td>
 			<td>
 				<div style="float:left;" th:text="${MyTelNo}">전화번호</div>
-				<input name="newTelNO" type="text" id="change-phonenumber-input" hidden>
+				<input autocomplete=off maxlength="13" oninput="oninputPhone(this)" name="newTelNO" type="text" id="change-phonenumber-input" hidden>
 				<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
 			</td>
 			<td><input name="nowPassword" type="password"></td>
@@ -52,6 +52,11 @@
 				}
 				function showPhoneNumberInput(){
 					document.getElementById("change-phonenumber-input").removeAttribute("hidden");
+				}
+				function oninputPhone(target) {
+				    target.value = target.value
+				        .replace(/[^0-9]/g, '')
+				        .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
 				}
 			</script>
 	<div class="update-user-button-container">

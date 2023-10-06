@@ -98,17 +98,20 @@
 	left join product p on re.product_id = p.product_id
 	left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
 	WHERE re.customer_id=#{customerId} 
+	  AND re.status='Y'
 	</select>
 
 	<!-- 
 			기능: 내가 쓴 리뷰 삭제하기
 			담당자: 윤상영
 		 -->
-	<delete id="deleteReview">
-		DELETE 
-		  FROM review  re
-		 WHERE re.customer_id=#{customerId} and re.review_id=#{reviewId}
-	</delete>
+	<update id="deleteReview">
+		UPDATE review re
+		   SET status = 'N'
+		 WHERE re.customer_id=#{customerId} 
+		   AND re.review_id=#{reviewId}
+		   AND re.status = 'Y'
+	</update>
 
 	<!-- 
 			기능: 리뷰 내용 카운트
@@ -118,7 +121,8 @@
 		SELECT COUNT(re.review_content) as "reviewContentCount"
 		  FROM review re
 		 WHERE re.customer_id = #{customerId}
-	</select>
+		   AND re.status='Y'
+ 	</select>
 
 	<!-- 
 			기능: 리뷰작성페이지-내가 주문한 상품 정보 가져오기
@@ -140,14 +144,26 @@
 		   AND  pur.purchase_num = #{purchaseNum}
 	</select>
 	<!-- 
-				기능: 리뷰 작성하기
-				담당자: 윤상영
-			 -->
+		기능: 리뷰 작성하기
+		담당자: 윤상영
+	 -->
 	<insert id="insertReview" parameterType="com.example.daitso.review.model.WriteMyReview">
 		INSERT INTO review (review_id, product_id,customer_id,review_content,review_star_point,
 							review_image_first,review_image_second,review_image_third,status,
 							creator,review_title)
 		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, null, null, null, 'Y', 'admin',#{reviewTitle})   
 	</insert>
+		<!-- 
+		기능: customerId와 productId와 purchaseNum에 따른 리뷰의 갯수
+		담당자: 윤상영
+	 -->
+	 <select id="countCusProPurId" resultType="int">
+	 	SELECT count(*)
+		  FROM review rev , purchase pur
+		 WHERE rev.customer_id=#{customerId}
+		   AND rev.product_id = #{productId}
+		   AND pur.purchase_num = #{purchaseNum}
+		   AND rev.status='Y'
+	 </select>
 
 </mapper>

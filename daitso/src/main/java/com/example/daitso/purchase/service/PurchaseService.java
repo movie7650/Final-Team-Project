@@ -74,5 +74,10 @@ public class PurchaseService implements IPurchaseService {
 	public int selectPurchaseNumCount(int customerId) {
 		return purchaseRepository.selectPurchaseNumCount(customerId);
 	}
+	//내 주문상품 전체 갯수
+	@Override
+	public int countMyOrderList(int customerId) {
+		return purchaseRepository.countMyOrderList(customerId);
+	}
 	
 }
