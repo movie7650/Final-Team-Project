@@ -248,4 +248,14 @@
 	 	  FROM shipping
 		 WHERE shipping_id=#{shippingId}
 	 </delete>
+	  <!-- 
+		기능: shippingId에 따른 배송지구분가져오기
+	 	담당자: 윤상영
+	 -->
+	 <select id="selectShippingDv" resultType="int">
+	 	SELECT shipping_dv as "shippingDv"
+		  FROM shipping
+		 WHERE shipping_id = #{shippingId}
+	 </select>
+	 
 </mapper>

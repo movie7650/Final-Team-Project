@@ -84,5 +84,11 @@ public class ShippingService implements IShippingService {
 		shippingRepository.deleteMyshipping(shippingId);		
 	}
 	
+	//배송지Id에 따른 배송지구분
+	@Override
+	public int selectShippingDv(int shipppingId) {
+		return shippingRepository.selectShippingDv(shipppingId);
+	}
+	
 	
 }

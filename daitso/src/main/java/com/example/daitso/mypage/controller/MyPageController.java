@@ -940,14 +940,18 @@ public class MyPageController {
 									   @RequestParam String shippingRoadNMAddr, @RequestParam String shippingDaddr,
 									   @RequestParam String shippingReceiverTelNO, @RequestParam String shippingDmnd,
 									   @RequestParam(defaultValue = "302") int shippingDv,RedirectAttributes redirectAttributes) {
-		
+		//로그인
 		int customerId = logincheckService.loginCheck();
 
 		if (customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		if(shippingService.countShippingDv301(customerId)>0) {
+		int countshippingdv301 = shippingService.countShippingDv301(customerId);
+		int selectshippingdv = shippingService.selectShippingDv(shippingId);
+		//이미 등록된 기본배송지가 있고, 수정하고자 하는 배송지가 기본배송지일때 
+		if(countshippingdv301>0 && selectshippingdv == 302) {
+			redirectAttributes.addFlashAttribute("error", "이미 등록된 기본배송지가 있습니다!");
 			shippingDv = 302;	
 			shippingService.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
 			return "redirect:/mypage/myshipping";

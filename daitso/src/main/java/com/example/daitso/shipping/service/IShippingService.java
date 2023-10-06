@@ -37,6 +37,9 @@ public interface IShippingService {
 						  @Param("shippingReceiverTelNO") String shippingReceiverTelNO, @Param("shippingDmnd") String shippingDmnd,
 						  @Param("shippingDv") int shippingDv);
 	
+	//배송지 Id에 따른 배송지구분 가져오기 
+	int selectShippingDv(@Param("shippingId") int shipppingId);
+	
 	//마이페이지-배송지관리-배송지 삭제
 	void deleteMyshipping(@Param("shippingId")int shippingId);
 	
