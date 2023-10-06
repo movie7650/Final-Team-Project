@@ -100,6 +100,8 @@ public interface IAdminService {
 	
 	void updateCategoryImage(int categoryId, String imageUrl);
 	
+	void deleteCategoryImage(int categoryId, boolean deleteCategoryImage);
+	
 	
 	// 최상위 공통코드 조회하기
 	List<CommonCode> selectAllCommonCodesPr(@Param("offset") int offset, @Param("pageSize") int pageSize);

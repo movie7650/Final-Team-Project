@@ -18,18 +18,18 @@
 		        <option value="purchaseNum">주문번호</option>
 		    </select>
 		    <input id="searchText" style="width:15%;" type="text" onkeypress="if( event.keyCode == 13 ){searchList();}" autocomplete="off"> 
-		    <input type="button" class="btn btn-secondary" style="width:7%; background-color: #39594e; border-color: #39594e; color: #ffff; margin-left: 5px;" value="검색" 
+		    <input type="button" class="btn btn-secondary" style="background-color: #b69f93; border-color: #d5bdaf; color: #ffff; margin-left: 5px;" value="검색" 
 		    	   onclick="searchList()"/>
 		</div>
 		
 		<div class="col-sm-12"	style="display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
-				<button type="button" onclick="loadData(401)" class="btn btn-default" style="border-color: #aac8b2; border-radius:0em;">입금/결제</button>
-				<button type="button" onclick="loadData(402)" class="btn btn-default" style="border-color: #aac8b2; border-radius:0em;">배송중</button>
-				<button type="button" onclick="loadData(403)" class="btn btn-default" style="border-color: #aac8b2; border-radius:0em;">배송완료</button>				
+				<button type="button" onclick="loadData(401)" class="btn btn-default" style="background: #f7ba8b;border-color: #f7ba8b;color: white;border-radius: 0em;">입금/결제</button>
+				<button type="button" onclick="loadData(402)" class="btn btn-default" style="background: #aac8b2;border-color: #aac8b2;color: white;border-radius: 0em;">배송중</button>
+				<button type="button" onclick="loadData(403)" class="btn btn-default" style="background: #d9c9eb;border-color: #d9c9eb;color: white;border-radius: 0em;">배송완료</button>				
 		</div>
 
 
-		<div style="height: 690px;">
+		<div style="height: 630px;">
 			<table class="table" style="text-align: center;">
 				<thead>
 					<tr>
@@ -65,16 +65,24 @@
 		</div>
 		
 		<!-- 페이지 링크 표시 -->
-		<div th:if="${totalCount > 0}">
-			 <ul class="pagination" id="pagination">
-				<!-- 이전 페이지 -->
-				<li th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
-					<!-- 이전 페이지로 이동하는 링크 -->
-					<a class="page-link"
-					th:href="@{/admin/purchase(page=${currentPage - 1}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
+			<div th:if="${totalCount > 0}">
+		    <ul class="pagination" id="pagination">
+		        <!-- 첫 페이지로 이동하는 화살표 -->
+		        <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
+		            <a class="page-link"
+		                th:href="@{/admin/purchase(page=1, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
+		                aria-label="First"> <span aria-hidden="true">&laquo;</span>
+		            </a>
+		        </li>
+		
+		        <!-- 이전 페이지 -->
+		        <li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
+		            <!-- 이전 페이지로 이동하는 링크 -->
+		            <a class="page-link"
+		                th:href="@{/admin/purchase(page=${currentPage - 1}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
+		                aria-label="Previous"> <span aria-hidden="true">&lsaquo;</span>
+		            </a>
+		        </li>
 
 				<!-- 페이지 번호 링크 -->
 				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}" class="page-item" th:classappend="${page == currentPage} ? active">
@@ -89,11 +97,18 @@
 					<!-- 다음 페이지로 이동하는 링크 -->
 					<a class="page-link" 
 					th:href="@{/admin/purchase(page=${currentPage + 1}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					aria-label="Next"> <span aria-hidden="true">&rsaquo;</span>
 					</a>
 				</li>
-			</ul>
-	  </div>
+			   <!-- 마지막 페이지로 이동하는 화살표 -->
+		        <li class="page-item" th:classappend="${currentPage == totalPages} ? disabled">
+		            <a class="page-link"
+		                th:href="@{/admin/purchase(page=${totalPages}, pageSize=${pageSize}, commonCodeId=${commonCodeId})}"
+		                aria-label="Last"> <span aria-hidden="true">&raquo;</span>
+		            </a>
+		        </li>
+		    </ul>
+		</div>
 	
 	<!-- 주문 내역 조회 모달 -->
 	<div id="infoModal" class="modal fade" tabindex="-1"	role="dialog">
@@ -112,7 +127,7 @@
 						 </div>
 							<table class="table" style="text-align:center;">
 								<thead>
-									<tr>
+									<tr style="background: aliceblue;">
 										<th style="border: outset;">상품명</th>
 										<th style="border: outset;">상품가격</th>
 										<th style="border: outset;">수량</th>
@@ -125,7 +140,7 @@
 							
 						</div>
 						<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
 						</div>
 			</div>
 		</div>
@@ -178,10 +193,16 @@
 	            /// 페이징 정보 업데이트
 	            var pagination = $('#pagination');
 	            pagination.empty();
+	            
+	            // 첫 페이지로 이동하는 링크
+	             var firstLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+				    "<a class='page-link' onclick='loadData(" + commonCodeId + ")' aria-label='First'><span aria-hidden='true'>&laquo;</span></a>" +
+				    "</li>";
+				 pagination.append(firstLink);
 
 	            // 이전 페이지로 이동하는 링크
 	            var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
-	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&lsaquo;</span></a>" +
 	                "</li>";
 	            pagination.append(prevLink);
 
@@ -194,9 +215,15 @@
 
 	            // 다음 페이지로 이동하는 링크
 	            var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
-	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&rsaquo;</span></a>" +
 	                "</li>";
 	            pagination.append(nextLink);
+	            
+	            // 마지막 페이지로 이동하는 링크
+	             var lastLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+		             "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
+		             "</li>";
+	        	 pagination.append(lastLink);
 
 	        },
 	        error: function (error) {

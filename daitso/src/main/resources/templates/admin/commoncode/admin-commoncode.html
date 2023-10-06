@@ -14,7 +14,7 @@
 		<div class="row"
 			style="padding-bottom: 15px; justify-content: flex-end;">
 			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
-				<button class="btn btn-primary" style="background-color: #39594e"
+				<button class="btn btn-primary" style="background-color: #b69f93; border-color:#b69f93;"
 					data-bs-toggle="modal" data-bs-target="#registerModal"
 					type="button">등록</button>
 			</div>
@@ -42,7 +42,7 @@
 						<td th:text="${commonCodes.createDt}"></td>
 						<td>
 							<div class="btn-group">
-								<button class="btn btn-xs"	style="background-color: #d4a373; color: #ffff"
+								<button class="btn btn-xs"	style="background-color: #f7ba8b; color: #ffff"
 									data-bs-toggle="modal" data-bs-target="#searchModal"
 									type="button" th:onclick="selectCommonCodesByPr([[${commonCodes.commonCodeId}]])">상세</button>
 								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
@@ -174,9 +174,9 @@
 
 						
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #668663"
+							<button class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;"
 								type="submit" >저장</button>
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;"  data-bs-dismiss="modal">닫기</button>
 						</div>
 					</div>
 				</form>
@@ -234,9 +234,9 @@
 						
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #668663"
+							<button class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;"
 								type="submit">저장</button>
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;"  data-bs-dismiss="modal">닫기</button>
 						</div>
 					</form>
 				</div>
@@ -368,7 +368,7 @@
 	                          <td>${commonCode.createDt}</td>
 	                          <td>
 			   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
-			   						style="background-color: #adb5bd; color: #ffff" type="button"
+			   							style="background-color: #f7ba8b; color: #ffff" type="button"
 			   						onclick = "selectCommonCode(${commonCode.commonCodeId})">수정</button>
 			   						
 			    			  </td>
