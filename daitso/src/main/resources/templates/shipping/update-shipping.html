@@ -85,7 +85,7 @@
 						<div style="margin-left: 5px;">기본배송지로 선택</div>
 					</div>
 					<div class="ship-add-btn">
-						<button type="submit" style="width: 100%; height: 100%; border:none; background-color: #39594E; color:white; font-weight: 600; outline: none;">저장</button>
+						<button id="ship-add-btn-id" type="submit" style="width: 100%; height: 100%; border:none; background-color: #39594E; color:white; font-weight: 600; outline: none;">저장</button>
 					</div>
 				</form>
 				<form th:action="@{/shipping/{customerId}/delete/{shippingId}(shippingId = ${shippingId}, customerId = ${customerId})}" th:method="post" >
@@ -297,10 +297,12 @@
 			if(patternPhone.test(item.value)){
 				document.getElementById("ship-telno").style.border = '1px solid #CECECE';
 				document.getElementById("ship-error-telno").style.display = 'none';
+				document.getElementById("ship-add-btn-id").disabled = false;
 			} else {
 				document.getElementById("ship-error-telno").innerText='형식에 맞는 휴대폰 번호를 입력하세요.';
 				document.getElementById("ship-telno").style.border = '1px solid red';
 				document.getElementById("ship-error-telno").style.display = 'block';
+				document.getElementById("ship-add-btn-id").disabled = true;
 			}
 		}
 	}

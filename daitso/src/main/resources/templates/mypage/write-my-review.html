@@ -33,7 +33,7 @@
 				</div><!-- order-list-container01 -->	
 			</div><!-- order-list-container -->
 			
-			
+			<div th:if="${countcuspropur}==0">
 			<div>
 				<div style="float:left; padding-bottom:3px; border-bottom:solid 2px #668663;">평점 및 별점</div>
 				<div class="review-input"><input required onfocus="this.blur()" name="reviewStarPoint" th:text="${reviewStarPoint}" type="number" min="1" max="5" maxlength="1"/></div>
@@ -54,7 +54,11 @@
 				<button id="save-button" type="submit">저장하기</button>
 				<button id="cancle-button"  type="button" th:onclick="|location.href='@{/mypage/orderlist}'|">취소하기</button>
 			</div><!--write-review-button-container  -->
-	
+			</div>
+			<div th:if="${countcuspropur}!=0">
+				<div style="margin-left:250px; font-size:150%;">이미 리뷰를 작성한 주문상품입니다.</div>
+				<input type="button" class="already-review-back" th:onclick="|location.href='@{/mypage/orderlist}'|" value="뒤로가기">
+			</div>
 		</form>
 	</th:block>
 </div>

@@ -11,4 +11,5 @@ public class CustomerInfo {
 	private String customerTelno;
 	private int shippingId;
 	private int recentShippingId;
+	private String loginMethod;
 }

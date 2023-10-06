@@ -56,6 +56,7 @@
 	const email = document.getElementById("customer-find-input-email");
 	const name = document.getElementById("customer-find-input-name");
 	const emailText = document.getElementById("customer-find-email-text");
+	const csrfToken = '[[${_csrf.token}]]';
 	
 	function findPw() {
 		if(!name.value) {
@@ -72,7 +73,7 @@
 			    method: "POST",
 			    headers: { 
 			        "Content-Type": "application/json",
-			        "X-CSRF-TOKEN": [[${_csrf.token}]]
+			        "X-CSRF-TOKEN": csrfToken
 			    },
 			    body: JSON.stringify({
 			        email: email.value

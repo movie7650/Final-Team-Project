@@ -15,6 +15,9 @@ import com.example.daitso.review.model.WriteMyReview;
 @Mapper
 public interface IReviewRepository {
 	
+	//productId와 customerId와 purchaseId를 보고 작성한 리뷰 갯수 카운트
+	int countCusProPurId(@Param("customerId")int customerId, @Param("productId") int productId, @Param("purchaseNum") String purchaseNum );
+	
 	// 리뷰 작성하기
 	void insertReview(WriteMyReview writeMyReview);
 	//내가 주문한 상품의 상품정보가져오기
