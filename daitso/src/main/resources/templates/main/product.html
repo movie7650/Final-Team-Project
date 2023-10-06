@@ -10,10 +10,10 @@
 	<div class="product-body">
 		<div class="product-path-bar">
 			<th:block th:if="${categoryId == 'noCategory'}">
-				<span style="width:1215px">전체 > [[${path}]]</span>		
+				<span style="font-size:20px; width:1215px">전체 > [[${path}]]</span>		
 			</th:block>
 			<th:block th:if="${categoryId != 'noCategory'}">
-				<span style="width:1215px">전체 [[${path}]]</span>		
+				<span style="font-size:20px; width:1215px">전체 [[${path}]]</span>		
 			</th:block>
 		</div>
 		<div class="d-flex justify-content-center">
@@ -48,13 +48,13 @@
 				</th:block>
 				<div class="product-large-box">
 					<th:block th:each="list : ${productList}">
-						<div style="width: 212px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]], [[${list.productGroupId}]])">
-							<div style="width: 212px; height: 212px;">
+						<div style="width: 250px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]], [[${list.productGroupId}]])">
+							<div style="border:1px solid #d9d9d9; width: 250px; height: 212px;">
 								<img style="width: 100%; height: 100%" th:src="${list.productImageFirst}">
 							</div>
-							<div style="width: 212px;">
+							<div style="width: 250px; padding: 0 5px 0 5px;">
 								<p class="font-s-13" th:if='${list.discountRate != 0}' style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:0px">지금 10% 할인중</p>
-								<p style="font-size:13px; margin-bottom: 0px">[[${list.productNm}]]</p>
+								<p style="font-size:15px; margin-bottom: 0px">[[${list.productNm}]]</p>
 								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(list.productPrice, 3, 'COMMA') + '원'}"></p>
 								<div>상품 리뷰([[${list.reviewCount}]])</div>
 								<div class="star-parent">
@@ -97,12 +97,12 @@
 	sideEl = document.querySelector('.sidebar-ul');
     cList.map((data,idx) => {
 		if(data.lv == 1){
-			const elements = `<p style="margin-left:10px; border-bottom: solid 1px #eee">${data.categoryNm}</p>`
+			const elements = `<p style="font-size:20px; margin-left:10px; border-bottom: solid 1px #eee">${data.categoryNm}</p>`
 			sideEl.innerHTML += elements;
 		}
 		else if(data.lv == 2){
 			const elements = `<li class="li${data.categoryId} font-s-13 margin-b-5" style="margin-left:20px">
-							  	<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black">${data.categoryNm}</a> 
+							  	<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black; font-size:17px;">${data.categoryNm}</a> 
 							  	${data.isLeaf == 0 ? `
 							  			<a class="show-btn${data.categoryId}"  onclick="showDownCategory(${data.categoryId})">
 											<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
@@ -122,7 +122,7 @@
 				const span = document.createElement('span');
 				const elements = `<ul class="ul${data.categoryPrId}" style="display: none">
 									<li class="li${data.categoryId}">
-										<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black">${data.categoryNm}</a> 
+										<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black; font-size:17px;">${data.categoryNm}</a> 
 									  	${data.isLeaf == 0 ? `
 									  			<a class="show-btn${data.categoryId}"  onclick="showDownCategory(${data.categoryId})">
 													<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
@@ -165,7 +165,7 @@
 			else if(data.lv <= cList[idx-1].lv){
 				const span = document.createElement('span');
 				const elements = `<li class="li${data.categoryId}">
-									<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black">${data.categoryNm}</a> 
+									<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black; font-size:17px;">${data.categoryNm}</a> 
 								  	${data.isLeaf == 0 ? `
 								  			<a class="show-btn${data.categoryId}"  onclick="showDownCategory(${data.categoryId}, ${data.lv})">
 												<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
