@@ -2,6 +2,7 @@ package com.example.daitso.customer.controller;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.customer.model.CustomerEmail;
@@ -33,6 +36,7 @@ import com.google.gson.JsonParser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -52,6 +56,9 @@ public class CustomerController {
 	
 	@Autowired
 	JavaMailSender javaMailSender;
+	
+	@Autowired
+	SpringTemplateEngine templateEngine;
 	
 	final DefaultMessageService messageService;
 	
@@ -157,26 +164,34 @@ public class CustomerController {
 	
 	// 사용자에게 비밀번호 세팅창 메일로 보내기
 	@PostMapping("/setting-password/email")
-	public @ResponseBody String settingPassword(@RequestBody String data, HttpServletRequest request) {
+	public @ResponseBody String settingPassword(@RequestBody String data, HttpServletRequest request, HttpSession session) {
 		
 		JsonElement element = JsonParser.parseString(data);
 		String email = element.getAsJsonObject().get("email").getAsString();
 		
-		String urlString = request.getRequestURL().toString();
-		String url = urlString.substring(0, urlString.length() - 6) + "/" + email;
+		String randomNum = makeDigitRandomNum();
+				
+		session.setAttribute(email, randomNum);
+		session.setMaxInactiveInterval(60 * 60); // 1시간 유효
 		
+		String urlString = request.getRequestURL().toString();
+		String url = urlString.substring(0, urlString.length() - 6) + "/";
+		 
 		// 이메일 보내기    
         try {
         	MimeMessage m = javaMailSender.createMimeMessage();
             MimeMessageHelper h = new MimeMessageHelper(m,"UTF-8");
-			
+            
+            Context thymeleafContext = new Context();
+            thymeleafContext.setVariable("customerEmail", email);
+            thymeleafContext.setVariable("url", url);
+            
+            String htmlBody = templateEngine.process("email/email-pw", thymeleafContext);
+            
             h.setFrom("cjw9977@naver.com");
 			h.setTo(email);
 	        h.setSubject("[쿠팡] 비밀번호 재설정을 위한 안내메일입니다.");
-	        h.setText("<html><body> "
-	        		+ "<div>비밀번호 재설정을 위한 안내 이메일입니다!. 비밀번호 설정할려면 아래 링크로 가주세요!<div>"
-	        		+ "<div><a href=" + url + ">비밀번호 설정하기</a></div>"
-	        		+ "</body></html>", true);
+	        h.setText(htmlBody, true);
 	        javaMailSender.send(m);
 	        
 		} catch (MessagingException e) {
@@ -185,10 +200,17 @@ public class CustomerController {
 		return null;
 	}
 	
+	// 난수 만들기
+	private String makeDigitRandomNum() {
+		return UUID.randomUUID().toString();
+	}
+
 	// 새로운 비밀번호 설정 화면
 	@GetMapping("/setting-password/{customerEmail}")
-	public String settingPassword(@PathVariable String customerEmail, RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("email", customerEmail);
+	public String getSettingPassword(@PathVariable String customerEmail, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(session.getAttribute(customerEmail) != null) {
+			redirectAttributes.addFlashAttribute("email", customerEmail);
+		}
 		return "redirect:/customer/setting-password";
 	}
 	
@@ -199,7 +221,7 @@ public class CustomerController {
 	
 	// 새로운 비밀번호 설정
 	@PostMapping("/setting-password")
-	public String settingPassword(@RequestParam String password, @RequestParam String email, RedirectAttributes redirectAttributes) {
+	public String postSettingPassword(@RequestParam String password, @RequestParam String email, RedirectAttributes redirectAttributes) {
 		customerService.settingPassword(password,email);
 		if(email == "") {
 			redirectAttributes.addFlashAttribute("error", "다시 전송해주세요.");

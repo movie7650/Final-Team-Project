@@ -100,9 +100,12 @@
     <![CDATA[
     	SELECT category_id AS categoryId, 
     			category_nm AS categoryNm, 
-    			category_content AS categoryContent 
+    			category_content AS categoryContent,
+    			category_image AS categoryImage
    		FROM  (
-    			SELECT category_id, category_nm, category_content from category
+    			SELECT category_id, category_nm, category_content, category_image
+    			FROM category
+    			WHERE category_id != 0
 				ORDER BY dbms_random.value
 			  )
 		WHERE rownum <= 6
@@ -220,5 +223,10 @@
 		             </choose> ) -->
     </insert>
 	
+	<update id="updateCategoryImage">
+	    UPDATE category
+	       SET category_image = #{imageUrl}
+	    WHERE category_id = #{categoryId}
+	</update>
 
 </mapper>

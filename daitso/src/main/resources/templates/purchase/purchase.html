@@ -32,7 +32,7 @@
 						<div>이메일</div>
 						<div th:text="${customerInfo.customerEmail}"></div>
 					</div>
-					<div>
+					<div th:if="${customerInfo.loginMethod} == 'inside'">
 						<div>휴대폰 번호</div>
 						<div th:text="${customerInfo.customerTelno}"></div>
 					</div>

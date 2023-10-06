@@ -29,10 +29,10 @@
 								style="width: 30px; height: 30px;">
 						</div>
 						<div id="ship-addr" style="width:90%;">
-							<div style="padding: 0 10px 0 10px; height: 55px; line-height:55px; width: 100%; border: 1px solid #CECECE; cursor: pointer; color: #256B04; font-weight: 500; display: flex; justify-content: space-between;">
+							<div style="padding: 0 10px 0 10px; height: 55px; line-height:55px; width: 100%; border: 1px solid #CECECE; color: #256B04; font-weight: 500; display: flex; justify-content: space-between;">
 								<div id="ship-find-addr">우편번호 찾기</div>
 								<input id="ship-find-addr-input" type="hidden" value="" th:field="*{shippingRoadNmAddr}">
-								<div id="ship-find-addr-btn"><img th:src="@{/assets/header/search.svg}" style="width:20px; height: 20px;"></div>
+								<div id="ship-find-addr-btn"><img th:src="@{/assets/header/search.svg}" style="width:20px; height: 20px; cursor: pointer; "></div>
 							</div>
 							<div id="ship-detail-addr-box" style="display:none;">
 								<input 
@@ -68,10 +68,10 @@
 								style="width: 30px; height: 30px;">
 						</div>
 						<div style="width:90%;">
-							<div style="padding: 0 10px 0 10px; width: 100%; height: 55px; line-height:55px; outline: none; border: 1px solid #CECECE; cursor:pointer; display: flex; justify-content: space-between; color:#256B04; font-weight: 500;">
+							<div style="padding: 0 10px 0 10px; width: 100%; height: 55px; line-height:55px; outline: none; border: 1px solid #CECECE; display: flex; justify-content: space-between; color:#256B04; font-weight: 500;">
 								<div id="ship-demand-text">배송 요청사항</div>
 								<input id="ship-demand-input-value" type="hidden" value="" th:field="*{shippingDmnd}">
-								<div onclick="shipDemand()">
+								<div onclick="shipDemand()" style="cursor:pointer;">
 									<img th:src="@{/assets/common/right_arrow_green.svg}">
 								</div>
 							</div>
@@ -82,7 +82,7 @@
 						<div style="margin-left: 5px;">기본배송지로 선택</div>
 					</div>
 					<div class="ship-add-btn">
-						<button type="submit" style="width: 100%; height: 100%; border:none; background-color: #39594E; color:white; font-weight: 600; outline: none;">저장</button>
+						<button type="submit" style="width: 100%; border:none; background-color: #39594E; color:white; font-weight: 600; outline: none;">저장</button>
 					</div>
 				</form>
 			</div>

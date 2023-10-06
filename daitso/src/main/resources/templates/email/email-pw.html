@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>비밀번호 찾기</title>
+<style>
+        .footer {
+		  	display: flex;
+		  	justify-content: center;
+		  	background-color: #39594e;
+		}
+		
+		.footer-box{
+			display: flex;
+		  	margin-top: 5%;
+		  	margin-bottom: 5%;
+		  	width: 100%;
+		}
+		
+		.footer-logo {
+		  	width: 10%;
+		  	margin: 0 101px 52px 20px;
+		}
+		
+		.footer-logo-img {
+			width:150px;
+			height:50px;
+		}
+		
+		.footer-text{
+			color:white;
+			font-family: 'Playfair Display';
+		  	font-size: 12px;
+		  	font-weight: normal;
+		  	font-stretch: normal;
+		  	font-style: normal;
+		  	margin-bottom: 10px;
+		}
+		
+		.footer-text:nth-child(2) {
+			margin-bottom: 25px;
+		}
+</style>
+</head>
+<body>
+	<div style="width: 70%; padding: 20px;">
+		<img src="https://daitso.s3.ap-northeast-2.amazonaws.com/daitso_logo_header.png" style="width: 150px; height: 50px;">
+		<div style="margin-top: 20px; border-top: 10px solid #39594E; border-radius: 5px; text-align: center; padding:0 20px 35px 20px; background-color: #F8F8F8;">
+			<div style="margin-top: 40px; font-size: 20px; color:#555555;"><span style="font-weight: 600;">비밀번호 재설정</span>을 위한 안내 이메일입니다!</div>
+			<div style="margin-top: 30px; text-align: left; font-size: 14px; color:#555555; border: 2px solid #CECECE; background-color: white; padding: 25px;">
+				<div style="font-weight: 600;">안녕하세요. 다있소니다.</div>
+				<div style="margin-top: 5px;">요청하신 <span style="font-weight: 600;">비밀번호 재설정</span>을 위한 본인 확인메일입니다.</div>
+				<div style="margin-top: 5px;"><span style="font-weight: 600;">비밀번호 재설정</span>을 하시려면 <span style="font-weight: 600;">아래의 버튼을 클릭해주세요.</span></div>
+				<div style="color: #256B04; margin-top: 5px; font-weight: 500;">해당 링크는 발송후 1시간 동안만 유효합니다.</div>
+				<div style="margin-top: 30px; text-align: center;">
+					<div style="background-color: #39594E; border-radius: 5px; width: 22%; text-align: center; padding: 15px 10px 15px 10px;">
+						<a th:href="@{${url} + ${customerEmail}}" target="_blank" 
+						   style="color:white; text-decoration: none; width: 100%; display: block; height: 100%; font-size: 15px; font-weight: 600;">비밀번호 재설정하기</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="footer-box">
+				<div class="footer-logo">
+					<img class="footer-logo-img" src="https://daitso.s3.ap-northeast-2.amazonaws.com/daitso_logo_footer.png">
+				</div>
+				<div>
+					<div class="footer-text">주식회사 다있소 대표이사 :  최준원 외 3인  | 사업자등록번호 : 211-87-21455 사업자등록확인  |  통신판매업 신고 : 강남-01882</div>
+					<div class="footer-text">개인정보관리책임 : 회원운영관리담당 최준원  |  서울시 강남구 테헤란로 98길 12  |  다있소 대표전화 : 02. 549. 2233</div>
+					<div class="footer-text">Daitso Department Store. All rights reserved.</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

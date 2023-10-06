@@ -17,36 +17,36 @@
 				<div class="recommand-box-frame d-flex" style="height: 1000px; border: solid 2px #f0f0f0; margin-top: 30px ">
 					<div class="d-flex flex-column align-items-center justify-content-center" style="width:100%">
 						<div class="d-flex" style="width:97%; height: 32%">
-							<div class="re-box" th:onclick="goCategory([[${categoryList[0].categoryId}]])" style="flex: 1; background-image: url('/images/cup.jpg'); background-size:100% 100%;">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[0].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; background-image: url(' + ${categoryList[0].categoryImage} + ')'">
 								<div class="re-box-child">
 									<p>[[${categoryList[0].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[1].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/grape.jpg'); background-size:100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[1].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; margin-left:15px; background-image: url(' + ${categoryList[1].categoryImage} + ')'">
 								<div class="re-box-child">
 									<p>[[${categoryList[1].categoryContent}]]</p>
 								</div>
 							</div>
 						</div>
 						<div class="d-flex" style="width:97%; height: 32%">
-							<div class="re-box" th:onclick="goCategory([[${categoryList[2].categoryId}]])" style="flex: 1; background-image: url('/images/cup.jpg'); background-size:100% 100%;">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[2].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; background-image: url(' + ${categoryList[2].categoryImage} + ')'">
 								<div class="re-box-child">
 									<p>[[${categoryList[2].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[3].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/grape.jpg'); background-size:100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[3].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; margin-left:15px; background-image: url(' + ${categoryList[3].categoryImage} + ')'">
 								<div class="re-box-child">
 									<p>[[${categoryList[3].categoryContent}]]</p>
 								</div>
 							</div>
 						</div>						
 						<div class="d-flex" th:onclick="goCategory([[${categoryList[4].categoryId}]])" style="width:97%; height: 32%">
-							<div class="re-box" style="flex: 1; background-image: url('/images/hairTreatment.jpg'); background-size: 100% 100%">
+							<div class="re-box" th:style="'flex: 1; background-size: 100% 100%; background-image: url(' + ${categoryList[4].categoryImage} + ')' ">
 								<div class="re-box-child">
 									<p>[[${categoryList[4].categoryContent}]]</p>
 								</div>
 							</div>
-							<div class="re-box" th:onclick="goCategory([[${categoryList[5].categoryId}]])" style="flex: 1; margin-left:15px; background-image: url('/images/cleaner.jpg'); background-size: 100% 100%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[5].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; margin-left:15px; background-image: url(' + ${categoryList[5].categoryImage} + ')'">
 								<div class="re-box-child">
 									<p>[[${categoryList[5].categoryContent}]]</p>
 								</div>
@@ -61,7 +61,7 @@
 					<div class="popular-container d-flex justify-content-evenly align-items-center margin-b-10" style="margin-top: 30px; flex-wrap: nowrap">
 						<th:block th:each="product : ${productList}">
 							<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 248px; height: 320px;">
-								<img style="width: 100%; height: 195px" th:src="@{/images/mainImages.png}">
+								<img style="width: 100%; height: 195px" th:src="${product.productImageFirst}">
 								<p class="font-s-13" style="margin-bottom: 0px;">[[${product.specialProductNm}]]</p>
 								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
 								<p style="margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
@@ -91,7 +91,7 @@
 					<div class="sale-container d-flex align-items-center margin-b-10" style="margin-top: 30px; flex-wrap: nowrap">
 						<th:block th:each="product : ${saleProductList}">
 							<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.productGroupId}]])" style="margin-left: 15px; width: 248px; height: 320px;">
-								<img style="width: 100%; height: 195px" th:src="@{/images/mainImages.png}">
+								<img style="width: 100%; height: 195px" th:src="${product.productImageFirst}">
 								<p class="font-s-13" style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:5px">지금 10% 할인중</p>
 								<p class="font-s-13" style="margin-bottom: 0px;">[[${product.productNm}]]</p>
 								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
