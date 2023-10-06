@@ -98,4 +98,21 @@ public class InquiryService implements IInquiryService {
 		return inquiryRepository.selectInquiryContent(inquiryId);
 	}
 
+	//문의답변ID에 따른 문의 답변 가져오기
+	@Override
+	public String selectMyInquiryPRIdInquiry(int inquiryId) {
+		return inquiryRepository.selectMyInquiryPRIdInquiry(inquiryId);
+	}
+	
+	//내문의 작성시간
+	@Override
+	public String selectMyInquiryTime(int inquiryId) {
+		return inquiryRepository.selectMyInquiryTime(inquiryId);
+	}
+	//내문의의 답변 작성시간
+	@Override
+	public String selectMyInquiryReplyTime(int inquiryId) {
+		return inquiryRepository.selectMyInquiryReplyTime(inquiryId);
+	}
+
 }

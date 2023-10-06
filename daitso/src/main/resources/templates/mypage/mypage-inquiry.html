@@ -35,6 +35,7 @@
 								th:if="${myinquiry.inquiryAnsDv}=='W'">답변대기</div>
 							<div style="color: blue; padding-bottom: 5px;"
 								th:if="${myinquiry.inquiryAnsDv}=='C'">답변완료</div>
+							<input type="button" th:if="${myinquiry.inquiryAnsDv}=='C'" id="show-reply" th:onclick="new_window([[${myinquiry.inquiryId}]]);" value="답변보기">	
 							<form th:action="@{/mypage/myinquiry/__${myinquiry.inquiryId}__}"
 								method="post">
 								<button type="submit" class="mypage-inquiry-delete">삭제</button>
@@ -51,52 +52,21 @@
 					</tr>
 				</table>
 				<!-- mypage-inquiry-table -->
-
+				
+				<script>
+	    			function new_window(item) {
+	        				window.open(
+	        						"/mypage/myinquiryreply/"+ item, 
+	          								"Child",
+	          								"width=800, height=450, top=50, left=350"
+	        							);
+	     								 }
+    			</script>
 			</div>
 			<!-- mypage-inquiry-table-container -->
 			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">문의내역이
 				없습니다.</div> 
 			
-	<!-- 		
-			<div id="container">
-				<div id="lorem-ipsum"></div>
-			</div>
-			<div id="modal" class="modal-overlay">
-				<div class="modal-window">
-					<div class="title">
-						<h2>문의내용</h2>
-					</div>
-					<div class="close-area">X</div>
-					<div class="content">
-						<div th:text="${myinquirycontent}">가나다라마바사 아자차카타파하</div>
-					</div>
-					<div class="title2">
-						<h2>답변내용</h2>
-					</div>
-					<div class="reply-content">
-						<p>답변입니다</p>
-					</div>
-				</div>
-			</div>모달창 끝 -->
-			
-	<!-- 		<script>
-	    const modal = document.getElementById("modal")
-	    const btnModal = document.getElementById("btn-modal")
-	    btnModal.addEventListener("click", e => {
-	        modal.style.display = "flex"
-	    })
-	    const closeBtn = modal.querySelector(".close-area")
-	    closeBtn.addEventListener("click", e => {
-	        modal.style.display = "none"
-	    })
-	    modal.addEventListener("click", e => {
-    const evTarget = e.target
-    if(evTarget.classList.contains("modal-overlay")) {
-        modal.style.display = "none"
-    }
-})
-    </script> -->
-
 		</div>
 		<!-- style="width:800px;margin-right:55px;"  -->
 

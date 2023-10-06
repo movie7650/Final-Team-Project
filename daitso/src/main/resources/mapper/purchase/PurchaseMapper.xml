@@ -90,7 +90,16 @@
 		  FROM purchase pur 
 		 WHERE pur.customer_id=#{customerId}
 	</select>
-	
+	<!-- 
+			기능: 내 주문상품 전체 갯수 
+			담당자: 윤상영
+		 -->
+	 <select id="countMyOrderList" resultType="int" parameterType="int">
+	 	SELECT count(*)
+		  FROM purchase
+		 WHERE customer_id=#{customerId}
+		   AND status='Y'
+	 </select>
 	<!-- 
 			기능: 주문상세조회
 			담당자: 윤상영

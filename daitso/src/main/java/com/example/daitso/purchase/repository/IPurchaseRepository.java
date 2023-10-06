@@ -30,6 +30,9 @@ public interface IPurchaseRepository {
 	//주문취소 
 	void canclePurchase(Purchase purchase);
 	
+	//내 주문상품 전체 갯수
+	int countMyOrderList(int customerId);
+	
 	//배송중인 상품 갯수
 	int selectShipping(int customerId);
 	
