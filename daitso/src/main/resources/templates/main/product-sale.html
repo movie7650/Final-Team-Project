@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<div th:replace="~{/include/header :: header}"></div>
+<body>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div class="d-flex justify-content-center" style="position: relative; margin-bottom:35px">
+		<div style="width:1100px;">
+			<img style="width:100%; height: 800px" th:src="@{/images/poster.png}">
+		</div>
+		<div class="d-flex" style="position: absolute; top: 585px">
+			<p style="width: 507px; font-family:fantasy; color: white; font-weight: bold; font-size: 120px;" class="time"></p>
+			<p style="width: 200px; font-family:fantasy; color: white; font-weight: bold; font-size: 120px;">END</p>
+		</div>
+	</div>
+	<div class="d-flex justify-content-center">
+		<div style="width: 1100px">
+			<span style="font-size:25px">할인상품 </span>
+			<span style="font-size:25px; font-weight:bold; color:purple">베스트템</span>
+			<div class="d-flex justify-content-between flex-wrap" style="width:1100px; margin-top:35px;">
+				<th:block th:each="product : ${sList}">
+					<div class="d-flex" style="width:515px; height:300px; border:1px solid silver; border-radius:5px; margin: 10px 10px 10px 10px">
+						<div style="width:200px;">
+							<img th:src="${product.productImageFirst}" style="width:100%; height:100%">
+						</div>
+						<div>
+						</div>
+					</div>				
+				</th:block>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+<script>
+const time = document.querySelector('.time');
+
+function init(){
+    setInterval(getTime, 1000) // getTime이라는 함수를 1000ms(1초) 단위로 실행한다.
+}
+function getTime(){
+    const Dday = new Date("2021-08-29:00:00:00+0900");
+    const today = new Date();
+    let hours = today.getHours(); // 시
+    let minutes = today.getMinutes();  // 분
+    let seconds = today.getSeconds();  // 초
+   	hours = String(24 - hours).padStart(2, "0");
+    minutes = String(60 - minutes).padStart(2, "0");
+    seconds = String(60 - seconds).padStart(2, "0");
+    time.textContent = `${hours} : ${minutes} : ${seconds}`;
+}
+getTime();
+init();
+</script>
+</html>
