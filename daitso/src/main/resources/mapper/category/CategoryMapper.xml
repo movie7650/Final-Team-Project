@@ -229,4 +229,9 @@
 	    WHERE category_id = #{categoryId}
 	</update>
 
+ 	<update id="deleteCategoryImage" parameterType="int">
+        UPDATE category
+		   set category_image = 'NULL'
+         WHERE category_id = #{categoryId}
+    </update>
 </mapper>

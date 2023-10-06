@@ -52,5 +52,7 @@ public interface ICategoryRepository {
 	void registerCategories(CategoryCheck categoryCheck);
 
 	void updateCategoryImage(int categoryId, String imageUrl);
+	
+	void deleteCategoryImage(int categoryId, boolean deleteCategoryImage);
 }
 

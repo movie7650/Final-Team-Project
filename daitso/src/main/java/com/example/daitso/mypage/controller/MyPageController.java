@@ -80,6 +80,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 내 포인트 목록 가져오기
 		List<Point> points = pointService.selectPoint(customerId);
@@ -127,6 +131,12 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
+		
+
 
 		// 주문번호 카운트
 		int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
@@ -169,6 +179,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 		
 		// 주문번호 카운트
 		int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
@@ -213,9 +227,14 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
+		
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 구매 목록 출력
 		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
@@ -242,6 +261,7 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
+		
 		// 상단에 잔여 포인트 출력
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
@@ -252,6 +272,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 
 		// 구매 목록 출력
@@ -290,6 +314,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 주문 목록 출력
 		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
@@ -327,6 +355,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 내가쓴 리뷰 조회
 		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
@@ -371,10 +403,18 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 리뷰작성 - 내가 주문한 상품 정보 출력
 		List<WriteMyReview> myReviewPurchaseList = reviewService.selectMyPurchase(customerId, productId, purchaseNum);
 		model.addAttribute("MyReviewPurchaseList", myReviewPurchaseList);
+		
+		//customerId, productId, purchaseNum 값에 따른 리뷰 갯수 카운트
+		int countCusProPur = reviewService.countCusProPurId(customerId, productId, purchaseNum);
+		model.addAttribute("countcuspropur", countCusProPur);
 
 		return "mypage/write-my-review";
 	}
@@ -434,6 +474,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 내 문의내역 조회
 		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
@@ -443,10 +487,30 @@ public class MyPageController {
 		int inquiryStatusY = inquiryService.countInquiryStatusY(customerId);
 		model.addAttribute("myInquiryStatusY", inquiryStatusY);
 
-		// 내 문의 내용 select
-//			String myinquiryContent = inquiryService.selectInquiryContent(inquiryId);
-//			model.addAttribute("myinquirycontent",myinquiryContent);
 		return "mypage/mypage-inquiry";
+	}
+	
+	//내 문의에 대한 답변 윈도우창으로 보이기
+	@GetMapping("/myinquiryreply/{inquiryId}")
+	public String myInquiryReply(@PathVariable int inquiryId, Model model) {
+		//내 문의 내용
+		String myInquiry = inquiryService.selectInquiryContent(inquiryId);
+		model.addAttribute("myinquiry",myInquiry);
+		
+		//내문의의 답변내용
+		String myPRInquiry = inquiryService.selectMyInquiryPRIdInquiry(inquiryId);
+		model.addAttribute("myprinquiry",myPRInquiry);
+		
+		//내문의의 시간
+		String myInquiryTime = inquiryService.selectMyInquiryTime(inquiryId);
+		model.addAttribute("myinquirytime",myInquiryTime);
+		
+		//내 문의의 답변시간
+		String myInquiryReplyTime = inquiryService.selectMyInquiryReplyTime(inquiryId);
+		model.addAttribute("myinquiryreplytime", myInquiryReplyTime);
+		
+		
+		return "mypage/my-inquiry-reply";
 	}
 
 	// 마이페이지-내문의 삭제
@@ -487,6 +551,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 사용가능한 쿠폰리스트 출력
 		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService
@@ -526,6 +594,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 사용완료 쿠폰리스트 출력
 		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId);
@@ -591,6 +663,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 유저 정보 리스트
 		List<CheckMyInform> checkmyinform = customerService.selectMyInform(customerId);
@@ -640,6 +716,10 @@ public class MyPageController {
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 내 아이디(이메일) 가져오기
 		String myEmail = customerService.selectMyEmail(customerId);
@@ -738,6 +818,10 @@ public class MyPageController {
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
 		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
+		
 		//마이페이지-배송지관리-배송지리스트 출력
 		List<MypageReceiverShipping> mypageReceiverShippingList = shippingService.selectMyShippingInfo(customerId);
 		model.addAttribute("myshippinglist",mypageReceiverShippingList);
@@ -771,6 +855,10 @@ public class MyPageController {
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
+		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
 
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
@@ -832,6 +920,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 		
+		//상단 내 주문상품 전체갯수 출력 
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder",countMyOrder);
+		
 		//상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon",countUsableCoupon);
@@ -848,14 +940,18 @@ public class MyPageController {
 									   @RequestParam String shippingRoadNMAddr, @RequestParam String shippingDaddr,
 									   @RequestParam String shippingReceiverTelNO, @RequestParam String shippingDmnd,
 									   @RequestParam(defaultValue = "302") int shippingDv,RedirectAttributes redirectAttributes) {
-		
+		//로그인
 		int customerId = logincheckService.loginCheck();
 
 		if (customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		if(shippingService.countShippingDv301(customerId)>0) {
+		int countshippingdv301 = shippingService.countShippingDv301(customerId);
+		int selectshippingdv = shippingService.selectShippingDv(shippingId);
+		//이미 등록된 기본배송지가 있고, 수정하고자 하는 배송지가 기본배송지일때 
+		if(countshippingdv301>0 && selectshippingdv == 302) {
+			redirectAttributes.addFlashAttribute("error", "이미 등록된 기본배송지가 있습니다!");
 			shippingDv = 302;	
 			shippingService.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
 			return "redirect:/mypage/myshipping";

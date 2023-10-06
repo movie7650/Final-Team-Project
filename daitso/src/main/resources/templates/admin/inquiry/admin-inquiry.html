@@ -42,7 +42,7 @@
 					<div class="admin-inquiry-btn" th:onclick="inquiryComplete([[${inquiry.inquiryId}]], 'C')">답변 보기</div>
 				</div>
 			</div>
-			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px;">
+			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px; top: 810px;">
 				<div th:if="${nowPageBlock>1}" style="width: 30px; height: 30px; text-align: center; border: 2px solid gray;">
 					<a th:href="@{/admin/inquiry/__${inquiryAnsDv}__/__${startPage-1}__}">
 						<img th:src="@{/assets/common/left_arrow_gray.svg}" style="width: 12px; height: 12px;">

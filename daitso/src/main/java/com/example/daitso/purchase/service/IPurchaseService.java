@@ -14,6 +14,9 @@ public interface IPurchaseService {
 	//구매
 	void insertPurchase(PurchaseInsert purchaseInsert);
 	
+	//내 주문상품 전체 갯수
+	int countMyOrderList(int customerId);
+	
 	//전체주문상품가져오기
 	List<PurchaseCheck> selectAllOrderProduct(int customerId);
 	

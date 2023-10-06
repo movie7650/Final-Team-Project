@@ -572,6 +572,22 @@ public class AdminController {
 	    }
 	}
 
+	
+	@PostMapping("/deleteCategoryImage")
+    public ResponseEntity<?> deleteCategoryImage(@RequestParam int categoryId,
+                                                 @RequestParam(required = false) boolean deleteCategoryImage) {
+        try {
+            // 상품 이미지 정보 삭제
+            adminService.deleteCategoryImage(categoryId, deleteCategoryImage);
+            // 성공적인 응답 반환
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // 오류 발생 시 오류 응답 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+		
+		
  		
 	// 전체 공통 코드 조회하기
   	@GetMapping("/common-code")
