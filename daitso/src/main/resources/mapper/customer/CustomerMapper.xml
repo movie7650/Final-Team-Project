@@ -100,9 +100,9 @@
     	담당자: 최준원
     -->
     <select id="getCustomerInfoByCustomerId" parameterType="int" resultType="com.example.daitso.customer.model.CustomerInfo">
-		SELECT customer_nm as "customerNm",
-			   customer_email as "customerEmail",
-		       customer_telno as "customerTelno",
+		SELECT customer_nm AS "customerNm",
+			   customer_email AS "customerEmail",
+		       customer_telno AS "customerTelno",
 		       (  SELECT shipping_id 
 		       	    FROM shipping 
 		       	   WHERE customer_id = #{customerId} 
@@ -112,7 +112,8 @@
 		       	    FROM shipping 
 		       	   WHERE customer_id = #{customerId} 
 		       	     AND shipping_dv != 301 
-		       	     AND status = 'Y'  ) AS "recentShippingId"
+		       	     AND status = 'Y'  ) AS "recentShippingId",
+		       login_method AS "loginMethod"
 		  FROM customer
 		 WHERE customer_id = #{customerId}
     </select>

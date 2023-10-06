@@ -5,7 +5,7 @@
 	<div class="cart-container">
 		<div class="cart-boxes">
 			<div style="display: flex; justify-content: center">
-				<div style="width: 57%">
+				<div style="width: 62%">
 					<div class="cart-logo">
 						<a th:href="@{/}"> <img class="cart-logo-img"
 							th:src="@{/assets/header/daitso_logo_header.png}">
@@ -512,10 +512,10 @@
 			alert("상품을 선택한 후 쿠폰조회 및 적용을 해주세요.");
 		} else {
 			if(purchaseClassification == 'cart' || purchaseClassification == null){
-				window.open( window.location.origin + '/cart/coupon/' + customerId, '쿠폰 조회 및 적용', 'width=870px,height=600px,scrollbars=yes');
+				window.open( window.location.origin + '/cart/coupon/' + customerId, '쿠폰 조회 및 적용', 'width=1000px,height=640px,scrollbars=yes');
 				cartIdList = [];	
 			} else {
-				window.open( window.location.origin + '/cart/coupon/' + customerId + '/' + cartList[0].cartId, '쿠폰 조회 및 적용', 'width=870px,height=600px,scrollbars=yes');
+				window.open( window.location.origin + '/cart/coupon/' + customerId + '/' + cartList[0].cartId, '쿠폰 조회 및 적용', 'width=1000px,height=640px,scrollbars=yes');
 				cartIdList = [];
 			}
 		}
