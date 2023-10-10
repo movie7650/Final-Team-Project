@@ -10,26 +10,17 @@
 	<div class="product-body">
 		<div class="product-path-bar">
 			<th:block th:if="${categoryId == 'noCategory'}">
-				<span style="font-size:20px; width:1215px">전체 > [[${path}]]</span>		
+				<span style="font-size:20px; width:1100px">전체 > [[${path}]]</span>		
 			</th:block>
 			<th:block th:if="${categoryId != 'noCategory'}">
-				<span style="font-size:20px; width:1215px">전체 [[${path}]]</span>		
+				<span style="font-size:20px; width:1100px">전체 [[${path}]]</span>		
 			</th:block>
 		</div>
 		<div class="d-flex justify-content-center">
-			<th:block th:if="${categoryList != 'noCategory'}">
-				<div class="product-sidebar">
-					<div>
-						<div style="width:200px; border: 1px solid #eee">
-						<ul class="sidebar-ul">
-						</ul>
-						</div>	
-					</div>
-				</div>
-			</th:block>
-			<div>
+			
+			<div style="position:relative">
 				<th:block th:if="${categoryId != 'noCategory'}">
-					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#fafafa; font-size:12px">
+					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; padding-left:10px; font-size:12px">
 						<a class="a-sort" th:href="@{'/category/' + ${categoryId} + '?sort=lowPrice'}" style="margin-left: 20px">낮은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
 						<a class="a-sort" th:href="@{'/category/' + ${categoryId} + '?sort=highPrice'}">높은 가격순</a>
@@ -38,7 +29,7 @@
 					</div>				
 				</th:block>
 				<th:block th:if="${categoryId == 'noCategory'}">
-					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; background-color:#fafafa; font-size:12px">
+					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; padding-left:10px; font-size:12px">
 						<a class="a-sort" th:href="@{'/product/search' + '?sort=lowPrice&searchText='+ ${path}}" style="cursor: pointer; margin-left: 20px">낮은 가격순</a>
 						<span style="margin:0 10px 0 10px"> | </span>
 						<a class="a-sort" style="cursor: pointer" th:href="@{'/product/search' + '?sort=highPrice&searchText=' + ${path}}">높은 가격순</a>
@@ -46,16 +37,27 @@
 						<a class="a-sort" style="cursor: pointer" th:href="@{'/product/search' + '?sort=highRate&searchText=' + ${path}}">평점순</a>
 					</div>				
 				</th:block>
-				<div class="product-large-box">
+				<th:block th:if="${categoryList != 'noCategory'}">
+					<div class="product-sidebar">
+						<div>
+							<div style="width:200px; border: 1px solid #eee">
+							<ul class="sidebar-ul">
+							</ul>
+							</div>	
+						</div>
+					</div>
+				</th:block>
+				<div class="product-large-box" style="position:relative">
 					<th:block th:each="list : ${productList}">
 						<div style="width: 250px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]], [[${list.productGroupId}]])">
-							<div style="border:1px solid #d9d9d9; width: 250px; height: 212px;">
-								<img style="width: 100%; height: 100%" th:src="${list.productImageFirst}">
+							<div style="border:1px solid #d9d9d9; width: 231px; height: 212px;">
+								<img style="padding: 10px; width: 100%; height: 100%" th:src="${list.productImageFirst}">
 							</div>
-							<div style="width: 250px; padding: 0 5px 0 5px;">
+							<div style="padding: 0 5px 0 5px;">
 								<p class="font-s-13" th:if='${list.discountRate != 0}' style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:0px">지금 10% 할인중</p>
 								<p style="font-size:15px; margin-bottom: 0px">[[${list.productNm}]]</p>
-								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:red" data-th-text="${#numbers.formatInteger(list.productPrice, 3, 'COMMA') + '원'}"></p>
+								<span style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(list.productPrice * 0.9, 3, 'COMMA') + '원'}"></span>
+								<span style="font-size:18px; text-decoration: line-through; margin-bottom: 0px; color:#5e5e5e" data-th-text="${#numbers.formatInteger(list.productPrice, 3, 'COMMA') + '원'}"></span>
 								<div>상품 리뷰([[${list.reviewCount}]])</div>
 								<div class="star-parent">
 									<div class="star-fill" th:style="'width: ' + ${list.reviewStarPoint} + '%;'">
