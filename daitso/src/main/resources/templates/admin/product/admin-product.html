@@ -742,6 +742,7 @@
             // 모든 업로드 요청이 성공했을 때 알림 표시
             if (results.every(result => result === 'success')) {
                 alert('모든 이미지가 성공적으로 수정되었습니다.');
+                window.location.href = "/admin/product";
             } else {
                 alert('일부 이미지 수정에 실패했습니다.');
             }
@@ -926,6 +927,7 @@
 	         if (response.ok) {
 	             // 이미지 삭제가 성공한 경우
 	             alert("이미지가 삭제되었습니다.");
+	             window.location.href = "/admin/product";
 	         } else {
 	             // 이미지 삭제 실패한 경우
 	             alert("이미지 삭제에 실패했습니다.");

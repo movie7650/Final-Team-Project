@@ -25,7 +25,6 @@
 	height:45px;
 	text-align:center;
 	padding-top:1%;
-	font-family:Inter;
 }
 .pay-order-rectangle01 > a{
 	text-decoration-line: none;
@@ -43,7 +42,6 @@
 	height:45px;
 	text-align:center;
 	padding-top:1%;
-	font-family:Inter;
 	background-color:#668663;
 }
 .pay-order-rectangle02 > a{
@@ -62,7 +60,6 @@
 	height:45px;
 	text-align:center;
 	padding-top:1%;
-	font-family:Inter;
 }
 .pay-order-rectangle03 a{
 	text-decoration-line:none;
@@ -80,7 +77,6 @@
 	height:45px;
 	text-align:center;
 	padding-top:1%;
-	font-family:Inter;
 }
 .pay-order-rectangle04 a{
 	text-decoration-line:none;
@@ -105,13 +101,7 @@
 	padding-left:20px;
 	padding-top:10px;
 }
-/* .shipping-date{
-	
-	font-family:Inter;
-	margin-top:1%;
-	font-size:100%;
-	color:#668663;
-} */
+
 .purchase-img-001{
 	border:solid 1px orange;
 	width:100px;
@@ -130,7 +120,6 @@
 .detail-button{
 	color:#668663;
 	font-size:80%;
-	font-family:Inter;
 	width:130px;
 	height:40px;
 	text-align:center;

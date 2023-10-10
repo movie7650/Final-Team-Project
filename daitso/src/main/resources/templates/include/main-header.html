@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header">
+<head th:fragment="main-header">
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>다있소</title>
@@ -42,7 +42,7 @@
     <link rel="stylesheet" th:href="@{/css/mypage-css/my-shipping-update.css}">
     
     <!-- BootStrap -->    
-    <link href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -163,7 +163,6 @@
 	    			})
 	    			.then((json) => {
 	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
-	    				document.getElementById("customer-name").style.fontWeight = '600';
 	    				if(json.customerNm == '관리자'){
 	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/product');
 	    				}

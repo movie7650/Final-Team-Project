@@ -37,7 +37,13 @@
 		<input required name="shippingDmnd" type="text" th:value="${shippingIdInfo.shippingDmnd}" placeholder="요청사항">
 	</div><!-- shipping-receiver-request -->
 	<div style="margin-top:5px; margin-left:10px;">
-	<label><input  type="checkbox" name="shippingDv" value=301>기본배송지로 설정</label>
+	<label>
+		<input type="checkbox" th:if="${shippingIdInfo.shippingDv} == 301" th:value="${shippingIdInfo.shippingDv}" checked onclick="changeShippingCheckStatus(this)">
+		<input type="checkbox" th:unless="${shippingIdInfo.shippingDv} == 301" th:value="${shippingIdInfo.shippingDv}" onclick="changeShippingCheckStatus(this)">
+		<input th:if="${shippingIdInfo.shippingDv} == 301" id="shipping-check-status" name="shippingDv" type="hidden" value=301>
+		<input th:unless="${shippingIdInfo.shippingDv} == 301" id="shipping-check-status" name="shippingDv" type="hidden" value=302>
+		기본배송지로 설정
+	</label>
 	</div>
 	<div class="shipping-button-container">
 		<button id="add-shipping-button" type="submit">저장하기</button>
@@ -54,13 +60,24 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 
+const shippingCheckStatus = document.getElementById("shipping-check-status");
+
+function changeShippingCheckStatus(item) {
+	if(item.checked) {
+		shippingCheckStatus.value = 301;
+	} else {
+		shippingCheckStatus.value = 302;
+	}
+}
+
 //전화번호 입력
 function oninputPhone(target) {
     target.value = target.value
         .replace(/[^0-9]/g, '')
         .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
 }
-  
+ 
+ 
     function kakaoPost() {
         new daum.Postcode({
             oncomplete: function(data) {
