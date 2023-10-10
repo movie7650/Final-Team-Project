@@ -66,6 +66,7 @@
 		       product p
 		 WHERE i.product_id = p.product_id
 		   AND i.inquiry_id = #{inquiryId}
+		   AND i.status = 'Y'
 	</select>
 	
 	<!-- 
@@ -99,11 +100,13 @@
 		       ( SELECT inquiry_content FROM inquiry where inquiry_id = #{inquiryId} ) AS "inquiryContent",
 		       TO_CHAR(( SELECT create_dt FROM inquiry where inquiry_id = #{inquiryId} ), 'YYYY/MM/DD hh:mm') AS "createDt",
 		       i.inquiry_content AS "inquiryAnswer",
-		       TO_CHAR(i.create_dt, 'YYYY/MM/DD hh:mm') AS "modifyDt"
+		       TO_CHAR(i.create_dt, 'YYYY/MM/DD hh:mm') AS "modifyDt",
+		       i.inquiry_id AS "ansInquiryId"
 		 FROM inquiry i,
 		      product p
 		WHERE i.product_id = p.product_id
 		  AND i.inquiry_pr_id = #{inquiryId}
+		  AND i.status = 'Y'
 	</select>
 
 	<!-- 
@@ -217,4 +220,27 @@
 		  FROM inquiry
 		 WHERE inquiry_pr_id=#{inquiryId}
 	 </select>
+	 
+	 <!-- 
+		기능: 문의 답변 삭제하기(관리자)
+		담당자: 최준원
+	 -->
+	 <update id="deleteInquiryAdmin" parameterType="int">
+	 	UPDATE inquiry
+	 	   SET status = 'N'
+	 	 WHERE inquiry_id = #{ansInquiryId}
+	 	   AND status = 'Y'
+	 </update>
+	 
+	 <!-- 
+		기능: 삭제한 문의 상태 변경하기(관리자)
+		담당자: 최준원
+	 -->
+	 <update id="updateInquiryAdminDelete" parameterType="int">
+	 	UPDATE inquiry
+	 	   SET inquiry_ans_dv = 'W'
+	 	 WHERE inquiry_id = #{inquiryId}
+	 	   AND status = 'Y'
+	 </update>
+	 
 </mapper>

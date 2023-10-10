@@ -56,4 +56,7 @@ public interface IInquiryService {
 	//문의답변ID에 따른 문의 답변내용가져오기
 	String selectMyInquiryPRIdInquiry(@Param("inquiryId") int inquiryId);
 
+	// 문의 답변 삭제하기(관리자)
+	void deleteInquiryAdmin(int inquiryId, int ansInquiryId);
+
 }
