@@ -160,6 +160,7 @@
 	  JOIN product p on p.product_id = i.product_id
 	 WHERE i.customer_id = #{customerId}
 	   AND i.status='Y'
+  ORDER BY i.create_dt desc
  	</select>
 	<!-- 
 		기능: 내가 쓴 문의 삭제하기 
