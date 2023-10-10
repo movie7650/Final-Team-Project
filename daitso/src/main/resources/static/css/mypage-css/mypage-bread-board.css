@@ -26,7 +26,6 @@
 	margin-left: 15%;
 	width: 185px;
 	height: 80px;
-	font-family: Inter;
 	font-size: 150%;
 	font-weight: bold;
 	font-stretch: normal;
@@ -48,7 +47,6 @@
   margin-top:-15%;
   width: 159px;
   height: 47px;
-  font-family: Inter;
   font-size: 130%;
   font-weight: normal;
   font-stretch: normal;
@@ -93,7 +91,6 @@
 .left-menu-title{
 	font-size:110%;
 	font-weight:bold;
-	font-family:Inter;
 	margin-left:10%;
 	padding-top:10%; 
 }

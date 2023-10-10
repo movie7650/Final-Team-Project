@@ -54,4 +54,17 @@ public interface IShippingService {
 	
 	// 배송지 삭제
 	void deleteShipping(int shippingId, int customerId);
+	
+	// 301인 상태인 배송지 아이디 조회
+	int countShippingId301(int customerId);
+	
+	//shippingDv변경
+	void updateShippingDV(@Param("shippingId")int shippingId, @Param("shippingDv") int shippingDv);
+	
+	//shipppingId에 따라 가져온 배송정보 수정하기
+	void updateShippingIdInfo2(@Param("shippingId")int shippingId, @Param("shippingReceiverNM") String shippingReceiverNM,
+							  @Param("shippingRoadNMAddr") String shippingRoadNMAddr, @Param("shippingDaddr") String shippingDaddr,
+							  @Param("shippingReceiverTelNO") String shippingReceiverTelNO, @Param("shippingDmnd") String shippingDmnd,
+							  @Param("shippingDv") int shippingDv, int customerId);
+
 }
