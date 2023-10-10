@@ -116,7 +116,7 @@ public class ProductController {
 		model.addAttribute("oListThird", oListThird);
 		model.addAttribute("inquiryList", inquiryList);
 		
-		return "/main/productDetail";
+		return "/main/product-detail";
 	}
 	
 	//상품 옵션 변경하기
@@ -201,4 +201,13 @@ public class ProductController {
 
 		return "/main/product";
 	}
+	
+	@GetMapping("/sale")
+	public String salePage(Model model) {
+		List<Product> sList = productService.saleProductList();
+		
+		model.addAttribute("sList", sList);
+		return "/main/product-sale";
+	}
+	
 }

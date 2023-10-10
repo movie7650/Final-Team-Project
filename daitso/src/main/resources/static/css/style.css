@@ -14,7 +14,7 @@
 }
 
 .product-path-bar{
-	height: 30px;
+	height: 50px;
 	background-color: #fafafa;
 	display:flex;
 	align-items:center;
@@ -29,7 +29,7 @@
 }
 
 .product-large-box{
-	width:1010px; 
+	width:1160px; 
 	display:flex; 
 	flex-wrap: wrap;
 } 
@@ -60,6 +60,10 @@
 
 .font-s-13{
 	font-size: 13px;
+}
+
+.font-s-15{
+	font-size: 15px;
 }
 
 .margin-b-5{
@@ -170,7 +174,7 @@
 	justify-content: center;
 	align-items: center;
 	position: absolute; 
-	top: 77%; 
+	top: 78.5%; 
 	width:100%; 
 	height:75px; 
 	background-color: #fffffff0;
@@ -197,10 +201,19 @@
     outline:none;
 }
 .a-sort{
+	font-size: 15px;
 	cursor: pointer;
 	text-decoration: none;
 	color: black;
 }
 .a-sort:link{
 	text-decoration: none;
+}
+.main-back{
+	z-index: -1;
+    top: 848px;
+    position: absolute;
+    width: 100%;
+    height: 533px;
+    background-color: #F8EBCE;
 }
