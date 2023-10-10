@@ -211,9 +211,9 @@
 }
 .main-back{
 	z-index: -1;
-    top: 1547px;
+    top: 848px;
     position: absolute;
     width: 100%;
-    height: 500px;
+    height: 533px;
     background-color: #F8EBCE;
 }
