@@ -16,10 +16,12 @@ public class PurchaseCheck {
 	private String purchasePrice;
 	private String totalCost;
 	private String purchaseDv;
+	private String productImg;
 	private Date createDt;
 	private int shippingCompleteCount;
 	private int shippingCount;
 	private int payCoinCount;
 	private int purchaseNumCount;
+	private int reviewCount;
 	
 }

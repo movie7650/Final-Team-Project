@@ -3,9 +3,9 @@
 * {	
 	font-family:'Noto Sans KR', sans-serif;
 }
-
 .product-box{
-	margin: 20px 20px 20px 20px;
+	margin: 20px 15px 20px 20px;
+	padding: 10px;
 }
 
 .product-box:hover{
@@ -14,7 +14,8 @@
 }
 
 .product-path-bar{
-	height: 50px;
+	border: 1px solid #dadada;
+	height: 40px;
 	background-color: #fafafa;
 	display:flex;
 	align-items:center;
@@ -22,7 +23,9 @@
 }
 
 .product-sidebar{
-	margin: 15px 10px 0 0;
+	position: absolute;
+	top:26px;
+	left:-185px;
 	width: 200px;
 	display: flex;
 	justify-content: center;
@@ -64,6 +67,7 @@
 
 .font-s-15{
 	font-size: 15px;
+	font-weight: 500;
 }
 
 .margin-b-5{
@@ -167,7 +171,7 @@
 	border: solid 2px #f0f0f0
 }
 .re-box:hover{
-	border: solid 2px #586dc2
+	border: solid 2px #39594e
 }
 .re-box-child{
 	display: flex;
@@ -186,7 +190,7 @@
 	vertical-align: middle;
 	user-select: none;
 	font-size: 1rem;
-	border-radius: 0.25rem;
+	height: 50px;
 	line-height: 1.5;
 	border: 1px solid #39594e; 
 	color : #39594e;
@@ -209,11 +213,14 @@
 .a-sort:link{
 	text-decoration: none;
 }
+.a-sort:hover{
+	color : #39594e;
+}
 .main-back{
 	z-index: -1;
-    top: 848px;
+    top: 900px;
     position: absolute;
     width: 100%;
-    height: 533px;
+    height: 645px;
     background-color: #F8EBCE;
 }

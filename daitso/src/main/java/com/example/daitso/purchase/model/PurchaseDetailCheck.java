@@ -23,4 +23,5 @@ public class PurchaseDetailCheck {
 	private String shippingRoadNmAddr;
 	private String shippingDaddr;
 	private String shippingDmnd;
+	private String productImg;
 }

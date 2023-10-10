@@ -27,26 +27,30 @@
 		<th:block th:each="purchase : ${purchaseList}">
 			<div th:if="${purchase.purchaseDv}==배송완료" class="order-list-container">
 				<div class="order-list-container-01">
-					<div class="shipping-status" th:text="|주문날짜: ${purchase.createDt}|">주문날짜</div> 
-					<div style="color:blue; font-weight: bold;" class="shipping-status" th:text="${purchase.purchaseDv}">배송완료</div>
-					<!-- <div class="shipping-date">&bull;8/2(금)도착</div> -->
-					
-					<div class="purchase-img-001">이미지</div>
-					
+				<div style="display:flex;">
+					<div style="color:#39594e; font-size:20px; font-weight: bold;" th:text="${purchase.purchaseDv}">배송완료</div>
+					<div class="my-order-date" th:text="|주문날짜: ${purchase.createDt}|">주문날짜</div> 
+				</div>	
+				
+				<div style="margin-top:10px;">
+					<div class="purchase-img-001"><img style="width:100%; height:100%;" th:src="${purchase.productImg}"></div>
 					<div class="purchase-product-inform">
-						
 						<div class="purchase-number" th:text="|주문번호: ${purchase.purchaseNum}|">주문번호</div>
 						<div class="purchase-inform-001" th:text="|상품명: ${purchase.productNm}|" >ProductName</div>
 						<div class="purchase-count" th:text="|수량: ${purchase.purchaseCount}개|">구매수량</div>
 						<div class="purchase-product-cost" th:text="|상품가격: ${purchase.purchasePrice}원|"></div>
 						<div class="purchase-total-cost"th:text="|총 가격: ${purchase.totalCost}원|">총 가격</div>
 					</div><!-- purchase-product-inform -->
+				</div>
 				</div><!-- order-list-container01 -->
 				
 				
 				<div class="detail-button-container">
-					<div class="detail-button"><a th:href="@{/mypage/mydetailorder?purchaseNum=__${purchase.purchaseNum}__}">주문상세보기</a></div>
-					<div class="detail-button"><a th:href="@{/mypage/writeReview?productId=__${purchase.productId}__&purchaseNum=__${purchase.purchaseNum}__}">리뷰남기기</a></div>
+					<div style="height:100%; line-height: normal; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
+						<input type="button" th:onclick="|location.href='@{/mypage/mydetailorder?purchaseNum=__${purchase.purchaseNum}__}'|"  value="주문상세보기" class="detail-button">
+						<input type="button" th:if="${purchase.purchaseDv} == '배송완료' and ${purchase.reviewCount} == 0" th:onclick="|location.href='@{/mypage/writeReview?productId=__${purchase.productId}__&purchaseNum=__${purchase.purchaseNum}__}'|" value="리뷰남기기" class="detail-button01">
+						<input class="review-complete-button" type="button" th:if="${purchase.purchaseDv} == '배송완료' and ${purchase.reviewCount} == 1" value="리뷰작성완료" disabled="disabled">
+					</div>
 				</div><!-- shipping-button-container -->	
 			</div><!-- order-list-container -->
 		 </th:block>
