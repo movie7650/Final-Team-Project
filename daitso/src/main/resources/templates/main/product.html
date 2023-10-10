@@ -54,7 +54,7 @@
 								<img style="padding: 10px; width: 100%; height: 100%" th:src="${list.productImageFirst}">
 							</div>
 							<div style="padding: 0 5px 0 5px;">
-								<p style="font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; margin-bottom: 0px">[[${list.productNm}]]</p>
+								<p style="margin-top: 10px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; margin-bottom: 0px">[[${list.productNm}]]</p>
 								<div th:if='${list.discountRate != 0}' style="margin-bottom: -5px;">
 									<span  style="font-size:18px; text-decoration: line-through; margin-bottom: 0px; color:#5e5e5e" data-th-text="${#numbers.formatInteger(list.productPrice, 3, 'COMMA') + '원'}"></span>
 									<span  style="color:#5e5e5e; font-weight:500"> 10%</span>						
@@ -101,12 +101,14 @@
 	sideEl = document.querySelector('.sidebar-ul');
     cList.map((data,idx) => {
 		if(data.lv == 1){
-			const elements = `<p style="font-size:20px; margin-left:10px; border-bottom: solid 1px #eee">${data.categoryNm}</p>`
+			const elements = `<div style="border-bottom: solid 1px #eee">
+								<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="text-decoration:none; color: black; font-size:20px; margin-left:10px;">${data.categoryNm}</a>
+							  </div>`
 			sideEl.innerHTML += elements;
 		}
 		else if(data.lv == 2){
 			const elements = `<li class="li${data.categoryId} font-s-13 margin-b-5" style="margin-left:20px">
-							  	<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black; font-size:17px;">${data.categoryNm}</a> 
+							  	<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="text-decoration:none; color: black; font-size:17px;">${data.categoryNm}</a> 
 							  	${data.isLeaf == 0 ? `
 							  			<a class="show-btn${data.categoryId}"  onclick="showDownCategory(${data.categoryId})">
 											<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
@@ -126,7 +128,7 @@
 				const span = document.createElement('span');
 				const elements = `<ul class="ul${data.categoryPrId}" style="display: none">
 									<li class="li${data.categoryId}">
-										<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black; font-size:17px;">${data.categoryNm}</a> 
+										<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="text-decoration:none; color: black; font-size:17px;">${data.categoryNm}</a> 
 									  	${data.isLeaf == 0 ? `
 									  			<a class="show-btn${data.categoryId}"  onclick="showDownCategory(${data.categoryId})">
 													<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
@@ -169,7 +171,7 @@
 			else if(data.lv <= cList[idx-1].lv){
 				const span = document.createElement('span');
 				const elements = `<li class="li${data.categoryId}">
-									<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="color: black; font-size:17px;">${data.categoryNm}</a> 
+									<a class="a${data.categoryId}" href="/category/${data.categoryId}" style="text-decoration:none; color: black; font-size:17px;">${data.categoryNm}</a> 
 								  	${data.isLeaf == 0 ? `
 								  			<a class="show-btn${data.categoryId}"  onclick="showDownCategory(${data.categoryId}, ${data.lv})">
 												<img style="width:10px" src="/assets/common/angle-down-solid.svg"></img>
