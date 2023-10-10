@@ -154,7 +154,7 @@
 		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, null, null, null, 'Y', 'admin',#{reviewTitle})   
 	</insert>
 		<!-- 
-		기능: customerId와 productId와 purchaseNum에 따른 리뷰의 갯수
+		기능: customerId와 productId와 purchaseNum에 따른 status가 Y인 리뷰의 갯수
 		담당자: 윤상영
 	 -->
 	 <select id="countCusProPurId" resultType="int">
@@ -165,5 +165,17 @@
 		   AND pur.purchase_num = #{purchaseNum}
 		   AND rev.status='Y'
 	 </select>
+	 	<!-- 
+		기능: customerId와 productId와 purchaseNum에 따른 모든 리뷰의 갯수
+		담당자: 윤상영
+	 -->
+	 <select id="">
+	 	SELECT count(*)
+		  FROM review rev , purchase pur
+		 WHERE rev.customer_id=#{customerId}
+		   AND rev.product_id = #{productId}
+		   AND pur.purchase_num = #{purchaseNum}
+	 </select>
+	 
 
 </mapper>
