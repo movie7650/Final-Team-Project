@@ -1,11 +1,7 @@
 @charset "UTF-8";
 
-
 .left-menu-container {
     width: 200px;
-/* 불필요한 css인 것 같아 주석(나현웅)
-   background-color: #f0f0f0;  
-*/
 }
 
 .left-menu {
@@ -23,10 +19,13 @@
 }
 
 .left-menu{
-	width:135%;
-	padding-bottom:45%;
+	width:130%;
+	padding-bottom:40%;
 	background-color:#efefef;
 	border-bottom:solid 1px #c0c0c0;
+    padding-right: 5px;
+    padding-left: 5px;
+	
 }
 
 .left-menu-a{
@@ -37,7 +36,6 @@
 .left-menu-title{
 	font-size:110%;
 	font-weight:bold;
-/* 	font-family:Inter; */
 	margin-left:10%;
 	padding-top:10%;
 }
@@ -46,6 +44,8 @@
 	font-size:100%;
 	margin-left:10%;
 	margin-right: 10%;
+    display: flex;
+    flex-direction: column;
 }
 
 .left-menu-semi-01 > a{
@@ -58,19 +58,18 @@
 }
 
 .top-rectangle-02 {
-	height: 142px;
+	height: 135px;
 	padding: 52px 7px;
 	border-left: solid 1px #caddfd;
 	background-color: #a5c2f2;
 	width: inherit;
+	padding-left: 10px;
 }
 
 .rectangle-title {
   margin-top:-10%;
-/*   width: 159px; */
   height: 47px;
-  /* font-family: Inter; */
-  font-size: 120%;
+  font-size: 115%;
   color: #fff;
 }
 
@@ -97,15 +96,14 @@
 }
 
 .top-rectangle-01 {
-	height: 142px;
-	width : 200px;
+	height: 135px;
+	width : 61%;
 	padding-top: 40px;
-	background-color: #1a385d; /*#3e526a*/
+	background-color: #1a385d;
 }
 
 .page-title {
-	margin-left: 20%;
-/* 	font-family: Inter; */
+	margin-left: 25%;
 	font-size: 200%;
 	font-weight: bold;
 	text-align: center;
@@ -118,5 +116,14 @@
 
 #table{
 	padding-top: 10px;
-	padding-left: 80px;
+	padding-left: 70px;
+}
+
+.pagination {
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+    align-items: center;
 }
