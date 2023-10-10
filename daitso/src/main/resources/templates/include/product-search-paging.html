@@ -9,7 +9,8 @@
 	</li>
 	
 	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:if="${i != 0}" th:classappend="${i==nowPage}?active">
-		<a th:href="@{'/product/search/__${i}__/__${sort}__?searchText=' + ${path}}">[[${i}]]</a>
+		<a th:href="@{'/product/search/__${i}__/__${sort}__?searchText=' + ${path}}" th:if="${i==nowPage}" style="border:2px solid #39594e">[[${i}]]</a>
+		<a th:href="@{'/product/search/__${i}__/__${sort}__?searchText=' + ${path}}" th:if="${i!=nowPage}">[[${i}]]</a>
 	</li>
 	
 	<li th:if="${nowPageBlock<totalPageBlock}">
