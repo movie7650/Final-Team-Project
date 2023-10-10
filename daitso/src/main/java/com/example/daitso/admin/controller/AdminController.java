@@ -808,6 +808,7 @@ public class AdminController {
 		} else {
 			InquiryInfoWithAnswer inquiryInfo = inquiryService.selectInquiryInfoWithAnswerByInquiryId(inquiryId);
 			model.addAttribute("inquiryInfo", inquiryInfo);
+			model.addAttribute("ansInquiryInfo", inquiryInfo.getAnsInquiryId());
 		}
 		
 		return "admin/inquiry/admin-inquiry-complete";
@@ -824,6 +825,19 @@ public class AdminController {
 		inquiryService.insertInquiryComplete(inquiryId, productId, inquiryContent);
 		
 		return null;
+	}
+	
+	// 문의 삭제
+	@PostMapping("/inquiry/delete")
+	public @ResponseBody String deleteInquiry(@RequestBody String data) {
+		JsonElement element = JsonParser.parseString(data);
+		
+		int inquiryId = Integer.valueOf(element.getAsJsonObject().get("inquiryId").getAsString());
+		int ansInquiryId = Integer.valueOf(element.getAsJsonObject().get("ansInquiryId").getAsString());
+		
+		inquiryService.deleteInquiryAdmin(inquiryId, ansInquiryId);
+		
+		return "ok";
 	}
 
 }

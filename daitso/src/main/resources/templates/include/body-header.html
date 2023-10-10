@@ -42,7 +42,8 @@
 			</div>
 			<div class="header-mydaitso">
 				<div class="header-mydaitso-box">
-					<img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}">
+					<a sec:authorize="isAnonymous()" th:href="@{/customer/login}"><img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}"></a>
+					<a sec:authorize="isAuthenticated()" th:href="@{/mypage/orderlist}"><img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}"></a>
 					<div class="header-mydaitso-content">
 						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;" class="korea">마이다있소</a>
 						<a sec:authorize="isAuthenticated()" th:href="@{/mypage/orderlist}" style="color:black; text-decoration: none;" class="korea">마이다있소</a>
@@ -51,7 +52,8 @@
 			</div>
 			<div class="header-cart">
 				<div class="header-cart-box">
-					<img class="header-cart-img" th:src="@{/assets/header/cart.svg}">
+					<a sec:authorize="isAnonymous()" th:href="@{/customer/login}"><img class="header-cart-img" th:src="@{/assets/header/cart.svg}"></a>
+					<a sec:authorize="isAuthenticated()" th:href="@{/cart}"><img class="header-cart-img" th:src="@{/assets/header/cart.svg}"></a>
 					<div class="header-cart-content">
 						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;" class="korea">장바구니</a>
 						<a sec:authorize="isAuthenticated()" th:href="@{/cart}" style="color:black; text-decoration: none;" class="korea">장바구니</a>

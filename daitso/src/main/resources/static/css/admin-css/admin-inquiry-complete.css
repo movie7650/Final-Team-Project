@@ -52,3 +52,17 @@
 	margin-left: 10px;
 	cursor: pointer;
 }
+
+.admin-inquiry-delete-btn{
+	background-color: white;
+	color:red;
+	border: 1px solid red;
+	width: 95px;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+}
