@@ -11,7 +11,7 @@
 	margin-left:165px;
 	margin-top:10px;
 	width:855px;
-	border-bottom:solid 3px #668663;
+	border-bottom:solid 3px #39594e;
 }
 .my-review-container{
 	border:solid 2px #e7e7e7;
@@ -44,17 +44,17 @@
 	padding-top:70px;
 }
 .my-review-button-container button{
-	border:solid 1px #668663;
+	border:solid 1px #39594e;
 	background-color:white;
-	color:#668663;
+	border-radius:5px;
+	color:#39594e;
 	width:80px;
 	height:30px;
 }
-.my-review-button-container button:hover{
-	color:white;
-	background-color:red;
-	border:none;
+.my-review-button-container button:focus{
+	outline:none;
 }
+
 .my-review-like-count{
 	border-right:solid 2px #e7e7e7;
 	width:100px;
@@ -68,7 +68,7 @@
 }
 .my-review-star-point{
 	color:orange;
-	border-bottom:solid 1.5px #668663;
+	border-bottom:solid 1.5px #39594e;
 	padding-bottom:10px;
 	width:750px;
 }

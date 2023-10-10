@@ -10,7 +10,7 @@
 	margin-left:165px;
 	margin-top:10px;
 	width:855px;
-	border-bottom:solid 3px #668663;
+	border-bottom:solid 3px #39594e;
 }
 .order-category{
 	margin-top:100px;
@@ -20,13 +20,13 @@
 }
 .order-rectangle01{
 	float:left;
-	border:solid 1.5px #668663;
+	border:solid 1.5px #39594e;
 	width:214px;
 	height:45px;
 	text-align:center;
 	padding-top:1%;
 	color:white;
-	background-color:#668663;
+	background-color:#39594e;
 }
 .order-rectangle01 > a{
 	text-decoration-line: none;
@@ -37,9 +37,9 @@
 }
 .order-rectangle02{
 	float:left;
-	border-top:solid 1.5px #668663;
-	border-right:solid 1.5px #668663;
-	border-bottom:solid 1.5px #668663;
+	border-top:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
 	width:214px;
 	height:45px;
 	text-align:center;
@@ -50,13 +50,13 @@
 	color:black;
 }
 .order-rectangle02 > a:hover{
-	color:#668663;
+	color:#39594e;
 }
 .order-rectangle03{
 	float:left;
-	border-top:solid 1.5px #668663;
-	border-right:solid 1.5px #668663;
-	border-bottom:solid 1.5px #668663;
+	border-top:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
 	width:214px;
 	height:45px;
 	text-align:center;
@@ -67,13 +67,13 @@
 	color:black;
 }
 .order-rectangle03 a:hover{
-	color:#668663;
+	color:#39594e;
 }
 .order-rectangle04{
 	float:left;
-	border-top:solid 1.5px #668663;
-	border-right:solid 1.5px #668663;
-	border-bottom:solid 1.5px #668663;
+	border-top:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
 	width:214px;
 	height:45px;
 	text-align:center;
@@ -84,7 +84,7 @@
 	color:black;
 }
 .order-rectangle04 a:hover{
-	color:#668663;
+	color:#39594e;
 }
 .order-list-container{
 	/* position:absolute; */
@@ -119,13 +119,13 @@
 	padding-top:50px;
 }
 .detail-button{
-	color:#668663;
+	color:#39594e;
 	font-size:80%;
 	width:130px;
 	height:40px;
 	text-align:center;
-	border:solid 1px #668663;
-	border-radius:10px;
+	border:solid 1px #39594e;
+	border-radius:5px;
 	padding-top:3.5%;
 	margin-bottom:2%;
 	margin-left:25%;
@@ -138,7 +138,7 @@
 	margin-top:10px;
 }
 .detail-button a{
-	color:#668663;
+	color:#39594e;
 }
 .detail-button a:hover{
 	color:black;
