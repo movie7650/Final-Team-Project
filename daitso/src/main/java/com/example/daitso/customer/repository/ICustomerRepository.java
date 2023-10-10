@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.customer.model.CheckMyInform;
+import com.example.daitso.customer.model.CustomerChart;
 import com.example.daitso.customer.model.CustomerInfo;
 import com.example.daitso.customer.model.CustomerName;
 import com.example.daitso.customer.model.CustomerSecurity;
@@ -85,4 +86,6 @@ public interface ICustomerRepository {
 	Optional<CustomerSecurity> findByCustomerEmailWithSocial(@Param("customerEmail") String customerEmail,
 			@Param("loginMethod") String loginMethod);
 
+	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+	List<CustomerChart> getCustomerCounts();
 }

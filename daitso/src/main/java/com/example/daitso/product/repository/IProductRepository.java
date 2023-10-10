@@ -6,11 +6,12 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductChart;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.product.model.SpecialProduct;
+
 
 @Mapper
 @Repository
@@ -24,7 +25,6 @@ public interface IProductRepository {
 	
 	// 상품 상세 정보 조회하기
 	Product selectProduct(@Param("productId") int productId);
-
 	
 	// 상품 조회하기(카테고리별)(관리자 페이지)
     List<ProductCheck> selectProductsByCategory(int firstCategoryId, int secondCategoryId, int thirdCategoryId, int offset, int pageSize);
@@ -66,6 +66,8 @@ public interface IProductRepository {
 //	void updateProductImages(int productId, List<String> imageUrls);
 	void updateProductImages(int productId, int selector, String imageUrl);
 	
+	// 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+	List<ProductChart> selectProductStocks();
 	
 	// 상품 첫 번째 옵션 조회
 	List<String> selectProductOptionFirst(int productGroupId);
@@ -102,5 +104,6 @@ public interface IProductRepository {
 	
 	// 상품 개수 조회(검색시)
 	int selectSearchProductCount(@Param("searchText") String searchText);
+	
 }
 

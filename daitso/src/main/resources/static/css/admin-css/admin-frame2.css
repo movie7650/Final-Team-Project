@@ -29,6 +29,11 @@
 	border-bottom:solid 1px #c0c0c0;
 }
 
+.left-menu-a{
+	width:135%;
+	border:solid 1px #c0c0c0;
+}
+
 .left-menu-title{
 	font-size:110%;
 	font-weight:bold;

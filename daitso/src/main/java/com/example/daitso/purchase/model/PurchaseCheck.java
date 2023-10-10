@@ -21,4 +21,5 @@ public class PurchaseCheck {
 	private int shippingCount;
 	private int payCoinCount;
 	private int purchaseNumCount;
+	
 }

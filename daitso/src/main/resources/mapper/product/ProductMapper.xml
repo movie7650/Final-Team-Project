@@ -80,6 +80,7 @@
 		</choose>
 	</select>
 
+
 	<!-- 
 		기능: 특정 카테고리 상품 개수 조회(페이징 처리를 위한 기능)
 		담당자: 나현웅
@@ -97,6 +98,7 @@
 				 AND status = 'Y'
 		        )
 	</select>
+
 
 	<!-- 
 		기능: 상품 상세 조회에서 보여줄 상품 정보 조회
@@ -129,131 +131,32 @@
 	    담당자: 이세인
     -->
     <select id="selectProductsByCategory" resultType="com.example.daitso.product.model.ProductCheck">
-       <!--  SELECT *
-	      FROM ( SELECT p.product_group_id  AS "productGroupId",
-		                p.product_nm        AS "productNm",
-		                c.category_pr_id    AS "categoryPrId",
-		                c.category_id       AS "categoryId",
-		                c.category_nm       AS "categoryNm",
-		                ROW_NUMBER() OVER (ORDER BY p.product_group_id DESC) AS "rn"
-		           FROM product p
-		           JOIN category c
-					 ON p.category_id = c.category_id AND p.status ='Y'
-		       GROUP BY p.product_group_id, 
-		                p.product_nm, 
-		                c.category_pr_id, 
-		                c.category_id, 
-		                c.category_nm
-		         HAVING 1=1
-			        <choose>
-			            아무 카테고리도 선택되지 않은 경우
-			            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-			            		     and (thirdCategoryId == null or thirdCategoryId == 0)">		            
-			            </when>
-			            
-			            첫 번째, 두 번째 카테고리를 선택한 경우
-			            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-			            		    and (thirdCategoryId == null or thirdCategoryId == 0)">
-			              AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
-			               OR  c.category_pr_id = #{secondCategoryId}
-			            </when>
-			            
-			            첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우
-			            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-			           		        and thirdCategoryId != null and thirdCategoryId != 0">
-			              AND c.category_pr_id = #{secondCategoryId}
-			            </when>
-			            
-			            첫 번째 카테고리만 선택한 경우
-			            <otherwise>
-			              AND c.category_pr_id = #{firstCategoryId}
-			            </otherwise>
-			        </choose>
-	            ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize} -->
-	<!--     SELECT *
-	      FROM ( SELECT  p.product_group_id  AS "productGroupId",
-                                    p.product_nm        AS "productNm",
-                                    c.category_pr_id    AS "categoryPrId",
-                                    c.category_id       AS "categoryId",
-                                    c.category_nm       AS "categoryNm", 
-                                    row_number() over (partition by  c.category_pr_id order by  p.product_group_id) AS "rn"
-                            FROM product p
-                            LEFT JOIN category c
-                                   ON p.category_id = c.category_id
-                            WHERE c.category_id in (
-                                                    SELECT category_id from category c
-									                      <choose>
-												            아무 카테고리도 선택되지 않은 경우
-												            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-												            		     and (thirdCategoryId == null or thirdCategoryId == 0)">
-												            START WITH category_id = 0		            
-												            </when>
-												            
-												            첫 번째, 두 번째 카테고리를 선택한 경우
-												            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-												            		    and (thirdCategoryId == null or thirdCategoryId == 0)">	              
-												             START WITH category_id = #{secondCategoryId}
-												            </when>
-												            
-												            첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우
-												            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-												           		        and thirdCategoryId != null and thirdCategoryId != 0">
-												               START WITH category_id = #{thirdCategoryId}
-												            </when>
-												            
-												            첫 번째 카테고리만 선택한 경우
-												            <otherwise>
-												               START WITH category_id = #{firstCategoryId}
-												            </otherwise>
-												        </choose>
-                                                    
-                                                    CONNECT BY PRIOR category_id = category_pr_id
-                                                  )
-                             AND p.status = 'Y'
-                             GROUP BY   p.product_group_id, 
-                                        p.product_nm, 
-                                        c.category_pr_id, 
-                                        c.category_id, 
-                                        c.category_nm
-			      
-	            ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize} -->
-				SELECT
-				    "rn",
-				    "productGroupId",
-				    "productNm",
-				    "categoryPrId",
-				    "categoryId",
-				    "categoryNm"
-				FROM (
-				    SELECT
-				        ROWNUM AS "rn",
+        SELECT "rn",
+			   "productGroupId",
+			   "productNm",
+			   "categoryPrId",
+			   "categoryId",
+			   "categoryNm"
+		  FROM ( SELECT ROWNUM AS "rn",
 				        "productGroupId",
 				        "productNm",
 				        "categoryPrId",
 				        "categoryId",
 				        "categoryNm"
-				    FROM (
-				        SELECT
-				            "productGroupId",
-				            "productNm",
-				            "categoryPrId",
-				            "categoryId",
-				            "categoryNm"
-				        FROM (
-				            SELECT
-				                p.product_group_id AS "productGroupId",
-				                p.product_nm AS "productNm",
-				                c.category_pr_id AS "categoryPrId",
-				                c.category_id AS "categoryId",
-				                c.category_nm AS "categoryNm"
-				            FROM
-				                product p
-				            LEFT JOIN
-				                category c ON p.category_id = c.category_id
-				            WHERE
-				                c.category_id IN (
-				                    SELECT category_id 
-				                      FROM category c
+				    FROM ( SELECT "productGroupId",
+					              "productNm",
+					              "categoryPrId",
+					              "categoryId",
+					              "categoryNm"
+					         FROM ( SELECT p.product_group_id AS "productGroupId",
+						                   p.product_nm AS "productNm",
+						                   c.category_pr_id AS "categoryPrId",
+						                   c.category_id AS "categoryId",
+						                   c.category_nm AS "categoryNm"
+							          FROM product p
+							     LEFT JOIN category c ON p.category_id = c.category_id
+							         WHERE c.category_id IN ( SELECT category_id 
+											                    FROM category c
 				                     <choose>
 				                        <!-- 아무 카테고리도 선택되지 않은 경우 -->
 				                        <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
@@ -290,7 +193,7 @@
 				        )
 				    )
 				) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
-		</select>
+    </select>
 
 
     <!-- 
@@ -298,79 +201,38 @@
 		담당자: 이세인
 	-->
 	<select id="selectCountProducts">
-	    <!-- SELECT COUNT (*)
-		  FROM(	SELECT COUNT(*)
-		          FROM product p 
-			      JOIN category c 
-			        ON p.category_id = c.category_id  AND p.status ='Y'
-			  GROUP BY p.product_group_id, 
-			           p.product_nm, 
-			           c.category_pr_id, 
-			           c.category_id, 
-			           c.category_nm
-		    	HAVING 1=1
-				   <choose>
-				       아무 카테고리도 선택되지 않은 경우
-				       <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-				            	    and (thirdCategoryId == null or thirdCategoryId == 0)">
-				       )
-				       </when>
-				        
-				       첫 번째, 두 번째 카테고리를 선택한 경우
-				       <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-				                   and (thirdCategoryId == null or thirdCategoryId == 0)">
-				         AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
-				          OR  c.category_pr_id = #{secondCategoryId}
-				       )
-				       </when>
-				        
-				       첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우
-				       <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-				                   and thirdCategoryId != null and thirdCategoryId != 0">
-				         AND c.category_pr_id = #{secondCategoryId}
-				       )
-				       </when>
-				          
-				       첫 번째 카테고리만 선택한 경우
-				       <otherwise>
-				         AND c.category_pr_id = #{firstCategoryId}
-				       )
-				       </otherwise>
-				  </choose> -->
-				   SELECT count(*)
-						  FROM (
-						  		 SELECT distinct product_group_id 
-						  		   FROM product 
-						 		  WHERE category_id IN (
-						 		  						 SELECT category_id 
-							 							   FROM category 
-				                                           <choose>
-													            <!-- 아무 카테고리도 선택되지 않은 경우 -->
-													            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-													            		     and (thirdCategoryId == null or thirdCategoryId == 0)">
-													            START WITH category_id = 0		            
-													            </when>
-													            
-													            <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
-													            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-													            		    and (thirdCategoryId == null or thirdCategoryId == 0)">	              
-													             START WITH category_id = #{secondCategoryId}
-													            </when>
-													            
-													            <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
-													            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-													           		        and thirdCategoryId != null and thirdCategoryId != 0">
-													               START WITH category_id = #{thirdCategoryId}
-													            </when>
-													            
-													            <!-- 첫 번째 카테고리만 선택한 경우 -->
-													            <otherwise>
-													               START WITH category_id = #{firstCategoryId}
-													            </otherwise>
-													        </choose>
-							  CONNECT BY PRIOR category_id = category_pr_id )
-				 AND status = 'Y')
-    	 </select>
+	    SELECT count(*)
+		  FROM ( SELECT distinct product_group_id 
+			       FROM product 
+			      WHERE category_id IN ( SELECT category_id 
+				 						   FROM category 
+		                                   <choose>
+								            <!-- 아무 카테고리도 선택되지 않은 경우 -->
+								            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
+								            		     and (thirdCategoryId == null or thirdCategoryId == 0)">
+								            START WITH category_id = 0		            
+								            </when>
+								            
+								            <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
+								            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+								            		    and (thirdCategoryId == null or thirdCategoryId == 0)">	              
+								             START WITH category_id = #{secondCategoryId}
+								            </when>
+								            
+								            <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
+								            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+								           		        and thirdCategoryId != null and thirdCategoryId != 0">
+								               START WITH category_id = #{thirdCategoryId}
+								            </when>
+								            
+								            <!-- 첫 번째 카테고리만 선택한 경우 -->
+								            <otherwise>
+								               START WITH category_id = #{firstCategoryId}
+								            </otherwise>
+								        </choose>
+				  						CONNECT BY PRIOR category_id = category_pr_id )
+					 AND status = 'Y')
+    </select>
 
 
 	<!-- 
@@ -488,9 +350,9 @@
     
     
 	<!-- 
-			기능: 상품 이미지 정보 삭제하기
-			담당자: 이세인
-		-->
+		기능: 상품 이미지 정보 삭제하기
+		담당자: 이세인
+	-->
 	
 	<update id="updateProductImages">
 	    UPDATE product
@@ -650,6 +512,23 @@
 		  JOIN category c 
 		    ON p.category_id = c.category_id AND p.status = 'Y'
 		 WHERE INSTR(p.product_nm,#{searchText}) > 0
+	</select>
+	
+	
+	<!-- 
+		기능: 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+		담당자: 이세인
+	-->
+	<select id="selectProductStocks" resultType="com.example.daitso.product.model.ProductChart">
+	  <![CDATA[
+	    SELECT 'Stock Low' AS label, product_nm AS productNm, product_stock AS productStock
+		  FROM product
+		 WHERE product_stock < 10
+	 UNION ALL
+		SELECT 'Stock Sufficient' AS label, '' AS product_nm, COUNT(*) AS productStock
+		  FROM product
+		 WHERE product_stock >= 10
+	  ]]>
 	</select>
 
 
@@ -952,6 +831,7 @@
 		WHERE rnum between #{start} and #{end}
 	</select>
 	
+	
 	<!-- 
 		기능: 검색된 상품 개수 조회
 		담당자: 나현웅
@@ -967,4 +847,5 @@
 		</if>
 		)
 	</select>
+	
 </mapper>

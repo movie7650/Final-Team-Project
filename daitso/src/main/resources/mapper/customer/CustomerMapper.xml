@@ -259,6 +259,23 @@
    		   SET customer_pw = #{newPassword}
    		 WHERE customer_id = #{customerId}  
    	</update>
+
+
+	<!-- 
+		기능: 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+		담당자: 이세인
+	-->
+    <select id="getCustomerCounts">
+	    SELECT TO_CHAR(create_dt, 'YYYY-MM') AS registerMonth, COUNT(customer_id) AS count
+	      FROM customer
+		 WHERE create_dt >= TRUNC(SYSDATE, 'MM') - INTERVAL '5' MONTH
+	  GROUP BY TO_CHAR(create_dt, 'YYYY-MM')
+	  ORDER BY registerMonth
+		<!-- SELECT TO_CHAR(create_dt, 'YYYY-MM') AS registerMonth, COUNT(customer_id) AS count
+			FROM customer
+			GROUP BY TO_CHAR(create_dt, 'YYYY-MM')
+			ORDER BY registerMonth -->
+    </select>
     
     
 </mapper>
