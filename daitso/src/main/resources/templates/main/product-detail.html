@@ -42,7 +42,7 @@
 			<p class="font-s-15">무료 배송(산간 지역은 별도)<p>
 			<div class="d-flex margin-b-10">
 				<div class="d-flex flex-column option-list">
-					<div class="d-flex margin-b-10" th:if='!${"0".equals(oListFirst[0].OPTIONFIRST)}'>
+					<div class="d-flex margin-b-10" th:if='!${"-".equals(oListFirst[0].OPTIONFIRST) and oListFirst.size() == 1}'>
 						<span style="margin-right: 10px;">크기</span>
 						<select class="option-size select-style" name="size" th:onchange="optionChange([[${product.productGroupId}]],1)">
 							<th:block th:each="option : ${oListFirst}">
@@ -50,9 +50,9 @@
 							</th:block>
 						</select>					
 					</div>
-					<div class="d-flex margin-b-10" th:if='!${"0".equals(oListSecond[0].OPTIONSECOND)}'>
+					<div class="option-list-color">
+						<div class="d-flex margin-b-10" th:if='!${"-".equals(oListSecond[0].OPTIONSECOND) and oListSecond.size() == 1}'>
 						<span style="margin-right: 10px;">색상</span>
-						<div class="option-list-color">
 							<select class="option-color select-style" name="color" th:onchange="optionChange([[${product.productGroupId}]],2)">
 								<th:block  th:each="option : ${oListSecond}">
 									<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}">[[${option.OPTIONSECOND}]]</option>
@@ -60,14 +60,14 @@
 							</select>
 						</div>
 					</div>
-					<div class="d-flex" th:if='!${"0".equals(oListThird[0].OPTIONTHIRD)}'>
-						<span style="margin-right: 10px;">기타</span>
-						<div class="option-list-other">
-							<select class="option-other select-style" name="others" th:onchange="optionChange([[${product.productGroupId}]],3)">
-								<th:block th:each="option : ${oListThird}">
-									<option th:selected="${option.OPTIONTHIRD eq product.productOptionThird}">[[${option.OPTIONTHIRD}]]</option>
-								</th:block>
-							</select>
+					<div class="option-list-other">
+						<div class="d-flex" th:if='!${"-".equals(oListThird[0].OPTIONTHIRD) and oListThird.size() == 1}'>
+							<span style="margin-right: 10px;">기타</span>
+								<select class="option-other select-style" name="others" th:onchange="optionChange([[${product.productGroupId}]],3)">
+									<th:block th:each="option : ${oListThird}">
+										<option th:selected="${option.OPTIONTHIRD eq product.productOptionThird}">[[${option.OPTIONTHIRD}]]</option>
+									</th:block>
+								</select>
 						</div>
 					</div>
 				</div>
@@ -291,7 +291,7 @@
 	if(product.discountRate != 0){
 //		document.querySelector('.origin-price').textContent = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
 		text = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",") + '원';
-		document.querySelector('.origin-price').innerHTML = `<h5 style="color: #9E9E9E; font-size:15px; text-decoration: line-through; margin-bottom: 0px">${text}</h5>`
+		document.querySelector('.origin-price').innerHTML = `<span style="color: #5e5e5e; font-size:15px; text-decoration: line-through;">${text}</span><span style="color: #5e5e5e; font-size:15px;"> 10%</span>`
 		//Math.round함수로 할인상품 반올림 사용
 		fPrice = Math.round(product.productPrice * 0.9);						
 	}
@@ -483,8 +483,11 @@
         	fetch("/product/option/" + productGroupId + params)
             .then(response => response.json())
             .then(data => {
-                	if(data[0].length != 1 | data[0][0].OPTIONSECOND != 0){
-                		const select = `<select class="option-color select-style" name="color" onchange="optionChange('${product.productGroupId}',2)"></select>`
+                	if(data[0].length != 1 | data[0][0].OPTIONSECOND != "-"){
+                		const select = `<div class="d-flex margin-b-10">
+                						<span style="margin-right: 10px;">색상</span>
+                						<select class="option-color select-style" name="color" onchange="optionChange('${product.productGroupId}',2)"></select>
+                						</div>`
                 		sColor.innerHTML = select;
                 		const s = document.querySelector(".option-color");
                 		data[0].forEach(option => {
@@ -499,8 +502,11 @@
                         	}
                         }
                 	}
-                	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != 0){
-                		const select = `<select class="option-other select-style" name="other" onchange="optionChange('${product.productGroupId}',3)"></select>`
+                	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != "-"){
+                		const select = `<div class="d-flex">
+										<span style="margin-right: 10px;">기타</span>
+                						<select class="option-other select-style" name="other" onchange="optionChange('${product.productGroupId}',3)"></select>
+                						</div>`
                 		sOther.innerHTML = select;
                 		const s = document.querySelector(".option-other");
                 		data[1].forEach(option => {
