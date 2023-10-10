@@ -8,8 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.config.CommonCode;
 import com.example.daitso.coupon.model.CouponCheck;
+import com.example.daitso.customer.model.CustomerChart;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductChart;
 import com.example.daitso.product.model.ProductCheck;
+import com.example.daitso.purchase.model.PurchaseChart;
 import com.example.daitso.purchase.model.PurchaseList;
 
 public interface IAdminService {
@@ -58,7 +61,6 @@ public interface IAdminService {
 //	void updateProductImages(int productId, String imageUrl);
 	void updateProductImages(int productId, int selector, String imageUrl);
 	
-	
 	// 주문 내역 조회하기(배송상태별)
 	List<PurchaseList> selectPurchaseList(int commonCodeId, int offset, int pageSize);
 	
@@ -76,7 +78,6 @@ public interface IAdminService {
 	
 	// 주문번호로 주문 상세 내역 조회하기
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
-	
 	
 	// 전체 카테고리 조회하기
 	List<CategoryCheck> selectAllCategories(int offset, int pageSize);
@@ -100,8 +101,7 @@ public interface IAdminService {
 	
 	void updateCategoryImage(int categoryId, String imageUrl);
 	
-	void deleteCategoryImage(int categoryId, boolean deleteCategoryImage);
-	
+	void deleteCategoryImage(int categoryId, boolean deleteCategoryImage);	
 	
 	// 최상위 공통코드 조회하기
 	List<CommonCode> selectAllCommonCodesPr(@Param("offset") int offset, @Param("pageSize") int pageSize);
@@ -126,9 +126,6 @@ public interface IAdminService {
  	
  	void registerCommonCodes(CommonCode commonCode);
  	
- 	
- 	
- 	
 	// 전체 쿠폰 조회하기
 	List<CouponCheck> selectAllCoupons(@Param("offset") int offset, @Param("pageSize") int pageSize);
 	
@@ -143,5 +140,19 @@ public interface IAdminService {
 	
 	// 쿠폰 일련번호 중복 확인하기
 	boolean isCouponSnUnique(String couponSn);
+
+List<PurchaseChart> getSalesStatus();
+	
+	//일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 5주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	List<PurchaseChart> selectSalesStatus(String dateType);
+
+	// 일일, 주간, 월별 가장 많이 팔린 상품 조회하기
+	List<PurchaseChart> selectTopSelling(String dateType);
+	
+	// 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+	List<ProductChart> selectProductStocks();
+	
+	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+	List<CustomerChart> getCustomerCounts();
 	
 }

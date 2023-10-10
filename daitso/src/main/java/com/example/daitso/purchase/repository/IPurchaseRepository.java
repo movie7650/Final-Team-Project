@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.daitso.purchase.model.Purchase;
+import com.example.daitso.purchase.model.PurchaseChart;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseInsert;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
@@ -70,5 +71,14 @@ public interface IPurchaseRepository {
 	List<PurchaseList> getPurchaseDetails(String purchaseNum);
 	
 	// 상품구매시 제고 업테이트
-	void updateProductStockInPurchase(int cartId);
+	void updateProductStockInPurchase(int cartId);	
+	
+List<PurchaseChart> getSalesStatus();
+	
+	// 일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 5주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	List<PurchaseChart> selectSalesStatus(@Param("dateType") String dateType);
+	
+	// 일일, 주간, 월별 가장 많이 팔린 상품 조회하기
+	List<PurchaseChart> selectTopSelling(@Param("dateType") String dateType);
+
 }

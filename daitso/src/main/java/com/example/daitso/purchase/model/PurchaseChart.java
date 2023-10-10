@@ -1,5 +1,4 @@
 package com.example.daitso.purchase.model;
-
 import java.sql.Date;
 
 import lombok.Getter;
@@ -7,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PurchaseList {
+public class PurchaseChart {
 	private int purchaseId;
 	private int productId;
 	private int customerId;
@@ -31,4 +30,12 @@ public class PurchaseList {
 	private int rn;
 	private String searchText;
 	
+	private String weekStart;
+	private String weekEnd;
+	private String week;
+	private String day;
+	private String month;
+	private int count;
+	private String dateType;
+	private String result;
 }

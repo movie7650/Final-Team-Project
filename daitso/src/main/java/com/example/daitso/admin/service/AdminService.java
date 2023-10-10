@@ -16,9 +16,14 @@ import com.example.daitso.config.CommonCode;
 import com.example.daitso.config.repository.ICommonCodeRepository;
 import com.example.daitso.coupon.model.CouponCheck;
 import com.example.daitso.coupon.repository.ICouponRepository;
+import com.example.daitso.customer.model.CustomerChart;
+import com.example.daitso.customer.repository.ICustomerRepository;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductChart;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.product.repository.IProductRepository;
+import com.example.daitso.purchase.model.PurchaseChart;
+import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseList;
 import com.example.daitso.purchase.repository.IPurchaseRepository;
 
@@ -39,6 +44,9 @@ public class AdminService implements IAdminService{
 	
 	@Autowired
 	ICouponRepository couponRepository;
+	
+	@Autowired
+	ICustomerRepository customerRepository;
 	
 	@Autowired
 	S3Service s3Service;
@@ -250,13 +258,11 @@ public class AdminService implements IAdminService{
 		categoryRepository.updateCategoryImage(categoryId, imageUrl);
 	}
 	
-	
 	@Override
 	public void deleteCategoryImage(int categoryId, boolean deleteCategoryImage) {
 		categoryRepository.deleteCategoryImage(categoryId, deleteCategoryImage);
 		
 	}
-	
 
 	// 최상위 공통코드 조회하기
 	@Override
@@ -299,16 +305,11 @@ public class AdminService implements IAdminService{
 	public void deleteCommonCode(int commonCodeId) {
 		commonCodeRepository.deleteCommonCode(commonCodeId);
 	}
-
-	
 	
 	@Override
 	public void registerCommonCodes(CommonCode commonCode) {
 		commonCodeRepository.registerCommonCodes(commonCode);
 	}
-
-	
-	
 	
 	// 전체 쿠폰 조회하기
 	@Override
@@ -340,6 +341,36 @@ public class AdminService implements IAdminService{
         return count == 0; // 0이면 중복되지 않음, 1 이상이면 중복됨
     }
 
+	
+@Override
+public List<PurchaseChart> getSalesStatus() {
+	return purchaseRepository.getSalesStatus();
+}
 
+	//일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 5주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	@Override
+	public List<PurchaseChart> selectSalesStatus(String dateType) {
+		return purchaseRepository.selectSalesStatus(dateType);
+	}
+
+	// 일일(오늘 가장 많이 팔린 상품 상위 5개만 가져오기), 주간, 월별 가장 많이 팔린 상품 조회하기
+	@Override
+	public List<PurchaseChart> selectTopSelling(String dateType) {
+		return purchaseRepository.selectTopSelling(dateType);
+	}
+
+	// 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+	@Override
+	public List<ProductChart> selectProductStocks() {
+		return productRepository.selectProductStocks();
+	}
+
+	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+	@Override
+	public List<CustomerChart> getCustomerCounts() {
+		return customerRepository.getCustomerCounts();
+	}
+
+	
 
 }
