@@ -89,6 +89,25 @@ public class ShippingService implements IShippingService {
 	public int selectShippingDv(int shipppingId) {
 		return shippingRepository.selectShippingDv(shipppingId);
 	}
+
+	// 301인 상태인 배송지 아이디 조회
+	@Override
+	public int countShippingId301(int customerId) {
+		return shippingRepository.countShippingId301(customerId);
+	}
+
+	@Override
+	public void updateShippingDV(int shippingId, int shippingDv) {
+		shippingRepository.updateShippingDV(shippingId, shippingDv);
+	}
+
+	@Transactional
+	public void updateShippingIdInfo2(int shippingId, String shippingReceiverNM, String shippingRoadNMAddr,
+			String shippingDaddr, String shippingReceiverTelNO, String shippingDmnd, int shippingDv, int customerId) {
+		shippingRepository.updateAllShippingDv302(customerId);
+		shippingRepository.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+		
+	}
 	
 	
 }

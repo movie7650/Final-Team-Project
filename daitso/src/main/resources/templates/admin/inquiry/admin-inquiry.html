@@ -10,7 +10,7 @@
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 	
 	<!-- 오른쪽 컨텐츠 -->
-	<div id="table" style="position: relative;">
+	<div id="table" style="position: relative; margin-bottom: 100px;">
 		<div class="admin-inquiry-title">문의 조회/답변</div>
 		<div class="admin-inquiry-table">
 			<div 
@@ -42,7 +42,7 @@
 					<div class="admin-inquiry-btn" th:onclick="inquiryComplete([[${inquiry.inquiryId}]], 'C')">답변 보기</div>
 				</div>
 			</div>
-			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px; top: 810px;">
+			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px; top: 830px;">
 				<div th:if="${nowPageBlock>1}" style="width: 30px; height: 30px; text-align: center; border: 2px solid gray;">
 					<a th:href="@{/admin/inquiry/__${inquiryAnsDv}__/__${startPage-1}__}">
 						<img th:src="@{/assets/common/left_arrow_gray.svg}" style="width: 12px; height: 12px;">
@@ -67,7 +67,7 @@
 <script type="text/javascript" th:inline="javascript">
 
 	function inquiryComplete(inquiryId, inquiryAnsDv){
-		window.open( window.location.origin + '/admin/inquiry/complete/' + inquiryId + '/' + inquiryAnsDv , '문의 답변', 'width=870px,height=660px,scrollbars=yes');
+		window.open( window.location.origin + '/admin/inquiry/complete/' + inquiryId + '/' + inquiryAnsDv , '문의 답변', 'width=870px,height=740px,scrollbars=yes');
 	}
 </script>
 </html>

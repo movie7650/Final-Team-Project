@@ -11,9 +11,9 @@
 	margin-left:165px;
 	margin-top:10px;
 	width:855px;
-	border-bottom:solid 3px #668663;
+	border-bottom:solid 3px #39594e;
 }
-.address-tr-01{
+/* .address-tr-01{
 	display:block;
 	float:left;
 	padding-left:5%;
@@ -41,48 +41,48 @@
 	display:block;
 	padding-left:1%;
 	
-}
+} */
 .address-container{
 	margin-top:20px;
 	height:200px;
-	border:solid 1.5px #668663;
+	border:solid 1.5px #39594e;
 	width:800px;
-	border-radius:10px;
+	border-radius:5px;
 	padding-left:20px;
 	padding-top:10px;
 }
 .add-address-container{
 	margin-top:20px;
 	height:40px;
-	border-radius:10px;
+	border-radius:5px;
 	text-align:center;
 	width:800px;
-	border:solid 1.5px #668663;
+	border:solid 1.5px #39594e;
 	padding-top:0.5%;
  	box-shadow: 2px 2px 2px 2px gray;
  	background-color: white;
- 	color:#668663;
+ 	color:#39594e;
  	
 }
 
 .base-address{
 	border:solid 2px blue;
 	width:100px;
-	border-radius:10px;
+	border-radius:5px;
 	text-align: center;
 	color:blue;
 }
 .nomal-address{
 	border:solid 2px gray;
 	width:100px;
-	border-radius:10px;
+	border-radius:5px;
 	text-align: center;
 	color:gray;
 }
 .address-container button{
 	border:none;
-	background-color: #668663;
+	background-color: #39594e;
 	color:white;
-	border-radius:10px;
+	border-radius:5px;
 	width:50px;
 }

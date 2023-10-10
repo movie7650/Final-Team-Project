@@ -9,7 +9,7 @@
 .post-receiver-container{
 	margin-top:10%;
 	width:800px;
-	border:solid 1.5px #668663;
+	border:solid 1.5px #39594e;
 	
 }
 .post-receiver-container img {
@@ -23,9 +23,9 @@
 }
 .post-address-input{
 	width:800px;
-	border-left:solid 1.5px #668663;
-	border-right:solid 1.5px #668663;
-	border-bottom:solid 1.5px #668663;
+	border-left:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
 
 }
 .post-address-input input{
@@ -37,9 +37,9 @@
 	height:50px;
 }
 .shipping-receiver-phonenumber{
-	border-left:solid 1.5px #668663;
-	border-right:solid 1.5px #668663;
-	border-bottom:solid 1.5px #668663;
+	border-left:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
 }
 .shipping-receiver-phonenumber img{
 	width:50px;
@@ -51,9 +51,9 @@
 	outline:none;
 }
 .shipping-receiver-request{
-	border-left:solid 1.5px #668663;
-	border-right:solid 1.5px #668663;
-	border-bottom:solid 1.5px #668663;
+	border-left:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
 }
 .shipping-receiver-request img{
 	width:50px;
@@ -74,8 +74,9 @@
 	height:50px;
 	border:none;
 	display:inline-block;
-	background-color:#668663;
+	background-color:#39594e;
 	color:white;
+	border-radius:5px;
 }
 #cancle-add-shipping{
 	width:150px;
@@ -83,16 +84,17 @@
 	border:solid 1px black;
 	display:inline-block;
 	background-color:white;
-	color:#668663;
+	color:#39594e;
+	border-radius:5px;
 }
 
 #find-post-button{
-	background-color:#668663;
+	background-color:#39594e;
 	color:white;
 	border:none;
 	height:10%;
 	text-align:center;
-	border-radius:10px;
+	border-radius:5px;
 }
 #shipping-post-number{
 	width:100px;

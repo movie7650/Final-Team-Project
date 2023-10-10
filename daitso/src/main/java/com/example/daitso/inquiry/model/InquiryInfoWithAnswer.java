@@ -12,4 +12,5 @@ public class InquiryInfoWithAnswer {
 	private String createDt;
 	private String inquiryAnswer;
 	private String modifyDt;
+	private int ansInquiryId;
 }

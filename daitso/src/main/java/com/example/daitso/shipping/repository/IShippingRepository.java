@@ -58,4 +58,13 @@ public interface IShippingRepository {
 	
 	// 배송지 삭제
 	void deleteShipping(@Param("shippingId") int shippingId,@Param("customerId") int customerId);
+	
+	// 301인 상태인 배송지 아이디 조회
+	int countShippingId301(int customerId);
+	
+	//shippingDv변경
+	void updateShippingDV(@Param("shippingId")int shippingId, @Param("shippingDv") int shippingDv);
+	
+	//모든 배송지를 일반으로 변경
+	void updateAllShippingDv302(int customerId);
 }
