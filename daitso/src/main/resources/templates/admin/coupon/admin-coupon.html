@@ -10,18 +10,19 @@
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 
+	<div class="container-xl" style="max-width: 90%;">
 	<!-- 오른쪽 컨텐츠 -->
-	<div id="table" style="padding-top: 10px;">
-	<div style="font-weight: 600; margin-top: 20px;">쿠폰관리 > 쿠폰 등록/수정/삭제</div>
+	<div id="table">
+	<div style="font-weight: bold; margin-top: 10px; font-size:17px;">쿠폰관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 쿠폰 등록/수정/삭제</div>
 		<div class="row"
 			style="padding-bottom: 15px; justify-content: flex-end;">
-			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
+			<div class="col-sm-6" style="text-align: end; padding-left: 0px; right: 10px;">
 				<button class="btn btn-primary" style="background-color: #b69f93; border-color:#b69f93;"
 					data-bs-toggle="modal" data-bs-target="#registerModal"
 					type="button">등록</button>
 			</div>
 		</div>
-		<div style="height: 690px;">
+		<div style="height: 650px;">
 			<table class="table" style="text-align: center;">
 				<thead>
 					<tr>
@@ -42,7 +43,7 @@
 						<td th:text="${couponCheck.couponDscntRate + '%'}"></td>
 						<td th:text="${couponCheck.couponPblDt}"></td>
 						<td th:text="${couponCheck.couponEprDt}"></td>
-						<td>
+						<td style="display: flex; justify-content: flex-end;">
 							<div class="btn-group">
 								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
 									type="button" th:onclick="deleteCoupon([[${couponCheck.couponId}]])">삭제</button>
@@ -191,6 +192,7 @@
 	
 	</div>
 
+	</div>
 	</div>
 	</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
