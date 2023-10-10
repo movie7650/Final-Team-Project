@@ -4,7 +4,7 @@
 <body>
 	<div class="cart-container">
 		<div class="cart-boxes">
-			<div style="display: flex; justify-content: center">
+			<!-- <div style="display: flex; justify-content: center">
 				<div style="width: 62%">
 					<div class="cart-logo">
 						<a th:href="@{/}"> <img class="cart-logo-img"
@@ -12,10 +12,11 @@
 						</a>
 					</div>
 				</div>
-			</div>
+			</div> -->
+			<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 			<div style="display: flex; justify-content: center">
 				<div class="cart-box">
-					<div style="width: 94%;">
+					<div style="width: 100%;">
 						<div class="cart-title">
 							<div class="cart-title-img-box">
 								<img class="cart-title-img" th:src="@{/assets/header/cart.svg}">

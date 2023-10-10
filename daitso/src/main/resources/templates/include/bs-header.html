@@ -50,7 +50,11 @@
 	    				return res.json();
 	    			})
 	    			.then((json) => {
-	    				document.getElementById("customer-name").innerText = json.customerNm + '님';	
+	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
+	    				document.getElementById("customer-name").style.fontWeight = '600';
+	    				if(json.customerNm == '관리자'){
+	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/product');
+	    				}
 	    			})
 	    		}
 	    	})

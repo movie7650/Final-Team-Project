@@ -62,5 +62,11 @@ public interface IInquiryRepository {
 	
 	//문의내용 선택하기
 	String selectInquiryContent(int inquiryId);
+
+	// 문의 답변 삭제하기(관리자)
+	void deleteInquiryAdmin(int ansInquiryId);
+	
+	// 삭제한 문의 상태 변경하기(관리자)
+	void updateInquiryAdminDelete(int inquiryId);
 	
 }

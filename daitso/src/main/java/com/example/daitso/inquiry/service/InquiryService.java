@@ -115,4 +115,11 @@ public class InquiryService implements IInquiryService {
 		return inquiryRepository.selectMyInquiryReplyTime(inquiryId);
 	}
 
+	// 문의 답변 삭제하기(관리자)
+	@Transactional
+	public void deleteInquiryAdmin(int inquiryId, int ansInquiryId) {
+		inquiryRepository.deleteInquiryAdmin(ansInquiryId);
+		inquiryRepository.updateInquiryAdminDelete(inquiryId);
+	}
+
 }
