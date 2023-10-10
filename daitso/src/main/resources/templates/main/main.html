@@ -34,17 +34,18 @@
 		</div>
 		<div>
 			<div class="decalcomania" style="margin-top: 30px">
-				<span style="font-size: 20px; margin-left: 15px; font-weight:bold">오늘의 <span style="color:#e5e500">인기</span> 상품</span>
+				<span style="font-size: 22px; margin-left: 15px; font-weight:bold">오늘의 <span style="color:#e5e500">인기</span> 상품</span>
 				<th:block th:if="${productList.size() != 0}">
-					<div class="window" style="width:1132px; overflow:hidden">
-						<div class="popular-container d-flex align-items-center margin-b-10" style="margin-top: 30px; flex-wrap: nowrap">
+					<div class="window" style="width:1180px; position:relative; overflow:hidden">
+						<button class="carousel-btn" style="top: 230px; position:absolute" onclick="prev('P')"><</button>
+						<div class="popular-container d-flex justify-content-evenly align-items-center margin-b-10" style="flex-wrap: nowrap">
 							<th:block th:each="product : ${productList}">
-								<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 248px; height: 450px;">
-									<img style="border:1px solid #d9d9d9; padding: 10px; width: 100%; height: 270px" th:src="${product.productImageFirst}">
+								<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 230px; height: 450px;">
+									<img style="border:1px solid #d9d9d9; padding: 10px; width: 100%; height: 250px" th:src="${product.productImageFirst}">
 									<div style="padding: 0 5px 0 5px">
-										<p class="font-s-15" style="margin-bottom: 0px;">[[${product.specialProductNm}]]</p>
-										<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
-										<p style="margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
+										<p class="font-s-15" style="margin-top: 10px; margin-bottom: 0px; max-width:218px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${product.specialProductNm}]]</p>
+										<p style="font-size:16px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
+										<p style="font-size:14px; margin-top:8px; margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
 										<div class="star-parent">
 											<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
 												<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
@@ -57,6 +58,7 @@
 								</div>
 							</th:block>			
 						</div>
+						<button class="carousel-btn" style="top: 230px; left:1150px; position:absolute" onclick="next('P')">></button>
 					</div>
 				</th:block>
 				<th:block th:if="${productList.size() == 0}">
@@ -64,24 +66,21 @@
 						<p style="font-size:30px; font-weight:bold">인기 상품 준비중</p>
 					</div>
 				</th:block>			
-				<div class="d-flex justify-content-between">
-					<button class="carousel-btn" onclick="prev('P')"><</button>
-					<button class="carousel-btn" onclick="next('P')">></button>
-				</div>
 			</div>
- 			<div style="margin-top: 30px">
-				<span style="font-size: 20px; margin-left: 15px; font-weight:bold">오늘의 <span style="color:red">세일</span> 상품</span>
-				<div class="window" style="width: 1132px; overflow: hidden">
-					<div class="sale-container d-flex align-items-center margin-b-10" style="margin-top: 12px; flex-wrap: nowrap">
+ 			<div style="margin-top: 25px">
+				<span style="font-size: 22px; margin-left: 15px; font-weight:bold">오늘의 <span style="color:red">세일</span> 상품</span>
+				<div class="window" style="margin-bottom: 100px; width: 1180px; position:relative; overflow: hidden">
+					<button class="carousel-btn" onclick="prev('S')" style="top: 230px; position:absolute"><</button>
+					<div class="sale-container d-flex justify-content-evenly align-items-center margin-b-10" style="margin-top: 12px; flex-wrap: nowrap">
 						<th:block th:each="product : ${saleProductList}">
-							<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.productGroupId}]])" style="padding:10px; background-color:white; margin-left: 15px; width: 248px; height: 450px;">
-								<img style="border:1px solid #d9d9d9; padding: 10px; width: 100%; height: 270px" th:src="${product.productImageFirst}">
+							<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.productGroupId}]])" style="padding:10px; background-color:white; margin-left: 15px; width: 230px; height: 450px;">
+								<img style="border:1px solid #d9d9d9; padding: 10px; width: 100%; height: 250px" th:src="${product.productImageFirst}">
 								<div style="padding: 0 5px 0 5px">
-									<p class="font-s-13" style="color:#a50000; font-weight:bold; margin-top:5px; margin-bottom:5px">지금 10% 할인중</p>
-									<p class="font-s-15" style="margin-bottom: 0px;">[[${product.productNm}]]</p>
-									<span style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(product.productPrice * 0.9, 3, 'COMMA') + '원'}"></span>
-									<span style="font-size:18px; text-decoration: line-through; margin-bottom: 0px; color:#5e5e5e" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></span>
-									<p style="margin-bottom:0px">상품리뷰([[${product.reviewCount}]])</p>
+									<p class="font-s-15" style="margin-top: 10px; margin-bottom: 0px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${product.productNm}]]</p>
+									<span style="font-size:14px; text-decoration: line-through; margin-bottom: 0px; color:#5e5e5e" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></span>
+									<span style="font-weight: 500; font-size:12px; color:#5e5e5e"> 10%</span>
+									<p style="margin-top: -5px; font-size:16px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(product.productPrice * 0.9, 3, 'COMMA') + '원'}"></p>
+									<p style="font-size:14px; margin-top:8px; margin-bottom:0px">상품리뷰([[${product.reviewCount}]])</p>
 									<div class="star-parent">
 										<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
 											<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
@@ -94,10 +93,7 @@
 							</div>
 						</th:block>			
 					</div>
-				</div>
-				<div class="d-flex justify-content-between" style="margin-bottom:60px">
-					<button class="carousel-btn" onclick="prev('S')"><</button>
-					<button class="carousel-btn" onclick="next('S')">></button>
+					<button class="carousel-btn" style="top: 230px; left:1150px; position:absolute" onclick="next('S')">></button>
 				</div>
 			</div> 	
 			<div style="margin-top: 30px">
