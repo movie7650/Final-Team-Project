@@ -6,23 +6,24 @@
 }
 .title-review{
 	position:absolute;
-	padding-bottom:0.5%;
-	font-size:150%;
-	margin-left:165px;
-	margin-top:10px;
-	width:855px;
-	border-bottom:solid 3px #39594e;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:900px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
 }
 .my-review-container{
-	border:solid 2px #e7e7e7;
-	border-radius:10px;
+	border:solid 2px #d9d9d9;
+	border-radius:5px;
 	height:220px;
-	width:800px;
-	margin-right:55px;
+	width:900px;
 	padding-top:10px;
 	padding-left:20px;
 	font-size:80%;
 	margin-bottom:50px;
+	margin-left:-45px;
 }
 .my-review-photo-container{
 	width:400px;
@@ -70,7 +71,7 @@
 	color:orange;
 	border-bottom:solid 1.5px #39594e;
 	padding-bottom:10px;
-	width:750px;
+	width:850px;
 }
 .my-review-star-point span{
 	color:black;
