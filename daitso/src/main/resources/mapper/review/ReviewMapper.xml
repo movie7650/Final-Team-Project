@@ -50,7 +50,7 @@
 	<select id="selectProductReviewCount" parameterType="int" resultType="int">
 		SELECT count(*) FROM review r
 		LEFT JOIN product p ON r.product_id = p.product_id
-		WHERE p.product_group_id = #{groupId}
+		WHERE p.product_group_id = #{groupId} AND r.status='Y'
 	</select>
 	
 	<!-- 
