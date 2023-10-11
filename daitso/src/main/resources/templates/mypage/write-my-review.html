@@ -13,7 +13,7 @@
 	<div class="write-review-title">리뷰작성하기</div>
 	<div style="margin-top:100px; padding-right:55px;">
 		<th:block th:each="myReviewPurchase : ${MyReviewPurchaseList}">
-			<form action="/mypage/writeReview" method="post">
+			<form action="/mypage/writeReview" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="productId" th:value="${myReviewPurchase.productId}">
 				<input type="hidden" name="customerId" th:value="${myReviewPurchase.customerId}">
 				<input type="hidden" name="purchaseNum" th:value="${myReviewPurchase.purchaseNum}">
@@ -62,7 +62,7 @@
 			
 			<div class="insert">
 					<div style="float:left; padding-bottom:2px; border-bottom:solid 2px #39594e; margin-right: 20px; font-weight: 500;">이미지</div>
-		        	<input type="file" onchange="addFile(this);" style="margin-left:15px;" multiple/>
+		        	<input type="file" name="files" style="margin-left:15px;" multiple/>
 			</div>
 			
 			<div class="write-review-button-container">
