@@ -185,6 +185,7 @@ public class CustomerController {
             Context thymeleafContext = new Context();
             thymeleafContext.setVariable("customerEmail", email);
             thymeleafContext.setVariable("url", url);
+            thymeleafContext.setVariable("randomNum", "/" + randomNum);
             
             String htmlBody = templateEngine.process("email/email-pw", thymeleafContext);
             
@@ -206,9 +207,9 @@ public class CustomerController {
 	}
 
 	// 새로운 비밀번호 설정 화면
-	@GetMapping("/setting-password/{customerEmail}")
-	public String getSettingPassword(@PathVariable String customerEmail, RedirectAttributes redirectAttributes, HttpSession session) {
-		if(session.getAttribute(customerEmail) != null) {
+	@GetMapping("/setting-password/{customerEmail}/{randomNum}")
+	public String getSettingPassword(@PathVariable String customerEmail, @PathVariable String randomNum, RedirectAttributes redirectAttributes, HttpSession session) {		
+		if(randomNum.equals(session.getAttribute(customerEmail))) {
 			redirectAttributes.addFlashAttribute("email", customerEmail);
 		}
 		return "redirect:/customer/setting-password";

@@ -54,7 +54,7 @@
 				<div style="color: #256B04; margin-top: 5px; font-weight: 500;">해당 링크는 발송후 1시간 동안만 유효합니다.</div>
 				<div style="margin-top: 30px; text-align: center;">
 					<div style="background-color: #39594E; border-radius: 5px; width: 22%; text-align: center; padding: 15px 10px 15px 10px;">
-						<a th:href="@{${url} + ${customerEmail}}" target="_blank" 
+						<a th:href="@{${url} + ${customerEmail} + ${randomNum}}" target="_blank" 
 						   style="color:white; text-decoration: none; width: 100%; display: block; height: 100%; font-size: 15px; font-weight: 600;">비밀번호 재설정하기</a>
 					</div>
 				</div>
