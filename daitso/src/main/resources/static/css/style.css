@@ -31,6 +31,14 @@
 	justify-content: center;
 }
 
+/* 1540px 이하일 때 적용 */
+@media screen and (max-width: 1540px){
+	
+    .product-sidebar{
+        display: none;
+    }
+}
+
 .product-large-box{
 	width:1160px; 
 	display:flex; 
@@ -224,3 +232,4 @@
     height: 630px;
     background-color: #F8EBCE;
 }
+
