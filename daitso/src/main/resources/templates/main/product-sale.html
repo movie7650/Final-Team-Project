@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+    <style>
+        .containers {
+            min-width: 300px; /* 컨테이너의 너비를 설정합니다. */
+            border: 1px solid #ccc;
+            white-space: nowrap; /* 텍스트가 한 줄에 표시되도록 합니다. */
+            overflow-x: scroll; /* 가로 스크롤을 활성화합니다. */
+        }
+    </style>
 </head>
 <div th:replace="~{/include/header :: header}"></div>
 <body>
@@ -13,7 +21,7 @@
 		</div>
 		<div class="d-flex" style="position: absolute; top: 585px">
 			<p style="width: 535px; font-family:fantasy; color: white; font-weight: bold; font-size: 120px;" class="time"></p>
-			<p style="width: 200px; font-family:fantasy; color: white; font-weight: bold; font-size: 120px;">END</p>
+			<p style="width: 200px; font-family:fantasy; color: white; font-size: 120px;">END</p>
 		</div>
 	</div>
 	<div class="d-flex justify-content-center" style="margin-bottom:50px">
@@ -22,7 +30,7 @@
 			<span style="font-size:25px; font-weight:bold; color:purple">베스트템</span>
 			<div class="d-flex justify-content-between flex-wrap" style="width:1100px; margin-top:35px;">
 				<th:block th:each="product : ${sList}">
-					<div class="d-flex" style="padding:10px; width:530px; height:220px; border:1px solid silver; border-radius:5px; margin-bottom: 10px">
+					<div class="d-flex" th:onclick="goProduct([[${product.productId}]], [[${product.productGroupId}]])" style="cursor: pointer; padding:10px; width:530px; height:220px; border:1px solid silver; border-radius:5px; margin-bottom: 10px">
 						<div style="flex:1"> 
 							<img th:src="${product.productImageFirst}" style="width:100%; height:100%">
 						</div>
@@ -42,26 +50,31 @@
 			</div>
 		</div>
 	</div>
+
 	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
 <script>
-const time = document.querySelector('.time');
-
-function init(){
-    setInterval(getTime, 1000) // getTime이라는 함수를 1000ms(1초) 단위로 실행한다.
-}
-function getTime(){
-    const Dday = new Date("2021-08-29:00:00:00+0900");
-    const today = new Date();
-    let hours = today.getHours(); // 시
-    let minutes = today.getMinutes();  // 분
-    let seconds = today.getSeconds();  // 초
-   	hours = String(24 - hours).padStart(2, "0");
-    minutes = String(60 - minutes).padStart(2, "0");
-    seconds = String(60 - seconds).padStart(2, "0");
-    time.textContent = `${hours} : ${minutes} : ${seconds}`;
-}
-getTime();
-init();
+	const time = document.querySelector('.time');
+	
+	function init(){
+	    setInterval(getTime, 1000) // getTime이라는 함수를 1000ms(1초) 단위로 실행한다.
+	}
+	function getTime(){
+	    const Dday = new Date("2021-08-29:00:00:00+0900");
+	    const today = new Date();
+	    let hours = today.getHours(); // 시
+	    let minutes = today.getMinutes();  // 분
+	    let seconds = today.getSeconds();  // 초
+	   	hours = String(24 - hours).padStart(2, "0");
+	    minutes = String(60 - minutes).padStart(2, "0");
+	    seconds = String(60 - seconds).padStart(2, "0");
+	    time.textContent = `${hours} : ${minutes} : ${seconds}`;
+	}
+	getTime();
+	init();
+	
+	function goProduct(productId, productGroupId){
+		location.href=`/product/${productId}/${productGroupId}`;
+	}
 </script>
 </html>

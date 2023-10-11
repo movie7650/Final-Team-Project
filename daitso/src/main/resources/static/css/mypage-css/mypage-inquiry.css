@@ -6,28 +6,32 @@
 }
 .mypage-inquiry-title{
 	position:absolute;
-	padding-bottom:0.5%;
-	font-size:150%;
-	margin-left:165px;
-	margin-top:10px;
-	width:855px;
-	border-bottom:solid 3px #39594e;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:900px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
 }
 .mypage-inquiry-table-container{
-	margin-top:100px; 
+	margin-top:100px;
+    margin-left: -48px;
+    width: 1000px; 
 	
 }
 .mypage-inquiry-table{
 	text-align:center;
 }
 .mypage-inquiry-table th{
-	width:214px;
-	padding-top:5px;
-	padding-bottom:5px;
+	width:225px;
+	height:50px;
 	background-color:#fafafa;
-	font-weight:500px;
 	border-top:1px solid #d9d9d9;
 	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
 }
 .mypage-inquiry-table td{
 	vertical-align: middle;
@@ -58,7 +62,6 @@
 	margin-top:10px;
 	width:80px; 
 	height:80px; 
-	border:solid 1px blue; 
 	float:left;
 }
 .my-inquiry-content{

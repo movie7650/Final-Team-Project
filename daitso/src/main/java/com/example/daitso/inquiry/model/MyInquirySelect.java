@@ -20,4 +20,5 @@ public class MyInquirySelect {
 	private int inquiryId;
 	private int inquiryStatusYCount;
 	private String inquiryReply;
+	private String productImg;
 }

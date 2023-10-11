@@ -24,7 +24,7 @@
 
 					</tr>
 					<tr style="font-size: 80%;" th:each="myinquiry : ${myinquirylist}">
-						<td><div class="my-inquiry-product-img">이미지</div>
+						<td><div class="my-inquiry-product-img"><img style="width:100%; height:100%;" th:src="${myinquiry.productImg}"></div>
 							<div th:text="${myinquiry.productNm}"
 								class="my-inquiry-productNm">남성무지반팔티</div></td>
 						<td><div th:text="${myinquiry.inquiryContent}" id="btn-modal">문의
@@ -53,7 +53,7 @@
 				<script>
 					function new_window(item) {
 						window.open("/mypage/myinquiryreply/" + item, "Child",
-								"width=800, height=550, top=50, left=350");
+								"width=870, height=740, top=50, left=350");
 					}
 
 					function removeCheck(event) {

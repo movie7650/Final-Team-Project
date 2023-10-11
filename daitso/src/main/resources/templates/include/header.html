@@ -40,12 +40,16 @@
     <link rel="stylesheet" th:href="@{/css/shipping.css}">
     <link rel="stylesheet" th:href="@{/css/customer-find.css}">
     <link rel="stylesheet" th:href="@{/css/mypage-css/my-shipping-update.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-inquiry-reply.css}">
     
     <!-- BootStrap -->    
     <link href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     
     <!-- JS -->
     <script>
@@ -163,9 +167,10 @@
 	    			})
 	    			.then((json) => {
 	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
-	    				document.getElementById("customer-name").style.fontWeight = '600';
 	    				if(json.customerNm == '관리자'){
 	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/chart');
+	    				} else {
+	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/mypage/orderlist');
 	    				}
 	    			})
 	    		}

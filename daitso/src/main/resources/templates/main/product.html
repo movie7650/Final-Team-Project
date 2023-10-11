@@ -5,7 +5,7 @@
 <title>카테고리별 상품 리스트</title>
 </head>
 <div th:replace="~{/include/header :: header}"></div>
-<body>
+<body style="overflow-x:scroll">
 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 	<div class="product-body">
 		<div class="product-path-bar">
@@ -47,7 +47,7 @@
 						</div>
 					</div>
 				</th:block>
-				<div class="product-large-box" style="position:relative; min-height:500px">
+				<div class="product-large-box" style="position:relative;">
 					<th:block th:each="list : ${productList}">
 						<div style="width: 250px; height:400px" class="product-box" th:onclick="goProductDetail([[${list.productId}]], [[${list.productGroupId}]])">
 							<div style="border:1px solid #d9d9d9; width: 231px; height: 212px;">
@@ -57,9 +57,12 @@
 								<p style="margin-top: 10px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; margin-bottom: 0px">[[${list.productNm}]]</p>
 								<div th:if='${list.discountRate != 0}' style="margin-bottom: -5px;">
 									<span  style="font-size:18px; text-decoration: line-through; margin-bottom: 0px; color:#5e5e5e" data-th-text="${#numbers.formatInteger(list.productPrice, 3, 'COMMA') + '원'}"></span>
-									<span  style="color:#5e5e5e; font-weight:500"> 10%</span>						
+									<span  style="color:#5e5e5e; font-weight:500"> 10%</span>	
+									<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(list.productPrice * 0.9, 3, 'COMMA') + '원'}"></p>					
 								</div>
-								<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(list.productPrice * 0.9, 3, 'COMMA') + '원'}"></p>
+								<div th:if='${list.discountRate == 0}' style="margin-bottom: -5px;">
+									<p style="font-size:20px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(list.productPrice, 3, 'COMMA') + '원'}"></p>				
+								</div>
 								<div>상품 리뷰([[${list.reviewCount}]])</div>
 								<div class="star-parent">
 									<div class="star-fill" th:style="'width: ' + ${list.reviewStarPoint} + '%;'">
@@ -96,8 +99,7 @@
     /*]]>*/
 	pList =/*[[${productList}]]*/
 	
-    
-	
+	//카테고리 요소 삽입 코드
 	sideEl = document.querySelector('.sidebar-ul');
     cList.map((data,idx) => {
 		if(data.lv == 1){
@@ -213,11 +215,17 @@
 		}
 	}) 
 	
+	// 선택 카테고리 css 추가 코드
 	selected = document.querySelector(`.a${cId}`);
     if(selected){
     	selected.style.color="#39594e";
     	selected.style.fontWeight="bold";    	
     }
+    
+    // absolute 처리된 요소의 길이보다 화면이 더 길도록 minHeight 속성 추가 코드
+    const sidebarHeight = document.querySelector('.product-sidebar').offsetHeight;
+    console.log(sidebarHeight);
+    document.querySelector('.product-large-box').style.minHeight = sidebarHeight + 'px';
 	
 	function goProductDetail(id, groupId){
 		let tag = document.createElement('form');
