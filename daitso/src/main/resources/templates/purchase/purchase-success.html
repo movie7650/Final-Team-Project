@@ -11,7 +11,7 @@
 				<span><span style="color:#E8C369;">주문이 완료</span>되었습니다. 감사합니다!</span>
 			</div>
 			<div class="purchase-success-date-num">
-				<span>주문일 <span>2023-09-15</span></span>
+				<span>주문일 <span id="purchase-date">2023-09-15</span></span>
 				<span style="margin:0 10px 0 10px;">|</span>
 				<span>주문번호 <span th:text="${purchaseSuccess.purchaseNum}">2023091510590100000009</span></span>
 			</div>
@@ -73,6 +73,16 @@
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
 <script type="text/javascript" th:inline="javascript">
+	var today = new Date();
+	
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var day = ('0' + today.getDate()).slice(-2);
+	
+	var dateString = year + '-' + month  + '-' + day;
+	
+	document.getElementById("purchase-date").innerText = dateString;
+
 	var cartIdList = [[${cartIdList}]];
 	var purchaseSuccess = [[${purchaseSuccess}]];
 	var couponCartIdList = {};

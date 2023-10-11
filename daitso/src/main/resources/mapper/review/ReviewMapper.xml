@@ -151,7 +151,7 @@
 		INSERT INTO review (review_id, product_id,customer_id,review_content,review_star_point,
 							review_image_first,review_image_second,review_image_third,status,
 							creator,review_title)
-		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, null, null, null, 'Y', 'admin',#{reviewTitle})   
+		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, #{reviewImageFirst}, #{reviewImageSecond}, #{reviewImageThird}, 'Y', 'admin',#{reviewTitle})   
 	</insert>
 		<!-- 
 		기능: customerId와 productId와 purchaseNum에 따른 status가 Y인 리뷰의 갯수
