@@ -5,6 +5,12 @@
 	visibility: visible;
 }
 
+.table td, .table th {
+    padding: 0.65rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
 #table {
 	padding-top: 10px;
     padding-left: 50px;

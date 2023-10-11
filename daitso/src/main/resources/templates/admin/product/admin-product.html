@@ -8,13 +8,13 @@
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-
+	<div class="container-xl" style="max-width: 90%;">
 	<!-- 오른쪽 컨텐츠 -->
 	<div id="table">
-		<div style="font-weight: 600; margin-top: 20px;">상품관리 > 상품정보 추가/수정/삭제</div>
+		<div style="font-weight: bold; margin-top: 10px; font-size:17px;">상품관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 상품정보 추가/수정/삭제</div>
 		
 		<div class="row" style="padding-bottom: 10px;">
-			<div class="col" style="z-index: 1; display: flex; justify-content: space-between; margin-top: 10px;">
+			<div class="col" style="z-index: 1; display: flex; justify-content: space-between; margin-top: 10px; margin-bottom: 10px;">
 				
 				<div class="col-sm-5" style="display: inline-flex; align-items: flex-end; padding-left: 0px;">
 					<!-- "첫 번째 카테고리" -->
@@ -48,12 +48,12 @@
 
 				<div style="display: inline-flex; align-items: flex-end; padding-left: 0px; justify-content: flex-end;">
 					<!-- "조회" 버튼 -->
-					<div class="col-sm-5" style="text-align: end; padding-right: 0px;">
+					<div class="col-sm-5" style="text-align: end; padding-right: 0px; left:10px;">
 						<button class="btn btn-primary" onclick="searchByCategory()"
 							style="background-color: #b69f93; border-color: #d5bdaf" type="button">조회</button> <!--#ffafcc -->
 					</div>
 					<!-- "신규등록" 버튼 -->
-					<div class="col-sm-5" style="text-align: end; padding-left: 0px;">
+					<div class="col-sm-5" style="text-align: end; padding-left: 0px; left: 10px;">
 						<button class="btn btn-primary" style="background-color: #94ccf2;border-color: #a0cfef;width: 90px; margin-left: 10px;"
 							data-bs-toggle="modal" data-bs-target="#registerNewModal" type="button">신규등록</button>
 					</div>
@@ -63,7 +63,7 @@
 		</div>
 
 		<!-- 카테고리별 상품 조회하기 -->
-		<div style="height: 685px;">
+		<div style="height: 630px;">
 			<table class="table" style="text-align: center;">
 				<thead>
 					<tr>
@@ -71,7 +71,7 @@
 						<th>그룹 ID</th>
 						<th>카테고리명</th>
 						<th>상품명</th>
-						<th></th>
+						<th ></th>
 					</tr>
 				</thead>
 				<tbody id="tableBody">
@@ -80,7 +80,7 @@
 						<td th:text="${product.productGroupId}"></td>
 						<td th:text="${product.categoryNm}"></td>
 						<td th:text="${product.productNm}"></td>
-						<td><!-- style="display: flex; justify-content: flex-end; -->
+						<td style="display: flex; justify-content: flex-end;">
 							<div class="btn-group">
 								<button class="btn btn-xs"	style="background-color: #f7ba8b; color: #ffff;"
 									data-bs-toggle="modal" data-bs-target="#detailModal"
@@ -645,6 +645,7 @@
 		</div>
 	</div>
 
+	</div>
 	</div>
 
 	<div th:replace="~{/include/footer :: footer}"></div>
