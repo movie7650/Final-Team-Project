@@ -129,14 +129,15 @@
 			담당자: 윤상영
 		 -->
 	<select id="selectMyPurchase" resultType="com.example.daitso.review.model.WriteMyReview">
-		SELECT  p.product_id as "productId",
-				pur.customer_id as "customerId",
-				pur.purchase_num as "purchaseNum",
-	            pur.purchase_count as "purchaseCount",
-	            TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
-				TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
-	            pur.create_dt           as"purchaseDt",
-	            p.product_nm as "productNm"
+		SELECT  p.product_id 														AS "productId",
+			pur.customer_id 														AS "customerId",
+				pur.purchase_num 													AS "purchaseNum",
+	            pur.purchase_count 													AS "purchaseCount",
+	            TO_CHAR(pur.purchase_price, 'FM999,999,999') 						AS "purchasePrice",
+				TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') 	AS "totalCost",
+	            pur.create_dt           											AS "purchaseDt",
+	            p.product_nm 														AS "productNm",
+	            p.product_image_first												AS "productImg"
 		  FROM  purchase pur, product p
 		 WHERE  customer_id=#{customerId}
 		   AND  pur.product_id=p.product_id

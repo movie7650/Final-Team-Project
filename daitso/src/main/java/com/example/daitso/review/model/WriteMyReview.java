@@ -15,6 +15,7 @@ public class WriteMyReview {
 	private Date purchaseDt;
 	private String totalCost;
 	private String purchasePrice;
+	private String productImg;
 	
 	//리뷰정보
 	private int reviewId;
