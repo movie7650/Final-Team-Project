@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<!-- <style>
+.container {
+            zoom: 0.95; 
+        	}
+</style> -->
+<body>
+	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
+	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+	<div id="table">
+
+		<div class="row">
+
+			<!-- 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출 통계  -->
+			<div class="col-lg-6" style="margin-top: 20px;">
+				<div class="card">
+					<!-- 드롭다운 메뉴 -->
+						<div class="filter dropdown">
+						    <button class="icon dropdown-toggle" href="#" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						        <!-- <i class="bi bi-three-dots"></i> -->
+						    </button>
+						    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+						        <li class="dropdown-header">
+						            <h8>Filter</h8>
+						        </li>
+						        <li><a class="dropdown-item" href="#" id="filterRevenueDay" data-date-type="day">일별</a></li>
+						        <li><a class="dropdown-item" href="#" id="filterRevenueWeek" data-date-type="week">주별</a></li>
+						        <li><a class="dropdown-item" href="#" id="filterRevenueMonth" data-date-type="month">월별</a></li>
+						    </ul>
+						</div>
+
+					<div class="card-body">
+						<div class="card-header" id="revenueCardHeader"></div>
+						<canvas id="revenueChart"
+							style="max-height: 400px; display: block; box-sizing: border-box; height: 210px; width: 421px;"
+							width="631" height="316">
+                   		 </canvas>
+					</div>
+				</div>
+			</div>
+
+			<!-- 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 통계  -->
+			<div class="col-lg-6">
+				<div class="card">
+					<div class="filter dropdown">
+							<button class="dropdown-toggle" href="#" id="filterDropdown"
+								data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-three-dots"></i>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="filterDropdown">
+								<li class="dropdown-header">
+									<h8>Filter</h8>
+								</li>
+								<li><a class="dropdown-item" href="#"
+									id="filterTopSellingDay">당일</a></li>
+								<li><a class="dropdown-item" href="#"
+									id="filterTopSellingWeek">금주</a></li>
+								<li><a class="dropdown-item" href="#"
+									id="filterTopSellingMonth">당월</a></li>
+							</ul>
+					</div>
+					
+					<div class="card-body">
+						<div class="card-header" id="topSellingCardHeader"></div>
+						<canvas id="topSellingChart" 
+							style="max-height: 255px; display: block; box-sizing: border-box; height: 210px; width: 300px;"
+							width="300" height="210">
+						</canvas>
+				   </div>
+				</div>
+			</div>
+
+
+			<!-- 재고 상태  -->
+			<div class="col-lg-6" style="margin-top: 20px;">
+				<div class="card">
+					<div class="card-body">
+						<div class="card-header">재고 상태</div>
+							<canvas id="stockChart" style="max-height: 250px; display: block; box-sizing: border-box; height: 250px; width: 300px;"
+							width="300" height="210">
+						</canvas>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 월별 회원 유입  -->
+			<div class="col-lg-6">
+				<div class="card">
+					<div class="card-body">
+						<div class="card-header">월별 회원 유입</div>
+							<canvas id="signUpChart" style="max-height: 250px; display: block; box-sizing: border-box; height: 250px; width: 300px;"
+							width="300" height="210">
+						</canvas>
+					</div>
+				</div>
+			</div>
+
+	</div>
+	
+	<!---->
+	</div>
+	</div>
+	</div>
+
+	<div th:replace="~{/include/footer :: footer}"></div>
+	<!-- Chart.js 라이브러리 추가 -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script th:inline="javascript">
+	
+	// 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문건수
+	document.addEventListener("DOMContentLoaded", () => {
+	    var revenueCtx = document.getElementById('revenueChart').getContext('2d');
+	    var revenueChart;
+
+	    // 드롭다운 메뉴 클릭 이벤트 핸들러
+	    document.getElementById('filterRevenueDay').addEventListener('click', function () {
+	    	renderSalesChart('day');
+	    	updateCardHeader('revenueCardHeader', '일별 매출 현황');
+	    });
+
+	    document.getElementById('filterRevenueWeek').addEventListener('click', function () {
+	    	renderSalesChart('week');
+	    	updateCardHeader('revenueCardHeader', '주별 매출 현황');
+	    });
+
+	    document.getElementById('filterRevenueMonth').addEventListener('click', function () {
+	    	renderSalesChart('month');
+	    	updateCardHeader('revenueCardHeader', '월별 매출 현황');
+	    });
+
+	    function renderSalesChart(dateType) {
+	        $.ajax({
+	            url: '/admin/sales-chart?dateType=' + dateType,
+	            method: 'GET',
+	            dataType: 'json',
+	            success: function (data) {
+	            	console.log(data);
+
+	                if (revenueChart) {
+	                    revenueChart.destroy(); // 기존 차트 제거
+	                }
+
+	                revenueChart = new Chart(revenueCtx, {
+	                    type: 'line',
+	                    data: {
+	                        labels: data.dates,
+	                        datasets: [{
+	                            label: '주문건수',
+	                            data: data.orderCounts,
+	                            fill: false,
+	                            borderColor: 'rgb(75, 192, 192)',
+	                            tension: 0.1
+	                        }, {
+	                            label: '매출액',
+	                            data: data.revenueData,
+	                            fill: false,
+	                            borderColor: 'rgb(255, 99, 132)',
+	                            tension: 0.1
+	                        }]
+	                    },
+	                    options: {
+	                        scales: {
+	                            y: {
+	                                beginAtZero: true,
+	                                ticks: {
+	                                    /* callback: function (value, index, values) {
+	                                        if (value >= 1000000) {
+	                                            return (value / 1000000).toFixed(1) + 'M';
+	                                        } else if (value >= 1000) {
+	                                            return (value / 1000).toFixed(1) + 'K';
+	                                        } else {
+	                                            return value;
+	                                        }
+	                                    } */
+	                                }
+	                            }
+	                        }
+	                    }
+	                });
+	            },
+	            error: function (error) {
+	                console.error('Error fetching data:', error);
+	            }
+	        });
+	    }
+
+	    // 페이지 로드시 데이터를 불러와서 차트를 생성
+	    updateCardHeader('revenueCardHeader', '주별 매출 현황 (주문건수, 매출액)');
+	    renderSalesChart('week');
+	});
+	
+	
+	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
+	document.addEventListener("DOMContentLoaded", () => {
+	    var topSellingCtx = document.getElementById('topSellingChart').getContext('2d');
+	    var topSellingChart;
+	    
+	    document.getElementById('filterTopSellingDay').addEventListener('click', function () {
+	    	renderTopSellingPie('day');
+	    	updateCardHeader('topSellingCardHeader', '당일 가장 많이 팔린 상품 TOP 5');
+	    });
+
+	    document.getElementById('filterTopSellingWeek').addEventListener('click', function () {
+	    	renderTopSellingPie('week');
+	    	updateCardHeader('topSellingCardHeader', '금주 가장 많이 팔린 상품 TOP 5');
+	    });
+
+	    document.getElementById('filterTopSellingMonth').addEventListener('click', function () {
+	    	renderTopSellingPie('month');
+	    	updateCardHeader('topSellingCardHeader', '당월 가장 많이 팔린 상품 TOP 5');
+	    });
+
+	    function renderTopSellingPie(dateType) {
+	        if (topSellingChart) {
+	            topSellingChart.destroy();
+	        }
+
+	        $.ajax({
+	            url: '/admin/selling-pie?dateType=' + dateType,
+	            method: 'GET',
+	            success: function (data) {
+	                console.log(data);
+	                var productNames = data.productNames;
+	                var salesData = data.salesData;
+
+	                // Pie 차트 데이터 생성
+	                var pieData = {
+	                    labels: productNames,
+	                    datasets: [{
+	                        data: salesData,
+	                        backgroundColor: getRandomColors(salesData.length), // 랜덤 색상 생성
+	                    }]
+	                };
+
+	                // Pie 차트 생성
+	                topSellingChart = new Chart(topSellingCtx, {
+	                    type: 'pie',
+	                    data: pieData,
+	                    options: {
+	                        responsive: true,
+	                        maintainAspectRatio: false
+	                    }
+	                });
+	                
+	            },
+	            error: function (error) {
+	                console.error('Error fetching data:', error);
+	            }
+	        });
+	    }
+
+	    // Pie 차트 랜덤 색상을 생성하는 함수
+	    function getRandomColors(count) {
+	        var colors = [];
+	        for (var i = 0; i < count; i++) {
+	            var color = '#' + Math.floor(Math.random()*16777215).toString(16); // 랜덤 HEX 색상 생성
+	            colors.push(color);
+	        }
+	        return colors;
+	    }
+	    
+	    /* function updateCardHeader(cardId, headerText) {
+	        document.querySelector(`#${cardId}`).textContent = headerText;
+	    } */
+
+	    updateCardHeader('topSellingCardHeader', '금주 가장 많이 팔린 상품 TOP 5');
+	    renderTopSellingPie('week');
+	});
+	
+	// cardId 별로 card-header 수정하기
+	function updateCardHeader(cardId, headerText) {
+        document.querySelector(`#${cardId}`).textContent = headerText;
+    }
+	
+	// 상품 부족한 재고(10개 미만), 충분한 재고 나눠서 조회하기
+    function renderStockPie() {
+        $.ajax({
+            url: '/admin/stock-pie',
+            method: 'GET',
+            success: function (data) {
+            	console.log(data);
+            	
+                var labels = data.map(item => item.productNm || item.label);
+                var quantities = data.map(item => item.productStock);
+				
+                var backgroundColors = data.map(item => {
+                    return item.label === '재고 10개 이상' ? '#3333FF' : '#FF5733';
+                });
+                
+                console.log(labels);
+                console.log(quantities);
+                // 파이 차트 생성
+                var ctx = document.getElementById('stockChart').getContext('2d');
+                var stockChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: quantities,
+                            backgroundColor: backgroundColors,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    }
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+
+    // 페이지 로드 시 데이터 가져와서 차트 생성
+    renderStockPie();
+
+    
+    // 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+	$.ajax({
+	    url: "/admin/signup-bar",
+	    method: "GET",
+	    dataType: "json", 
+	    success: function (data) {
+			console.log(data);
+
+	        var labels = [];
+	        var signUpCounts = []; 
+
+	        for (var i = 0; i < data.length; i++) {
+	            labels.push(data[i].registerMonth);
+	            signUpCounts.push(data[i].count);
+	        }
+
+	        var monthlySignUpData = {
+	            labels: labels,
+	            datasets: [{
+	                label: "월별 회원 가입 수",
+	                data: signUpCounts,
+	                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+	                borderColor: 'rgba(75, 192, 192, 1)',
+	                borderWidth: 1
+	            }]
+	        };
+
+	        var ctx = document.getElementById('signUpChart').getContext('2d');
+	        var signUpChart = new Chart(ctx, {
+	            type: 'bar',
+	            data: monthlySignUpData,
+	            options: {
+	                scales: {
+	                    y: {
+	                        beginAtZero: true
+	                    }
+	                }
+	            }
+	        });
+	    },
+	    error: function (error) {
+	        console.log("에러 발생: " + error);
+	    }
+	});
+
+
+</script>
+
+</body>
+</html>

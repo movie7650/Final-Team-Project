@@ -118,8 +118,10 @@
 	     WHERE common_code_id = #{commonCodeId}
 	</delete>
 	
-	
-	
+	 <!-- 
+    	기능: 공통코드 등록하기
+    	담당자: 이세인
+     --> 
 	<insert id="registerCommonCodes" parameterType="com.example.daitso.config.CommonCode" >
 		INSERT INTO common_code ( common_code_id,
 		                          common_code_nm,

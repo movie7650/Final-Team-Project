@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
-<link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-commoncode.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <body>
@@ -19,7 +19,7 @@
 					type="button">등록</button>
 			</div>
 		</div>
-		<div style="height: 650px;">
+		<div style="height: 630px;">
 			<table class="table" style="text-align: center;">
 				<thead>
 					<tr>
@@ -40,8 +40,8 @@
 						<td th:text="${commonCodes.status}"></td>
 						<td th:text="${commonCodes.creator}"></td>
 						<td th:text="${commonCodes.createDt}"></td>
-						<td>
-							<div class="btn-group">
+						<td style="display: flex; justify-content: flex-end;">
+							<div class="btn-group" >
 								<button class="btn btn-xs"	style="background-color: #f7ba8b; color: #ffff"
 									data-bs-toggle="modal" data-bs-target="#searchModal"
 									type="button" th:onclick="selectCommonCodesByPr([[${commonCodes.commonCodeId}]])">상세</button>

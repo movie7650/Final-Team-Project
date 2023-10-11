@@ -162,7 +162,7 @@
 	    			.then((json) => {
 	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
 	    				if(json.customerNm == '관리자'){
-	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/product');
+	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/chart');
 	    				}
 	    			})
 	    		}

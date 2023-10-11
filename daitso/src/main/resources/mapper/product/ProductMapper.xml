@@ -516,7 +516,7 @@
 	
 	
 	<!-- 
-		기능: 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+		기능: 상품 부족한 재고(10개 미만), 충분한 재고 조회하기
 		담당자: 이세인
 	-->
 	<select id="selectProductStocks" resultType="com.example.daitso.product.model.ProductChart">
@@ -525,7 +525,7 @@
 		  FROM product
 		 WHERE product_stock < 10
 	 UNION ALL
-		SELECT 'Stock Sufficient' AS label, '' AS product_nm, COUNT(*) AS productStock
+		SELECT '재고 10개 이상' AS label, '' AS product_nm, COUNT(*) AS productStock
 		  FROM product
 		 WHERE product_stock >= 10
 	  ]]>
