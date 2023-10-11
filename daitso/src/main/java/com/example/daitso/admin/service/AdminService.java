@@ -253,11 +253,13 @@ public class AdminService implements IAdminService{
 //		
 //	}
 
+	// 카테고리 이미지 수정하기
 	@Override
 	public void updateCategoryImage(int categoryId, String imageUrl) {
 		categoryRepository.updateCategoryImage(categoryId, imageUrl);
 	}
 	
+	// 카테고리 이미지 삭제하기
 	@Override
 	public void deleteCategoryImage(int categoryId, boolean deleteCategoryImage) {
 		categoryRepository.deleteCategoryImage(categoryId, deleteCategoryImage);
@@ -306,6 +308,7 @@ public class AdminService implements IAdminService{
 		commonCodeRepository.deleteCommonCode(commonCodeId);
 	}
 	
+	// 공통코드 등록하기
 	@Override
 	public void registerCommonCodes(CommonCode commonCode) {
 		commonCodeRepository.registerCommonCodes(commonCode);
@@ -335,31 +338,25 @@ public class AdminService implements IAdminService{
 		couponRepository.registerCoupons(couponCheck);		
 	}
 
-	//쿠폰 일련번호 중복 확인하기 (해당 쿠폰 일련번호가 데이터베이스에 이미 존재하는지 확인하고, 중복되지 않으면 true를 반환하고 중복된 경우 false를 반환)
+	// 쿠폰 일련번호 중복 확인하기 (해당 쿠폰 일련번호가 데이터베이스에 이미 존재하는지 확인하고, 중복되지 않으면 true를 반환하고 중복된 경우 false를 반환)
 	public boolean isCouponSnUnique(String couponSn) {
         int count = couponRepository.countByCouponSn(couponSn);
         return count == 0; // 0이면 중복되지 않음, 1 이상이면 중복됨
     }
 
-	
-@Override
-public List<PurchaseChart> getSalesStatus() {
-	return purchaseRepository.getSalesStatus();
-}
-
-	//일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 5주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	// 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
 	@Override
 	public List<PurchaseChart> selectSalesStatus(String dateType) {
 		return purchaseRepository.selectSalesStatus(dateType);
 	}
 
-	// 일일(오늘 가장 많이 팔린 상품 상위 5개만 가져오기), 주간, 월별 가장 많이 팔린 상품 조회하기
+	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
 	@Override
 	public List<PurchaseChart> selectTopSelling(String dateType) {
 		return purchaseRepository.selectTopSelling(dateType);
 	}
 
-	// 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+	// 상품 부족한 재고(10개 미만), 충분한 재고 조회하기
 	@Override
 	public List<ProductChart> selectProductStocks() {
 		return productRepository.selectProductStocks();
