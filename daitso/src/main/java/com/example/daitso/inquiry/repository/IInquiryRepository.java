@@ -55,7 +55,7 @@ public interface IInquiryRepository {
 	List<MyInquirySelect> selectMyInquiry(int customerId);
 	
 	//내 문의글 삭제
-	void deleteMyInquiry(MyInquirySelect myInquirySelect);
+	void deleteMyInquiry(@Param("inquiryId")int inquiryId);
 	
 	//inquiry status가  Y 인거 갯수
 	int countInquiryStatusY(int customerId);

@@ -21,7 +21,7 @@ public interface IReviewRepository {
 	// 리뷰 작성하기
 	void insertReview(WriteMyReview writeMyReview);
 	//내가 주문한 상품의 상품정보가져오기
-	List<WriteMyReview> selectMyPurchase(@Param("customerId") int customerId, @Param("productId") int productId, @Param("purchaseNum") String purchaseNum);
+	List<WriteMyReview> selectMyPurchase(@Param("customerId") int customerId, @Param("productId") int productId, @Param("purchaseNum") String purchaseNum, @Param("purchaseId") int purchaseId);
 	
 	List<MypageReviewCheck> selectReviewAll(int customerId);
 	
@@ -29,7 +29,7 @@ public interface IReviewRepository {
 	
 	void updateReview(Review review);
 	
-	void deleteReview(@Param("customerId") int customerId, @Param("reviewId") int reviewId);
+	void deleteReview(@Param("reviewId") int reviewId);
 	
 	// 특정 상품에 대한 리뷰 조회하기
 	List<ReviewProductDetail> selectProductReview(@Param("groupId") int groupId, @Param("start") int start, @Param("end") int end, @Param("customerId") int customerId);

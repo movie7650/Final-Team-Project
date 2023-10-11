@@ -31,7 +31,7 @@ public class S3Service {
     private String bucket;
 	
 	// MultipartFile을 전달받아 S3에 저장 (다중 이미지)
-    public List<String> upload(List<MultipartFile> files) {
+    public List<String> upload(List<MultipartFile> files) throws Exception {
     	List<String> imagePathList = new ArrayList<>();
         files.stream().forEach((file) -> {
         	String originalName =  file.getOriginalFilename(); // 파일 이름
@@ -49,7 +49,6 @@ public class S3Service {
 				);
 			} catch (SdkClientException | IOException e) {
 				log.info("S3 등록 실패");
-				e.printStackTrace();
 			}
 			
 			String imagePath = amazonS3Client.getUrl(bucket, originalName).toString(); // 접근가능한 URL 가져오기

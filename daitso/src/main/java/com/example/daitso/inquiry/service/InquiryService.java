@@ -84,8 +84,8 @@ public class InquiryService implements IInquiryService {
 	
 	//내 문의글 삭제
 	@Override
-	public void deleteMyInquiry(MyInquirySelect myInquirySelect) {
-		inquiryRepository.deleteMyInquiry(myInquirySelect);		
+	public void deleteMyInquiry(int inquiryId) {
+		inquiryRepository.deleteMyInquiry(inquiryId);		
 	}
 	//내문의 status가 Y 인 개수
 	@Override

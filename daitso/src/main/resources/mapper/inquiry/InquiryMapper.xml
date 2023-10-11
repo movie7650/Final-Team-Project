@@ -167,14 +167,11 @@
 		기능: 내가 쓴 문의 삭제하기 
 		담당자: 윤상영
 	 -->
-	 <delete id="deleteMyInquiry" parameterType="com.example.daitso.inquiry.model.MyInquirySelect">
+	 <update id="deleteMyInquiry" parameterType="int">
 	  UPDATE inquiry 
 	  SET status='N'	  
-	  WHERE (inquiry_id = #{inquiryId}
-	  	AND customer_id=#{customerId}
-	    AND product_id = #{productId})
-         OR inquiry_pr_id = #{inquiryId}
-	 </delete>
+	  WHERE inquiry_id = #{inquiryId}
+	 </update>
   	<!-- 
 		기능: inquiry status Y 인거 카운트
 		담당자: 윤상영
