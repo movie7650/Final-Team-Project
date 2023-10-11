@@ -18,7 +18,7 @@
 				<input type="hidden" name="customerId" th:value="${myReviewPurchase.customerId}">
 				<input type="hidden" name="purchaseNum" th:value="${myReviewPurchase.purchaseNum}">
 				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-				<div class="order-list-container">
+				<div class="order-list-container" style="border-radius: 5px;">
 					<div class="order-list-container-01">
 					<div th:text="${myReviewPurchase.purchaseDt}" class="shipping-status">주문날짜</div> 					
 					<div class="purchase-img-001">이미지</div>
@@ -35,19 +35,34 @@
 			
 			<div th:if="${countcuspropur}==0">
 			<div>
-				<div style="float:left; padding-bottom:3px; border-bottom:solid 2px #668663;">평점 및 별점</div>
-				<div class="review-input"><input required onfocus="this.blur()" name="reviewStarPoint" th:text="${reviewStarPoint}" type="number" min="1" max="5" maxlength="1"/></div>
+				<div style="float:left; padding-bottom:2px; border-bottom:solid 2px #39594e; margin-right: 45px; font-weight: 500;">별점</div>
+				<div class="review-input">
+					<!-- <input required onfocus="this.blur()" name="reviewStarPoint" th:text="${reviewStarPoint}" type="number" min="1" max="5" maxlength="1"/> -->
+					<div class="rating"> 
+					    <i class="rating__star far fa-star"></i>
+					    <i class="rating__star far fa-star"></i>
+					    <i class="rating__star far fa-star"></i>
+					    <i class="rating__star far fa-star"></i>
+					    <i class="rating__star far fa-star"></i>
+					    <span class="rating__result"></span>
+					    <input type="hidden" id="rating-star" name="reviewStarPoint">
+					</div>
+				</div>
 			</div>
 			
 			<div style="margin-top:20px;">
-				<div style="float:left; border-bottom:solid 2px #668663;">글 제목 :</div>
-				<input required name="reviewTitle" autocomplete="off" th:text="${reviewTitle}" style="margin-left:10px; border:solid 2px #e7e7e7;" type="text" placeholder="제목을 입력하세요"/>
+				<div style="float:left; padding-bottom:2px; border-bottom:solid 2px #39594e; margin-right: 20px; font-weight: 500;">글 제목</div>
+				<input required name="reviewTitle" autocomplete="off" th:text="${reviewTitle}" style="margin-left:10px; border:solid 2px #e7e7e7; border-radius: 5px; padding: 5px 0 5px 10px; width: 350px; font-size: 15px; outline: none;" type="text" placeholder="제목을 입력하세요"/>
 			</div>
 			
-			<textarea required name="reviewContent" th:text="${reviewContent}" class="review-text-area" placeholder="고객님의 소중한리뷰를 여기에 작성해주세요!"></textarea>
+			<div style="margin-top:20px;"> 
+				<div style="float:left; padding-bottom:2px; border-bottom:solid 2px #39594e; margin-right: 20px; font-weight: 500;">글 내용</div>
+				<textarea required name="reviewContent" th:text="${reviewContent}" class="review-text-area" placeholder="고객님의 소중한리뷰를 여기에 작성해주세요!" style="padding: 10px; font-size: 15px; outline: none;"></textarea>
+			</div>
 			
 			<div class="insert">
-		        	<input type="file" onchange="addFile(this);" multiple/>
+					<div style="float:left; padding-bottom:2px; border-bottom:solid 2px #39594e; margin-right: 20px; font-weight: 500;">이미지</div>
+		        	<input type="file" onchange="addFile(this);" style="margin-left:15px;" multiple/>
 			</div>
 			
 			<div class="write-review-button-container">
@@ -67,4 +82,38 @@
 
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script>
+	const ratingStars = [...document.getElementsByClassName("rating__star")];
+	const ratingResult = document.querySelector(".rating__result");
+	const ratingStar = document.getElementById("rating-star");
+	
+	printRatingResult(ratingResult);
+	
+	function executeRating(stars, result) {
+	   const starClassActive = "rating__star fas fa-star";
+	   const starClassUnactive = "rating__star far fa-star";
+	   const starsLength = stars.length;
+	   let i;
+	   stars.map((star) => {
+	      star.onclick = () => {
+	         i = stars.indexOf(star);
+	
+	         if (star.className.indexOf(starClassUnactive) !== -1) {
+	            printRatingResult(result, i + 1);
+	            for (i; i >= 0; --i) stars[i].className = starClassActive;
+	         } else {
+	            printRatingResult(result, i);
+	            for (i; i < starsLength; ++i) stars[i].className = starClassUnactive;
+	         }
+	      };
+	   });
+	}
+	
+	function printRatingResult(result, num = 0) {
+	   result.textContent = `${num}/5`;
+	   ratingStar.value = `${num}`;
+	}
+	
+	executeRating(ratingStars, ratingResult);
+</script>
 </html>
