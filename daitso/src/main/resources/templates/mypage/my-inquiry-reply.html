@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/header :: header}">
-<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
-<body style="background-color:#e7e7e7;">
+<body>
+<div class="my-inquiry-title">문의</div>
 <div style="width:80%;; margin-left:10%; margin-top:2%;">
-	<div class="my-inquiry-content-title">내 문의내용</div>
-	<div th:text="${myinquiry}" class="inquiryId-content"></div>
-	<div th:text="|작성일자 : ${myinquirytime}|"></div>
-	<div style="margin-top:2%;">
-		<div class="my-inquiry-pr-content">답변내용</div>
-		<div th:text="${myprinquiry}" class="inquiryPrId-content"></div>
-		<div th:text="|작성일자 : ${myinquiryreplytime}|"></div>
+	<div class="my-inquiry-info-title">문의 내용</div>
+	<div style="padding: 20px; border: 1px solid #888888; border-top: none; height: 230px; position: relative;">
+		<div th:text="${myinquiry}" style="font-size: 18px; font-weight: 600;" class="inquiryId-content"></div>
+		<div style="font-size: 16px; color: #888888; position: absolute; bottom: 20px;" th:text="|작성일자 : ${myinquirytime}|"></div>
+	</div>
+	
+	<div class="my-inquiry-pr-content">답변</div>
+	<div style="padding: 20px; border: 1px solid #888888; border-top: none; height: 230px; position: relative;">
+		<div  th:text="${myprinquiry}" class="inquiryPrId-content"></div>
+		<div style="font-size: 16px; color: #888888; position: absolute; bottom: 20px;" th:text="|작성일자 : ${myinquiryreplytime}|"></div>
 	</div>
 	<div>
 		<input id="close-inquiry-window" type="button" onclick="closeTabClick();" value="닫기">
