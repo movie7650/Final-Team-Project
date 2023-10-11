@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.daitso.admin.service.S3Service;
@@ -422,9 +423,31 @@ public class MyPageController {
 	// 마이페이지-리뷰작성-post
 	@RequestMapping(value = "/writeReview", method = RequestMethod.POST)
 	public String writeReview(WriteMyReview writeMyReview, @RequestParam int productId, @RequestParam int customerId,
-			@RequestParam String purchaseNum) {
+			@RequestParam String purchaseNum, List<MultipartFile> files, RedirectAttributes redirectAttributes) {
+		
+		if(files.size() > 3) {
+			redirectAttributes.addFlashAttribute("error", "이미지 최대 업로드 수(3개)를 초과하였습니다.");
+			return "redirect:/mypage/review";
+		} 
+		
+		List<String> imageList = s3Service.upload(files);
+		
+		if(imageList.size() == 1) {
+			writeMyReview.setReviewImageFirst(imageList.get(0));
+			writeMyReview.setReviewImageSecond(null);
+			writeMyReview.setReviewImageThird(null);
+		} else if(imageList.size() == 2) {
+			writeMyReview.setReviewImageFirst(imageList.get(0));
+			writeMyReview.setReviewImageSecond(imageList.get(1));
+			writeMyReview.setReviewImageThird(null);
+		} else if(imageList.size() == 3){
+			writeMyReview.setReviewImageFirst(imageList.get(0));
+			writeMyReview.setReviewImageSecond(imageList.get(1));
+			writeMyReview.setReviewImageThird(imageList.get(2));
+		}
+		
 		reviewService.insertReview(writeMyReview);
-		System.out.println(customerId);
+		
 		return "redirect:/mypage/review";
 
 	}
@@ -629,7 +652,6 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "이미 등록된 쿠폰이거나 없는 쿠폰입니다.");
 			return "redirect:/mypage/mycoupon";
 		}
-
 		return "redirect:/mypage/mycoupon";
 	}
 
