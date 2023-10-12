@@ -25,10 +25,10 @@
 				<img style="width:800px; border-radius:10px;" th:src="@{/assets/mypage/shipping.JPG}">
 	</div>
 		<th:block  th:each="purchase : ${purchaseList}">
-			<div th:if="${purchase.purchaseDv}==배송중" class="order-list-container">
+			<div th:if="${purchase.purchaseDv}==402" class="order-list-container">
 				<div  class="order-list-container-01">
 				<div style="display:flex;">
-					<div style="color:#256B04; font-size:20px; font-weight: bold;" th:text="${purchase.purchaseDv}">배송중</div>
+					<div style="color:#256B04; font-size:20px; font-weight: bold;" th:if="${purchase.purchaseDv}==402">배송중</div>
 					<div class="my-order-date" th:text="|주문날짜: ${purchase.createDt}|">주문날짜</div> 
 				</div>
 				
@@ -48,7 +48,7 @@
 				<div  class="detail-button-container">
 					<div style="height:100%; line-height: normal; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
 						<input type="button" th:onclick="|location.href='@{/mypage/mydetailorder?purchaseNum=__${purchase.purchaseNum}__}'|"  value="주문상세보기" class="detail-button">
-						<input type="button" th:if="${purchase.purchaseDv} == '배송완료' " th:onclick="|location.href='@{/mypage/writeReview?productId=__${purchase.productId}__&purchaseNum=__${purchase.purchaseNum}__}'|" value="리뷰남기기" class="detail-button01">
+						<input type="button" th:if="${purchase.purchaseDv} == 403 " th:onclick="|location.href='@{/mypage/writeReview?productId=__${purchase.productId}__&purchaseNum=__${purchase.purchaseNum}__}'|" value="리뷰남기기" class="detail-button01">
 					</div>
 				</div><!-- shipping-button-container -->	
 			</div><!-- order-list-container -->
