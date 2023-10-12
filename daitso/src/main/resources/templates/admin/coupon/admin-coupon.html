@@ -151,24 +151,24 @@
 								</div>
 							</div>
 							
-						<div style="display: flex; align-items: center; margin-bottom: 5px;">
+						<div style="display: flex; align-items: center; margin-bottom: 10px;">
 								<label for="couponNm" style="margin-left: 10px; margin-right: 70px;">쿠폰명</label>
 								<div>
 									<input type="text" id="couponNm" name="couponNm" style="width: 140%;"
-										autocomplete="off">
+										autocomplete="off" required>
 								</div>
 						</div>
 												
-						<div style="display: flex; align-items: center; margin-bottom: 5px;">
-							<label for="couponDscntRate" style="margin-left: 10px; margin-right: 10px;">쿠폰 할인율(%)</label>
+						<div style="display: flex; align-items: center; margin-bottom: 10px;">
+							<label for="couponDscntRate" style="margin-left: 10px; margin-right: 11px;">쿠폰 할인율(%)</label>
 							<div>
 								<input type="number" min="1" max="100"
-								id="couponDscntRate" name="couponDscntRate" style="width: 80%;"	autocomplete="off">
+								id="couponDscntRate" name="couponDscntRate" style="width: 80%;"	autocomplete="off" required>
 							</div>
 						</div>
 							
 							
-						<div style="margin-bottom: 5px;">
+						<div style="margin-bottom: 10px;">
 						    <label for="couponPblDt" class="col-sm-2 col-form-label" style="margin-right: 10px;padding-left: 10px;">쿠폰 발행일</label>
 						    <input type="text" id="couponPblDt" name="couponPblDt" autocomplete="off" style="width: 20%;" required>
 						
@@ -195,7 +195,7 @@
 	</div>
 	</div>
 	</div>
-	<div th:replace="~{/include/footer :: footer}"></div>
+	<div th:replace="~{/include/admin-footer :: footer}"></div>
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
@@ -419,11 +419,30 @@
     }  
 
 	 // Datepicker를 사용해서 날짜 입력받기
-    $(function() {
-   	 $.datepicker.setDefaults($.datepicker.regional['ko']);
-       $("#couponPblDt").datepicker();
-       $("#couponEprDt").datepicker();
-   });
+     $(function() {
+   	 	$.datepicker.setDefaults($.datepicker.regional['ko']);
+       	$("#couponPblDt").datepicker();
+       	$("#couponEprDt").datepicker();
+    })
+
+    /*$(document).ready(function () {
+        // 쿠폰 발행일과 쿠폰 만료일 input 요소를 가져옵니다.
+        var $couponPblDt = $('#couponPblDt');
+        var $couponEprDt = $('#couponEprDt');
+        
+        // 쿠폰 발행일이 변경되었을 때 쿠폰 만료일을 설정합니다.
+        $couponPblDt.on('change', function () {
+            var startDate = new Date($couponPblDt.val());
+            console.log('Start Date:', startDate);
+            var endDate = new Date($couponEprDt.val());
+
+            if (endDate <= startDate) {
+                $couponEprDt.val('');
+            }
+        });
+    }); */
+
+
 
 
 	 

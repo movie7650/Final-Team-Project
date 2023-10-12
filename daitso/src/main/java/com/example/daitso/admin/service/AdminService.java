@@ -74,7 +74,7 @@ public class AdminService implements IAdminService{
 		}
 	}
 	
-	
+	// 기존 상품 등록하기
 	@Transactional
 	public void registerProductOriginal(ProductCheck product) {
 		
@@ -387,7 +387,5 @@ public class AdminService implements IAdminService{
 	public int selectCountPurchaseDv(int purchaseDv) {
 		return purchaseRepository.selectCountPurchaseDv(purchaseDv);
 	}
-
-	
 
 }

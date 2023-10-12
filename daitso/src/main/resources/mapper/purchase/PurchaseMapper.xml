@@ -382,7 +382,7 @@
 		    <when test="dateType == 'day'">
 	           SELECT TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD') AS result,
 	                   COUNT(*) AS count,
-	                   SUM(total_cost) AS totalCost
+	                   SUM(purchase_price) AS totalCost
 	             FROM purchase
 	            WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 6 
 	         GROUP BY TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD')
@@ -394,7 +394,7 @@
 					  TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS weekEnd,
 					  TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS result,
 					  COUNT(*) AS count,
-					  SUM(total_cost) AS totalCost
+					  SUM(purchase_price) AS totalCost
 				 FROM purchase
 				WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 27
 			 GROUP BY TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD'),
@@ -405,7 +405,7 @@
 	        <when test="dateType == 'month'">
 	           SELECT TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM') AS result,
 	                  COUNT(*) AS count,
-	                  SUM(total_cost) AS totalCost
+	                  SUM(purchase_price) AS totalCost
 	             FROM purchase
 	            WHERE create_dt >= ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -4)
 	         GROUP BY TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM')
