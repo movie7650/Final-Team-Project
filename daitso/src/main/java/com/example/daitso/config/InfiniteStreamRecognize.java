@@ -88,11 +88,12 @@ public class InfiniteStreamRecognize {
     }
   }
   public static void doThatShit() {
-	  System.out.println("you can do that shit?");
-	  str = "";
-      referenceToStreamController.cancel(); // remove Observer
-      targetDataLine.stop(); // 녹음을 멈춥니다.
-      targetDataLine.close(); // 오디오 라인을 닫습니다.
+	  if(referenceToStreamController != null) {
+		  str = "";
+		  referenceToStreamController.cancel(); // remove Observer
+		  targetDataLine.stop(); // 녹음을 멈춥니다.
+		  targetDataLine.close(); // 오디오 라인을 닫습니다.		  
+	  }
   }
 
   public static String convertMillisToDate(double milliSeconds) {
@@ -334,15 +335,11 @@ public class InfiniteStreamRecognize {
 
           }
           clientStream.send(request);
-			 
-          System.out.println("타이슨 퓨리");
         }
       } catch (Exception e) {
         System.out.println(e);
       }
-      System.out.println("안녕안녕 나는 웅쓰야~");
     }
-    System.out.println("안녕안녕 나는 웅쓰야22222~");
     //speech의 while문이 종료되도 여기로 안오면 위에서 return 해주자
     return str;
   }
