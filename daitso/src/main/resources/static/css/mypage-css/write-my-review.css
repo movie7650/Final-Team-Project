@@ -6,12 +6,13 @@
 
 .write-review-title{
 	position:absolute;
-	padding-bottom:0.5%;
-	font-size:150%;
-	margin-left:165px;
-	margin-top:10px;
-	width:855px;
-	border-bottom:solid 3px #668663;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:890px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
 }
 .review-text-area{
 	width:720px;
@@ -63,7 +64,7 @@ input[type="number"]::-webkit-outer-spin-button {
 #save-button{
 	width:140px;
 	height:50px;
-	margin-right:20px;
+	margin-right:5px;
 	background-color:#39594e;
 	color:white;
 	font-weight: 600;
@@ -72,7 +73,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 #cancle-button{
 	width:140px;
-	margin-left:20px;
+	margin-left:5px;
 	background-color:white;
 	border: 2px solid #39594e;
 	border-radius: 5px;
@@ -110,6 +111,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .rating__result {
 	margin-left: 10px;
+	font-weight: 500;
+}
+.my-product-review-date{
+	font-size:14px;
+	margin-left:3px;
+	display:block;
+	margin-top:8px;
 	font-weight: 500;
 }
 

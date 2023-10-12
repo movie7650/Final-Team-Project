@@ -3,6 +3,7 @@
 .mypage-inquiry-main{
 	display: flex;
 	justify-content: center;
+	margin-bottom:100px;
 }
 .mypage-inquiry-title{
 	position:absolute;
@@ -10,21 +11,70 @@
 	font-size:25px;
 	margin-left:195px;
 	margin-top:15px;
-	width:900px;
+	width:890px;
 	border-bottom:solid 2px #39594e;
 	font-weight:600;
 }
 .mypage-inquiry-table-container{
 	margin-top:100px;
-    margin-left: -48px;
-    width: 1000px; 
+    margin-left: -43px;
+    width: 890px; 
 	
 }
 .mypage-inquiry-table{
 	text-align:center;
 }
-.mypage-inquiry-table th{
-	width:225px;
+/* .mypage-inquiry-table th{
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+} */
+.inquiry-table-th-1{
+	width:260px;
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+}
+.inquiry-table-th-2{
+	width:260px;
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+}
+.inquiry-table-th-3{
+	width:140px;
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+}
+.inquiry-table-th-4{
+	width:140px;
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+}
+.inquiry-table-th-5{
+	width:100px;
 	height:50px;
 	background-color:#fafafa;
 	border-top:1px solid #d9d9d9;
@@ -34,19 +84,22 @@
 	font-weight: 500;
 }
 .mypage-inquiry-table td{
-	vertical-align: middle;
-	padding-bottom:5px;
+	font-size:15px;
 	height:120px;
 	border-bottom:solid 1px #d9d9d9;
+	vertical-align: middle;
 }
-.mypage-inquiry-table button{
+.mypage-inquiry-delete{
 	border:solid 1px red;
 	width:70px;
 	background-color:white;
 	color:red;
-	margin-top:5px;
 	border-radius:5px;
-	}
+	font-weight: 500;
+	margin-bottom:20px;
+	font-size:85%;
+	padding:5px 0 5px 0;
+}
 	
 .mypage-inquiry-table button:focus{
 	outline:none;
@@ -57,6 +110,11 @@
 	background-color:white;
 	border-radius:5px;
 	color:#39594e;
+	font-weight: 500;
+	margin-bottom:10px;
+	margin-top:18px;
+	font-size:85%;
+	padding:5px 0 5px 0;
 }
 .my-inquiry-product-img{
 	margin-top:10px;
@@ -65,9 +123,8 @@
 	float:left;
 }
 .my-inquiry-content{
-	padding-left:30px; 
-	padding-top:10px; 
-	width:200px; 
+	padding-top:10px;
+	width:300px; 
 	height:50px; 
 	overflow:hidden; 
 	text-overflow: ellipsis; 
@@ -75,15 +132,13 @@
 }
 .my-inquiry-productNm{
 	margin-top:30px;
+	width:130px;
+	text-overflow: ellipsis; 
+	white-space:nowrap;
+	overflow:hidden; 
+	padding-left:10px;
 }
 
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
 
 .close {
   color: #aaa;

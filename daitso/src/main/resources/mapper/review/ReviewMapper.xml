@@ -84,16 +84,17 @@
 			담당자: 윤상영
 		 -->
 	<select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
-	SELECT  	  re.review_title as "reviewTitle",
-	 			  re.review_id 	  as "reviewId",
-	              NVL(cnt,0) AS "reviewHeartCount", 
-	              p.product_nm as "productNm",
-	              re.review_star_point as "reviewStarPoint",
-	              re.review_content as "reviewContent",
-	              re.review_image_first as "reviewImageFirst",
-	              re.review_image_second as "reviewImageSecond",
-	              re.review_image_third   as "reviewImageThird",
-	              re.create_dt              as "createDt"
+	SELECT  	  re.review_title 			AS "reviewTitle",
+	 			  re.review_id 	  			AS "reviewId",
+	              NVL(cnt,0) 				AS "reviewHeartCount", 
+	              p.product_nm 				AS "productNm",
+	              re.review_star_point 		AS "reviewStarPoint",
+	              re.review_content 		AS "reviewContent",
+	              re.review_image_first 	AS "reviewImageFirst",
+	              re.review_image_second 	AS "reviewImageSecond",
+	              re.review_image_third   	AS "reviewImageThird",
+	              re.create_dt              AS "createDt",
+	              p.product_image_first		AS "productImg"		
 	FROM   review re
 	left join product p on re.product_id = p.product_id
 	left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
@@ -108,9 +109,7 @@
 	<update id="deleteReview">
 		UPDATE review re
 		   SET status = 'N'
-		 WHERE re.customer_id=#{customerId} 
-		   AND re.review_id=#{reviewId}
-		   AND re.status = 'Y'
+		 WHERE re.review_id=#{reviewId} 
 	</update>
 
 	<!-- 
@@ -129,14 +128,16 @@
 			담당자: 윤상영
 		 -->
 	<select id="selectMyPurchase" resultType="com.example.daitso.review.model.WriteMyReview">
-		SELECT  p.product_id as "productId",
-				pur.customer_id as "customerId",
-				pur.purchase_num as "purchaseNum",
-	            pur.purchase_count as "purchaseCount",
-	            TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
-				TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
-	            pur.create_dt           as"purchaseDt",
-	            p.product_nm as "productNm"
+		SELECT  p.product_id 														AS "productId",
+			pur.customer_id 														AS "customerId",
+				pur.purchase_num 													AS "purchaseNum",
+	            pur.purchase_count 													AS "purchaseCount",
+	            TO_CHAR(pur.purchase_price, 'FM999,999,999') 						AS "purchasePrice",
+				TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') 	AS "totalCost",
+	            pur.create_dt           											AS "purchaseDt",
+	            p.product_nm 														AS "productNm",
+	            p.product_image_first												AS "productImg",
+	            pur.purchase_id														AS "purchaseId"
 		  FROM  purchase pur, product p
 		 WHERE  customer_id=#{customerId}
 		   AND  pur.product_id=p.product_id
@@ -150,8 +151,8 @@
 	<insert id="insertReview" parameterType="com.example.daitso.review.model.WriteMyReview">
 		INSERT INTO review (review_id, product_id,customer_id,review_content,review_star_point,
 							review_image_first,review_image_second,review_image_third,status,
-							creator,review_title)
-		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, #{reviewImageFirst}, #{reviewImageSecond}, #{reviewImageThird}, 'Y', 'admin',#{reviewTitle})   
+							creator,review_title, purchase_id)
+		VALUES (review_seq.nextval, #{productId}, #{customerId}, #{reviewContent}, #{reviewStarPoint}, #{reviewImageFirst}, #{reviewImageSecond}, #{reviewImageThird}, 'Y', 'admin',#{reviewTitle}, #{purchaseId})   
 	</insert>
 		<!-- 
 		기능: customerId와 productId와 purchaseNum에 따른 status가 Y인 리뷰의 갯수
@@ -166,16 +167,25 @@
 		   AND rev.status='Y'
 	 </select>
 	 	<!-- 
-		기능: customerId와 productId와 purchaseNum에 따른 모든 리뷰의 갯수
+		기능: reviewId에 따른 리뷰정보 가져오기
 		담당자: 윤상영
 	 -->
-	 <select id="">
-	 	SELECT count(*)
-		  FROM review rev , purchase pur
-		 WHERE rev.customer_id=#{customerId}
-		   AND rev.product_id = #{productId}
-		   AND pur.purchase_num = #{purchaseNum}
+	 <select id="selectMyReview" resultType="com.example.daitso.review.model.MyReview" parameterType="int">
+	 		SELECT re.review_title 				AS "reviewTitle",
+	 			   re.review_id 	  			AS "reviewId",
+	               NVL(cnt,0) 					AS "reviewHeartCount", 
+	               p.product_nm 				AS "productNm",
+	               re.review_star_point 		AS "reviewStarPoint",
+	               re.review_content 			AS "reviewContent",
+	               re.review_image_first 		AS "reviewImageFirst",
+	               re.review_image_second 		AS "reviewImageSecond",
+	               re.review_image_third   		AS "reviewImageThird",
+	               re.create_dt              	AS "createDt",
+	               p.product_image_first		AS "productImg"		
+			  FROM review re
+			  left join product p on re.product_id = p.product_id
+			  left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
+			 WHERE re.review_id=#{reviewId}
+	  		   AND re.status='Y'
 	 </select>
-	 
-
 </mapper>

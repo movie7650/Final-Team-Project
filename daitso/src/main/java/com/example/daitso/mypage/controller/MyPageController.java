@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,6 +28,7 @@ import com.example.daitso.point.service.IPointService;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.service.IPurchaseService;
+import com.example.daitso.review.model.MyReview;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.service.IReviewService;
@@ -374,7 +376,7 @@ public class MyPageController {
 
 	// 마이페이지-리뷰작성-GET
 	@RequestMapping(value = "/writeReview", method = RequestMethod.GET)
-	public String writeReview(int productId, Model model, RedirectAttributes redirectAttributes, String purchaseNum) {
+	public String writeReview(int productId, Model model, RedirectAttributes redirectAttributes, String purchaseNum, int purchaseId) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -410,7 +412,7 @@ public class MyPageController {
 		model.addAttribute("countmyorder",countMyOrder);
 
 		// 리뷰작성 - 내가 주문한 상품 정보 출력
-		List<WriteMyReview> myReviewPurchaseList = reviewService.selectMyPurchase(customerId, productId, purchaseNum);
+		List<WriteMyReview> myReviewPurchaseList = reviewService.selectMyPurchase(customerId, productId, purchaseNum, purchaseId);
 		model.addAttribute("MyReviewPurchaseList", myReviewPurchaseList);
 		
 		//customerId, productId, purchaseNum 값에 따른 리뷰 갯수 카운트
@@ -423,50 +425,54 @@ public class MyPageController {
 	// 마이페이지-리뷰작성-post
 	@RequestMapping(value = "/writeReview", method = RequestMethod.POST)
 	public String writeReview(WriteMyReview writeMyReview, @RequestParam int productId, @RequestParam int customerId,
-			@RequestParam String purchaseNum, List<MultipartFile> files, RedirectAttributes redirectAttributes) {
-		
+			@RequestParam String purchaseNum,List<MultipartFile> files, RedirectAttributes redirectAttributes) {
 		if(files.size() > 3) {
 			redirectAttributes.addFlashAttribute("error", "이미지 최대 업로드 수(3개)를 초과하였습니다.");
 			return "redirect:/mypage/review";
 		} 
-		
-		List<String> imageList = s3Service.upload(files);
-		
-		if(imageList.size() == 1) {
-			writeMyReview.setReviewImageFirst(imageList.get(0));
-			writeMyReview.setReviewImageSecond(null);
-			writeMyReview.setReviewImageThird(null);
-		} else if(imageList.size() == 2) {
-			writeMyReview.setReviewImageFirst(imageList.get(0));
-			writeMyReview.setReviewImageSecond(imageList.get(1));
-			writeMyReview.setReviewImageThird(null);
-		} else if(imageList.size() == 3){
-			writeMyReview.setReviewImageFirst(imageList.get(0));
-			writeMyReview.setReviewImageSecond(imageList.get(1));
-			writeMyReview.setReviewImageThird(imageList.get(2));
+		List<String> imageList;
+		try {
+			imageList = s3Service.upload(files);
+			
+			if(imageList.size() == 1) {
+				writeMyReview.setReviewImageFirst(imageList.get(0));
+				writeMyReview.setReviewImageSecond("null");
+				writeMyReview.setReviewImageThird("null");
+			} else if(imageList.size() == 2) {
+				writeMyReview.setReviewImageFirst(imageList.get(0));
+				writeMyReview.setReviewImageSecond(imageList.get(1));
+				writeMyReview.setReviewImageThird("null");
+			} else if(imageList.size() == 3){
+				writeMyReview.setReviewImageFirst(imageList.get(0));
+				writeMyReview.setReviewImageSecond(imageList.get(1));
+				writeMyReview.setReviewImageThird(imageList.get(2));
+			}
+			
+			reviewService.insertReview(writeMyReview);
+			
+		} catch (Exception e) {
+			reviewService.insertReview(writeMyReview);
 		}
-		
-		reviewService.insertReview(writeMyReview);
 		
 		return "redirect:/mypage/review";
 
 	}
-
+	//마이페이지-리뷰관리-리뷰상세보기
+	@GetMapping("/mydetailreview/{reviewId}")
+	public String selectDetailReview(@PathVariable int reviewId, Model model) {
+		
+		
+		MyReview myReviewList = reviewService.selectMyReview(reviewId);
+		model.addAttribute("myreviewlist", myReviewList);
+		
+		return "mypage/mypage-review-detail";
+	}
 	// 마이페이지-내리뷰-리뷰삭제
-	@RequestMapping(value = "/review/{reviewId}", method = RequestMethod.POST)
-	public String deleteMyReview(@PathVariable int reviewId, RedirectAttributes redirectAttributes) {
-
-		// spring security -> 사용자 고유번호 받아오기
-		int customerId = logincheckService.loginCheck();
-
-		if (customerId == -1) {
-			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
-			return "redirect:/customer/login";
-		}
-
+	@RequestMapping(value = "/delete/review/{reviewId}", method = RequestMethod.POST)
+	public @ResponseBody String deleteMyReview(@PathVariable int reviewId) {
 		// 리뷰삭제
-		reviewService.deleteReview(customerId, reviewId);
-		return "redirect:/mypage/review";
+		reviewService.deleteReview(reviewId);
+		return "0";
 	}
 	//내 문의내역 조회
 	@RequestMapping(value = "/myinquiry")
@@ -537,11 +543,10 @@ public class MyPageController {
 	}
 
 	// 마이페이지-내문의 삭제
-	@RequestMapping(value = "/myinquiry/{inquiryId}", method = RequestMethod.POST)
-	public String deleteMyInquiry(MyInquirySelect myInquirySelect, @RequestParam int customerId,
-			@RequestParam int productId, @PathVariable int inquiryId) {
-		inquiryService.deleteMyInquiry(myInquirySelect);
-		return "redirect:/mypage/myinquiry";
+	@RequestMapping(value = "/delete/myinquiry/{inquiryId}", method = RequestMethod.POST)
+	public @ResponseBody String deleteMyInquiry(@PathVariable int inquiryId) {
+		inquiryService.deleteMyInquiry(inquiryId);
+		return "0";
 	}
 
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러

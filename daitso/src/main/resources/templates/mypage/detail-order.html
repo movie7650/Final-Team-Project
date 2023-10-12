@@ -13,7 +13,7 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 	<div class="detail-order-title">주문상세보기</div>
 	
-	<div style="margin-top:200px; padding-right:31.5px;">
+	<div style="margin-top:200px; margin-right:2.5px;">
 		<th:block th:each="purchase : ${purchaseDetailList}" >
 			<div class="detail-order-list-container">
 				<div class="order-list-container-01">
@@ -36,26 +36,25 @@
 			
 			</div><!-- order-list-container -->
 			</th:block>
-			<div  class="detail-receiver-title">받는사람</div>
+			<div class="detail-receiver-title">받는사람</div>
 			<div th:each="purchaseShip : ${purchaseShipList}" class="detail-order-table-container">
-		<table class="detail-order-table">
-			<tr>
-			<th>받는사람</th>
-			<th>연락처</th>
-			<th>받는주소</th>
-			<th>배송요청사항</th>
-		</tr>
-		
-		<tr>
-			<td th:text="${purchaseShip.shippingReceiverNm}">홍길동</td>
-			<td th:text="${purchaseShip.shippingReceiverTelno}">010-1234-1234</td>
-			<td th:text="|${purchaseShip.shippingRoadNmAddr} ${purchaseShip.shippingDaddr}|">주소+상세주소</td> 
-			<td th:text="${purchaseShip.shippingDmnd}">문앞에 놔주세요</td>
-		</tr>
-		</table>
+				<table class="detail-order-table">
+					<tr>
+					<th>받는사람</th>
+					<th>연락처</th>
+					<th>받는주소</th>
+					<th>배송요청사항</th>
+				</tr>
+				
+				<tr>
+					<td th:text="${purchaseShip.shippingReceiverNm}">홍길동</td>
+					<td th:text="${purchaseShip.shippingReceiverTelno}">010-1234-1234</td>
+					<td th:text="|${purchaseShip.shippingRoadNmAddr} ${purchaseShip.shippingDaddr}|">주소+상세주소</td> 
+					<td th:text="${purchaseShip.shippingDmnd}">문앞에 놔주세요</td>
+				</tr>
+				</table>
 	
-	</div><!-- detail-order-table-container --> 
-		 
+			</div><!-- detail-order-table-container -->
 		 </div> 
 	
 </div><!-- order-list-main -->
