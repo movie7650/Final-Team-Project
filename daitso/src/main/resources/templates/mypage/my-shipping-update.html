@@ -10,7 +10,7 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 
 <div class="shipping-title">배송지수정하기</div>
-<div style=" margin-right:55px; margin-top:20px;">
+<div style=" margin-right:8px; margin-top:20px;">
 <div class="post-inform-container" th:each="shippingIdInfo : ${shippingIdInfoList}">
 <form th:action="@{/mypage/updateshippingaddr}" method="post">
 	<div class="post-receiver-container">
@@ -36,7 +36,7 @@
 		<img th:src="@{/assets/mypage/request.JPG}">
 		<input required name="shippingDmnd" type="text" th:value="${shippingIdInfo.shippingDmnd}" placeholder="요청사항">
 	</div><!-- shipping-receiver-request -->
-	<div style="margin-top:5px; margin-left:10px;">
+	<div style="margin-top:5px; margin-left:-30px;">
 	<label>
 		<input type="checkbox" th:if="${shippingIdInfo.shippingDv} == 301" th:value="${shippingIdInfo.shippingDv}" checked onclick="changeShippingCheckStatus(this)">
 		<input type="checkbox" th:unless="${shippingIdInfo.shippingDv} == 301" th:value="${shippingIdInfo.shippingDv}" onclick="changeShippingCheckStatus(this)">
