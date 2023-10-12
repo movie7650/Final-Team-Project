@@ -663,7 +663,7 @@
 		WHERE product_group_id = #{productGroupId} and status='Y'
 		<choose>
 			<when test='"사이즈옵션 없음".equals(size)'>
-				and product_option_first is null
+				and product_option_first = '-'
 			</when>
 			<otherwise>
 				and product_option_first = #{size}
@@ -671,7 +671,7 @@
 		</choose>
 		<choose>
 			<when test='"색상옵션 없음".equals(color)'>
-				and product_option_second is null
+				and product_option_second = '-'
 			</when>
 			<otherwise>
 				and product_option_second = #{color}
@@ -679,7 +679,7 @@
 		</choose>
 		<choose>
 			<when test='"기타옵션 없음".equals(other)'>
-				and product_option_third is null
+				and product_option_third = '-'
 			</when>
 			<otherwise>
 				and product_option_third = #{other}
