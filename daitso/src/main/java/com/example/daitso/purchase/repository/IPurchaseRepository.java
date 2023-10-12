@@ -78,5 +78,7 @@ public interface IPurchaseRepository {
 	
 	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
 	List<PurchaseChart> selectTopSelling(@Param("dateType") String dateType);
+	
+	int selectCountPurchaseDv(@Param("purchaseDv") int purchaseDv);
 
 }
