@@ -242,6 +242,7 @@ public class MyPageController {
 		// 구매 목록 출력
 		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
 		model.addAttribute("purchaseList", purchaseList);
+		
 		return "mypage/cancle-pay";
 	}
 

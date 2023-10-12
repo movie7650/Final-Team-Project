@@ -16,7 +16,7 @@ public class PurchaseCheck {
 	private int purchaseCount;
 	private String purchasePrice;
 	private String totalCost;
-	private String purchaseDv;
+	private int purchaseDv;
 	private String productImg;
 	private Date createDt;
 	private int shippingCompleteCount;

@@ -35,7 +35,7 @@
 			   pur.customer_id 					AS "customerId",
 			   purchase_count					AS	"purchaseCount",
 			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
-			   cc.common_code_nm				AS	"purchaseDv",
+			   pur.purchase_dv					AS	"purchaseDv",
 			   TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
 			   product_nm						AS 	"productNm",
 			   purchase_num						AS	"purchaseNum",
@@ -124,7 +124,7 @@
 	           sh.shipping_daddr            			as "shippingDaddr",
 	           sh.shipping_dmnd             			as "shippingDmnd",
 	           pur.create_dt                       		as "createDt",
-	   		   cc.common_code_nm     					as "purchaseDv",
+	   		   pur.purchase_dv     						as "purchaseDv",
 	   		   p.product_image_first					as "productImg"
 	           
 		  FROM purchase pur , product p, shipping sh, common_code cc
