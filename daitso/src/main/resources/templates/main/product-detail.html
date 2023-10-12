@@ -277,9 +277,7 @@
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
 <script th:src="@{/js/mic.js}"></script>
-<script th:inline="javascript">
-	_csrf = JSON.parse(`[[${_csrf}]]`);
-	
+<script th:inline="javascript">	
 	const body = document.querySelector("body");
 	const modal = document.querySelector(".modal");
 	const cntInput = document.querySelector(".cnt-input");
@@ -532,6 +530,7 @@
 	}
 	
 	function goToCart(selector){
+		_csrf = JSON.parse(`[[${_csrf}]]`);
 		if(customerId == 'whoAreYou'){
 			window.alert('whoAreYou');
 		}
@@ -677,6 +676,7 @@
     });
 	
 	function insertInquiry(productGroupId){
+		_csrf = JSON.parse(`[[${_csrf}]]`);
 		if(customerId == 'whoAreYou'){
 			window.alert('whoAreYou');
 		}else{
@@ -719,6 +719,7 @@
 	}
 	
 	function heartClick(reviewId){
+		_csrf = JSON.parse(`[[${_csrf}]]`);
 		const data = {
 				customerId: customerId,
 				reviewId: reviewId
