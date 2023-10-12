@@ -5,12 +5,13 @@
 }
 .update-customer-title{
 	position:absolute;
-	padding-bottom:0.5%;
-	font-size:150%;
-	margin-left:165px;
-	margin-top:10px;
-	width:855px;
-	border-bottom:solid 3px #39594e;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:890px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
 }
 .update-table-container-01{
 	margin-top:100px;
