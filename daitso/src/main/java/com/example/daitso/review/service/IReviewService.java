@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.example.daitso.review.model.MyReview;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
@@ -42,4 +43,7 @@ public interface IReviewService {
 	
 	// 리뷰 좋아요 삽입한 후 좋아요 개수 갖고오기
 	int insertReviewHeart(int reviewId, int customerId);
+	
+	//reviewId에 따른 리뷰 가져오기 
+	MyReview selectMyReview(@Param("reviewId") int reviewId);
 }

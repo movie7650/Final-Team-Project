@@ -166,6 +166,26 @@
 		   AND pur.purchase_num = #{purchaseNum}
 		   AND rev.status='Y'
 	 </select>
-	 
-
+	 	<!-- 
+		기능: reviewId에 따른 리뷰정보 가져오기
+		담당자: 윤상영
+	 -->
+	 <select id="selectMyReview" resultType="com.example.daitso.review.model.MyReview" parameterType="int">
+	 		SELECT re.review_title 				AS "reviewTitle",
+	 			   re.review_id 	  			AS "reviewId",
+	               NVL(cnt,0) 					AS "reviewHeartCount", 
+	               p.product_nm 				AS "productNm",
+	               re.review_star_point 		AS "reviewStarPoint",
+	               re.review_content 			AS "reviewContent",
+	               re.review_image_first 		AS "reviewImageFirst",
+	               re.review_image_second 		AS "reviewImageSecond",
+	               re.review_image_third   		AS "reviewImageThird",
+	               re.create_dt              	AS "createDt",
+	               p.product_image_first		AS "productImg"		
+			  FROM review re
+			  left join product p on re.product_id = p.product_id
+			  left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
+			 WHERE re.review_id=#{reviewId}
+	  		   AND re.status='Y'
+	 </select>
 </mapper>

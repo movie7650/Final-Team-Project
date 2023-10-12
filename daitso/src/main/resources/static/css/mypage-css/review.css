@@ -14,69 +14,6 @@
 	border-bottom:solid 2px #39594e;
 	font-weight:600;
 }
-/* .my-review-container{
-	border:solid 2px #d9d9d9;
-	border-radius:5px;
-	height:220px;
-	width:900px;
-	padding-top:10px;
-	padding-left:20px;
-	font-size:80%;
-	margin-bottom:50px;
-	margin-left:-45px;
-}
-.my-review-photo-container{
-	width:400px;
-	height:80px;
-	margin-top:30px;
-	float:left;
-}
-.my-review-photo-01{
-	width:60px;
-	height:60px;
-	float:left;
-	margin-left:5px;
-}
-.my-review-button-container{
-	margin-top:70px;
-	float:right;
-	width:100px;
-	height:30px;
-}
-.my-review-button-container button{
-	border:solid 1px red;
-	background-color:white;
-	border-radius:5px;
-	color:red;
-	width:80px;
-	height:30px;
-}
-.my-review-button-container button:focus{
-	outline:none;
-}
-
-.my-review-like-count{
-	border-right:solid 2px #e7e7e7;
-	width:100px;
-	float:left;
-	height:30px;
-	text-align: center;
-	margin-right:10px;
-	padding-left:40px;
-	font-size:150%;
-	color:#ff73a0;
-}
-.my-review-star-point{
-	color:orange;
-	border-bottom:solid 1.5px #39594e;
-	padding-bottom:10px;
-	width:850px;
-}
-.my-review-star-point span{
-	color:black;
-}
- */
-
 .mypage-review-table{
 	text-align:center;
 }
@@ -91,6 +28,7 @@
 	font-weight: 500;
 }
 .mypage-review-table td{
+	font-size:15px;
 	vertical-align: middle;
 	padding-bottom:5px;
 	height:120px;
@@ -103,15 +41,23 @@
 	float:left;
 }
 .my-review-productNm{
+	width:135px;
 	margin-top:30px;
+	overflow:hidden; 
+	text-overflow: ellipsis; 
+	white-space:nowrap;
+	padding-left:25px;
 }
 .mypage-review-table button{
 	border:solid 1px red;
 	width:70px;
 	background-color:white;
 	color:red;
-	margin-top:5px;
+	margin-top:10px;
 	border-radius:5px;
+	font-weight: 500;
+	font-size: 85%;
+	padding:5px 0 5px 0;
 	}
 	
 .mypage-review-table button:focus{
@@ -124,4 +70,7 @@
 	background-color:white;
 	border-radius:5px;
 	color:#39594e;
+	font-weight: 500;
+	font-size: 85%;
+	padding:5px 0 5px 0;
 }

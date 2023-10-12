@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.daitso.review.model.MyReview;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
@@ -78,6 +79,11 @@ public class ReviewService implements IReviewService{
 	@Override
 	public int countCusProPurId(int customerId, int productId, String purchaseNum) {
 		return reviewRepository.countCusProPurId(customerId, productId, purchaseNum);
+	}
+	//reviewId에 따른 리뷰가져오기 
+	@Override
+	public MyReview selectMyReview(int reviewId) {
+		return reviewRepository.selectMyReview(reviewId);
 	}
 
 }

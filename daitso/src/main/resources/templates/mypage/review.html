@@ -19,7 +19,7 @@
 						<th>상품정보</th>
 						<th>리뷰제목</th>
 						<th>리뷰작성일자</th>
-						<th>기타</th>
+						<th>기능</th>
 					</tr>
 			 		<tr style="font-size: 80%;" th:each="mypageReview : ${mypageReviewList}"> 
 			 			<td>
@@ -31,9 +31,11 @@
 						</td>
 			 			<td th:text="${mypageReview.createDt}">리뷰작성일자</td>
 			 			<td>
-		 						<input type="button" id="show-review" th:onclick="new_window([[${mypageReview.reviewId}]]);" value="리뷰보기">
-		 						<input class="review-id" type="hidden" name="reviewId" th:value="${mypageReview.reviewId}"><br>
+			 				<div style="border:solid 1px white; padding-top:20px;">
+		 						<input type="button" id="show-review" th:onclick="new_window([[${mypageReview.reviewId}]]);" value="리뷰보기"><br>
+		 						<input class="review-id" type="hidden" name="reviewId" th:value="${mypageReview.reviewId}">
 								<button type="button" th:id="${mypageReview.reviewId}" class="mypage-inquiry-delete" th:onclick="removeCheck([[${mypageReview.reviewId}]])">삭제</button>
+		 					</div>
 		 				</td>
 			 		</tr>
 		 		</table>

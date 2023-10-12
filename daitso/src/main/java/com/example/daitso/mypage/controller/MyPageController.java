@@ -28,6 +28,7 @@ import com.example.daitso.point.service.IPointService;
 import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
 import com.example.daitso.purchase.service.IPurchaseService;
+import com.example.daitso.review.model.MyReview;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.service.IReviewService;
@@ -460,6 +461,9 @@ public class MyPageController {
 	@GetMapping("/mydetailreview/{reviewId}")
 	public String selectDetailReview(@PathVariable int reviewId, Model model) {
 		
+		
+		MyReview myReviewList = reviewService.selectMyReview(reviewId);
+		model.addAttribute("myreviewlist", myReviewList);
 		
 		return "mypage/mypage-review-detail";
 	}

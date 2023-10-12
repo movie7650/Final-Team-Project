@@ -4,7 +4,8 @@
 </head>
 <body>
 <div class="my-inquiry-title">문의</div>
-<div style="width:80%;; margin-left:10%; margin-top:2%;">
+<div style="width:100%; display: flex; justify-content: center; margin-top:20px;">
+	<div style="width:95%;">
 	<div class="my-inquiry-info-title">문의 내용</div>
 	<div style="padding: 20px; border: 1px solid #888888; border-top: none; height: 230px; position: relative;">
 		<div th:text="${myinquiry}" style="font-size: 18px; font-weight: 600;" class="inquiryId-content"></div>
@@ -19,6 +20,8 @@
 	<div>
 		<input id="close-inquiry-window" type="button" onclick="closeTabClick();" value="닫기">
 	</div>
+</div>
+
 </div>
 
 <script>

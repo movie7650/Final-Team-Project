@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.daitso.review.model.MyReview;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
 import com.example.daitso.review.model.ReviewProductDetail;
@@ -48,4 +49,7 @@ public interface IReviewRepository {
 	
 	// 리뷰 좋아요 개수 갖고오기
 	int selectReviewHeartCount(int reviewId);
+	
+	//reviewId에 따른 리뷰 가져오기 
+	MyReview selectMyReview(@Param("reviewId") int reviewId);
 }
