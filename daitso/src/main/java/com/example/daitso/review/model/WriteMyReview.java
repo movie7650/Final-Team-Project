@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class WriteMyReview {
 	//상품정보
+	private int purchaseId;
 	private String purchaseNum;
 	private int purchaseCount;
 	private int productId;
@@ -15,6 +16,7 @@ public class WriteMyReview {
 	private Date purchaseDt;
 	private String totalCost;
 	private String purchasePrice;
+	private String productImg;
 	
 	//리뷰정보
 	private int reviewId;

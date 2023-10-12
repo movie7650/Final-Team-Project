@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class PurchaseCheck {
 	private int productId;
+	private int purchaseId;
 	private int customerId;
 	private String productNm;
 	private int productPrice;

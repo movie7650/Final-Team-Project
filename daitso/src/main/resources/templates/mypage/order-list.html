@@ -50,7 +50,7 @@
 				<div class="detail-button-container">
 					<div style="height:100%; line-height: normal; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
 						<input type="button" th:onclick="|location.href='@{/mypage/mydetailorder?purchaseNum=__${purchase.purchaseNum}__}'|"  value="주문상세보기" class="detail-button">
-						<input type="button" th:if="${purchase.purchaseDv} == '배송완료' and ${purchase.reviewCount} == 0" th:onclick="|location.href='@{/mypage/writeReview?productId=__${purchase.productId}__&purchaseNum=__${purchase.purchaseNum}__}'|" value="리뷰남기기" class="detail-button01">
+						<input type="button" th:if="${purchase.purchaseDv} == '배송완료' and ${purchase.reviewCount} == 0" th:onclick="|location.href='@{/mypage/writeReview?productId=__${purchase.productId}__&purchaseNum=__${purchase.purchaseNum}__&purchaseId=__${purchase.purchaseId}__}'|" value="리뷰남기기" class="detail-button01">
 						<input class="review-complete-button" type="button" th:if="${purchase.purchaseDv} == '배송완료' and ${purchase.reviewCount} == 1" value="리뷰작성완료" disabled="disabled">
 					</div>
 				</div><!-- shipping-button-container -->
