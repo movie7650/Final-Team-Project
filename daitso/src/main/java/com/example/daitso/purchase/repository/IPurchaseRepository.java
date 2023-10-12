@@ -73,12 +73,10 @@ public interface IPurchaseRepository {
 	// 상품구매시 제고 업테이트
 	void updateProductStockInPurchase(int cartId);	
 	
-List<PurchaseChart> getSalesStatus();
-	
-	// 일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 5주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	// 일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
 	List<PurchaseChart> selectSalesStatus(@Param("dateType") String dateType);
 	
-	// 일일, 주간, 월별 가장 많이 팔린 상품 조회하기
+	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
 	List<PurchaseChart> selectTopSelling(@Param("dateType") String dateType);
 
 }

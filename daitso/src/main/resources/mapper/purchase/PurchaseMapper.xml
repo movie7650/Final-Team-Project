@@ -6,8 +6,8 @@
 		 기능: 구매하기
 		 담당자: 최준원 
 	 -->
-	 <insert id="insertPurchase" parameterType="com.example.daitso.purchase.model.PurchaseInsert">
-	 	INSERT INTO purchase ( purchase_id, product_id, customer_id, shipping_id, purchase_num, purchase_count, purchase_price, total_cost, order_request, purchase_dv, creator )
+    <insert id="insertPurchase" parameterType="com.example.daitso.purchase.model.PurchaseInsert">
+	    INSERT INTO purchase ( purchase_id, product_id, customer_id, shipping_id, purchase_num, purchase_count, purchase_price, total_cost, order_request, purchase_dv, creator )
      				  VALUES ( purchase_seq.nextval, (SELECT product_id FROM cart WHERE cart_id = #{cartId}), #{customerId}, #{shippingId}, #{purchaseNum}, (SELECT cart_count FROM cart WHERE cart_id = #{cartId}),
               					( SELECT ((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count) - ((p.product_price - (p.product_price * p.discount_rate * 0.01)) * c.cart_count * 
                        					 <choose>
@@ -96,6 +96,7 @@
 		  FROM purchase pur 
 		 WHERE pur.customer_id=#{customerId}
 	</select>
+	
 	<!-- 
 			기능: 내 주문상품 전체 갯수 
 			담당자: 윤상영
@@ -106,6 +107,7 @@
 		 WHERE customer_id=#{customerId}
 		   AND status='Y'
 	 </select>
+	 
 	<!-- 
 			기능: 주문상세조회
 			담당자: 윤상영
@@ -180,16 +182,16 @@
 		        <choose>
 				<!-- 전체 조회 -->
 				    <when test="(commonCodeId == null or commonCodeId == 0)">	
-						            
+							            
 					</when>
+					
 				<!-- commonCodeId에 따라서 -->
 					<otherwise>
 					 AND d.common_code_id = #{commonCodeId}
-					 </otherwise>
+					</otherwise>
 			    </choose>
 			   ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
-
 
 	<!-- 
 		기능: 주문 내역 개수 조회하기(전체, 배송상태별)
@@ -213,17 +215,16 @@
 				<choose>
 				  <!-- 전체 조회 -->
 				  <when test="(commonCodeId == null or commonCodeId == 0)">	
-				)
+			   )
 				  </when>
-	
+				  
 				  <!-- commonCodeId에 따라서 -->
 				  <otherwise>
 				  AND d.common_code_id = #{commonCodeId}
-				)
-				 </otherwise>
-				</choose>
+			   )
+				  </otherwise>
+			   </choose>
 	 </select>
-
 
 	<!-- 
 		기능: 배송 상태 변경하기
@@ -237,7 +238,6 @@
 	     WHERE purchase_id = #{purchaseId}
 	</update>
 	
-
 	<!-- 
 		기능: 주문 내역 검색하기 (회원명, 주문번호 선택해서)
 		담당자: 이세인
@@ -278,7 +278,6 @@
 				 )    WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
 
-
 	<!-- 
 		기능: 검색 결과 개수 조회하기
 		담당자: 이세인
@@ -313,20 +312,19 @@
 		   	   </choose>
 	</select>
 	
-	
 	<!--    기능: 주문번호로 주문 상세 내역 조회하기
 			담당자: 이세인
 	-->	
 	<select id="getPurchaseDetails" resultType="com.example.daitso.purchase.model.PurchaseList">
-	    SELECT     p.purchase_id                            AS  "purchaseId",
-				   r.product_nm                             AS  "productNm",
-				   c.customer_nm                            AS  "customerNm",
-				   p.purchase_num	                        AS  "purchaseNum",
-				   p.create_dt                              AS  "createDt",
-				   d.common_code_nm                         AS  "commonCodeNm",
-	               p.total_cost                             AS  "totalCost",
-	               p.purchase_count                         AS  "purchaseCount",
-	               p.purchase_price							AS  "purchasePrice"
+	    SELECT p.purchase_id                            AS  "purchaseId",
+			   r.product_nm                             AS  "productNm",
+			   c.customer_nm                            AS  "customerNm",
+			   p.purchase_num	                        AS  "purchaseNum",
+			   p.create_dt                              AS  "createDt",
+			   d.common_code_nm                         AS  "commonCodeNm",
+	           p.total_cost                             AS  "totalCost",
+	           p.purchase_count                         AS  "purchaseCount",
+	           p.purchase_price							AS  "purchasePrice"
 		  FROM purchase p
 		  JOIN customer c ON p.customer_id = c.customer_id 
 		  JOIN common_code d ON p.purchase_dv = d.common_code_id
@@ -343,129 +341,105 @@
 		 WHERE product_id = ( SELECT product_id FROM cart WHERE cart_id = #{cartId} )
 	</update>
 
-
-<select id="getSalesStatus">
-		SELECT
-		    TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') AS weekStart,
-		    TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS weekEnd,
-		    TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS week,
-		    COUNT(*) AS count,
-		    SUM(total_cost) AS totalCost
-		FROM purchase
-		WHERE create_dt >= TRUNC(SYSDATE, 'D') - 34
-		GROUP BY
-		    TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD'),
-		    TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD')
-		ORDER BY TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD')
-</select> 
-
-	<!--    기능:  
+	<!--    기능:  일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
 			담당자: 이세인
 	-->
     <select id="selectSalesStatus" parameterType="string"  resultType="com.example.daitso.purchase.model.PurchaseChart">
-	  <choose>
-	    <when test="dateType == 'day'">
-            SELECT TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD') AS result,
-                   COUNT(*) AS count,
-                   SUM(total_cost) AS totalCost
-              FROM purchase
-             WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 6 
-          GROUP BY TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD')
-          ORDER BY TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD')
-        </when>
-		        
-        <when test="dateType == 'week'">
-            SELECT TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') AS weekStart,
-				   TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS weekEnd,
-				   TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS result,
-				   COUNT(*) AS count,
-				   SUM(total_cost) AS totalCost
-			 FROM purchase
-			WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 27
-		 GROUP BY TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD'),
-		    	  TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD')
-		 ORDER BY TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD')
-		 <!-- SELECT TO_CHAR(TRUNC(create_dt, 'IW'), 'MM-DD') AS weekStart,
-				   TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'MM-DD') AS weekEnd,
-				   TO_CHAR(TRUNC(create_dt, 'IW'), 'MM-DD') || ' ~ ' || TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'MM-DD') AS result,
-				   COUNT(*) AS count,
-				   SUM(total_cost) AS totalCost
-			 FROM purchase
-			WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 27
-		 GROUP BY TO_CHAR(TRUNC(create_dt, 'IW'), 'MM-DD'),
-		    	  TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'MM-DD')
-		 ORDER BY TO_CHAR(TRUNC(create_dt, 'IW'), 'MM-DD') -->
-        </when>
-        
-        <when test="dateType == 'month'">
-            SELECT TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM') AS result,
-                   COUNT(*) AS count,
-                   SUM(total_cost) AS totalCost
-             FROM purchase
-            WHERE create_dt >= ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -4)
-         GROUP BY TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM')
-         ORDER BY TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM')
-        </when>	        
-	  </choose>
-    </select> 
- 
- 
- 
-    <select id="selectTopSelling" parameterType="string"  resultType="com.example.daitso.purchase.model.PurchaseChart">
-	  <choose>
-	    <when test="dateType == 'day'">
-	      <![CDATA[
-	        SELECT sub.result, sub.productId, sub.productNm, sub.count
-			  FROM ( SELECT TO_CHAR(c.create_dt, 'YYYY-MM-DD') AS result,
-				            c.product_id AS productId,
-				            p.product_nm AS productNm,
-				            SUM(c.purchase_count) AS count,
-				            RANK() OVER (PARTITION BY TO_CHAR(c.create_dt, 'YYYY-MM-DD') ORDER BY SUM(c.purchase_count) DESC) AS rank
-				      FROM purchase c
-				      JOIN product p ON c.product_id = p.product_id
-				     WHERE TO_CHAR(c.create_dt, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
-				  GROUP BY TO_CHAR(c.create_dt, 'YYYY-MM-DD'), c.product_id, p.product_nm
-				  ) sub
-		     WHERE sub.rank <= 5
-		 ]]>
-	     </when>
-	        
+	    <choose>
+		    <when test="dateType == 'day'">
+	           SELECT TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD') AS result,
+	                   COUNT(*) AS count,
+	                   SUM(total_cost) AS totalCost
+	             FROM purchase
+	            WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 6 
+	         GROUP BY TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD')
+	         ORDER BY TO_CHAR(TRUNC(create_dt, 'DD'), 'YYYY-MM-DD')
+	        </when>
+			        
 	        <when test="dateType == 'week'">
-	        <![CDATA[
-	        	SELECT sub.result, sub.productId, sub.productNm, sub.count
-					FROM (
-					    SELECT TO_CHAR(TRUNC(c.create_dt, 'IW'), 'YYYY-MM-DD') AS result,
-					                 c.product_id AS productId,
-					                 p.product_nm AS productNm,
-					                 SUM(c.purchase_count) AS count,
-					                 RANK() OVER (PARTITION BY TO_CHAR(TRUNC(c.create_dt, 'IW'), 'YYYY-MM-DD') ORDER BY SUM(c.purchase_count) DESC) AS rank
-					            FROM purchase c
-					            JOIN product p ON c.product_id = p.product_id
-					            WHERE c.create_dt >= TRUNC(SYSDATE, 'IW') - 7
-					            GROUP BY TO_CHAR(TRUNC(c.create_dt, 'IW'), 'YYYY-MM-DD'), c.product_id, p.product_nm
-					) sub
-					WHERE sub.rank <= 5
-			]]>
+	           SELECT TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') AS weekStart,
+					  TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS weekEnd,
+					  TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD') AS result,
+					  COUNT(*) AS count,
+					  SUM(total_cost) AS totalCost
+				 FROM purchase
+				WHERE create_dt >= TRUNC(SYSDATE, 'DD') - 27
+			 GROUP BY TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD'),
+			    	  TO_CHAR(TRUNC(create_dt, 'IW') + 6, 'YYYY-MM-DD')
+			 ORDER BY TO_CHAR(TRUNC(create_dt, 'IW'), 'YYYY-MM-DD')
 	        </when>
 	        
 	        <when test="dateType == 'month'">
+	           SELECT TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM') AS result,
+	                  COUNT(*) AS count,
+	                  SUM(total_cost) AS totalCost
+	             FROM purchase
+	            WHERE create_dt >= ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -4)
+	         GROUP BY TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM')
+	         ORDER BY TO_CHAR(TRUNC(create_dt, 'MM'), 'YYYY-MM')
+	         </when>	        
+	    </choose>
+    </select> 
+
+ 	<!--    기능: 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
+			담당자: 이세인
+	-->
+    <select id="selectTopSelling" parameterType="string"  resultType="com.example.daitso.purchase.model.PurchaseChart">
+	    <choose>
+	        <when test="dateType == 'day'">
+	        <![CDATA[
+		       SELECT result, productId, productNm, count
+			     FROM ( SELECT TO_CHAR(c.create_dt, 'YYYY-MM-DD') AS result,
+			                   c.product_id AS productId,
+			                   p.product_nm AS productNm,
+			                   p.product_price,
+			                   SUM(c.purchase_count) AS count,
+			                   RANK() OVER (ORDER BY SUM(c.purchase_count) DESC, p.product_price DESC) AS rank
+			              FROM purchase c
+			              JOIN product p ON c.product_id = p.product_id
+			             WHERE TO_CHAR(c.create_dt, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+			          GROUP BY TO_CHAR(c.create_dt, 'YYYY-MM-DD'), c.product_id, p.product_nm, p.product_price
+			          ) sub
+			    WHERE sub.rank <= 5
+		   ]]>
+	       </when>
+	        
+	       <when test="dateType == 'week'">
+	       <![CDATA[
+	          SELECT result, productId, productNm, count
+				FROM ( SELECT TO_CHAR(TRUNC(c.create_dt, 'DD'), 'YYYY-MM-DD') AS result,
+					          c.product_id AS productId,
+					          p.product_nm AS productNm,
+                              p.product_price,
+					          SUM(c.purchase_count) AS count,
+					          RANK() OVER (ORDER BY SUM(c.purchase_count) DESC, p.product_price desc) AS rank
+					     FROM purchase c
+					     JOIN product p ON c.product_id = p.product_id
+					    WHERE c.create_dt >= TRUNC(SYSDATE, 'DD') - 7
+					 GROUP BY TO_CHAR(TRUNC(c.create_dt, 'DD'), 'YYYY-MM-DD'), c.product_id, p.product_nm,  p.product_price
+					 ) sub
+			  WHERE sub.rank <= 5
+		   ]]>
+	       </when>
+	        
+	        <when test="dateType == 'month'">
 	         <![CDATA[
-	           SELECT sub.result, sub.productId, sub.productNm, sub.count
-					FROM (
-					    SELECT TO_CHAR(c.create_dt, 'YYYY-MM') AS result,
-					                 c.product_id AS productId,
-					                 p.product_nm AS productNm,
-					                 SUM(c.purchase_count) AS count,
-					                 RANK() OVER (PARTITION BY TO_CHAR(c.create_dt, 'YYYY-MM') ORDER BY SUM(c.purchase_count) DESC) AS rank
-					            FROM purchase c
-					            JOIN product p ON c.product_id = p.product_id
-					            WHERE c.create_dt >= TRUNC(SYSDATE, 'MM') 
-					            GROUP BY TO_CHAR(c.create_dt, 'YYYY-MM'), c.product_id, p.product_nm
-					) sub
-					WHERE sub.rank <= 5
-						]]>
-	     </when>	        
-	  </choose>
+	            SELECT result, productId, productNm, count
+				  FROM ( SELECT TO_CHAR(c.create_dt, 'YYYY-MM') AS result,
+					            c.product_id AS productId,
+					            p.product_nm AS productNm,
+                                p.product_price,
+					            SUM(c.purchase_count) AS count,
+					            RANK() OVER (ORDER BY SUM(c.purchase_count) DESC, p.product_price DESC) AS rank
+					       FROM purchase c
+					       JOIN product p ON c.product_id = p.product_id
+					      WHERE c.create_dt >= TRUNC(SYSDATE, 'MM') 
+					    GROUP BY TO_CHAR(c.create_dt, 'YYYY-MM'), c.product_id, p.product_nm, p.product_price
+					    ) sub
+			     WHERE sub.rank <= 5
+			 ]]>
+	        </when>	        
+	    </choose>
     </select> 
 
 </mapper>
