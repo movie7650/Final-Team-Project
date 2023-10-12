@@ -37,6 +37,9 @@ public interface IProductRepository {
     
     // 상품 삭제하기(그룹ID)
     void deleteProductByGroupId(int productGroupId);
+    
+    // 특별 상품 삭제하기(그룹 상품 삭제시 같은 productGroupId인 특별 상품도 삭제하기)
+    void deleteSpecialProductGroup(int productGroupId);
 	
 	// 상품ID로 상품 정보 조회하기
 	Product selectProductByProductId(int productId);
@@ -46,6 +49,9 @@ public interface IProductRepository {
 	
 	// 상품 삭제하기
     void deleteProduct(int productId);
+    
+    // 특별 상품 삭제하기(상품 삭제시 같은 productId인 특별 상품도 삭제하기)
+    void deleteSpecialProduct(int productId);
     
     // 상품 등록하기
 	void registerProduct(ProductCheck product);

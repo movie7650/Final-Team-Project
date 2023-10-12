@@ -14,8 +14,7 @@
 			<div class="top-rectangle-02">
 				<div class="rectangle-title">입금/완료</div>
 				<div class="rectangle-count-wrap">
-					<span class="rectangle-count">0</span>
-					<!-- th:text="|${}|" -->
+					<span class="rectangle-count1"></span>
 					<span class="rectangle-02-count">건</span>
 				</div>
 			</div>
@@ -24,16 +23,16 @@
 			<div class="top-rectangle-02">
 				<div class="rectangle-title">배송중</div>
 				<div class="rectangle-count-wrap">
-					<span class="rectangle-count">0</span> <span
+					<span class="rectangle-count2"></span> <span
 						class="rectangle-02-count">건</span>
 				</div>
 			</div>
 
 
 			<div class="top-rectangle-02">
-				<div class="rectangle-title">문의 대기 중</div>
+				<div class="rectangle-title">배송완료</div>
 				<div class="rectangle-count-wrap">
-					<span class="rectangle-count">0</span> <span
+					<span class="rectangle-count3"></span> <span
 						class="rectangle-02-count">건</span>
 				</div>
 			</div>
@@ -91,4 +90,25 @@
 				</div>
 			
 			</div>
+			
+<script th:inline="javascript">
+function updateTopContainer() {
+
+    $.ajax({
+        url: '/admin/purchase-count',
+        type: 'GET',
+        success: function(data) {
+            $('.rectangle-count1').text(data.depositCount);
+            $('.rectangle-count2').text(data.shippingCount);
+            $('.rectangle-count3').text(data.shippedCount);
+        },
+        error: function() {
+            console.error('데이터를 가져오는 중에 오류가 발생했습니다.');
+        }
+    });
+}	
+$(document).ready(function() {
+    updateTopContainer();
+});
+</script>
 </html>
