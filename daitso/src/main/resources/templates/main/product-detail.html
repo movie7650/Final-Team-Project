@@ -20,8 +20,9 @@
 				<img class="s-img-third" style="width: 100%; height: 100%" th:src="${product.productImageThird}">				
 			</div>
 		</div>
-		<div style="width: 473px; height: 440px;">
+		<div class="img-container" style="position:relative; width: 473px; height: 440px;">
 			<img class="img-first" style="width: 100%; height: 100%" th:src="${product.productImageFirst}">
+			<div class="img-zoom" th:style="'background: url(' + ${product.productImageFirst} + ') no-repeat'"></div>
 		</div>
 		<div style="margin-left: 77px; width: 500px; height:440px">
 			<h3>[[${product.productNm}]]</h3>
@@ -239,20 +240,20 @@
 			    		<div class="d-flex flex-column" style="width:450px;">
 				    		<select class="inquiry-product-size margin-b-10" name="size" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],1)">
 				    			<th:block th:each="option : ${oListFirst}">			    	
-				    				<option th:if="${option.OPTIONFIRST == '0'}">사이즈옵션 없음</option>
-									<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}" th:if="${option.OPTIONFIRST != '0'}">[[${option.OPTIONFIRST}]]</option>
+				    				<option th:if='${"-".equals(option.OPTIONFIRST)}'>사이즈옵션 없음</option>
+									<option th:selected="${option.OPTIONFIRST eq product.productOptionFirst}" th:if='!${"-".equals(option.OPTIONFIRST)}'>[[${option.OPTIONFIRST}]]</option>
 								</th:block>
 				    		</select>
 				    		<select class="inquiry-product-color margin-b-10" name="color" style="width: 200px" th:onchange="inquiryOptionChange([[${product.productGroupId}]],2)">
-				    			<th:block  th:each="option : ${oListSecond}">
-				    				<option th:if="${option.OPTIONSECOND == '0'}">색상옵션 없음</option>
-									<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}" th:if="${option.OPTIONSECOND != '0'}">[[${option.OPTIONSECOND}]]</option>
+				    			<th:block th:each="option : ${oListSecond}">
+				    				<option th:if='${"-".equals(option.OPTIONSECOND)}'>색상옵션 없음</option>
+									<option th:selected="${option.OPTIONSECOND eq product.productOptionSecond}" th:if='!${"-".equals(option.OPTIONSECOND)}'>[[${option.OPTIONSECOND}]]</option>
 								</th:block>
 				    		</select>
-				    		<select class="inquiry-product-other margin-b-10" name="other" style="width: 200px">
+				    		<select class="inquiry-product-other" name="other" style="width: 200px">
 				    			<th:block th:each="option : ${oListThird}">
-				    				<option th:if="${option.OPTIONTHIRD == '0'}">기타옵션 없음</option>
-									<option th:if="${option.OPTIONTHIRD != '0'}">[[${option.OPTIONTHIRD}]]</option>
+				    				<option th:if='${"-".equals(option.OPTIONTHIRD)}'>기타옵션 없음</option>
+									<option th:selected="${option.OPTIONTHIRD eq product.productOptionThird}" th:if='!${"-".equals(option.OPTIONTHIRD)}'>[[${option.OPTIONTHIRD}]]</option>
 								</th:block>
 				    		</select>
 			    		</div>	
@@ -301,20 +302,50 @@
 
 	//이미지 마우스 오버시 메인 이미지 변경
 	const sImgFirst = document.querySelector('.s-img-first');
-	sImgFirst.addEventListener('mouseover',function(){
-		const img = document.querySelector('.img-first');
-		img.src = sImgFirst.src;
-	})
 	const sImgSecond = document.querySelector('.s-img-second');
-	sImgSecond.addEventListener('mouseover',function(){
-		const img = document.querySelector('.img-first');
-		img.src = sImgSecond.src;
-	})
 	const sImgThird = document.querySelector('.s-img-third');
-	sImgThird.addEventListener('mouseover',function(){
-		const img = document.querySelector('.img-first');
-		img.src = sImgThird.src;
+	if(sImgFirst != null){
+		sImgFirst.addEventListener('mouseover',function(){
+			const img = document.querySelector('.img-first');
+			img.src = sImgFirst.src;
+			const imgZoom = document.querySelector('.img-zoom');
+			imgZoom.style.background = `url(${sImgFirst.src}) no-repeat`;
+		})		
+	}
+	if(sImgSecond != null){
+		sImgSecond.addEventListener('mouseover',function(){
+			const img = document.querySelector('.img-first');
+			img.src = sImgSecond.src;
+			const imgZoom = document.querySelector('.img-zoom');
+			imgZoom.style.background = `url(${sImgSecond.src}) no-repeat`;
+		})		
+	}
+	if(sImgThird != null){
+		sImgThird.addEventListener('mouseover',function(){
+			const img = document.querySelector('.img-first');
+			img.src = sImgThird.src;
+			const imgZoom = document.querySelector('.img-zoom');
+			imgZoom.style.background = `url(${sImgThird.src}) no-repeat`;
+		})		
+	}
+	
+	
+	const imageContainer = document.querySelector('.img-first');
+	imageContainer.addEventListener('mouseover', function(){
+		const img = document.querySelector('.img-zoom');
+		img.style.opacity = 1;
 	})
+	imageContainer.addEventListener('mousemove', function(e){
+		const x = e.offsetX / imageContainer.offsetWidth;
+		const y = e.offsetY / imageContainer.offsetHeight;
+		
+		const img = document.querySelector('.img-zoom');
+		img.style.backgroundPosition = x * 100 + '% ' + y * 100 + '%';
+	})
+	imageContainer.addEventListener('mouseout', () => {
+		const img = document.querySelector('.img-zoom');
+	  	img.style.opacity = 0;
+	});
 	
 	function cntBtn(division){
 		if(division == 'plus'){
@@ -338,6 +369,72 @@
 				totalPrice.value = tPrice;
 				cntInput.value = Number(num) - 1;
 			}
+		}
+	}
+	
+	function goToCart(selector){
+		_csrf = JSON.parse(`[[${_csrf}]]`); 
+		if(customerId == 'whoAreYou'){
+			window.alert('whoAreYou');
+		}
+		else{
+			if(selector == 'cart') {
+				if(customerId == -1) {
+					document.getElementById("cart-need-login").style.display = 'flex';	
+				} else {
+					fetch( window.location.origin + "/cart/insert-in-to" , {
+					    method: "POST",
+					    headers: { 
+					        "Content-Type": "application/json",
+					        "X-CSRF-TOKEN": _csrf.token,
+					    },
+					    body: JSON.stringify({
+					        productId: hiddenProductId.value,
+					        productCnt: cntInput.value
+					    }),
+					})
+					.then(response => response.json())
+					.then((data) => {
+						document.getElementById("cart-info").style.display = 'flex';	
+					});	
+				}
+			} else {
+				if(customerId == -1) {
+					document.getElementById("cart-need-login").style.display = 'flex';	
+				} else {
+					let tag = document.createElement('form');
+					
+					let objId = document.createElement('input');
+					objId.setAttribute('type', 'hidden');
+					objId.setAttribute('name', 'productId');
+					objId.setAttribute('value', hiddenProductId.value);
+					
+					let objCnt = document.createElement('input');
+					objCnt.setAttribute('type', 'hidden');
+					objCnt.setAttribute('name', 'productCnt');
+					objCnt.setAttribute('value', cntInput.value);
+					
+
+					let objSelector = document.createElement('input');
+					objSelector.setAttribute('type','hidden');
+					objSelector.setAttribute('name', 'selector');
+					objSelector.setAttribute('value', selector);
+					
+					let objCsrf = document.createElement('input');
+					objCsrf.setAttribute('type','hidden');
+					objCsrf.setAttribute('name', _csrf.parameterName);
+					objCsrf.setAttribute('value', _csrf.token);
+
+					tag.appendChild(objId);
+					tag.appendChild(objCnt);
+					tag.appendChild(objSelector);
+					tag.appendChild(objCsrf);
+					tag.setAttribute('method', 'post');
+					tag.setAttribute('action', '/cart/insert');
+					document.body.appendChild(tag);
+					tag.submit();				
+				}
+			}	
 		}
 	}
 
@@ -367,7 +464,6 @@
 		const optionSize = document.querySelector(".inquiry-product-size");
 		const optionColor = document.querySelector(".inquiry-product-color");
 		const optionOther = document.querySelector(".inquiry-product-other");
-		console.log(optionSize.value, optionColor, optionOther);
 		var param = `?productGroupId=${productGroupId}`;
 		if(num == 1){
 			param += `&optionFirst=${optionSize.value}`;
@@ -379,7 +475,7 @@
 		.then(response => response.json())
 		.then(data => {
 			if(data.length == 1){
-	        	if(data[0].length != 1 | data[0][0].OPTIONTHIRD != 0){
+	        	if(data[0].length != 1 | data[0][0].OPTIONTHIRD != '-'){
 	        		optionOther.innerHTML = "";
 	        		data[0].forEach(option => {
 	        			if(option.OPTIONTHIRD != 0){
@@ -389,11 +485,11 @@
 	        			
 	        		})
 	        	}else{
-	        		optionOther.innerHTML = "";
+	        		optionOther.innerHTML = `<option>기타옵션 없음</option>`;
 	        	}
 			}
 			else{
-				if(data[0].length != 1 | data[0][0].OPTIONSECOND != 0){
+				if(data[0].length != 1 | data[0][0].OPTIONSECOND != '-'){
 	        		optionColor.innerHTML = "";
 	        		data[0].forEach(option => {
 	        			if(option.OPTHIONSECOND != 0){
@@ -403,9 +499,9 @@
 	        			
 	                })
 	        	}else{
-	        		optionColor.innerHTML = "";
+	        		optionColor.innerHTML = `<option>색상옵션 없음</option>`;
 	        	}
-	        	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != 0){
+	        	if(data[1].length != 1 | data[1][0].OPTIONTHIRD != '-'){
 	        		optionOther.innerHTML = "";
 	        		data[1].forEach(option => {
 	        			if(option.OPTIONTHIRD != 0){
@@ -414,7 +510,7 @@
 	        			}
 	        		})
 	        	}else{
-	        		optionOther.innerHTML = "";
+	        		optionOther.innerHTML = `<option>기타옵션 없음</option>`;
 	        	}
 			}
 		})
@@ -529,72 +625,6 @@
         });
 	}
 	
-	function goToCart(selector){
-		_csrf = JSON.parse(`[[${_csrf}]]`);
-		if(customerId == 'whoAreYou'){
-			window.alert('whoAreYou');
-		}
-		else{
-			if(selector == 'cart') {
-				if(customerId == -1) {
-					document.getElementById("cart-need-login").style.display = 'flex';	
-				} else {
-					fetch( window.location.origin + "/cart/insert-in-to" , {
-					    method: "POST",
-					    headers: { 
-					        "Content-Type": "application/json",
-					        "X-CSRF-TOKEN": _csrf.token,
-					    },
-					    body: JSON.stringify({
-					        productId: hiddenProductId.value,
-					        productCnt: cntInput.value
-					    }),
-					})
-					.then(response => response.json())
-					.then((data) => {
-						document.getElementById("cart-info").style.display = 'flex';	
-					});	
-				}
-			} else {
-				if(customerId == -1) {
-					document.getElementById("cart-need-login").style.display = 'flex';	
-				} else {
-					let tag = document.createElement('form');
-					
-					let objId = document.createElement('input');
-					objId.setAttribute('type', 'hidden');
-					objId.setAttribute('name', 'productId');
-					objId.setAttribute('value', hiddenProductId.value);
-					
-					let objCnt = document.createElement('input');
-					objCnt.setAttribute('type', 'hidden');
-					objCnt.setAttribute('name', 'productCnt');
-					objCnt.setAttribute('value', cntInput.value);
-					
-
-					let objSelector = document.createElement('input');
-					objSelector.setAttribute('type','hidden');
-					objSelector.setAttribute('name', 'selector');
-					objSelector.setAttribute('value', selector);
-					
-					let objCsrf = document.createElement('input');
-					objCsrf.setAttribute('type','hidden');
-					objCsrf.setAttribute('name', _csrf.parameterName);
-					objCsrf.setAttribute('value', _csrf.token);
-
-					tag.appendChild(objId);
-					tag.appendChild(objCnt);
-					tag.appendChild(objSelector);
-					tag.appendChild(objCsrf);
-					tag.setAttribute('method', 'post');
-					tag.setAttribute('action', '/cart/insert');
-					document.body.appendChild(tag);
-					tag.submit();				
-				}
-			}	
-		}
-	}
-	
 	function closeCartInfo() {
 		document.getElementById("cart-info").style.display = 'none';
 		document.getElementById("cart-need-login").style.display = 'none';
@@ -608,6 +638,7 @@
 		fetch("/review/" + productGroupId +"/" + page + "/" + customerId)
 		.then(response => response.json())
 		.then(data => {
+			console.log(data);
 			if(data.length == 0){
 			}
 			else{
@@ -629,8 +660,7 @@
 						<p style="color:gray">${review.productNm} ${review.options}</p>
 					</div>
 					<div class="d-flex" style="height:100px; margin-bottom:10px">
-						<!-- 나중에 th:each로 이미지 가져오자. 지금은 없으니 sample image로 대체 -->
-						<img style="width: 100px; height: 100%" th:src="@{/images/mainImages.png}">
+						<img style="width: 100px; height: 100%" src="${review.reviewImageFirst}">
 					</div>
 					<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
 					<p>${review.reviewContent}</p>
@@ -676,9 +706,10 @@
     });
 	
 	function insertInquiry(productGroupId){
-		_csrf = JSON.parse(`[[${_csrf}]]`);
-		if(customerId == 'whoAreYou'){
-			window.alert('whoAreYou');
+	 	_csrf = JSON.parse(`[[${_csrf}]]`); 
+		_csrf = 1
+		if(customerId == -1){
+			window.alert('로그인이 필요한 기능입니다.');
 		}else{
 			const content = document.querySelector('.inquiry-content').value;
 			const size = document.querySelector('.inquiry-product-size').value;
@@ -719,13 +750,13 @@
 	}
 	
 	function heartClick(reviewId){
-		_csrf = JSON.parse(`[[${_csrf}]]`);
+ 		_csrf = JSON.parse(`[[${_csrf}]]`); 
 		const data = {
 				customerId: customerId,
 				reviewId: reviewId
 		};
-		if(customerId == 'whoAreYou'){
-			window.alert('whoAreYou');			
+		if(customerId == -1){
+			window.alert('로그인이 필요한 기능입니다.');			
 		}else{
 			fetch("/review/heart/update",{
 				method: "POST",
