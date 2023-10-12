@@ -120,7 +120,7 @@ public class AdminController {
 	    return "admin/product/admin-product";
 	}
 	
-	// 상품 조회하기(JSON-카테고리별,페이징)
+	// 상품 조회하기(JSON - 카테고리별,페이징)
 	@GetMapping("/products")
 	@ResponseBody
 	public PageResult<ProductCheck> selectProductsByCategory(
@@ -331,6 +331,7 @@ public class AdminController {
 //		model.addAttribute("searchUrl","/admin/product");
 //		return "admin/message";
 //	}	
+	
 //	@PostMapping("/product")
 //	public String registerProduct(ProductCheck product, Model model) {
 //	    // 입력 필드가 비어 있으면 '-'으로 대체
@@ -370,6 +371,7 @@ public class AdminController {
 //	    return "admin/message";
 //	}
 
+	// 중복 예외처리
 	@ExceptionHandler(DuplicateProductException.class)
     public String handleDuplicateProductException(DuplicateProductException e, Model model) {
         model.addAttribute("message", e.getMessage());
@@ -479,8 +481,7 @@ public class AdminController {
     public List<PurchaseList> getPurchaseDetails(@PathVariable String purchaseNum) {
     	List<PurchaseList> purchaselist = adminService.getPurchaseDetails(purchaseNum);
         return purchaselist;
-    }
-    
+    }  
 
     // 전체 카테고리 조회하기
   	@GetMapping("/category")
@@ -552,7 +553,7 @@ public class AdminController {
 	
 	}
 	
-	// 
+	// 카테고리 이미지 수정하기
 	@PostMapping("/updateCategoryImage")
 	public ResponseEntity<?> updateCategoryImage( @RequestParam int categoryId,
 	                                              @RequestParam(required = false) MultipartFile uploadCategoryImage) {
@@ -571,7 +572,7 @@ public class AdminController {
 	    }
 	}
 
-	//
+	// 카테고리 이미지 삭제하기
 	@PostMapping("/deleteCategoryImage")
     public ResponseEntity<?> deleteCategoryImage(@RequestParam int categoryId,
                                                  @RequestParam(required = false) boolean deleteCategoryImage) {
@@ -612,7 +613,7 @@ public class AdminController {
         return "admin/commoncode/admin-commoncode";
   	}
   	
- 	//테스트
+ 	// 공통 코드 등록하기
  	@PostMapping("/common-code")
 	public String registerCommonCodes(CommonCode commonCode, Model model) {
 		adminService.registerCommonCodes(commonCode);
@@ -621,14 +622,14 @@ public class AdminController {
 	return "admin/message";
 	}
  	
-  	// 
+  	// 공통코드 조회하기(최상위 공통코드별)
  	@GetMapping("/check/{commonCodeId}")
  	@ResponseBody
  	public List<CommonCode> commonCodes (@PathVariable int commonCodeId, Model model) {
  		return adminService.selectCommonCodesByPr(commonCodeId);
  	}
  	
- 	// 
+ 	// 최상위 공통코드 삭제하기
  	@PostMapping("/delete-common")
  	public String deleteCommonCodePr(@RequestParam int commonCodeId, Model model) {
  		adminService.deleteCommonCodePr(commonCodeId);
@@ -637,14 +638,14 @@ public class AdminController {
  		return "admin/message";
  	}	
   	
- 	//
+ 	// commonCodeId로 공통코드 정보 조회하기
  	@GetMapping("/update-common/{commonCodeId}")
  	@ResponseBody
  	public CommonCode selectCommonCode(@PathVariable int commonCodeId, Model model) {
  		return adminService.selectCommonCode(commonCodeId);
  	}
 
- 	//
+ 	// 공통코드 수정하기
  	@PostMapping("/update-common")
  	public String updateCommonCode(CommonCode commonCode, Model model, HttpSession session) {
  		adminService.updateCommonCode(commonCode);
@@ -657,7 +658,7 @@ public class AdminController {
  		return "admin/message";
  	}
  	
- 	//
+ 	// 공통코드 삭제하기
  	@PostMapping("/delete-common-code")
  	public String deleteCommonCode(@RequestBody List<Integer> selectedCommonCodeIds, Model model) {
  	    for (Integer commonCodeId : selectedCommonCodeIds) {
@@ -729,33 +730,38 @@ public class AdminController {
 // 	}
  	
  	
- 	@GetMapping("/charts")
-    @ResponseBody // JSON 형식의 응답을 생성하도록 설정
-    public Map<String, Object> showCharts(@RequestParam("dateType") String dateType) {
+ 	@GetMapping("/chart")
+    public String showAdminChart(Model model) {
+        return "admin/admin-chart";
+    }  
+ 	
+ 	
+ 	// 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+ 	@GetMapping("/sales-chart")
+    @ResponseBody
+    public Map<String, Object> renderSalesChart(@RequestParam("dateType") String dateType) {
         Map<String, Object> response = new HashMap<>();
-
-        List<PurchaseChart> saleslist = null;
+        List<PurchaseChart> saleslists = null;
         
         if ("day".equals(dateType)) {
-            saleslist = adminService.selectSalesStatus(dateType);
+        	saleslists = adminService.selectSalesStatus(dateType);
         } else if ("week".equals(dateType)) {
-            saleslist = adminService.selectSalesStatus(dateType);
+        	saleslists = adminService.selectSalesStatus(dateType);
         } else if ("month".equals(dateType)) {
-            saleslist = adminService.selectSalesStatus(dateType);
+        	saleslists = adminService.selectSalesStatus(dateType);
         }else {
-          // 예외 처리: 올바르지 않은 dateType 처리
           response.put("error", "Invalid dateType");
           return response;
       }
 
-        List<String> dates = new ArrayList<>();
-        List<Integer> orderCounts = new ArrayList<>();
-        List<Integer> revenueData = new ArrayList<>();
+        List<String> dates = new ArrayList<>(); //기간
+        List<Integer> orderCounts = new ArrayList<>(); //주문건수
+        List<Integer> revenueData = new ArrayList<>(); //매출액
 
-        for (PurchaseChart purchase : saleslist) {
-            dates.add(purchase.getResult());
-            orderCounts.add(purchase.getCount());
-            revenueData.add(purchase.getTotalCost());
+        for (PurchaseChart saleslist : saleslists) {
+            dates.add(saleslist.getResult());
+            orderCounts.add(saleslist.getCount());
+            revenueData.add(saleslist.getTotalCost());
         }
 
         response.put("dates", dates);
@@ -766,46 +772,20 @@ public class AdminController {
     }
 
     
-    @GetMapping("/chart")
-    public String getSalesStatus(Model model) {
-      
-    	List<PurchaseChart> saleslists = adminService.getSalesStatus();
-    	model.addAttribute("saleslists", saleslists);
-    	
-    	  List<String> dates = new ArrayList<>();
-    	  List<Integer> orderCounts = new ArrayList<>();
-    	  List<Integer> revenueData = new ArrayList<>();
-
-    	    for (PurchaseChart saleslist : saleslists) {
-    	        dates.add(saleslist.getWeek()); // saleslist의 주간 끝 날짜를 가져와 dates 리스트에 추가
-    	        orderCounts.add(saleslist.getCount()); // saleslist의 주문 수를 가져와 orderCounts 리스트에 추가
-    	        revenueData.add(saleslist.getTotalCost()); // saleslist의 매출 데이터를 가져와 revenueData 리스트에 추가
-    	    }
-
-    	    model.addAttribute("dates", dates);
-    	    model.addAttribute("orderCounts", orderCounts);
-    	    model.addAttribute("revenueData", revenueData);
-
-        return "admin/chart"; // Thymeleaf 템플릿 이름
-    }
-    
-    
-    
-    @GetMapping("/pie")
+ 	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
+    @GetMapping("/selling-pie")
     @ResponseBody 
     public Map<String, Object> showBar(@RequestParam("dateType") String dateType) {
         Map<String, Object> response = new HashMap<>();
-
-        List<PurchaseChart> sellinglist = null;
+        List<PurchaseChart> sellinglists = null;
         
         if ("day".equals(dateType)) {
-        	sellinglist = adminService.selectTopSelling(dateType);
+        	sellinglists = adminService.selectTopSelling(dateType);
         } else if ("week".equals(dateType)) {
-        	sellinglist = adminService.selectTopSelling(dateType);
+        	sellinglists = adminService.selectTopSelling(dateType);
         } else if ("month".equals(dateType)) {
-        	sellinglist = adminService.selectTopSelling(dateType);
+        	sellinglists = adminService.selectTopSelling(dateType);
         }else {
-          // 예외 처리: 올바르지 않은 dateType 처리
           response.put("error", "Invalid dateType");
           return response;
       }
@@ -814,10 +794,10 @@ public class AdminController {
         List<String> productNames = new ArrayList<>();
         List<Integer> salesData = new ArrayList<>();
 
-        for (PurchaseChart purchase : sellinglist) {
-            dates.add(purchase.getResult());
-            productNames.add(purchase.getProductNm());
-            salesData.add(purchase.getCount());
+        for (PurchaseChart sellinglist : sellinglists) {
+            dates.add(sellinglist.getResult());
+            productNames.add(sellinglist.getProductNm());
+            salesData.add(sellinglist.getCount());
         }
 
         response.put("dates", dates);
@@ -832,22 +812,25 @@ public class AdminController {
     }
     
     
-    @GetMapping("/pies")
+    // 상품 부족한 재고(10개 미만), 충분한 재고 조회하기
+    @GetMapping("/stock-pie")
     @ResponseBody
     public List<ProductChart> getProductChart() {
-        // 재고 정보 조회
         List<ProductChart> productStocks = adminService.selectProductStocks();
-        return productStocks; // JSON 응답 반환
+        return productStocks; 
     }
     
-    
-    @GetMapping("/bar")
+    // 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+    @GetMapping("/signup-bar")
     @ResponseBody
     public List<CustomerChart> getCustomerCounts() {
         List<CustomerChart> customerCounts = adminService.getCustomerCounts();
-        return customerCounts; // JSON 응답 반환
+        return customerCounts; 
     }
 
+    
+    
+    
     
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
@@ -955,7 +938,5 @@ public class AdminController {
 		
 		return "ok";
 	}
-
 	
- 
 }

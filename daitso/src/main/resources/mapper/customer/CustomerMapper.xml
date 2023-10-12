@@ -271,10 +271,6 @@
 		 WHERE create_dt >= TRUNC(SYSDATE, 'MM') - INTERVAL '5' MONTH
 	  GROUP BY TO_CHAR(create_dt, 'YYYY-MM')
 	  ORDER BY registerMonth
-		<!-- SELECT TO_CHAR(create_dt, 'YYYY-MM') AS registerMonth, COUNT(customer_id) AS count
-			FROM customer
-			GROUP BY TO_CHAR(create_dt, 'YYYY-MM')
-			ORDER BY registerMonth -->
     </select>
     
     

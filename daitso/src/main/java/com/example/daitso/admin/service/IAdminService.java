@@ -140,16 +140,14 @@ public interface IAdminService {
 	
 	// 쿠폰 일련번호 중복 확인하기
 	boolean isCouponSnUnique(String couponSn);
-
-List<PurchaseChart> getSalesStatus();
 	
-	//일일(현재 날짜를 기준으로 7일치), 주간(현재 날짜를 기준으로 5주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	// 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
 	List<PurchaseChart> selectSalesStatus(String dateType);
 
-	// 일일, 주간, 월별 가장 많이 팔린 상품 조회하기
+	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
 	List<PurchaseChart> selectTopSelling(String dateType);
 	
-	// 상품 부족한 재고, 충분한 재고 나눠서 조회하기
+	// 상품 부족한 재고(10개 미만), 충분한 재고 조회하기
 	List<ProductChart> selectProductStocks();
 	
 	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
