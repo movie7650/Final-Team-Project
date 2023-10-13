@@ -38,11 +38,11 @@ public class CustomerService implements ICustomerService {
 	// 회원가입
 	@Transactional
 	public void insertIntoCustomer(CustomerSignUp customerSignUp) {
-
+		
 		// 비밀번호 암호화
 		String encryptedPassword = passwordEncoder.encode(customerSignUp.getCustomerPw());
 		customerSignUp.setCustomerPw(encryptedPassword);
-
+		
 		customerRepository.insertIntoCustomer(customerSignUp);
 	}
 

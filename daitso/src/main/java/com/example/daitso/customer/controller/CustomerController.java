@@ -191,7 +191,7 @@ public class CustomerController {
             
             h.setFrom("cjw9977@naver.com");
 			h.setTo(email);
-	        h.setSubject("[쿠팡] 비밀번호 재설정을 위한 안내메일입니다.");
+	        h.setSubject("[다있소] 비밀번호 재설정을 위한 안내메일입니다.");
 	        h.setText(htmlBody, true);
 	        javaMailSender.send(m);
 	        
