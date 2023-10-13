@@ -28,11 +28,10 @@ public class InquiryController {
 	@PostMapping("/insert")
 	@ResponseBody
 	public int insertInquiry(@RequestBody InquiryInsertDTO inquiryInsertDTO ) {
-		System.out.println("why");
-		System.out.println(HtmlUtils.htmlEscape(inquiryInsertDTO.getContent()));
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
+		inquiryInsertDTO.setCustomerId(customerId);
 		
-		return inquiryService.insertInquiry(inquiryInsertDTO.getProductGroupId(), customerId, inquiryInsertDTO.getSize(), inquiryInsertDTO.getColor(), inquiryInsertDTO.getOther(), inquiryInsertDTO.getContent());
+		return inquiryService.insertInquiry(inquiryInsertDTO);
 	}
 }
