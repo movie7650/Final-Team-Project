@@ -5,9 +5,9 @@ import java.sql.Date;
 import lombok.Getter;
 import lombok.Setter;
 
-
 //사용가능 및 사용불가능 쿠폰출력 DTO
-@Getter @Setter
+@Getter
+@Setter
 public class SelectCustomerCoupon {
 	private int customerCouponId;
 	private int couponId;
@@ -21,5 +21,6 @@ public class SelectCustomerCoupon {
 	private String couponUseDv;
 	private String allCouponNum;
 	private int existCounponSn;
+	private int myCouponCount;
 
 }

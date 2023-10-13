@@ -7,24 +7,26 @@
 		담당자 : 나현웅
 	-->
     <select id="selectCategoryList" parameterType="int" resultType="com.example.daitso.category.model.Category">
-	SELECT category_id AS categoryId, 
- 	    	category_pr_id AS categoryPrId,
-		    category_nm AS categoryNm, 
-		    level AS lv,
-		    CONNECT_BY_ISLEAF AS isLeaf
-	FROM category 
-	WHERE CONNECT_BY_ROOT category_nm = 
+		SELECT category_id AS categoryId, 
+	 	    	category_pr_id AS categoryPrId,
+			    category_nm AS categoryNm, 
+			    level AS lv,
+			    CONNECT_BY_ISLEAF AS isLeaf
+		FROM category 
+		WHERE status = 'Y'
+		<if test="categoryId != -1">
+			AND CONNECT_BY_ROOT category_nm = 
 							      ( 
 							   	  SELECT CONNECT_BY_ROOT category_nm as root
 							      FROM category 
 								  WHERE category_id = #{categoryId}
 						          START WITH category_pr_id = 0
 					    		  CONNECT BY PRIOR category_id = category_pr_id
-			          			  )
-	AND status = 'Y' 
-	START WITH category_pr_id = 0
-	CONNECT BY PRIOR category_id = category_pr_id
-	ORDER SIBLINGS BY category_nm
+			          			  ) 
+		</if>
+		START WITH category_pr_id = 0
+		CONNECT BY PRIOR category_id = category_pr_id
+		ORDER SIBLINGS BY category_nm
 	</select>
 	
 	<!-- 
@@ -32,12 +34,12 @@
 		담당자 : 나현웅
 	 -->
 	<select id="selectCategoryPath" parameterType="int" resultType="String">
-	SELECT sys_connect_by_path(category_nm, ' > ') as path
-    FROM category 
-    WHERE category_id = #{categoryId}
-    START WITH category_pr_id = 0
-    CONNECT BY PRIOR category_id = category_pr_id	
-    ORDER SIBLINGS BY category_nm
+		SELECT sys_connect_by_path(category_nm, ' > ') as path
+	    FROM category 
+	    WHERE category_id = #{categoryId}
+	    START WITH category_pr_id = 0
+	    CONNECT BY PRIOR category_id = category_pr_id	
+	    ORDER SIBLINGS BY category_nm
 	</select>
 	
 	<!-- 
@@ -82,6 +84,10 @@
 		ORDER SIBLINGS BY category_nm
     </select>
     
+    <!-- 
+    	기능: drag&drop을 사용해 카테고리 수정 시 부모 카테고리 컬럼 수정
+    	담당자: 나현웅
+     -->
     <update id="updateCategory">
     	UPDATE category SET category_pr_id = #{parentCategoryId} where category_id = #{categoryId}
     </update>
@@ -94,9 +100,12 @@
     <![CDATA[
     	SELECT category_id AS categoryId, 
     			category_nm AS categoryNm, 
-    			category_content AS categoryContent 
+    			category_content AS categoryContent,
+    			category_image AS categoryImage
    		FROM  (
-    			SELECT category_id, category_nm, category_content from category
+    			SELECT category_id, category_nm, category_content, category_image
+    			FROM category
+    			WHERE category_id != 0
 				ORDER BY dbms_random.value
 			  )
 		WHERE rownum <= 6
@@ -162,7 +171,8 @@
 	<select id="selectCategoryByCategoryId">
 	 	SELECT category_id			  AS "categoryId",
 	           category_nm            AS "categoryNm",
-	           category_content		  AS "categoryContent"
+	           category_content		  AS "categoryContent",
+	           category_image		  AS "categoryImage"
 		  FROM category
 	     WHERE category_id = #{categoryId}
 	</select>
@@ -182,7 +192,10 @@
 	</update>
 	
 	
-
+	<!-- 
+		기능: 카테고리 등록하기
+    	담당자: 이세인
+     -->
 	<insert id="registerCategories" parameterType="com.example.daitso.category.model.CategoryCheck">
 		INSERT INTO category ( category_id,
 		                       category_nm,
@@ -210,5 +223,15 @@
 		             </choose> ) -->
     </insert>
 	
+	<update id="updateCategoryImage">
+	    UPDATE category
+	       SET category_image = #{imageUrl}
+	    WHERE category_id = #{categoryId}
+	</update>
 
+ 	<update id="deleteCategoryImage" parameterType="int">
+        UPDATE category
+		   set category_image = 'NULL'
+         WHERE category_id = #{categoryId}
+    </update>
 </mapper>

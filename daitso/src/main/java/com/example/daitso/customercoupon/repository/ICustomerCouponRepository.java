@@ -16,6 +16,9 @@ public interface ICustomerCouponRepository {
 	
 	//사용가능한 쿠폰 리스트 출력
 	List<SelectCustomerCoupon> selectUsableCoupon(int customerId);
+	
+	//사용자 사용가능한 쿠폰 count
+	int countUsableCustomerCoupon(int customerId);
 
 	//사용불가능한 쿠폰 리스트 출력
 	List<SelectCustomerCoupon> selectBanCoupon(int customerId);

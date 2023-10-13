@@ -19,6 +19,15 @@ public interface IInquiryRepository {
 	//문의글 삽입
 	int insertInquiry(@Param("pId") int pId, @Param("cId") int cId, @Param("content") String content);
 	
+	//내 문의 작성시간 
+	String selectMyInquiryTime(@Param("inquiryId") int inquiryId);
+	
+	//내 문의의 답변 작성시간
+	String selectMyInquiryReplyTime(@Param("inquiryId") int inquiryId);
+
+	//문의답변ID에 따른 문의 답변내용가져오기
+	String selectMyInquiryPRIdInquiry(@Param("inquiryId") int inquiryId);
+	
 	void selectInquiry(int inquiryId);
 	
 	//특정 상품에 해당하는 문의글 조회
@@ -46,12 +55,18 @@ public interface IInquiryRepository {
 	List<MyInquirySelect> selectMyInquiry(int customerId);
 	
 	//내 문의글 삭제
-	void deleteMyInquiry(MyInquirySelect myInquirySelect);
+	void deleteMyInquiry(@Param("inquiryId")int inquiryId);
 	
 	//inquiry status가  Y 인거 갯수
 	int countInquiryStatusY(int customerId);
 	
 	//문의내용 선택하기
 	String selectInquiryContent(int inquiryId);
+
+	// 문의 답변 삭제하기(관리자)
+	void deleteInquiryAdmin(int ansInquiryId);
+	
+	// 삭제한 문의 상태 변경하기(관리자)
+	void updateInquiryAdminDelete(int inquiryId);
 	
 }

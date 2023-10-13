@@ -17,4 +17,5 @@ public class SpecialProduct {
 	private int rCnt;
 	private Date createDt;
 	private String creator;
+	private String productImageFirst;
 }

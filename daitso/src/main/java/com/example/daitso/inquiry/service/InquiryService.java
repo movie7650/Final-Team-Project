@@ -84,8 +84,8 @@ public class InquiryService implements IInquiryService {
 	
 	//내 문의글 삭제
 	@Override
-	public void deleteMyInquiry(MyInquirySelect myInquirySelect) {
-		inquiryRepository.deleteMyInquiry(myInquirySelect);		
+	public void deleteMyInquiry(int inquiryId) {
+		inquiryRepository.deleteMyInquiry(inquiryId);		
 	}
 	//내문의 status가 Y 인 개수
 	@Override
@@ -96,6 +96,30 @@ public class InquiryService implements IInquiryService {
 	@Override
 	public String selectInquiryContent(int inquiryId) {
 		return inquiryRepository.selectInquiryContent(inquiryId);
+	}
+
+	//문의답변ID에 따른 문의 답변 가져오기
+	@Override
+	public String selectMyInquiryPRIdInquiry(int inquiryId) {
+		return inquiryRepository.selectMyInquiryPRIdInquiry(inquiryId);
+	}
+	
+	//내문의 작성시간
+	@Override
+	public String selectMyInquiryTime(int inquiryId) {
+		return inquiryRepository.selectMyInquiryTime(inquiryId);
+	}
+	//내문의의 답변 작성시간
+	@Override
+	public String selectMyInquiryReplyTime(int inquiryId) {
+		return inquiryRepository.selectMyInquiryReplyTime(inquiryId);
+	}
+
+	// 문의 답변 삭제하기(관리자)
+	@Transactional
+	public void deleteInquiryAdmin(int inquiryId, int ansInquiryId) {
+		inquiryRepository.deleteInquiryAdmin(ansInquiryId);
+		inquiryRepository.updateInquiryAdminDelete(inquiryId);
 	}
 
 }

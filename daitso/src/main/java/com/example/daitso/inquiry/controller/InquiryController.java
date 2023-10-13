@@ -27,7 +27,8 @@ public class InquiryController {
 	@PostMapping("/insert")
 	@ResponseBody
 	public int insertInquiry(@RequestBody InquiryInsertDTO inquiryInsertDTO ) {
-		
+		System.out.println("why");
+		System.out.println(inquiryInsertDTO);
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 		

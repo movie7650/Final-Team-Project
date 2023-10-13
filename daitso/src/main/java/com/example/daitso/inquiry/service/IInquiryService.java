@@ -2,6 +2,8 @@ package com.example.daitso.inquiry.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.example.daitso.inquiry.model.InquiryInfo;
 import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
 import com.example.daitso.inquiry.model.InquiryProduct;
@@ -12,6 +14,12 @@ public interface IInquiryService {
 	
 	//문의글 삽입
 	int insertInquiry(int productGroupId, int cId ,String size, String color, String other, String content);
+	
+	//내 문의 작성시간 
+	String selectMyInquiryTime(@Param("inquiryId") int inquiryId);
+	
+	//내 문의의 답변 작성시간
+	String selectMyInquiryReplyTime(@Param("inquiryId") int inquiryId);
 	
 	void selectInquiry(int inquiryId);
 	
@@ -37,12 +45,18 @@ public interface IInquiryService {
 	List<MyInquirySelect> selectMyInquiry(int customerId);
 	
 	//내 문의글 삭제
-	void deleteMyInquiry(MyInquirySelect myInquirySelect);
+	void deleteMyInquiry(@Param("inquiryId")int inquiryId);
 	
 	//inquiry status가  Y 인거 갯수
 	int countInquiryStatusY(int customerId);
 	
 	//문의내용 선택하기
 	String selectInquiryContent(int inquiryId);
+	
+	//문의답변ID에 따른 문의 답변내용가져오기
+	String selectMyInquiryPRIdInquiry(@Param("inquiryId") int inquiryId);
+
+	// 문의 답변 삭제하기(관리자)
+	void deleteInquiryAdmin(int inquiryId, int ansInquiryId);
 
 }

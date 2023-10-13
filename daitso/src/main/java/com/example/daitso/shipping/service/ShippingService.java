@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.daitso.shipping.model.MypageReceiverShipping;
 import com.example.daitso.shipping.model.ShippingAdd;
 import com.example.daitso.shipping.model.ShippingInfo;
 import com.example.daitso.shipping.repository.IShippingRepository;
@@ -45,4 +46,68 @@ public class ShippingService implements IShippingService {
 	public void deleteShipping(int shippingId, int customerId) {
 		shippingRepository.deleteShipping(shippingId, customerId);
 	}
+	//마이페이지의 배송지관리에서 보이는 내 배송지 리스트
+	@Override
+	public List<MypageReceiverShipping> selectMyShippingInfo(int customerId) {
+		return shippingRepository.selectMyShippingInfo(customerId);
+	}
+
+	@Override
+	public int selectShippingStatusY(int customerId) {
+		return shippingRepository.selectShippingStatusY(customerId);
+	}
+	//마이페이지-배송지관리-배송지추가하기
+	@Override
+	public void insertMyshipping(int customerId, String shippingReceiverNM, String shippingRoadNMAddr,
+			String shippingDaddr, String shippingReceiverTelNO, String shippingDmnd, int shippingDv) {
+		shippingRepository.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+	}
+	//기본배송지 갯수 카운트
+	@Override
+	public int countShippingDv301(int customerId) {
+		return shippingRepository.countShippingDv301(customerId);
+	}
+	//배송지 id에 따른 배송지 정보 가져오기
+	@Override
+	public List<MypageReceiverShipping> selectShippingIdInfo(int shippingId) {
+		return shippingRepository.selectShippingIdInfo(shippingId);
+	}
+	//배송지id에 따른 배송지 정보 수정하기
+	@Override
+	public void updateShippingIdInfo(int shippingId, String shippingReceiverNM, String shippingRoadNMAddr,
+			String shippingDaddr, String shippingReceiverTelNO, String shippingDmnd, int shippingDv) {
+		shippingRepository.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);		
+	}
+	//배송지ID에 따른 배송지 삭제
+	@Override
+	public void deleteMyshipping(int shippingId) {
+		shippingRepository.deleteMyshipping(shippingId);		
+	}
+	
+	//배송지Id에 따른 배송지구분
+	@Override
+	public int selectShippingDv(int shipppingId) {
+		return shippingRepository.selectShippingDv(shipppingId);
+	}
+
+	// 301인 상태인 배송지 아이디 조회
+	@Override
+	public int countShippingId301(int customerId) {
+		return shippingRepository.countShippingId301(customerId);
+	}
+
+	@Override
+	public void updateShippingDV(int shippingId, int shippingDv) {
+		shippingRepository.updateShippingDV(shippingId, shippingDv);
+	}
+
+	@Transactional
+	public void updateShippingIdInfo2(int shippingId, String shippingReceiverNM, String shippingRoadNMAddr,
+			String shippingDaddr, String shippingReceiverTelNO, String shippingDmnd, int shippingDv, int customerId) {
+		shippingRepository.updateAllShippingDv302(customerId);
+		shippingRepository.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+		
+	}
+	
+	
 }

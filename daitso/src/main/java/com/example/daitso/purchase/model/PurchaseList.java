@@ -30,4 +30,5 @@ public class PurchaseList {
 	private int commonCodeId;
 	private int rn;
 	private String searchText;
+	
 }

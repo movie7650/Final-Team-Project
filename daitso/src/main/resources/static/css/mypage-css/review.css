@@ -6,70 +6,71 @@
 }
 .title-review{
 	position:absolute;
-	padding-bottom:0.5%;
-	font-size:150%;
-	margin-left:165px;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:890px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
+}
+.mypage-review-table{
+	text-align:center;
+}
+.mypage-review-table th{
+	width:225px;
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+}
+.mypage-review-table td{
+	font-size:15px;
+	vertical-align: middle;
+	padding-bottom:5px;
+	height:120px;
+	border-bottom:solid 1px #d9d9d9;
+}
+.my-review-product-img{
 	margin-top:10px;
-	width:855px;
-	border-bottom:solid 3px #668663;
+	width:80px; 
+	height:80px; 
+	float:left;
 }
-.my-review-container{
-	border:solid 2px #e7e7e7;
-	border-radius:10px;
-	height:200px;
-	width:800px;
-	margin-top:100px;
-	margin-right:55px;
-	padding-left:20px;
-	padding-top:10px;
-	margin-bottom:-70px;
-	font-size:80%;
-}
-.my-review-photo-container{
-	width:400px;
-	height:80px;
+.my-review-productNm{
+	width:135px;
 	margin-top:30px;
-	float:left;
+	overflow:hidden; 
+	text-overflow: ellipsis; 
+	white-space:nowrap;
+	padding-left:25px;
 }
-.my-review-photo-01{
-	border:solid 1px blue;
-	width:60px;
-	height:60px;
-	float:left;
-	margin-left:5px;
-}
-.my-review-button-container{
-	float:right;
-	width:200px;
-	height:30px;
-	padding-top:70px;
-}
-.my-review-button-container button{
-	border:solid 1px #668663;
+.mypage-review-table button{
+	border:solid 1px red;
+	width:70px;
 	background-color:white;
-	color:#668663;
-	width:80px;
-	height:30px;
-}
-.my-review-button-container button:hover{
-	color:white;
-	background-color:red;
-	border:none;
-}
-.my-review-like-count{
-	border-right:solid 2px #e7e7e7;
-	width:100px;
-	float:left;
-	height:30px;
-	text-align: center;
-	margin-right:10px;
-	padding-left:40px;
-	font-size:150%;
-	color:#ff73a0;
-}
-.my-review-star-point{
-	color:orange;
-}
-.my-review-star-point span{
-	color:black;
+	color:red;
+	margin-top:10px;
+	border-radius:5px;
+	font-weight: 500;
+	font-size: 85%;
+	padding:5px 0 5px 0;
+	}
+	
+.mypage-review-table button:focus{
+	outline:none;
+}	
+
+#show-review{
+	border:solid 1px #39594e;
+	width:70px;
+	background-color:white;
+	border-radius:5px;
+	color:#39594e;
+	font-weight: 500;
+	font-size: 85%;
+	padding:5px 0 5px 0;
 }

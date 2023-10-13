@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.model.CategoryCheck;
-import com.example.daitso.product.model.Product;
+
 
 @Repository
 @Mapper
@@ -51,5 +51,8 @@ public interface ICategoryRepository {
 	// 카테고리 등록하기
 	void registerCategories(CategoryCheck categoryCheck);
 
+	void updateCategoryImage(int categoryId, String imageUrl);
+	
+	void deleteCategoryImage(int categoryId, boolean deleteCategoryImage);
 }
 

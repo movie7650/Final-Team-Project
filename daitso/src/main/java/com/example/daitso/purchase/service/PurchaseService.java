@@ -41,6 +41,7 @@ public class PurchaseService implements IPurchaseService {
 	@Transactional
 	public void insertPurchase(PurchaseInsert purchaseInsert) {
 		 purchaseRepository.insertPurchase(purchaseInsert);
+		 purchaseRepository.updateProductStockInPurchase(purchaseInsert.getCartId());
 		 cartRepository.updateCartStatusPurchaseSuccess(purchaseInsert.getCustomerId(), purchaseInsert.getCartId());
 		 if(purchaseInsert.getCustomerCouponId() != 0) {
 			 customerCouponRepository.updateCustomerCouponStatusPurchaseSuccess(purchaseInsert.getCustomerId(), purchaseInsert.getCustomerCouponId());
@@ -72,6 +73,11 @@ public class PurchaseService implements IPurchaseService {
 	@Override
 	public int selectPurchaseNumCount(int customerId) {
 		return purchaseRepository.selectPurchaseNumCount(customerId);
+	}
+	//내 주문상품 전체 갯수
+	@Override
+	public int countMyOrderList(int customerId) {
+		return purchaseRepository.countMyOrderList(customerId);
 	}
 	
 }

@@ -1,21 +1,29 @@
 package com.example.daitso.admin.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.daitso.admin.exceptions.DuplicateProductException;
 import com.example.daitso.category.model.CategoryCheck;
 import com.example.daitso.category.repository.ICategoryRepository;
 import com.example.daitso.config.CommonCode;
 import com.example.daitso.config.repository.ICommonCodeRepository;
 import com.example.daitso.coupon.model.CouponCheck;
 import com.example.daitso.coupon.repository.ICouponRepository;
+import com.example.daitso.customer.model.CustomerChart;
+import com.example.daitso.customer.repository.ICustomerRepository;
 import com.example.daitso.product.model.Product;
+import com.example.daitso.product.model.ProductChart;
 import com.example.daitso.product.model.ProductCheck;
 import com.example.daitso.product.repository.IProductRepository;
+import com.example.daitso.purchase.model.PurchaseChart;
+import com.example.daitso.purchase.model.PurchaseCheck;
 import com.example.daitso.purchase.model.PurchaseList;
 import com.example.daitso.purchase.repository.IPurchaseRepository;
 
@@ -38,48 +46,73 @@ public class AdminService implements IAdminService{
 	ICouponRepository couponRepository;
 	
 	@Autowired
+	ICustomerRepository customerRepository;
+	
+	@Autowired
 	S3Service s3Service;
 	
 	// 상품 등록하기 ★
-//	@Transactional
-//	public void registerProducts(ProductCheck product, List<MultipartFile> files) {
-//		List<String> imagePathList = s3Service.upload(files);
-//		product.setProductImageFirst(imagePathList.get(0));
-//		product.setProductImageSecond(imagePathList.get(1));
-//		product.setProductImageThird(imagePathList.get(2));
-//		
-//		// 상품 등록 실패시 s3에 등록된 이미지 삭제
-//		try {
-//			productRepository.registerProducts(product);
-//			product.getProductId();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			imagePathList.forEach((url) -> {
-//				s3Service.deleteImage(url);	
-//			});
-//		}
-//	}
-	
-	//테스트//
 	@Transactional
-	public void registerProducts(ProductCheck product) {
-		 if (isDuplicateProduct(product)) {
-	            // 중복 상품이 이미 존재하므로 등록을 막음
-			 throw new RuntimeException("상품이 중복되었습니다.");
-	        }
-
-		productRepository.registerProducts(product);
+	public void registerProduct(ProductCheck product, List<MultipartFile> files) {
+		List<String> imagePathList = s3Service.upload(files);
+		product.setProductImageFirst(imagePathList.get(0));
+		product.setProductImageSecond(imagePathList.get(1));
+		product.setProductImageThird(imagePathList.get(2));
 		
+		if (isDuplicateProduct(product)) {
+	        throw new DuplicateProductException("상품이 중복되었습니다.");
+	    }
+		// 상품 등록 실패시 s3에 등록된 이미지 삭제
+		try {
+			productRepository.registerProduct(product);
+			product.getProductId();
+		} catch(Exception e) {
+			e.printStackTrace();
+			imagePathList.forEach((url) -> {
+				s3Service.deleteImage(url);	
+			});
+		}
 	}
 	
-	// ★
+	// 기존 상품 등록하기
+	@Transactional
+	public void registerProductOriginal(ProductCheck product) {
+		
+		if (isDuplicateProduct(product)) {
+	        throw new DuplicateProductException("상품이 중복되었습니다.");
+	    }
+		productRepository.registerProduct(product);
+	}
+	
+	//테스트//
+//	@Transactional
+//	public void registerProduct(ProductCheck product) {
+//		// 중복 상품이 존재하면 등록을 막기 위해 RuntimeException 발생
+////		if (isDuplicateProduct(product)) {
+////			 throw new RuntimeException("상품이 중복되었습니다.");
+////	    	}
+//		 if (isDuplicateProduct(product)) {
+//		        throw new DuplicateProductException("상품이 중복되었습니다.");
+//		    }
+//		productRepository.registerProduct(product);
+//		
+//	}
+	
+	// 상품 등록시 상품의 중복 여부를 확인하기 
 	@Override
 	public boolean isDuplicateProduct(ProductCheck product) {
-		// 중복 체크 로직 구현
+		// 중복 상품이 존재하면(중복된 상품의 개수가 0보다 크면) true, 그렇지 않으면 false
         int count = productRepository.countDuplicateProducts(product);
         return count > 0;
 	}
 	
+	// 상품 수정시 상품의 중복 여부를 확인하기 -> 변경함
+//	@Override
+//	public boolean isDuplicateProduct(Product product) {
+//		// 중복 상품이 존재하면(중복된 상품의 개수가 0보다 크면) true, 그렇지 않으면 false
+//        int count = productRepository.countDuplicateProducts(product);
+//        return count > 0;
+//	}
 	
 	// 상품 조회하기(카테고리별)
 	@Override
@@ -100,34 +133,54 @@ public class AdminService implements IAdminService{
 	}
 		
 	// 상품 삭제하기(그룹)
-	@Override
+	@Transactional
 	public void deleteProductByGroupId(int productGroupId) {
 		productRepository.deleteProductByGroupId(productGroupId);
+		// 상품 삭제시(그룹) 같은 productGroupId인 특별 상품도 삭제하기
+		productRepository.deleteSpecialProductGroup(productGroupId);
 	}
 
 	// 상품ID로 상품 정보 갖고오기
 	@Override
-	public Product selectProductById(int productId) {
-		return productRepository.selectProductById(productId);
+	public Product selectProductByProductId(int productId) {
+		return productRepository.selectProductByProductId(productId);
 	}
 	
 	// 상품 수정하기
 	@Override
 	public void updateProduct(Product product) {
-		
+		// -> 변경함
+//		// 중복 상품이 존재하면 등록을 막기 위해 RuntimeException 발생
+//		if (isDuplicateProduct(product)) {
+//			throw new RuntimeException("상품이 중복되었습니다.");
+//		}
 		productRepository.updateProduct(product);
 	}
 
 	// 상품 삭제하기
-	@Override
+	@Transactional
 	public void deleteProduct(int productId) {
 		productRepository.deleteProduct(productId);
+		// 상품 삭제시 같은 productId인 특별 상품도 삭제하기
+		productRepository.deleteSpecialProduct(productId);
 	}
 	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
 	@Override
 	public List<ProductCheck> searchProductsByName(String searchText) {
 		return productRepository.searchProductsByName(searchText);
+	}
+
+	// 상품 이미지 정보 삭제하기
+	@Override
+	 public void deleteProductImages(int productId, boolean deleteFirstImage, boolean deleteSecondImage, boolean deleteThirdImage) {
+		 productRepository.deleteProductImages(productId, deleteFirstImage, deleteSecondImage, deleteThirdImage);
+	 }
+	
+	// 상품 이미지 수정하기
+	@Override
+	public void updateProductImages(int productId, int selector, String imageUrl) {
+		productRepository.updateProductImages(productId, selector, imageUrl);
 	}
 
 	
@@ -197,29 +250,33 @@ public class AdminService implements IAdminService{
 		categoryRepository.updateCategoryInfo(categoryCheck);
 	}
 
-
 	//카테고리 등록하기 ★
-//	@Transactional
-//	public void registerCategories(CategoryCheck categoryCheck, List<MultipartFile> files) {
-//		List<String> imagePathList = s3Service.upload(files);
-//		categoryCheck.setCategoryImage(imagePathList.get(0));
-//
-//		// 카테고리 등록 실패시 s3에 등록된 이미지 삭제
-//		try {
-//			categoryRepository.registerCategories(categoryCheck);
-//			categoryCheck.getCategoryId();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			imagePathList.forEach((url) -> {
-//				s3Service.deleteImage(url);	
-//			});
-//		}
-//	}
+	@Transactional
+	public void registerCategories(CategoryCheck categoryCheck, MultipartFile file) {
+		String imageUrl = s3Service.uploadSingle(file); 
+		System.out.println(imageUrl);
+		categoryCheck.setCategoryImage(imageUrl); 
+		categoryRepository.registerCategories(categoryCheck);
+			
+	}
 	
 	//테스트//
-	@Transactional
-	public void registerCategories(CategoryCheck categoryCheck) {
-		categoryRepository.registerCategories(categoryCheck);
+//	@Transactional
+//	public void registerCategories(CategoryCheck categoryCheck) {
+//		categoryRepository.registerCategories(categoryCheck);
+//		
+//	}
+
+	// 카테고리 이미지 수정하기
+	@Override
+	public void updateCategoryImage(int categoryId, String imageUrl) {
+		categoryRepository.updateCategoryImage(categoryId, imageUrl);
+	}
+	
+	// 카테고리 이미지 삭제하기
+	@Override
+	public void deleteCategoryImage(int categoryId, boolean deleteCategoryImage) {
+		categoryRepository.deleteCategoryImage(categoryId, deleteCategoryImage);
 		
 	}
 
@@ -264,14 +321,12 @@ public class AdminService implements IAdminService{
 	public void deleteCommonCode(int commonCodeId) {
 		commonCodeRepository.deleteCommonCode(commonCodeId);
 	}
-
 	
-	
+	// 공통코드 등록하기
 	@Override
 	public void registerCommonCodes(CommonCode commonCode) {
 		commonCodeRepository.registerCommonCodes(commonCode);
 	}
-
 	
 	// 전체 쿠폰 조회하기
 	@Override
@@ -297,10 +352,40 @@ public class AdminService implements IAdminService{
 		couponRepository.registerCoupons(couponCheck);		
 	}
 
-	//쿠폰 일련번호 중복 확인하기 (해당 쿠폰 일련번호가 데이터베이스에 이미 존재하는지 확인하고, 중복되지 않으면 true를 반환하고 중복된 경우 false를 반환)
+	// 쿠폰 일련번호 중복 확인하기 (해당 쿠폰 일련번호가 데이터베이스에 이미 존재하는지 확인하고, 중복되지 않으면 true를 반환하고 중복된 경우 false를 반환)
 	public boolean isCouponSnUnique(String couponSn) {
         int count = couponRepository.countByCouponSn(couponSn);
         return count == 0; // 0이면 중복되지 않음, 1 이상이면 중복됨
     }
-	
+
+	// 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출액과 주문량 조회하기
+	@Override
+	public List<PurchaseChart> selectSalesStatus(String dateType) {
+		return purchaseRepository.selectSalesStatus(dateType);
+	}
+
+	// 당일, 금주, 당월 가장 많이 팔린 상품 상위 5개 조회하기
+	@Override
+	public List<PurchaseChart> selectTopSelling(String dateType) {
+		return purchaseRepository.selectTopSelling(dateType);
+	}
+
+	// 상품 부족한 재고(10개 미만), 충분한 재고 조회하기
+	@Override
+	public List<ProductChart> selectProductStocks() {
+		return productRepository.selectProductStocks();
+	}
+
+	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
+	@Override
+	public List<CustomerChart> getCustomerCounts() {
+		return customerRepository.getCustomerCounts();
+	}
+
+
+	@Override
+	public int selectCountPurchaseDv(int purchaseDv) {
+		return purchaseRepository.selectCountPurchaseDv(purchaseDv);
+	}
+
 }

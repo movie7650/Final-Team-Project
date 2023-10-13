@@ -4,8 +4,9 @@ import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-@Getter @Setter
+@Getter @Setter @ToString
 public class MypageReviewCheck {
 	private int reviewId;
 	private int customerId;
@@ -20,4 +21,5 @@ public class MypageReviewCheck {
 	private String reviewImageThird;
 	private Date createDt;
 	private int reviewContentCount;
+	private String productImg;
 }

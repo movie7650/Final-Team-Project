@@ -29,11 +29,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-				/*
-				 * .csrf((csrf) -> csrf .ignoringRequestMatchers(new
-				 * AntPathRequestMatcher("/**")))
-				 */
-            	.csrf((csrf) -> csrf.csrfTokenRepository(sessionCsrfRepository()))
+            	.csrf((csrf) -> csrf
+            			.csrfTokenRepository(sessionCsrfRepository())
+            			.ignoringRequestMatchers(new AntPathRequestMatcher("/admin/**")))
             	.formLogin((formLogin) -> formLogin
                         .loginPage("/customer/login")
                         .successHandler(myAuthenticationSuccessHandler()))

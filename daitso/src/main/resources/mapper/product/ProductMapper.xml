@@ -35,7 +35,7 @@
 			category_id AS categoryId, 
 	        product_image_first AS productImageFirst, 
 			product_nm AS productNm, 
-			NVL(review_star_point,0) AS reviewStarPoint, 
+			review_star_point AS reviewStarPoint, 
 	        NVL(review_count,0) AS reviewCount,
 			product_content AS productContent, 
 			product_stock AS productStock, 
@@ -47,7 +47,7 @@
 	    			product_price, rownum as rnum
 	    	FROM(
 	    		SELECT p.product_id		AS		product_id,  discount_rate, row_number() over (partition by p.product_group_id order by product_price) snum,
-					   p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point, review_count
+					   p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(review_star_point,0) AS review_star_point, review_count
 				FROM product p
 	            LEFT JOIN  (
 	                        select product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count 
@@ -60,25 +60,26 @@
 									   	CONNECT BY PRIOR category_id = category_pr_id
 									  )
 				 AND p.status = 'Y'
-				 <choose>
-				 	<when test='sort.equals("normal")'>
-						 ORDER BY p.product_id			 	
-				 	</when>
-				 	<when test='sort.equals("highPrice")'>
-				 		ORDER BY p.product_price DESC
-				 	</when>
-				 	<when test='sort.equals("lowPrice")'>
-				 		ORDER BY p.product_price
-				 	</when>
-				 	<when test='sort.equals("highRate")'>
-				 		ORDER BY review_star_point
-				 	</when>
-				 </choose>
 	            )
 	        WHERE snum = 1
 	    ) 
 	    WHERE rnum between #{start} and #{end}
+	    <choose>
+		 	<when test='"normal".equals(sort)'>
+				 ORDER BY product_id			 	
+		 	</when>
+		 	<when test='"highPrice".equals(sort)'>
+		 		ORDER BY product_price DESC
+		 	</when>
+		 	<when test='"lowPrice".equals(sort)'>
+		 		ORDER BY product_price
+		 	</when>
+		 	<when test='"highRate".equals(sort)'>
+		 		ORDER BY review_star_point DESC
+		 	</when>
+		</choose>
 	</select>
+
 
 	<!-- 
 		기능: 특정 카테고리 상품 개수 조회(페이징 처리를 위한 기능)
@@ -97,6 +98,7 @@
 				 AND status = 'Y'
 		        )
 	</select>
+
 
 	<!-- 
 		기능: 상품 상세 조회에서 보여줄 상품 정보 조회
@@ -129,48 +131,69 @@
 	    담당자: 이세인
     -->
     <select id="selectProductsByCategory" resultType="com.example.daitso.product.model.ProductCheck">
-        SELECT *
-	      FROM ( SELECT p.product_group_id  AS "productGroupId",
-		                p.product_nm        AS "productNm",
-		                c.category_pr_id    AS "categoryPrId",
-		                c.category_id       AS "categoryId",
-		                c.category_nm       AS "categoryNm",
-		                ROW_NUMBER() OVER (ORDER BY p.product_group_id DESC) AS "rn"
-		           FROM product p
-		           JOIN category c
-					 ON p.category_id = c.category_id AND p.status ='Y'
-		       GROUP BY p.product_group_id, 
-		                p.product_nm, 
-		                c.category_pr_id, 
-		                c.category_id, 
-		                c.category_nm
-		         HAVING 1=1
-			        <choose>
-			            <!-- 아무 카테고리도 선택되지 않은 경우 -->
-			            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-			            		     and (thirdCategoryId == null or thirdCategoryId == 0)">		            
-			            </when>
-			            
-			            <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
-			            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-			            		    and (thirdCategoryId == null or thirdCategoryId == 0)">
-			              AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
-			               OR  c.category_pr_id = #{secondCategoryId}
-			            </when>
-			            
-			            <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
-			            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-			           		        and thirdCategoryId != null and thirdCategoryId != 0">
-			              AND c.category_pr_id = #{secondCategoryId}
-			            </when>
-			            
-			            <!-- 첫 번째 카테고리만 선택한 경우 -->
-			            <otherwise>
-			              AND c.category_pr_id = #{firstCategoryId}
-			            </otherwise>
-			        </choose>
-	            ) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
-		</select>
+        SELECT "rn",
+			   "productGroupId",
+			   "productNm",
+			   "categoryPrId",
+			   "categoryId",
+			   "categoryNm"
+		  FROM ( SELECT ROWNUM AS "rn",
+				        "productGroupId",
+				        "productNm",
+				        "categoryPrId",
+				        "categoryId",
+				        "categoryNm"
+				    FROM ( SELECT "productGroupId",
+					              "productNm",
+					              "categoryPrId",
+					              "categoryId",
+					              "categoryNm"
+					         FROM ( SELECT p.product_group_id AS "productGroupId",
+						                   p.product_nm AS "productNm",
+						                   c.category_pr_id AS "categoryPrId",
+						                   c.category_id AS "categoryId",
+						                   c.category_nm AS "categoryNm"
+							          FROM product p
+							     LEFT JOIN category c ON p.category_id = c.category_id
+							         WHERE c.category_id IN ( SELECT category_id 
+											                    FROM category c
+				                     <choose>
+				                        <!-- 아무 카테고리도 선택되지 않은 경우 -->
+				                        <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
+				                                     and (thirdCategoryId == null or thirdCategoryId == 0)">
+				                        START WITH category_id = 0		            
+				                        </when>
+				                        
+				                        <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
+				                        <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+				                                    and (thirdCategoryId == null or thirdCategoryId == 0)">	              
+				                         START WITH category_id = #{secondCategoryId}
+				                        </when>
+				                        
+				                        <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
+				                        <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+				                                    and thirdCategoryId != null and thirdCategoryId != 0">
+				                           START WITH category_id = #{thirdCategoryId}
+				                        </when>
+				                        
+				                        <!-- 첫 번째 카테고리만 선택한 경우 -->
+				                        <otherwise>
+				                           START WITH category_id = #{firstCategoryId}
+				                        </otherwise>
+				                    </choose>
+				                    CONNECT BY PRIOR category_id = category_pr_id
+				                )
+				            AND p.status = 'Y'
+				            GROUP BY p.product_group_id,
+					                 p.product_nm,
+					                 c.category_pr_id,
+					                 c.category_id,
+					                 c.category_nm
+				            ORDER BY p.product_group_id DESC
+				        )
+				    )
+				) WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+    </select>
 
 
     <!-- 
@@ -178,46 +201,38 @@
 		담당자: 이세인
 	-->
 	<select id="selectCountProducts">
-	    SELECT COUNT (*)
-		  FROM(	SELECT COUNT(*)
-		          FROM product p 
-			      JOIN category c 
-			        ON p.category_id = c.category_id  AND p.status ='Y'
-			  GROUP BY p.product_group_id, 
-			           p.product_nm, 
-			           c.category_pr_id, 
-			           c.category_id, 
-			           c.category_nm
-		    	HAVING 1=1
-				   <choose>
-				       <!-- 아무 카테고리도 선택되지 않은 경우 -->
-				       <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
-				            	    and (thirdCategoryId == null or thirdCategoryId == 0)">
-				       )
-				       </when>
-				        
-				       <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
-				       <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-				                   and (thirdCategoryId == null or thirdCategoryId == 0)">
-				         AND (c.category_pr_id = #{firstCategoryId} AND c.category_id = #{secondCategoryId}) 
-				          OR  c.category_pr_id = #{secondCategoryId}
-				       )
-				       </when>
-				        
-				       <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
-				       <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
-				                   and thirdCategoryId != null and thirdCategoryId != 0">
-				         AND c.category_pr_id = #{secondCategoryId}
-				       )
-				       </when>
-				          
-				       <!-- 첫 번째 카테고리만 선택한 경우 -->
-				       <otherwise>
-				         AND c.category_pr_id = #{firstCategoryId}
-				       )
-				       </otherwise>
-				  </choose>
-    	 </select>
+	    SELECT count(*)
+		  FROM ( SELECT distinct product_group_id 
+			       FROM product 
+			      WHERE category_id IN ( SELECT category_id 
+				 						   FROM category 
+		                                   <choose>
+								            <!-- 아무 카테고리도 선택되지 않은 경우 -->
+								            <when test="(firstCategoryId == null or firstCategoryId == 0) and (secondCategoryId == null or secondCategoryId == 0)
+								            		     and (thirdCategoryId == null or thirdCategoryId == 0)">
+								            START WITH category_id = 0		            
+								            </when>
+								            
+								            <!-- 첫 번째, 두 번째 카테고리를 선택한 경우 -->
+								            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+								            		    and (thirdCategoryId == null or thirdCategoryId == 0)">	              
+								             START WITH category_id = #{secondCategoryId}
+								            </when>
+								            
+								            <!-- 첫 번째, 두 번째, 세 번째 카테고리를 모두 선택한 경우 -->
+								            <when test="firstCategoryId != null and firstCategoryId != 0 and secondCategoryId != null and secondCategoryId != 0
+								           		        and thirdCategoryId != null and thirdCategoryId != 0">
+								               START WITH category_id = #{thirdCategoryId}
+								            </when>
+								            
+								            <!-- 첫 번째 카테고리만 선택한 경우 -->
+								            <otherwise>
+								               START WITH category_id = #{firstCategoryId}
+								            </otherwise>
+								        </choose>
+				  						CONNECT BY PRIOR category_id = category_pr_id )
+					 AND status = 'Y')
+    </select>
 
 
 	<!-- 
@@ -236,7 +251,11 @@
 		       p.product_option_third   AS "productOptionThird",
 		       p.product_price          AS "productPrice",
 	 	       p.product_stock          AS "productStock",
-	 	       p.product_max_get        AS "productMaxGet"
+	 	       p.product_max_get        AS "productMaxGet",
+               p.product_image_first	AS "productImageFirst",
+			   p.product_image_second	AS "productImageSecond",
+			   p.product_image_third	AS "productImageThird",
+			   p.product_content	    AS "productContent"
 	   	 FROM  product p 
 		 JOIN  category c 
 		   ON  p.category_id = c.category_id AND p.status = 'Y'
@@ -249,20 +268,33 @@
 		기능: 상품 삭제하기(그룹)
 		담당자: 이세인
 	-->
-	<delete id="deleteProductByGroupId" parameterType="int">
+	<update id="deleteProductByGroupId" parameterType="int">
     UPDATE product
 	   SET status = 'N',
 	   	   modifier = 'admin',
            modify_dt = systimestamp
      WHERE product_group_id = #{productGroupId}
-	</delete>
+	</update>
+	
+	<!-- 
+		기능: 상품 삭제시(그룹) 특별 상품 삭제하기
+		담당자: 이세인
+	-->
+	<update id="deleteSpecialProductGroup" parameterType="int">
+	    UPDATE special_product
+		   SET status = 'N',
+		       modifier = 'admin',
+		       modify_dt = systimestamp
+		 WHERE TRUNC(create_dt) = TRUNC(SYSDATE) 
+		   AND product_id IN (SELECT product_id FROM product WHERE product_group_id = #{productGroupId})
+	</update>
 
 
 	<!-- 
 		기능: 상품ID로 상품 정보 조회하기
 		담당자: 이세인
 	-->
-	<select id="selectProductById" resultType="com.example.daitso.product.model.Product" parameterType="int">
+	<select id="selectProductByProductId" resultType="com.example.daitso.product.model.Product" parameterType="int">
 	    SELECT product_group_id        AS "productGroupId",
 	           product_code            AS "productCode",
 	           product_id			   AS "productId",
@@ -275,7 +307,8 @@
 			   product_image_first	   AS "productImageFirst",
 			   product_image_second	   AS "productImageSecond",
 			   product_image_third	   AS "productImageThird",
-			   product_max_get         AS "productMaxGet"   
+			   product_max_get         AS "productMaxGet",
+			   product_content		   AS "productContent"   
 		  FROM product p
 	     WHERE product_id = #{productId}
 	</select>
@@ -287,169 +320,239 @@
 	-->
 	<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
 	    UPDATE product
-		   SET product_option_first  = #{productOptionFirst},
-		   	   product_option_second = #{productOptionSecond},
-		   	   product_option_third  = #{productOptionThird},
-		   	   product_price         = #{productPrice},
+		   SET product_price         = #{productPrice},
 		       product_stock         = #{productStock},
 		       product_max_get       = #{productMaxGet},
 		       modifier              = 'admin',
                modify_dt             = systimestamp
 		 WHERE product_id = #{productId}
 	</update>
+	<!--<update id="updateProduct" parameterType="com.example.daitso.product.model.Product">
+		    UPDATE product
+			   SET product_option_first  = #{productOptionFirst},
+			   	   product_option_second = #{productOptionSecond},
+			   	   product_option_third  = #{productOptionThird},
+			   	   product_price         = #{productPrice},
+			       product_stock         = #{productStock},
+			       product_max_get       = #{productMaxGet},
+			       modifier              = 'admin',
+	               modify_dt             = systimestamp
+			 WHERE product_id = #{productId}
+		</update> -->
 
 
+	<!-- 
+		기능: 상품 이미지 정보 삭제하기
+		담당자: 이세인
+	-->
+    <update id="deleteProductImages" parameterType="int">
+        UPDATE product
+          <set>
+	        <if test="deleteFirstImage">
+	        		  product_image_first = NULL,
+	        </if>
+	        <if test="deleteSecondImage">
+	        		  product_image_second = NULL,
+	        </if>
+	        <if test="deleteThirdImage">
+	        		  product_image_third = NULL
+	        </if>
+         </set>
+         WHERE product_id = #{productId}
+    </update>
+    
+    
+	<!-- 
+		기능: 상품 이미지 정보 삭제하기
+		담당자: 이세인
+	-->
+	
+	<update id="updateProductImages">
+	    UPDATE product
+	       SET
+		    <choose>
+		        <when test="selector == 1">
+		            product_image_first = #{imageUrl}
+		        </when>
+		        <when test="selector == 2">
+		            product_image_second = #{imageUrl}
+		        </when>
+		        <when test="selector == 3">
+		            product_image_third = #{imageUrl}
+		        </when>
+		    </choose>
+	    WHERE product_id = #{productId}
+	</update>
+	<!-- 	<update id="updateProductImages">
+		    UPDATE product
+			   SET
+			    <if test="uploadFirstImage != null">product_image_first = #{imageUrls},</if>
+			    <if test="uploadSecondImage != null">product_image_second = #{imageUrls},</if>
+			    <if test="uploadThirdImage != null">product_image_third = #{imageUrls}</if>
+			  WHERE product_id = #{productId}
+		</update> -->
+    
+    
 	<!-- 
 		기능: 상품 삭제하기
 		담당자: 이세인
 	-->
-	<delete id="deleteProduct" parameterType="int">
+	<update id="deleteProduct" parameterType="int">
 	    UPDATE product
-	       SET status = 'N',
+	       SET status    = 'N',
 	           modifier  = 'admin',
                modify_dt = systimestamp 
 	     WHERE product_id = #{productId}
-	</delete>
+	</update>
 
+	<!-- 
+		기능: 상품 삭제시 특별 상품 삭제하기
+		담당자: 이세인
+	-->
+	<update id="deleteSpecialProduct" parameterType="int">
+	    UPDATE special_product
+	       SET status    = 'N',
+	           modifier  = 'admin',
+               modify_dt = systimestamp 
+	     WHERE product_id = #{productId} AND TRUNC(create_dt) = TRUNC(SYSDATE)
+	</update>
 
 	<!-- 
 		기능: 상품 등록하기(상품 등록을 하고, 해당 상품에 상품 코드를 생성하기)
 		담당자: 이세인
 	-->
-	<insert id="registerProducts" parameterType="com.example.daitso.product.model.ProductCheck">
-	    <!-- DECLARE v_product_id NUMBER;
-		  BEGIN		  
-		 INSERT INTO product ( product_group_id,
-							   product_id,
-							   category_id,
-						       product_nm,
-					     	   product_content,
-						       product_image_first,
-						       product_image_second,
-						       product_image_third,
-							   product_price,
-							   product_stock,
-							   product_option_first,
-							   product_option_second,
-							   product_option_third ) 
-			  VALUES ( #{productGroupId},
-			           product_seq.NEXTVAL,
-			           #{categoryId},
-			           #{productNm},
-			           #{productContent},
-			           #{productImageFirst},
-			           #{productImageSecond},
-			           #{productImageThird},
-			           #{productPrice},
-			           #{productStock},
-			           #{productOptionFirst},
-			           #{productOptionSecond},
-			           #{productOptionThird} )		         
-       RETURNING  product_id INTO v_product_id;
-          UPDATE  product
-		     SET  product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-		   WHERE  product_id = v_product_id;
-		 COMMIT;
-		    END; -->
-	DECLARE v_product_id NUMBER;	    
-	BEGIN
-    <choose>
-      <when test="productGroupId == null or productGroupId ==0">
-        INSERT INTO product ( product_group_id,
-					          product_id,
-					          category_id,
-					          product_nm,
-					          product_content,
-					          product_image_first,
-					          product_price,
-					          product_stock,
-					          product_option_first,
-					          product_option_second,
-					          product_option_third,
-					          product_max_get
-					         )
-		     VALUES ( product_group_seq.NEXTVAL,
-				      product_seq.NEXTVAL,
-				      #{categoryId},
-				      #{productNm},
-				      #{productContent},
-		              #{productImageFirst},
-			          #{productPrice},
-			          #{productStock},
-			          #{productOptionFirst},
-			          #{productOptionSecond},
-			          #{productOptionThird},
-			          #{productMaxGet} )
-      RETURNING product_id INTO v_product_id;
-  
-      UPDATE product
-	     SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-       WHERE product_id = v_product_id;
-      </when>
-      <otherwise>
-        INSERT INTO product (
-           product_group_id,
-           product_id,
-           category_id,
-           product_nm,
-           product_content,
-           product_image_first,
-           product_price,
-           product_stock,
-           product_option_first,
-           product_option_second,
-           product_option_third,
-           product_max_get
-        )
-        VALUES (
-           #{productGroupId},
-           product_seq.NEXTVAL,
-           #{categoryId},
-           #{productNm},
-           #{productContent},
-           #{productImageFirst},
-           #{productPrice},
-           #{productStock},
-           #{productOptionFirst},
-           #{productOptionSecond},
-           #{productOptionThird},
-           #{productMaxGet}
-        )
-        RETURNING product_id INTO v_product_id;
-    
-        UPDATE product
-        SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
-        WHERE product_id = v_product_id;
-      </otherwise> 
-    </choose>
-  
-    COMMIT;
-  END;
-    </insert>
+	<insert id="registerProduct" parameterType="com.example.daitso.product.model.ProductCheck">
+		  DECLARE
+		    v_product_id NUMBER;
+		  BEGIN
+		    IF (#{productGroupId} IS NULL OR #{productGroupId} = 0) THEN
+		      INSERT INTO product (
+		        product_group_id,
+		        product_id,
+		        category_id,
+		        product_nm,
+		        product_image_first,
+		        product_image_second,
+		        product_image_third,
+		        product_price,
+		        product_stock,
+		        product_option_first,
+		        product_option_second,
+		        product_option_third,
+		        product_max_get
+		      )
+		      VALUES (
+		        product_group_seq.NEXTVAL,
+		        product_seq.NEXTVAL,
+		        #{categoryId},
+		        #{productNm},
+		        #{productImageFirst},
+		        #{productImageSecond},
+		        #{productImageThird},
+		        #{productPrice},
+		        #{productStock},
+		        #{productOptionFirst},
+		        #{productOptionSecond},
+		        #{productOptionThird},
+		        #{productMaxGet}
+		      )
+		      RETURNING product_id INTO v_product_id;
+		
+		      UPDATE product
+		         SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+		       WHERE product_id = v_product_id;
+		    ELSE
+		      INSERT INTO product (
+		        product_group_id,
+		        product_id,
+		        category_id,
+		        product_nm,
+		        product_image_first,
+		        product_image_second,
+		        product_image_third,
+		        product_price,
+		        product_stock,
+		        product_option_first,
+		        product_option_second,
+		        product_option_third,
+		        product_max_get
+		      )
+		      VALUES (
+		        #{productGroupId},
+		        product_seq.NEXTVAL,
+		        #{categoryId},
+		        #{productNm},
+		        #{productImageFirst},
+		        #{productImageSecond},
+		        #{productImageThird},
+		        #{productPrice},
+		        #{productStock},
+		        #{productOptionFirst},
+		        #{productOptionSecond},
+		        #{productOptionThird},
+		        #{productMaxGet}
+		      )
+		      RETURNING product_id INTO v_product_id;
+		
+		      UPDATE product
+		         SET product_code = CONCAT(v_product_id, TO_CHAR(create_dt, 'YYYYMMDDHH24MISSFF3'))
+		       WHERE product_id = v_product_id;
+		    END IF;
+		
+		    COMMIT;
+		  END;
+	</insert>
 
-<select id="countDuplicateProducts" resultType="int">
-    SELECT COUNT(*) FROM product
-    WHERE product_nm = #{productNm}
-    AND product_group_id = #{productGroupId}
-    AND product_option_first = #{productOptionFirst}
-    AND product_option_second = #{productOptionSecond}
-    AND product_option_third = #{productOptionThird}
-</select>
-    
 
+	<!-- 
+		기능: 중복된 상품의 개수를 반환하기
+		담당자: 이세인
+	-->
+	<select id="countDuplicateProducts" resultType="int">
+	    SELECT COUNT(*) 
+	      FROM product
+	     WHERE product_nm = #{productNm}
+	       AND product_group_id = #{productGroupId}
+	       AND product_option_first = #{productOptionFirst}
+	       AND product_option_second = #{productOptionSecond}
+	       AND product_option_third = #{productOptionThird}
+	       AND status = 'Y'
+	</select>
+    
+    
 	<!-- 
 		기능: 상품명으로 그룹 상품 조회하기
 		담당자: 이세인
 	-->
 	<select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
-	    SELECT DISTINCT p.product_group_id   AS "productGroupId",
-		        	    c.category_nm        AS "categoryNm",
-		       			p.product_nm         AS "productNm",
-		        		p.category_id        AS "categoryId"
+	    SELECT DISTINCT p.product_group_id   		AS "productGroupId",
+		        	    c.category_nm        		AS "categoryNm",
+		       			p.product_nm         		AS "productNm",
+		        		p.category_id        		AS "categoryId",
+		        		p.product_image_first       AS "productImageFirst",
+                        p.product_image_second      AS "productImageSecond",
+                        p.product_image_third       AS "productImageThird"
 		  FROM product p
 		  JOIN category c 
 		    ON p.category_id = c.category_id AND p.status = 'Y'
 		 WHERE INSTR(p.product_nm,#{searchText}) > 0
+	</select>
+	
+	
+	<!-- 
+		기능: 상품 부족한 재고(10개 미만), 충분한 재고 조회하기
+		담당자: 이세인
+	-->
+	<select id="selectProductStocks" resultType="com.example.daitso.product.model.ProductChart">
+	  <![CDATA[
+	    SELECT 'Stock Low' AS label, product_nm AS productNm, product_stock AS productStock
+		  FROM product
+		 WHERE product_stock < 10  AND status='Y'
+	 UNION ALL
+		SELECT '재고 10개 이상' AS label, '' AS product_nm, COUNT(*) AS productStock
+		  FROM product
+		 WHERE product_stock >= 10  AND status='Y'
+	  ]]>
 	</select>
 
 
@@ -475,7 +578,7 @@
 		FROM product 
 		WHERE product_group_id=#{productGroupId} AND status='Y'
 		<choose>
-			<when test='productOptionFirst.equals("0")'>
+			<when test='"0".equals(productOptionFirst)'>
 			</when>
 			<otherwise>
 				AND product_option_first = #{productOptionFirst}
@@ -495,14 +598,14 @@
 		FROM product 
 		WHERE product_group_id=#{productGroupId} AND status='Y'
 		<choose>
-			<when test='productOptionFirst.equals("0")'>
+			<when test='"0".equals(productOptionFirst)'>
 			</when>
 			<otherwise>
 				AND product_option_first = #{productOptionFirst}
 			</otherwise>
 		</choose>
 		<choose>
-			<when test='productOptionSecond.equals("0")'>
+			<when test='"0".equals(productOptionSecond)'>
 			</when>
 			<otherwise>
 				AND product_option_second = #{productOptionSecond}
@@ -524,21 +627,21 @@
 					FROM product p
 					WHERE product_group_id = #{productGroupId} AND status = 'Y'
 					<choose>
-						<when test='productOptionFirst.equals("0")'>
+						<when test='"0".equals(productOptionFirst)'>
 						</when>
 						<otherwise>
 							AND product_option_first = #{productOptionFirst}
 						</otherwise>
 					</choose>
 					<choose>
-						<when test='productOptionSecond.equals("0")'>
+						<when test='"0".equals(productOptionSecond)'>
 						</when>
 						<otherwise>
 							AND product_option_second = #{productOptionSecond}
 						</otherwise>
 					</choose>
 					<choose>
-						<when test='productOptionThird.equals("0")'>
+						<when test='"0".equals(productOptionThird)'>
 						</when>
 						<otherwise>
 								AND product_option_third = #{productOptionThird}
@@ -559,24 +662,24 @@
 		FROM product
 		WHERE product_group_id = #{productGroupId} and status='Y'
 		<choose>
-			<when test='size.equals("사이즈옵션 없음")'>
-				and product_option_first is null
+			<when test='"사이즈옵션 없음".equals(size)'>
+				and product_option_first = '-'
 			</when>
 			<otherwise>
 				and product_option_first = #{size}
 			</otherwise>
 		</choose>
 		<choose>
-			<when test='color.equals("색상옵션 없음")'>
-				and product_option_second is null
+			<when test='"색상옵션 없음".equals(color)'>
+				and product_option_second = '-'
 			</when>
 			<otherwise>
 				and product_option_second = #{color}
 			</otherwise>
 		</choose>
 		<choose>
-			<when test='other.equals("기타옵션 없음")'>
-				and product_option_third is null
+			<when test='"기타옵션 없음".equals(other)'>
+				and product_option_third = '-'
 			</when>
 			<otherwise>
 				and product_option_third = #{other}
@@ -597,7 +700,8 @@
 				category_id AS categoryId, 
 				product_price AS productPrice,  
 				NVL(average,0) AS reviewStarPoint, 
-				NVL(cnt,0) AS rCnt
+				NVL(cnt,0) AS rCnt,
+				product_image_first AS productImageFirst
 		FROM special_product sp 
 		LEFT JOIN product p ON sp.product_id = p.product_id
 		LEFT JOIN (
@@ -620,7 +724,8 @@
 	            category_id AS categoryId,
 	            product_price AS productPrice,
 	            NVL(average,0) AS reviewStarPoint, 
-				NVL(cnt,0) AS reviewCount
+				NVL(cnt,0) AS reviewCount,
+                product_image_first AS productImageFirst
 		FROM product p  
 		LEFT JOIN (
 					SELECT product_group_id, round(avg(review_star_point) * 20,0) as average, count(product_group_id) as cnt
@@ -652,10 +757,10 @@
 				WHERE p.status = 'Y'
 				)
 	    	WHERE snum = 1 
-	    	<if test='selector.equals("popular")'>
+	    	<if test='"popular".equals(selector)'>
 		    	ORDER BY pSum DESC   	
 	    	</if>
-	    	<if test='selector.equals("sale")'>
+	    	<if test='"sale".equals(selector)'>
 		    	ORDER BY pSum    	
 	    	</if>
 	    	  ) 
@@ -726,19 +831,21 @@
 							LEFT JOIN product mp ON r.product_id = mp.product_id GROUP BY product_group_id
 							) b
 				ON p.product_group_id = b.product_group_id
-				WHERE instr(p.product_nm,#{searchText}) > 0
-				AND p.status = 'Y'
+				WHERE  p.status = 'Y'
+				<if test='searchText != ""'>
+					AND instr(p.product_nm,#{searchText}) > 0			
+				</if>
 				<choose>
-					<when test='sort.equals("normal")'>
+					<when test='"normal".equals(sort)'>
 						ORDER BY p.product_id
 					</when>
-					<when test='sort.equals("highPrice")'>
+					<when test='"highPrice".equals(sort)'>
 						ORDER BY p.product_price DESC
 					</when>
-					<when test='sort.equals("lowPrice")'>
+					<when test='"lowPrice".equals(sort)'>
 						ORDER BY p.product_price
 					</when>
-					<when test='sort.equals("highRate")'>
+					<when test='"highRate".equals(sort)'>
 						ORDER BY review_star_point
 					</when>
 				</choose>
@@ -748,13 +855,21 @@
 		WHERE rnum between #{start} and #{end}
 	</select>
 	
+	
+	<!-- 
+		기능: 검색된 상품 개수 조회
+		담당자: 나현웅
+	 -->
 	<select id="selectSearchProductCount" resultType="int">
 		SELECT count(*)
 		FROM (
 			SELECT distinct product_group_id
 			FROM product
-			WHERE INSTR(product_nm, #{searchText}) > 0
-		AND status = 'Y'
+			WHERE status = 'Y'
+		<if test='searchText != ""'>
+			AND instr(product_nm,#{searchText}) > 0			
+		</if>
 		)
 	</select>
+	
 </mapper>

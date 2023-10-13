@@ -26,7 +26,6 @@
 	margin-left: 15%;
 	width: 185px;
 	height: 80px;
-	font-family: Inter;
 	font-size: 150%;
 	font-weight: bold;
 	font-stretch: normal;
@@ -38,18 +37,17 @@
 }
 
 .top-rectangle-02 {
-	width: 220px;
+	width: 230px;
 	height: 142px;
 	padding: 52px 7px;
 	border-left: solid 1px #aac8b2;
 	background-color: #e8c369;
 }
 .rectangle-title {
-  margin-top:-20%;
+  margin-top:-15%;
   width: 159px;
   height: 47px;
-  font-family: Inter;
-  font-size: 100%;
+  font-size: 130%;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
@@ -93,7 +91,6 @@
 .left-menu-title{
 	font-size:110%;
 	font-weight:bold;
-	font-family:Inter;
 	margin-left:10%;
 	padding-top:10%; 
 }

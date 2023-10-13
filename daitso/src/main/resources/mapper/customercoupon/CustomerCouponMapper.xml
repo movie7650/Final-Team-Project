@@ -18,6 +18,16 @@
           AND cc.status='Y'
 	</select>
 	<!-- 
+		기능: 사용가능한쿠폰 갯수 카운트
+		담당자: 윤상영
+	-->
+	<select id="countUsableCustomerCoupon" resultType="int" parameterType="int">
+		SELECT count(*) 
+		  FROM customer_coupon 
+       	 WHERE customer_id=#{customerId}
+		   AND coupon_use_dv = 203
+	</select>
+	<!-- 
 		기능: 사용불가한 쿠폰 조회
 		담당자: 윤상영
 	-->
@@ -49,7 +59,7 @@
 		기능: 쿠폰번호 중복입력 방지 - 입력된 번호와 같은번호 카운트 
 		담당자: 윤상영
 	-->
-	<select id="countExistCouponSn" resultType="int" parameterType="String">
+	<select id="countExistCouponSn" resultType="int" parameterType="String"> 
 		SELECT count(*) 
 		  FROM customer_coupon
 		 WHERE customer_id= cast(#{customerId} as number(8)) 
@@ -121,4 +131,6 @@
                modify_dt = SYSTIMESTAMP
          WHERE customer_coupon_id = #{customerCouponId}
 	</update>  
+	
+	
 </mapper>

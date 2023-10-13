@@ -2,11 +2,11 @@
 <html>
 <div th:fragment="adminFrame">
 	<div class="container" style="max-width: 1400px">
-	
-		<!-- 윗 단 화면 -->
-		<div class="top-container" style="padding-top: 140px;">
 
-			<div class="col-sm-2 top-rectangle-01">
+		<!-- 윗 단 화면 -->
+		<div class="top-container" style="padding-top: 120px;">
+
+			<div class="top-rectangle-01">
 				<span class="page-title" style="padding-left: 10px;">관리자</span>
 			</div>
 
@@ -14,8 +14,8 @@
 			<div class="top-rectangle-02">
 				<div class="rectangle-title">입금/완료</div>
 				<div class="rectangle-count-wrap">
-					<span class="rectangle-count">21</span> <!-- 바꿔놓아야함 -->
-					<span class="rectangle-02-count">건</span> <!-- 바꿔놓아야함 -->
+					<span class="rectangle-count1"></span>
+					<span class="rectangle-02-count">건</span>
 				</div>
 			</div>
 
@@ -23,17 +23,17 @@
 			<div class="top-rectangle-02">
 				<div class="rectangle-title">배송중</div>
 				<div class="rectangle-count-wrap">
-					<span class="rectangle-count">17</span> <!-- 바꿔놓아야함 -->
-					<span class="rectangle-02-count">건</span> <!-- 바꿔놓아야함 -->
+					<span class="rectangle-count2"></span> <span
+						class="rectangle-02-count">건</span>
 				</div>
 			</div>
 
 
 			<div class="top-rectangle-02">
-				<div class="rectangle-title">문의 대기 중</div>
+				<div class="rectangle-title">배송완료</div>
 				<div class="rectangle-count-wrap">
-					<span class="rectangle-count">5</span> <!-- 바꿔놓아야함 -->
-					<span class="rectangle-02-count">건</span> <!-- 바꿔놓아야함 -->
+					<span class="rectangle-count3"></span> <span
+						class="rectangle-02-count">건</span>
 				</div>
 			</div>
 
@@ -43,11 +43,20 @@
 		<div class="main-content">
 			<!-- 왼쪽 사이드바 -->
 			<div class="left-menu-container">
+			
+				<!-- <div class="left-menu-a">
+				<a href="/"><img class="header-logo-img" src="/assets/header/daitso_logo_header.png"></a>
+				</div> -->
+				
+				<div class="left-menu" style="padding-bottom: 5%;">
+					<div class="left-menu-title" style="padding-top: 5px;"><a class="menu-link" th:href="@{/admin/chart}">대시보드</a></div>
+				</div>
+				
 				<div class="left-menu">
 					<div class="left-menu-title">상품관리</div>
 					<div class="left-menu-semi-01">
-						<a th:href="@{/admin/category}">카테고리 추가/수정/삭제</a>
-						<a th:href="@{/admin/product}">상품정보 추가/수정/삭제</a>
+						<a th:href="@{/admin/product}">상품정보 추가/수정/삭제</a> 
+						<a th:href="@{/admin/category}">카테고리 추가/수정/삭제</a> 
 						<a th:href="@{/admin/category/update}">상품 카테고리 관리</a>
 					</div>
 				</div>
@@ -79,5 +88,27 @@
 						<a th:href="@{/admin/common-code}">공통코드 조회</a>
 					</div>
 				</div>
+			
 			</div>
+			
+<script th:inline="javascript">
+function updateTopContainer() {
+
+    $.ajax({
+        url: '/admin/purchase-count',
+        type: 'GET',
+        success: function(data) {
+            $('.rectangle-count1').text(data.depositCount);
+            $('.rectangle-count2').text(data.shippingCount);
+            $('.rectangle-count3').text(data.shippedCount);
+        },
+        error: function() {
+            console.error('데이터를 가져오는 중에 오류가 발생했습니다.');
+        }
+    });
+}	
+$(document).ready(function() {
+    updateTopContainer();
+});
+</script>
 </html>

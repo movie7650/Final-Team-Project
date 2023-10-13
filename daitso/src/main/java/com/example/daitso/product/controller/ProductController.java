@@ -116,7 +116,7 @@ public class ProductController {
 		model.addAttribute("oListThird", oListThird);
 		model.addAttribute("inquiryList", inquiryList);
 		
-		return "/main/productDetail";
+		return "/main/product-detail";
 	}
 	
 	//상품 옵션 변경하기
@@ -167,12 +167,11 @@ public class ProductController {
 	public String searchProduct(@RequestParam String searchText, @RequestParam(value="sort", required=false, defaultValue="normal") String sort, HttpSession session , Model model){
 		return searchProduct(searchText, 1, session, model, sort);
 	}
-
 	@GetMapping("/search/{page}/{sort}")
 	public String searchProduct(@RequestParam String searchText, @PathVariable int page ,HttpSession session ,Model model, @PathVariable String sort) {
 		session.setAttribute("page", page);
 		List<Product> list = productService.selectSearchProduct(searchText, page, sort);
-
+		List<Category> categoryList = categoryService.selectCategoryList(-1);
 		int listCnt = productService.selectSearchProductCount(searchText);
 		int totalPage = 0;
 		if(listCnt > 0) {
@@ -196,10 +195,19 @@ public class ProductController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("categoryId", "noCategory");
-		model.addAttribute("categoryList", "noCategory");
+		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("productList", list);
 		model.addAttribute("path", searchText);
 
 		return "/main/product";
 	}
+	
+	@GetMapping("/sale")
+	public String salePage(Model model) {
+		List<Product> sList = productService.saleProductList();
+		
+		model.addAttribute("sList", sList);
+		return "/main/product-sale";
+	}
+	
 }

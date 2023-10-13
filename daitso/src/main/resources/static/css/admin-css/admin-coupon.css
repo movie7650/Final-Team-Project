@@ -5,40 +5,20 @@
 	visibility: visible;
 }
 
+.table td, .table th {
+    padding: 0.65rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
 #table {
 	padding-top: 10px;
     padding-left: 50px;
     width: -webkit-fill-available;
 }
 
-/* 기존 상품 등록 모달 input */
-#productOptionFirst, #productOptionSecond,
-	#productOptionThird, #productPrice, #productStock, #productMaxGet{
-	width: 33%;
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-#productContent {
-	width: 100%;
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-/* 기존 상품 등록 모달 그룹ID, 카테고리명, 상품명 */
-#getProductGroupId, #getCategoryNm, #getProductNm{
-	border:none;
-	font-weight: bold;
-}
 
 .modal-body input {
-	width: 80%;
 	padding: 10px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
@@ -47,17 +27,12 @@
 }
 
 .modal-header{
-	background-color: tan;
+	background-color: #c4d8ff;
 }
 
-div.col-sm-10 {
-	padding-top: 7px;
-	padding-bottom: 7px;
-}
 
 .pagination {
 	justify-content: center;
-	padding-top: 10px;
 }
 
 .pagination li a {
@@ -77,15 +52,15 @@ div.col-sm-10 {
 
 .pagination li a:hover, .pagination1 li a:focus {
 	color: #fff;
-	border: 1px solid #39594e;
-	background-color: #39594e;
+	border: 1px solid #1a385d;
+	background-color: #1a385d;
 }
 
 .page-item.active .page-link {
 	color: black;
 	background-color: #fff;
 	z-index: 3;
-	border-color: #39594e;
+	border-color: #1a385d;
 }
 
 

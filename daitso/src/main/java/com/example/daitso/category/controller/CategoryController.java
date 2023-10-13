@@ -72,7 +72,6 @@ public class CategoryController {
 		}else {
 			endPage = totalPage;
 		}
-		System.out.println("endPage : " + endPage + "totalPage : " + totalPage + "listCnt : " + listCnt);
 		model.addAttribute("sort", sort);
 		model.addAttribute("totalPageCount", totalPage);
 		model.addAttribute("nowPage", page);

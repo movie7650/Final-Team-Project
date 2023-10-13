@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/include/bs-header :: bsHeader}"></head>
-<link rel="stylesheet" th:href="@{/css/admin-inquiry-complete.css}">
+<link rel="stylesheet" th:href="@{/css/admin-css/admin-inquiry-complete.css}">
 <body>
 	<div class="admin-inquiry-complete-title">문의</div>
 	<div style="padding: 30px;">
@@ -28,6 +28,7 @@
 		<div style="margin-top: 30px;">
 			<div style="display: flex; justify-content: flex-end;">
 				<div th:if="${inquiryAnsDv} == 'W'" class="admin-inquiry-complete-btn" th:onclick="inquiryComplete([[${inquiryInfo.productId}]])">저장</div>
+				<div th:unless="${inquiryAnsDv} == 'W'" class="admin-inquiry-delete-btn" th:onclick="inquiryDelete([[${ansInquiryInfo}]])">삭제</div>
 				<div class="admin-inquiry-complete-close" onclick="inquiryClose()">닫기</div>
 			</div>
 		</div>
@@ -62,6 +63,25 @@
 	
 	function inquiryClose() {
 		window.close();
+	}
+	
+	function inquiryDelete(ansInquiryId) {
+		fetch( window.location.origin + "/admin/inquiry/delete", {
+		    method: "POST",
+		    headers: { 
+		        "Content-Type": "application/json",
+		        "X-CSRF-TOKEN": [[${_csrf.token}]]
+		    },
+		    body: JSON.stringify({
+		    	ansInquiryId: ansInquiryId,
+		        inquiryId: inquiryId
+		    }),
+		})
+		.then((data) => {
+			alert("답변이 삭제되었습니다.");
+			opener.location.reload();
+			window.close();
+		});	  
 	}
 </script>
 </html>
