@@ -12,8 +12,23 @@
 		<!-- 오른쪽 컨텐츠 -->
 		<div id="table"  style="position: relative; margin-bottom: 100px;">
 		<!-- <div class="admin-inquiry-title">문의 조회/답변</div> -->
-		<div style="font-weight: bold; margin-top: 10px; font-size:17px;">문의관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 문의 조회/답변</div>
-		
+		<div style="font-weight: bold; margin-top: 20px; font-size:20px;">문의관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 문의 조회/답변</div>
+		<div class="admin-inquiry-search">
+			<div>
+				<select style="height: 32px; padding: 0 5px 0 5px; outline:none;" id="admin-inquiry-search-filter" onchange="changeOptionSelected()">
+				    <option value="id" selected>문의 ID</option>
+				    <option value="name">상품명</option>
+				    <option value="content">문의 내용</option>
+				</select>
+			</div>
+			<div style="margin-left:5px;">
+				<input type="text" style="height: 32px; outline:none;" id="admin-inquiry-search-content">
+				<input type="hidden" th:value="${inquiryAnsDv}" id="admin-inquiry-ans-dv">
+			</div>
+			<button type="submit" 
+					style="outline:none; background-color: #1a385d; color:white; border:none; border-radius: 5px; font-weight: 500; font-size: 15px; width: 60px; height: 32px; margin-left: 10px;"
+					onclick="searchInquiry()">검색</button>
+		</div>
 		<div class="admin-inquiry-table">
 			<div 
 				th:if="${inquiryAnsDv} == 'W'"
@@ -44,7 +59,7 @@
 					<div class="admin-inquiry-btn" th:onclick="inquiryComplete([[${inquiry.inquiryId}]], 'C')">답변 보기</div>
 				</div>
 			</div>
-			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px; top: 830px;">
+			<div style="position: absolute; bottom: 70px; display: flex; justify-content: center; width: 95%; margin: 0 10px 0 10px; top: 860px;">
 				<div th:if="${nowPageBlock>1}" style="width: 30px; height: 30px; text-align: center; border: 2px solid gray;">
 					<a th:href="@{/admin/inquiry/__${inquiryAnsDv}__/__${startPage-1}__}">
 						<img th:src="@{/assets/common/left_arrow_gray.svg}" style="width: 12px; height: 12px;">
@@ -69,8 +84,25 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
 
+	const searchContent = document.getElementById("admin-inquiry-search-content");
+	const ansDv = document.getElementById("admin-inquiry-ans-dv");
+	var searchFilterSelect = document.getElementById("admin-inquiry-search-filter");
+	var searchFilter = searchFilterSelect.options[searchFilterSelect.selectedIndex].value;
+	
 	function inquiryComplete(inquiryId, inquiryAnsDv){
 		window.open( window.location.origin + '/admin/inquiry/complete/' + inquiryId + '/' + inquiryAnsDv , '문의 답변', 'width=870px,height=740px,scrollbars=yes');
+	}
+	
+	function changeOptionSelected() {
+		searchFilter = searchFilterSelect.options[searchFilterSelect.selectedIndex].value;
+	}
+	
+	function searchInquiry() {
+		if(searchContent.value == '') {
+			window.location.href = window.location.origin + "/admin/inquiry/" + ansDv.value;
+		} else {
+			window.location.href = window.location.origin + "/admin/inquiry/" + ansDv.value + "/1/" + searchFilter + "/" + searchContent.value;	
+		}
 	}
 </script>
 </html>

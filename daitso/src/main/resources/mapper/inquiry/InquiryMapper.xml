@@ -31,6 +31,46 @@
 			SELECT 
 				inquiry_id, product_id, product_nm, category_id, customer_id, inquiry_pr_id, inquiry_content, rownum AS rnum
 			FROM (
+				SELECT 
+					   i.inquiry_id, 
+                       p.product_id,
+                       p.product_nm,
+                       p.category_id,
+			           i.customer_id, 
+                       i.inquiry_pr_id,
+			           i.inquiry_content 
+                 FROM inquiry i,
+                      product p
+				WHERE i.product_id = p.product_id 
+                  AND i.inquiry_ans_dv = #{inquiryAnsDv}
+                  AND i.inquiry_pr_id IS NULL
+                  AND i.status = 'Y'
+		          <choose>
+					<when test="inquiryAnsDv == 'W'"> ORDER BY i.inquiry_id DESC </when>
+					<otherwise> ORDER BY i.modify_dt DESC </otherwise>
+				  </choose>
+			)
+		)
+		WHERE rnum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 
+		기능: 검색 -> 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
+		담당자: 최준원 
+	-->
+	<select id="selectInquiryListByCategoryAndSearch" resultType="com.example.daitso.inquiry.model.InquirySelect">
+		 SELECT 
+			inquiry_id AS "inquiryId", 
+			product_id AS "productId", 
+            product_nm AS "productNm",
+            category_id AS "categoryId",
+			customer_id	AS "customerId",
+            inquiry_pr_id AS "inquiryPrId",
+			inquiry_content	AS "inquiryContent"
+		FROM (
+			SELECT 
+				inquiry_id, product_id, product_nm, category_id, customer_id, inquiry_pr_id, inquiry_content, rownum AS rnum
+			FROM (
 				SELECT i.inquiry_id, 
                        p.product_id,
                        p.product_nm,
@@ -44,6 +84,12 @@
                   AND i.inquiry_ans_dv = #{inquiryAnsDv}
                   AND i.inquiry_pr_id IS NULL
                   AND i.status = 'Y'
+                  <choose>
+					<when test="searchFilter == 'id'"> AND i.inquiry_id LIKE '%' || #{search} || '%' </when>
+					<when test="searchFilter == 'content'"> AND i.inquiry_content LIKE '%' || #{search} || '%' </when>
+					<when test="searchFilter == 'name'"> AND p.product_nm LIKE '%' || #{search} || '%' </when>
+					<otherwise></otherwise>
+				  </choose>
 		          <choose>
 					<when test="inquiryAnsDv == 'W'"> ORDER BY i.inquiry_id DESC </when>
 					<otherwise> ORDER BY i.modify_dt DESC </otherwise>
