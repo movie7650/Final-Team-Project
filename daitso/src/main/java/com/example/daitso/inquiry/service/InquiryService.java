@@ -121,5 +121,13 @@ public class InquiryService implements IInquiryService {
 		inquiryRepository.deleteInquiryAdmin(ansInquiryId);
 		inquiryRepository.updateInquiryAdminDelete(inquiryId);
 	}
+	
+	// 검색 -> 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
+	@Override
+	public List<InquirySelect> selectInquiryListByInquiryAnsDvAndSearch(char inquiryAnsDv, String searchFilter,
+			String search, int page) {
+		int start = (page-1)*10 + 1;
+		return inquiryRepository.selectInquiryListByCategoryAndSearch(inquiryAnsDv, searchFilter, search, start, start + 9);
+	}
 
 }

@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CustomerSignUp {
 	private String customerEmail;
 	private String customerPw;
+	private String customerRePw;
 	private String customerNm;
 	private String customerTelno;
 }

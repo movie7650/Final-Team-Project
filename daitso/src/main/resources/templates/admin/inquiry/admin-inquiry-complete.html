@@ -66,22 +66,23 @@
 	}
 	
 	function inquiryDelete(ansInquiryId) {
-		fetch( window.location.origin + "/admin/inquiry/delete", {
-		    method: "POST",
-		    headers: { 
-		        "Content-Type": "application/json",
-		        "X-CSRF-TOKEN": [[${_csrf.token}]]
-		    },
-		    body: JSON.stringify({
-		    	ansInquiryId: ansInquiryId,
-		        inquiryId: inquiryId
-		    }),
-		})
-		.then((data) => {
-			alert("답변이 삭제되었습니다.");
-			opener.location.reload();
-			window.close();
-		});	  
+		if(confirm("문의 답변을 삭제하시겠습니까?")){
+			fetch( window.location.origin + "/admin/inquiry/delete", {
+			    method: "POST",
+			    headers: { 
+			        "Content-Type": "application/json",
+			        "X-CSRF-TOKEN": [[${_csrf.token}]]
+			    },
+			    body: JSON.stringify({
+			    	ansInquiryId: ansInquiryId,
+			        inquiryId: inquiryId
+			    }),
+			})
+			.then((data) => {
+				opener.location.reload();
+				window.close();
+			});	
+		}	  
 	}
 </script>
 </html>

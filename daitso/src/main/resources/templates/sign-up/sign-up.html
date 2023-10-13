@@ -14,7 +14,7 @@
 				<div class="sign-up-title korea">회원 정보를 입력해주세요</div>
 				<div class="sign-up-form">
 					<form th:action="@{/customer/sign-up}" th:object="${customerSignUp}"
-						th:method="post">
+						th:method="post" id="sign-up-form" onsubmit="return isValidCode()">
 						<div>
 							<div class="sign-up-input-box">
 								<div class="sign-up-input-img-box">
@@ -26,7 +26,7 @@
 									th:field="*{customerEmail}" required autocomplete="off">
 							</div>
 							<div id="emailConfirm"
-								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;" class="korea">
+								style="font-size: 13px; font-weight: 500; margin: 10px 0 0 60px;" class="korea">
 							</div>
 							<div class="sign-up-auth-btn korea">이메일 인증</div>
 							<div class="sign-up-auth-box">
@@ -66,18 +66,20 @@
 										th:src="@{/assets/loginandsignup/password.svg}">
 								</div>
 								<input id="customerRePw" type="password"
-									class="sign-up-input-value korea-input" placeholder="비밀번호 확인" required>
+									th:field="*{customerRePw}" class="sign-up-input-value korea-input" placeholder="비밀번호 확인" required>
 							</div>
 							<div id="passwordConfirm"
-								style="color: red; font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;"></div>
+								style="color: red; font-size: 13px; font-weight: 500; margin: 10px 0 0 60px;"></div>
 							<div class="sign-up-input-box">
 								<div class="sign-up-input-img-box">
 									<img class="sign-up-input-img"
 										th:src="@{/assets/loginandsignup/customer_gray.svg}">
 								</div>
 								<input type="text" class="sign-up-input-value korea-input" placeholder="이름"
-									th:field="*{customerNm}" required autocomplete="off">
+									th:field="*{customerNm}" required autocomplete="off" onkeyup="changeCustomerNm()">
 							</div>
+							<div id="nameConfirm"
+								style="color: red; font-size: 13px; font-weight: 500; margin: 10px 0 0 60px;"></div>
 							<div class="sign-up-input-box">
 								<div class="sign-up-input-img-box">
 									<img class="sign-up-input-img"
@@ -87,7 +89,7 @@
 									placeholder="휴대폰 번호('01x-xxxx-xxxx')" th:field="*{customerTelno}" onchange="telnoCheck()" required autocomplete="off">
 							</div>
 							<div id="telnoConfirm"
-								style="font-size: 13px; font-weight: bold; margin: 10px 0 0 60px;">
+								style="font-size: 13px; font-weight: 500; margin: 10px 0 0 60px;">
 							</div>
 							<div class="sign-up-line"></div>
 							<div class="sign-up-checkAll">
@@ -95,6 +97,8 @@
 								<div class="sign-up-checkAll-title korea">모두 확인하였으며 동의합니다.</div>
 							</div>
 							<div class="sign-up-checkAll-content korea">전체 동의에는 필수 및 선택 정보에 대한 동의가 포함되어 있으며, 개별적으로 동의를 선택 하실 수 있습니다. 선택 항목에 대한 동의를 거부하시는 경우에도 서비스 이용이 가능합니다.</div>
+							<div id="agreeCheckConfirm"
+								style="color: red; font-size: 13px; font-weight: 500; margin: 10px 0 0 30px;"></div>
 							<div class="sign-up-check-boxes">
 								<div class="sign-up-check-box">
 									<input type="checkbox" name="check" id="check1" class="check" style="width: 15px; height: 15px; accent-color: #39594E;" required>
@@ -131,7 +135,7 @@
 								</div>
 							</div>
 							<div>
-								<button class ="sign-up-btn korea" type="submit">동의하고 계속하기</button>
+								<button class ="sign-up-btn korea" type="button" onclick="signUpProceed()">동의하고 계속하기</button>
 							</div>
 						</div>
 					</form>
@@ -194,8 +198,7 @@
 	pw2.onkeyup = function() {
 		if (pw1.value !== pw2.value) {
 			pwConfirm.innerText = "비밀번호가 일치하지 않습니다.";
-			pw2.style.borderBottom = "2px solid red";
-
+			pw2.style.borderBottom = "1px solid red";
 		} else {
 			pwConfirm.innerText = "";
 			pw2.style.borderBottom = "1px solid #D9D9D9";
@@ -209,16 +212,19 @@
 	/* '모두 동의' 체크박스가 체크가 되면 모든 체크박스의  체크를 하고, '모두 동의'
 		체크박스가 해제되면 모든 체크 박스의 체크상태를 해제 */
 	const agreements = {
-		    firstAgreements: false, // 첫번째 체크박스
-		   	secondAgreements: false, // 두번째 체크박스
-		    thirdAgreements: false, // 세번째 체크박스
-		    fourthAgreements: false, // 네번째 체크박스
-		    fifthAgreements: false, // 다섯번째 체크박스
-		    sixthAgreements: false, // 여섯번째 체크박스
-		    seventhAgreements: false, // 일곱번째 체크박스
+		    check1: false, // 첫번째 체크박스
+		   	check2: false, // 두번째 체크박스
+		    check3: false, // 세번째 체크박스
+		    check4: false, // 네번째 체크박스
+		    check5: false, // 다섯번째 체크박스
+		    check6: false, // 여섯번째 체크박스
+		    check7: false, // 일곱번째 체크박스
 		};
 	
+	const agreeCheckConfirm = document.querySelector("#agreeCheckConfirm");
+	
 	checkAll.addEventListener('click', (e) => {
+		agreeCheckConfirm.style.display = "none";
 	    const checked  = e.target.checked; 
 	    if (checked) {
 	        check.forEach((item) => {
@@ -242,9 +248,11 @@
 	}
 	
 	function checkAllStatus() {
-	    const { firstAgreements, secondAgreements, thirdAgreements, fourthAgreements, fifthAgreements, sixthAgreements, seventhAgreements} = agreements;
-	    if (firstAgreements && secondAgreements && thirdAgreements && fourthAgreements && fifthAgreements && sixthAgreements && seventhAgreements) {
+		const { check1, check2, check3, check4, check5, check6, check7} = agreements;
+	    if (check1 && check2 && check3 && check4 && check5 && check6 && check7) {
 	      checkAll.checked = true;
+	    } else if(check1 && check2 && check3 && check4 && check5) {
+	      agreeCheckConfirm.style.display = "none";
 	    } else {
 	      checkAll.checked = false;
 	    }
@@ -281,12 +289,12 @@
 				if(json == 0) {
 					emailConfirm.innerText = "사용가능한 이메일입니다!";	
 					emailConfirm.style.color = "blue";
-					emailBox.style.borderBottom = "2px solid blue";
+					emailBox.style.borderBottom = "1px solid blue";
 					emailAuthBtn.style.display = "block";
 				} else if(json == 1) {
 					emailConfirm.innerText = "이미 사용하고 있는 이메일입니다!";
 					emailConfirm.style.color = "red";
-					emailBox.style.borderBottom = "2px solid red";
+					emailBox.style.borderBottom = "1px solid red";
 					emailAuthBtn.style.display = "none";
 				} 
 			})
@@ -294,7 +302,7 @@
 		else { 
 			emailConfirm.innerText = "올바른 이메일 양식이 아닙니다.";	
 			emailConfirm.style.color = "red";
-			emailBox.style.borderBottom = "2px solid red";
+			emailBox.style.borderBottom = "1px solid red";
 			emailAuthBtn.style.display = "none";
 		}                            
 	}
@@ -391,23 +399,24 @@
     		authContainer.style.display="none";
     		authBtn.style.display="none";
     		emailConfirm.innerText = "인증이 완료되었습니다!";
-    		authBox.style.borderBottom = "2px solid #8BBA66";
+    		authBox.style.borderBottom = "1px solid #8BBA66";
             document.querySelector(".sign-up-auth-error").style.color="#8BBA66";
     		document.getElementById('customerEmail').readOnly = true; 
     		document.getElementById('customerEmail').style.backgroundColor = "#EFEFEF";
     	} else {
-    		authBox.style.borderBottom = "2px solid red";
+    		authBox.style.borderBottom = "1px solid red";
             document.querySelector(".sign-up-auth-error").style.display="block";
             document.querySelector(".sign-up-auth-error").style.color="red";
-            document.querySelector(".sign-up-auth-error").innerText="인증번호가 틀립니다."
+            document.querySelector(".sign-up-auth-error").innerText="인증번호가 틀립니다.";
     	}
     }
+    
+    var telnoBox = document.getElementById("customerTelno");
     
     // 휴대폰 번호 중복확인
     function telnoCheck() {
     	const telno = document.getElementById("customerTelno").value;
     	var telnoConfirm = document.querySelector("#telnoConfirm");
-    	var telnoBox = document.getElementById("customerTelno");
     	
     	var patternPhone = /^01([0|1|6|7|8|9])-[0-9]{3,4}-[0-9]{4}$/;
     	if(patternPhone.test(telno)){
@@ -420,18 +429,99 @@
     			if(json == 0) {
     				telnoConfirm.innerText = "사용가능한 휴대폰 번호입니다!";	
     				telnoConfirm.style.color = "blue";
-    				telnoBox.style.borderBottom = "2px solid blue";
+    				telnoBox.style.borderBottom = "1px solid blue";
     			} else if(json == 1) {
     				telnoConfirm.innerText = "이미 사용하고 있는 휴대폰 번호입니다!";
     				telnoConfirm.style.color = "red";
-    				telnoBox.style.borderBottom = "2px solid red";
+    				telnoBox.style.borderBottom = "1px solid red";
     			}
     		})	
     	} else {
     		telnoConfirm.innerText = "올바른 휴대폰 번호 양식이 아닙니다";
 			telnoConfirm.style.color = "red";
-			telnoBox.style.borderBottom = "2px solid red";
+			telnoBox.style.borderBottom = "1px solid red";
     	}
+    }
+    
+    // 이름 값 확인
+    function changeCustomerNm() {
+    	const name = document.getElementById("customerNm").value;
+    	const nameBox = document.getElementById("customerNm");
+    	const nameConfirm = document.querySelector("#nameConfirm");
+    	
+    	if(!name) {
+    		nameConfirm.innerText = "이름을 정확히 입력하세요.";
+    		nameBox.style.borderBottom = "1px solid red";
+    	} else {
+    		nameConfirm.style.display = "none";
+    		nameBox.style.borderBottom = "1px solid #D9D9D9";
+    	}
+    }
+    
+    
+    // form 제출하기 전 검사
+    function signUpProceed() {
+    	const signUpForm = document.getElementById("sign-up-form");
+    	
+    	const email = document.getElementById("customerEmail").value;
+    	const telno = document.getElementById("customerTelno").value;
+    	const pw = document.getElementById("customerPw").value;
+    	const rePw = document.getElementById("customerRePw").value;
+    	const name = document.getElementById("customerNm").value;
+    	const nameBox = document.getElementById("customerNm");
+
+    	const telnoConfirm = document.querySelector("#telnoConfirm");
+    	const nameConfirm = document.querySelector("#nameConfirm");
+    	const passwordConfirm = document.querySelector("#passwordConfirm");
+    	const agreeCheckConfirm = document.querySelector("#agreeCheckConfirm");
+    	
+    	const check1 = document.getElementById("check1");
+    	const check2 = document.getElementById("check2");
+    	const check3 = document.getElementById("check3");
+    	const check4 = document.getElementById("check4");
+    	const check5 = document.getElementById("check5");
+    	
+
+    	// 입력 값 있는지 확인!
+    	if(!email) {
+    		emailConfirm.innerText = "이메일을 입력하세요.";	
+			emailConfirm.style.color = "red";
+			emailBox.style.borderBottom = "1px solid red";
+    	}
+    	
+    	if(!telno) {
+    		telnoConfirm.innerText = "휴대폰 번호를 정확하게 입력하세요.";
+			telnoConfirm.style.color = "red";
+			telnoBox.style.borderBottom = "1px solid red";
+    	}
+    	
+    	if(!pw) {
+    		passwordPattern();
+    	}
+    	
+    	if(!rePw) {
+    		passwordConfirm.innerText = "확인을 위해 새 비밀번호를 다시 입력해주세요.";
+			pw2.style.borderBottom = "1px solid red";
+    	}
+    	
+    	if(!name) {
+    		nameConfirm.innerText = "이름을 정확히 입력하세요.";
+    		nameBox.style.borderBottom = "1px solid red";
+    	}
+    	
+    	if(!check1.checked || !check2.checked || !check3.checked || !check4.checked || !check5.checked){
+    		agreeCheckConfirm.style.display = "block";
+    		agreeCheckConfirm.innerText = "필수 항목에 모두 동의해주세요"; 
+    		agreeCheckConfirm.style.color = "red";
+    	}
+    	
+    	if(telnoConfirm.style.color == 'blue' && passwordConfirm.style.display == '' && emailConfirm.innerText == "인증이 완료되었습니다!" 
+    			&& name && check1.checked && check2.checked && check3.checked && check4.checked && check5.checked) {
+    		signUpForm.submit();
+    	} 
+    	
+    	window.scrollTo(0,0);
+    	
     }
 </script>
 </html>
