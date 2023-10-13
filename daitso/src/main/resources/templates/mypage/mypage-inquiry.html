@@ -28,7 +28,7 @@
 							<div th:text="${myinquiry.productNm}" class="my-inquiry-productNm">남성무지반팔티</div>
 						</td>
 						<td>	
-							<div th:text="${myinquiry.inquiryContent}" class="my-inquiry-content">문의내용</div>
+							<div class="my-inquiry-content">[(${myinquiry.inquiryContent})]</div>
 						</td>
 						<td th:text="${myinquiry.createDt}">23-08-01</td>
 						<td>

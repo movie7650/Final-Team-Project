@@ -8,13 +8,13 @@
 	<div style="width:95%;">
 	<div class="my-inquiry-info-title">문의 내용</div>
 	<div style="padding: 20px; border: 1px solid #888888; border-top: none; height: 230px; position: relative;">
-		<div th:text="${myinquiry}" style="font-size: 18px; font-weight: 600;" class="inquiryId-content"></div>
+		<div style="font-size: 18px; font-weight: 600;" class="inquiryId-content">[(${myinquiry})]</div>
 		<div style="font-size: 16px; color: #888888; position: absolute; bottom: 20px;" th:text="|작성일자 : ${myinquirytime}|"></div>
 	</div>
 	
 	<div class="my-inquiry-pr-content">답변</div>
 	<div style="padding: 20px; border: 1px solid #888888; border-top: none; height: 230px; position: relative;">
-		<div  th:text="${myprinquiry}" class="inquiryPrId-content"></div>
+		<div  class="inquiryPrId-content">[(${myprinquiry})]</div>
 		<div style="font-size: 16px; color: #888888; position: absolute; bottom: 20px;" th:text="|작성일자 : ${myinquiryreplytime}|"></div>
 	</div>
 	<div>

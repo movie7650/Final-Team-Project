@@ -365,6 +365,11 @@ public class MyPageController {
 		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
 		model.addAttribute("mypageReviewList", myReviewList);
 
+		int listSize = myReviewList.size();
+		for (int i = 0; i < listSize; i++) {
+			String reviewContent = myReviewList.get(i).getReviewTitle();
+			System.out.println("hahahahahahahaah" + reviewContent);
+		}
 		// 리뷰컨텐트 카운트
 		int reviewContentCount = reviewService.selectReviewContentCount(customerId);
 		model.addAttribute("reviewcontentcount", reviewContentCount);
@@ -463,6 +468,12 @@ public class MyPageController {
 	public String selectDetailReview(@PathVariable int reviewId, Model model) {
 
 		MyReview myReviewList = reviewService.selectMyReview(reviewId);
+//		String reviewContent = myReviewList.getReviewContent();
+//		String reviewContentDecode = HtmlUtils.htmlUnescape(reviewContent);
+
+		// 리뷰내용 xss필터링 해제
+//		model.addAttribute("reviewcontentdecode", reviewContentDecode);
+
 		model.addAttribute("myreviewlist", myReviewList);
 
 		return "mypage/mypage-review-detail";
