@@ -6,39 +6,49 @@ import org.apache.ibatis.annotations.Param;
 
 import com.example.daitso.purchase.model.Purchase;
 import com.example.daitso.purchase.model.PurchaseCheck;
-import com.example.daitso.purchase.model.PurchaseInsert;
 import com.example.daitso.purchase.model.PurchaseDetailCheck;
+import com.example.daitso.purchase.model.PurchaseInsert;
 
 public interface IPurchaseService {
-	
-	//구매
+
+	// 구매
 	void insertPurchase(PurchaseInsert purchaseInsert);
-	
-	//내 주문상품 전체 갯수
+
+	// purchase_dv가 401(입금/결제) 인 상품 가져오기
+	List<PurchaseCheck> selectPurchaseDv401(int customerId);
+
+	// purchase_dv가 402(배송중) 인 상품 가져오기
+	List<PurchaseCheck> selectPurchaseDv402(int customerId);
+
+	// purchase_dv가 403(배송완료) 인 상품 가져오기
+	List<PurchaseCheck> selectPurchaseDv403(int customerId);
+
+	// 내 주문상품 전체 갯수
 	int countMyOrderList(int customerId);
-	
-	//전체주문상품가져오기
+
+	// 전체주문상품가져오기
 	List<PurchaseCheck> selectAllOrderProduct(int customerId);
-	
-	//전체상품이름가져오기
+
+	// 전체상품이름가져오기
 	List<PurchaseCheck> selectAllProductNm(int customerId);
-	
-	//구매취소
+
+	// 구매취소
 	void canclePurchase(Purchase purchase);
-	
-	//상세주문조회
-	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId")int customerId, @Param("purchaseNum")String purchaseNum);
-	
-	//배송중인 상품 갯수
+
+	// 상세주문조회
+	List<PurchaseDetailCheck> selectDetailPurchase(@Param("customerId") int customerId,
+			@Param("purchaseNum") String purchaseNum);
+
+	// 배송중인 상품 갯수
 	int selectShipping(int customerId);
-		
-	//배송완료인 상품 갯수
+
+	// 배송완료인 상품 갯수
 	int selectShippingComplete(int customerId);
-	
-	//주문번호 카운트 
+
+	// 주문번호 카운트
 	int selectPurchaseNumCount(int customerId);
-	
-	//입금/결제 상품 갯수
+
+	// 입금/결제 상품 갯수
 	int selectPayCoin(int customerId);
-	
+
 }

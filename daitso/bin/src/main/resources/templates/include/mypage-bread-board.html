@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="mypageBreadBoard" class="main">
+	<div class="top-header">
+		<div class="top-container">
+			<div class="top-rectangle-01">
+				<span class="page-title">마이다있소</span>
+			</div><!-- top-rectangle-01 -->
+			
+			<div class="top-rectangle-02">
+				<div class="rectangle-title">총 주문상품</div>
+					<div class="rectangle-count-wrap">
+						<span class="rectangle-count" th:text="|${countmyorder}개|">0개</span> <!-- 타임리프 써야함 -->
+				</div><!-- rectangle-count-wrap  -->
+			</div><!-- top-rectangle-02 -->
+			
+			<div class="top-rectangle-02">
+				<div class="rectangle-title">배송중</div>
+					<div class="rectangle-count-wrap">
+						<span class="rectangle-02-count" th:text="|${shipCount}개|">0</span> <!-- 타임리프 써야함 -->
+						<!-- <span class="rectangle-02-count">개</span> -->
+					</div><!-- rectangle-count-wrap  -->
+			</div><!--top-rectangle-02  -->
+			
+			<div class="top-rectangle-02">
+				<div class="rectangle-title">배송완료</div>
+					<div class="rectangle-count-wrap">
+						<span th:text="|${shippingCompleteCount}개|" class="rectangle-count">0</span> <!-- 타임리프 써야함 -->
+				</div><!-- rectangle-count-wrap  -->
+			</div><!-- top-rectangle-02 -->
+			
+			<div class="top-rectangle-02">
+				<div class="rectangle-title">보유쿠폰</div>
+					<div class="rectangle-count-wrap">
+						<span class="rectangle-count" th:text="|${countcoupon}개|">0</span> <!-- 타임리프 써야함 -->
+						
+				</div><!-- rectangle-count-wrap  -->
+			</div><!-- top-rectangle-02 -->
+			
+			<!-- <div class="top-rectangle-02">
+				<div class="rectangle-title">포인트</div>
+					<div class="rectangle-count-wrap">
+						<span class="rectangle-count" th:text="${totalPoint}">10000</span> 타임리프 써야함
+						<span class="rectangle-02-count">P</span>
+				</div>rectangle-count-wrap 
+			</div>top-rectangle-02 -->
+</div><!-- main -->
+		</div><!-- top-container -->
+	</div><!-- top-header -->
+	 <div th:fragment="mypageBreadBoard01" class="left-menu-container">
+		<div class="left-menu-container01">
+			<div class="left-menu">
+				<div class="left-menu-title">MY쇼핑</div>
+				<div class="left-menu-semi-01"><a th:href="@{/mypage/orderlist}">주문목록/배송조회</a></div>
+			</div><!-- left-menu -->
+			<div class="left-menu">
+				<div class="left-menu-title">MY쿠폰</div>
+				<div class="left-menu-semi-01"><a th:href="@{/mypage/mycoupon}">쿠폰등록/조회</a></div>
+			</div><!-- left-menu -->
+			<div class="left-menu">
+				<div class="left-menu-title">MY활동</div>
+				<div class="left-menu-semi-01"><a th:href="@{/mypage/myinquiry}">내 문의확인</a></div>
+				<div class="left-menu-semi-01"><a th:href="@{/mypage/review}">내 리뷰확인</a></div>
+			</div><!-- left-menu -->
+			<div class="left-menu">
+				<div class="left-menu-title">MY정보</div>
+				<div class="left-menu-semi-01"><a th:href="@{/mypage/checkuser}">개인정보확인/수정</a></div>
+				<div class="left-menu-semi-01"><a th:href="@{/mypage/myshipping}">배송지관리</a></div>
+				<!-- <div class="left-menu-semi-01"><a th:href="@{/mypage/mypoint}">내포인트</a></div> -->
+			</div><!-- left-menu -->
+		</div><!-- left-menu-container01 -->
+	</div><!--left-menu-container -->
+<!-- </div> main div -->
+</html>

@@ -26,7 +26,7 @@
                             				  AND c.cart_id = #{cartId}), #{totalCost}, #{orderRequest}, 401, #{customerId})
 	 </insert>
 
-	<!-- 
+		<!--		 
 			기능: 내 주문목록조회
 			담당자: 윤상영
 		 -->
@@ -53,6 +53,90 @@
 	   	   AND pur.purchase_dv = cc.common_code_id
 	  ORDER BY purchase_id DESC
 	</select>
+		<!--		 
+			기능: purchase_dv가 401(입금/결제) 인 상품 출력
+			담당자: 윤상영
+		 -->
+		 <select id="selectPurchaseDv401" resultType="com.example.daitso.purchase.model.PurchaseCheck" parameterType="int">
+		 	SELECT pur.product_id 					AS "productId",	
+       			   pur.customer_id 					AS "customerId",
+       			   purchase_count					AS	"purchaseCount",
+       			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
+       			   pur.purchase_dv					AS	"purchaseDv",
+       			   TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
+       			   product_nm						AS 	"productNm",
+       			   purchase_num						AS	"purchaseNum",
+       			   pur.create_dt					AS	"createDt",
+       			   p.product_image_first			AS	"productImg",
+       			   pur.purchase_id					AS 	"purchaseId",
+       			   ( SELECT COUNT(*) 
+           					FROM review 
+          					WHERE purchase_id = pur.purchase_id 
+            				AND customer_id=#{customerId} 
+            				AND status = 'Y' ) 			AS "reviewCount"	   
+  			  FROM purchase pur, product p, common_code cc
+ 			 WHERE customer_id=#{customerId} 
+   			   AND pur.product_id = p.product_id
+   			   AND pur.purchase_dv = cc.common_code_id
+   			   AND pur.purchase_dv = 401
+		  ORDER BY purchase_id DESC
+		 </select>
+		 <!--		 
+			기능: purchase_dv가 402(배송중) 인 상품 출력
+			담당자: 윤상영
+		 -->
+		  <select id="selectPurchaseDv402" resultType="com.example.daitso.purchase.model.PurchaseCheck" parameterType="int">
+		 	SELECT pur.product_id 					AS "productId",	
+       			   pur.customer_id 					AS "customerId",
+       			   purchase_count					AS	"purchaseCount",
+       			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
+       			   pur.purchase_dv					AS	"purchaseDv",
+       			   TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
+       			   product_nm						AS 	"productNm",
+       			   purchase_num						AS	"purchaseNum",
+       			   pur.create_dt					AS	"createDt",
+       			   p.product_image_first			AS	"productImg",
+       			   pur.purchase_id					AS 	"purchaseId",
+       			   ( SELECT COUNT(*) 
+           					FROM review 
+          					WHERE purchase_id = pur.purchase_id 
+            				AND customer_id=#{customerId} 
+            				AND status = 'Y' ) 			AS "reviewCount"	   
+  			  FROM purchase pur, product p, common_code cc
+ 			 WHERE customer_id=#{customerId} 
+   			   AND pur.product_id = p.product_id
+   			   AND pur.purchase_dv = cc.common_code_id
+   			   AND pur.purchase_dv = 402
+		  ORDER BY purchase_id DESC
+		 </select>
+		 <!--		 
+			기능: purchase_dv가 403(배송완료) 인 상품 출력
+			담당자: 윤상영
+		 -->
+		   <select id="selectPurchaseDv403" resultType="com.example.daitso.purchase.model.PurchaseCheck" parameterType="int">
+		 	SELECT pur.product_id 					AS "productId",	
+       			   pur.customer_id 					AS "customerId",
+       			   purchase_count					AS	"purchaseCount",
+       			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
+       			   pur.purchase_dv					AS	"purchaseDv",
+       			   TO_CHAR(pur.purchase_price * pur.purchase_count, 'FM999,999,999') AS "totalCost",
+       			   product_nm						AS 	"productNm",
+       			   purchase_num						AS	"purchaseNum",
+       			   pur.create_dt					AS	"createDt",
+       			   p.product_image_first			AS	"productImg",
+       			   pur.purchase_id					AS 	"purchaseId",
+       			   ( SELECT COUNT(*) 
+           					FROM review 
+          					WHERE purchase_id = pur.purchase_id 
+            				AND customer_id=#{customerId} 
+            				AND status = 'Y' ) 			AS "reviewCount"	   
+  			  FROM purchase pur, product p, common_code cc
+ 			 WHERE customer_id=#{customerId} 
+   			   AND pur.product_id = p.product_id
+   			   AND pur.purchase_dv = cc.common_code_id
+   			   AND pur.purchase_dv = 403
+		  ORDER BY purchase_id DESC
+		 </select>
 	
 	<!-- 
 			기능: 배송중 카운트

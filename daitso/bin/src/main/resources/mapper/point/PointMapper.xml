@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.daitso.point.repository.IPointRepository">
+	<!-- 
+			기능: 내포인트조회
+			담당자: 윤상영
+		 -->
+	<select id="selectPoint" resultType="com.example.daitso.point.model.Point">
+	    SELECT point_after					AS		"pointAfter",
+			   point_updated_content		AS		"pointUpdatedContent",
+			   create_dt					AS		"createDt",
+			   point_use_dv					AS		"pointUseDv",
+			   point_before					AS		"pointBefore"
+		  FROM point
+		 WHERE customer_id = #{customerId}
+	</select>
+	<!-- 
+			기능: 전체포인트 합계
+			담당자: 윤상영
+		 -->
+	<select id="selectTotalPoint" resultType="String" >
+		SELECT	TO_CHAR(sum(point_after))				AS		"totalPoint"
+		FROM	point
+		WHERE	customer_id = #{customerId}
+	</select>
+	
+	
+
+</mapper>

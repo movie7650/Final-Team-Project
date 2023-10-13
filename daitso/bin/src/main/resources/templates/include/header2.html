@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header2">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>다있소</title>
+    
+    <!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS File -->
+    <link rel="stylesheet" th:href="@{/css/header-style.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-bread-board.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/review.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/order-list.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-point.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/add-shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/check-user-inform.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/update-user-inform.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-coupon.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mycoupon-used.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/cancle-pay.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-search-shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-shipping-complete.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-inquiry.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/detail-order.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/write-my-review.css}">
+    <link rel="stylesheet" th:href="@{/css/sign-up.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}">
+    <link rel="stylesheet" th:href="@{/css/my-point.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/cart-coupon.css}">
+    <link rel="stylesheet" th:href="@{/css/purchase.css}">
+    <link rel="stylesheet" th:href="@{/css/shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/customer-find.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-shipping-update.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-inquiry-reply.css}">
+    
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- JS -->
+    <script>
+    window.onload = function() {	
+			const categoryList = document.getElementById('header-category-list');
+			const category = document.getElementById('header-category');
+			
+    	    fetch(window.location.origin + '/category/first-category')
+    	  		.then((res) => {
+    	  			//Promise 반환
+    	        	return res.json(); 
+    	    	})
+    	    	.then((json) => {
+    	    		// 서버에서 주는 json데이터가 출력 됨
+    	        	let datas = json;
+    	        	datas.map(function(data) {
+    	        		const div1 = document.createElement('div');
+    	        		div1.setAttribute('id', 'header-category-first')
+    	        		const div2 = document.createElement('div');
+    	        		div2.setAttribute('id', 'header-category-list-box')
+    	        		div2.style.display = 'flex';
+    	        		div2.style.marginBottom = '20px';
+    	        		const a = document.createElement('a');
+    	        		const textnode = document.createTextNode(`${data.categoryNm}`);
+    	        		a.appendChild(textnode);
+    	        		div1.appendChild(a);
+    	        		div2.appendChild(div1)
+    	        		categoryList.appendChild(div2);
+    	        		 		
+    	        		const categoryId = `${data.categoryId}`;
+    	        		
+    	        		a.style.cursor = 'pointer';
+    	        		a.style.textDecoration = 'none';
+    	        		a.style.color = 'black';
+    	        		a.style.fontWeight = 'bold';
+    	        		a.style.fontSize = '18px';
+    	        		a.setAttribute('href', '/category/'+data.categoryId);
+    	        		a.setAttribute('id', 'a');
+    	        	
+    	        		a.addEventListener('mouseover', () => {
+    	        	   		a.style.color = '#39594e';
+    	        	   		a.style.textDecoration = 'underline'
+    	        	   		a.style.textDecorationColor = '#39594e';
+    	        	    });
+    	        		
+    	        		a.addEventListener('mouseout', () => {
+    	        	   		a.style.color = 'black';
+    	        	   		a.style.textDecoration = 'none'
+    	        	    });
+    	        		
+    	    	    	fetch( window.location.origin + '/category/second-category/' + categoryId)
+    		     	  		.then((res) => {
+    		     	  			//Promise 반환
+    		   		        	return res.json(); 
+    		   		    	})
+    	    		    	.then((json) => {
+    		   		    		// 서버에서 주는 json데이터가 출력 됨
+    		   		    		let datas = json;
+    		   		    		const div3 = document.createElement('div');
+		     	        		div3.setAttribute('id', 'header-category-second')
+		     	        		div3.style.marginLeft = '40px';
+    		     		       	datas.map(function(data) {
+    		     	        		const span = document.createElement('span');
+    		     	        		span.style.marginRight = '18px';
+    		     	        		const a = document.createElement('a');
+    		    	        		const textnode = document.createTextNode(`${data.categoryNm}`);
+    		    	        		a.appendChild(textnode);
+    		    	        		span.appendChild(a);
+    		    	        		div3.appendChild(span);
+    		    	        		div2.appendChild(div3);
+    		    	        		
+    		    	        		a.style.cursor = 'pointer';
+    		    	        		a.style.textDecoration = 'none';
+    		    	        		a.style.color = 'black';
+    		    	        		a.style.fontSize = '14px';
+    		    	        		a.setAttribute('href', '/category/'+data.categoryId);
+    		    	        		a.setAttribute('id', 'a');
+    		    	        		a.setAttribute('class', 'korea');
+    		    	        		
+    		    	        		a.addEventListener('mouseover', () => {
+    		    	        	   		a.style.color = '#8BBA66';
+    		    	        	   		a.style.textDecoration = 'underline';
+    		    	        	   		a.style.textDecorationColor = '#8BBA66';
+    		    	        	   		a.style.fontWeight = 'bold';
+    		    	        	    });
+    		    	        		
+    		    	        		a.addEventListener('mouseout', () => {
+    		    	        	   		a.style.color = 'black';
+    		    	        	   		a.style.fontWeight = 'normal';
+    		    	        	   		a.style.textDecoration = 'none'
+    		    	        	    });
+    		     		        });
+    		     		    })
+    		     		    .catch(function(error) {
+    		     		    	    console.log(error);
+    		     		    });
+    	              });
+    	    	})
+    	    	.catch(function(error) {
+    	    	      console.log(error);
+    	    	});
+    	    
+    	    // 스프링 시큐리티에서 사용자 정보(사용자 고유번호) 받아오기
+    	    fetch( window.location.origin + '/customer/customer-id')
+	  		.then((res) => {
+	  			//Promise 반환
+	        	return res.json(); 
+	    	})
+	    	.then((json) => {
+	    		let customerId = json;
+	    		if(json !== -1) {
+	    			fetch( window.location.origin + '/customer/customer-nm/' + customerId)
+	    			.then((res) => {
+	    				return res.json();
+	    			})
+	    			.then((json) => {
+	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
+	    				if(json.customerNm == '관리자'){
+	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/chart');
+	    				}
+	    			})
+	    		}
+	    	})
+	    	.catch(function(error) {
+	    	      console.log(error);
+	    	}); 
+    }
+    </script>
+</head>
+</html>

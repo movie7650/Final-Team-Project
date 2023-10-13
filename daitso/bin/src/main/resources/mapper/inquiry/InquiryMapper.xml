@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.daitso.inquiry.repository.IInquiryRepository">
+
+	<!-- 
+		기능: 문의 답변 상태별 총 문의 개수 조회
+		담당자: 최준원 
+	-->
+	<select id="selectTotalInquiryCountByInquiryAnsDv" resultType="int">
+		SELECT count(*)
+		  FROM inquiry
+		 WHERE inquiry_ans_dv = #{inquiryAnsDv}
+		   AND inquiry_pr_id IS NULL
+		   AND status = 'Y'
+	</select>
+	
+	<!-- 
+		기능: 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
+		담당자: 최준원 
+	-->
+	<select id="selectInquiryListByCategory" resultType="com.example.daitso.inquiry.model.InquirySelect">
+		 SELECT 
+			inquiry_id AS "inquiryId", 
+			product_id AS "productId", 
+            product_nm AS "productNm",
+            category_id AS "categoryId",
+			customer_id	AS "customerId",
+            inquiry_pr_id AS "inquiryPrId",
+			inquiry_content	AS "inquiryContent"
+		FROM (
+			SELECT 
+				inquiry_id, product_id, product_nm, category_id, customer_id, inquiry_pr_id, inquiry_content, rownum AS rnum
+			FROM (
+				SELECT i.inquiry_id, 
+                       p.product_id,
+                       p.product_nm,
+                       p.category_id,
+			           i.customer_id, 
+                       i.inquiry_pr_id,
+			           i.inquiry_content 
+                 FROM inquiry i,
+                      product p
+				WHERE i.product_id = p.product_id 
+                  AND i.inquiry_ans_dv = #{inquiryAnsDv}
+                  AND i.inquiry_pr_id IS NULL
+                  AND i.status = 'Y'
+		          <choose>
+					<when test="inquiryAnsDv == 'W'"> ORDER BY i.inquiry_id DESC </when>
+					<otherwise> ORDER BY i.modify_dt DESC </otherwise>
+				  </choose>
+			)
+		)
+		WHERE rnum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 
+		기능: 문의 아이디로 문의 내용 조회
+		담당자: 최준원 
+	-->
+	<select id="selectInquiryInfoByInquiryId" resultType="com.example.daitso.inquiry.model.InquiryInfo" parameterType="int">
+		SELECT p.product_id AS "productId",
+		       p.product_nm AS "productNm",
+		       i.inquiry_content AS "inquiryContent",
+		       TO_CHAR(i.create_dt, 'YYYY/MM/DD hh:mm') AS "createDt"
+		  FROM inquiry i,
+		       product p
+		 WHERE i.product_id = p.product_id
+		   AND i.inquiry_id = #{inquiryId}
+		   AND i.status = 'Y'
+	</select>
+	
+	<!-- 
+		기능: 문의 답변하기
+		담당자: 최준원 
+	-->
+	<insert id="insertInquiryComplete">
+		INSERT INTO inquiry (inquiry_id, product_id, customer_id, inquiry_content, creator, inquiry_pr_id, inquiry_ans_dv)
+		VALUES (inquiry_seq.nextval, #{productId}, 0 , #{inquiryContent}, 0 , #{inquiryId}, 'C')
+	</insert>
+	
+	<!-- 
+		기능: 문의 답변 후 문의 상태 W -> C 로 변경
+		담당자: 최준원 
+	-->
+	<update id="updateInquiryAnsDv" parameterType="int">
+		UPDATE inquiry
+		   SET inquiry_ans_dv = 'C',
+		   	   modifier = '0',
+		   	   modify_dt = SYSTIMESTAMP
+		 WHERE inquiry_id = #{inquiryId}
+	</update>
+	
+	<!-- 
+		기능: 문의 아이디로 문의 내용 조회 + 문의 답변 보기
+		담당자: 최준원 
+	-->
+	<select id="selectInquiryInfoWithAnswerByInquiryId" resultType="com.example.daitso.inquiry.model.InquiryInfoWithAnswer" parameterType="int">
+		SELECT p.product_id AS "productId",
+		       p.product_nm AS "productNm",
+		       ( SELECT inquiry_content FROM inquiry where inquiry_id = #{inquiryId} ) AS "inquiryContent",
+		       TO_CHAR(( SELECT create_dt FROM inquiry where inquiry_id = #{inquiryId} ), 'YYYY/MM/DD hh:mm') AS "createDt",
+		       i.inquiry_content AS "inquiryAnswer",
+		       TO_CHAR(i.create_dt, 'YYYY/MM/DD hh:mm') AS "modifyDt",
+		       i.inquiry_id AS "ansInquiryId"
+		 FROM inquiry i,
+		      product p
+		WHERE i.product_id = p.product_id
+		  AND i.inquiry_pr_id = #{inquiryId}
+		  AND i.status = 'Y'
+	</select>
+
+	<!-- 
+		기능: 고객 문의글쓰기
+		담당자: 나현웅
+	 -->
+	<insert id="insertInquiry">
+		INSERT INTO inquiry (inquiry_id, product_id, customer_id, inquiry_content, creator)
+		VALUES (inquiry_seq.nextval, #{pId}, #{cId}, #{content}, #{cId})
+	</insert>
+	
+	<!-- 
+		기능: 특정 상품에 대한 문의글 조회
+		담당자: 나현웅
+	 -->
+	<select id="selectProductInquiry" resultType="com.example.daitso.inquiry.model.InquiryProduct">
+		    SELECT p.product_option_first AS productOptionFirst, 
+					p.product_option_second AS productOptionSecond, 
+					nvl(p.product_option_third,0) AS productOptionThird,
+					i.product_id AS productId, 
+					i.customer_id AS customerId,
+					i.inquiry_content AS inquiryContent,
+            		i.inquiry_id AS inquiryId,
+            		i.inquiry_pr_id AS inquiryPrId,
+            		level,
+					i.create_dt AS createDt 
+			FROM inquiry i
+    		LEFT JOIN product p on p.product_id = i.product_id
+    		WHERE EXISTS (
+    						select 1 from product sp where sp.product_id = i.product_id and product_group_id = #{productGroupId}
+    					 )
+		    AND inquiry_ans_dv = 'C'
+    		START WITH inquiry_pr_id is null
+    		CONNECT BY PRIOR inquiry_id = inquiry_pr_id
+	</select>
+	<!-- 
+		기능: 내가 쓴 문의 조회하기
+		담당자: 윤상영
+	 -->
+	<select id="selectMyInquiry" resultType="com.example.daitso.inquiry.model.MyInquirySelect" parameterType="int">
+	SELECT p.product_nm 			as "productNm",
+           customer_id 				as "customerId",
+           inquiry_pr_id 			as "inquiryPrId",
+           inquiry_content 			as "inquiryContent",
+           inquiry_ans_dv 			as "inquiryAnsDv",
+           i.create_dt          	as "createDt",
+           i.creator            	as "creator",
+           inquiry_id           	as "inquiryId",
+           i.product_id				as "productId",
+           p.product_image_first	as "productImg"
+	  FROM inquiry i
+	  JOIN product p on p.product_id = i.product_id
+	 WHERE i.customer_id = #{customerId}
+	   AND i.status='Y'
+  ORDER BY i.create_dt desc
+ 	</select>
+	<!-- 
+		기능: 내가 쓴 문의 삭제하기 
+		담당자: 윤상영
+	 -->
+	 <update id="deleteMyInquiry" parameterType="int">
+	  UPDATE inquiry 
+	  SET status='N'	  
+	  WHERE inquiry_id = #{inquiryId}
+	 </update>
+  	<!-- 
+		기능: inquiry status Y 인거 카운트
+		담당자: 윤상영
+	 -->
+	 <select id="countInquiryStatusY" resultType="int" parameterType="int"> 
+	 	SELECT count( inquiry_content) as "inquiryStatusYCount"
+       	  FROM inquiry i
+       	 WHERE i.customer_id=#{customerId}
+           AND i.status='Y'
+	 </select>
+ 	<!-- 
+		기능: 문의고유아이디에 따른 문의 내용 가져오기
+		담당자: 윤상영
+	 -->
+	 <select id="selectInquiryContent" resultType="String" parameterType="int">
+	 	SELECT inquiry_content as "inquiryContent"
+ 		  FROM inquiry
+    	 WHERE inquiry_id=#{inquiryId}
+	 </select>
+  	<!-- 
+		기능: 문의고유아이디에 따른 문의 답변내용가져오기
+		담당자: 윤상영
+	 -->
+	  <select id="selectMyInquiryPRIdInquiry" resultType="String" parameterType="int">
+	  	SELECT inquiry_content
+		 FROM inquiry 
+		WHERE inquiry_pr_id= #{inquiryId}
+	  </select>
+	  <!-- 
+		기능: 내문의작성시간
+		담당자: 윤상영
+	 -->
+	 <select id="selectMyInquiryTime" resultType="String" parameterType="int">
+	 	SELECT TO_CHAR(create_dt, 'YYYY/MM/DD hh:mm')  as "createDt"
+		  FROM inquiry
+		 WHERE inquiry_id=#{inquiryId}
+	 </select>
+	 <!-- 
+		기능: 내문의의 답변작성시간
+		담당자: 윤상영
+	 -->
+	 <select id="selectMyInquiryReplyTime" resultType="String" parameterType="int">
+	 	SELECT TO_CHAR(create_dt, 'YYYY/MM/DD hh:mm')  as "createDt"
+		  FROM inquiry
+		 WHERE inquiry_pr_id=#{inquiryId}
+	 </select>
+	 
+	 <!-- 
+		기능: 문의 답변 삭제하기(관리자)
+		담당자: 최준원
+	 -->
+	 <update id="deleteInquiryAdmin" parameterType="int">
+	 	UPDATE inquiry
+	 	   SET status = 'N'
+	 	 WHERE inquiry_id = #{ansInquiryId}
+	 	   AND status = 'Y'
+	 </update>
+	 
+	 <!-- 
+		기능: 삭제한 문의 상태 변경하기(관리자)
+		담당자: 최준원
+	 -->
+	 <update id="updateInquiryAdminDelete" parameterType="int">
+	 	UPDATE inquiry
+	 	   SET inquiry_ans_dv = 'W'
+	 	 WHERE inquiry_id = #{inquiryId}
+	 	   AND status = 'Y'
+	 </update>
+	 
+</mapper>

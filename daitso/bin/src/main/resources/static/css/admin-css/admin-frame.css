@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+.left-menu-container {
+    width: 200px;
+}
+
+.left-menu {
+    padding: 10px;
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+    display: flex; /* 왼쪽 사이드바와 메인 컨텐츠 배치 */
+}
+
+.content {
+    flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    padding: 20px;
+}
+
+.left-menu{
+	width:130%;
+	padding-bottom:32%;
+	background-color:#efefef;
+	border-bottom:solid 1px #c0c0c0;
+    padding-right: 5px;
+    padding-left: 5px;
+	
+}
+
+.left-menu-a{
+	width:135%;
+	border:solid 1px #c0c0c0;
+}
+
+.left-menu-title{
+	font-size:110%;
+	font-weight:bold;
+	margin-left:10%;
+	padding-top:10%;
+}
+
+.menu-link:hover {
+    color: #a5c2f2;
+    text-decoration: none; 
+}
+
+.left-menu-semi-01{
+	font-size:100%;
+	margin-left:10%;
+	margin-right: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-menu-semi-01 > a{
+	color:black;
+	text-decoration:none;
+}
+
+.left-menu-title > a {
+	color:black;
+	text-decoration:none;
+}
+
+
+.left-menu-semi-01 > a:hover{
+	color:#a5c2f2;
+}
+
+.top-rectangle-02 {
+	height: 135px;
+	padding: 52px 7px;
+	border-left: solid 1px #caddfd;
+	background-color: #a5c2f2;
+	width: inherit;
+	padding-left: 10px;
+}
+
+.rectangle-title {
+  margin-top:-10%;
+  height: 47px;
+  font-size: 115%;
+  color: #fff;
+}
+
+.rectangle-count-wrap{
+	text-align:right;
+}
+
+.rectangle-count{
+	font-size:200%;
+	color:#fff;
+}
+
+.rectangle-count1{
+	font-size:200%;
+	color:#fff;
+}
+
+.rectangle-count2{
+	font-size:200%;
+	color:#fff;
+}
+
+.rectangle-count3{
+	font-size:200%;
+	color:#fff;
+}
+
+.rectangle-02-count{
+	margin-right:10%;
+	font-size:100%;
+	color:#fff;
+}
+
+.top-container{
+	display:flex;
+	height:40px;
+	width: 102.5%;
+	align-items: flex-end;
+}
+
+.top-rectangle-01 {
+	height: 135px;
+	width : 61%;
+	padding-top: 40px;
+	background-color: #1a385d;
+}
+
+.page-title {
+	margin-left: 25%;
+	font-size: 200%;
+	font-weight: bold;
+	text-align: center;
+	color: #fff;
+}
+
+.row{
+	 align-items: flex-end;
+}
+
+#table{
+	padding-top: 10px;
+	padding-left: 70px;
+}
+
+.pagination {
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+    align-items: center;
+}
