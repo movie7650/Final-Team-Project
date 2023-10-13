@@ -39,7 +39,7 @@ public interface IAdminService {
 	void deleteProduct(int productId);
 	
 	// 상품 등록하기 ★
-	void registerProduct(ProductCheck product, List<MultipartFile> files);
+	void registerProduct(ProductCheck product, List<MultipartFile> files) throws Exception;
 	
 	void registerProductOriginal(ProductCheck product);
 	

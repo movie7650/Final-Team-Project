@@ -185,6 +185,7 @@
     						select 1 from product sp where sp.product_id = i.product_id and product_group_id = #{productGroupId}
     					 )
 		    AND inquiry_ans_dv = 'C'
+			AND i.status = 'Y'
     		START WITH inquiry_pr_id is null
     		CONNECT BY PRIOR inquiry_id = inquiry_pr_id
 	</select>

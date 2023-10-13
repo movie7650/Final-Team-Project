@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.inquiry.model.InquiryInsertDTO;
 import com.example.daitso.inquiry.service.IInquiryService;
+import org.springframework.web.util.HtmlUtils;
 
 @Controller
 @RequestMapping("/inquiry")
@@ -28,7 +29,7 @@ public class InquiryController {
 	@ResponseBody
 	public int insertInquiry(@RequestBody InquiryInsertDTO inquiryInsertDTO ) {
 		System.out.println("why");
-		System.out.println(inquiryInsertDTO);
+		System.out.println(HtmlUtils.htmlEscape(inquiryInsertDTO.getContent()));
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 		

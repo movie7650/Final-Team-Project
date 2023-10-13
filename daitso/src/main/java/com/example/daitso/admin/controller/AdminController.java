@@ -317,9 +317,11 @@ public class AdminController {
 	        model.addAttribute("message", "상품이 등록되었습니다.");
 	    } catch (DuplicateProductException e) {
 	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
-	    }
-	    
-	    model.addAttribute("searchUrl", "/admin/product");
+	    } catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		model.addAttribute("searchUrl", "/admin/product");
 	    return "admin/message";
 	}
 	
