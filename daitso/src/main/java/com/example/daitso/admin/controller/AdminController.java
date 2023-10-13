@@ -975,4 +975,49 @@ public class AdminController {
 		return "ok";
 	}
 	
+	
+	// 문의 검색 후 화면
+	@GetMapping("/inquiry/{inquiryAnsDv}/{page}/{searchFilter}/{search}")
+	public String getSearchInquiry(@PathVariable char inquiryAnsDv, @PathVariable int page, @PathVariable String searchFilter, @PathVariable String search, Model model) {
+		
+		model.addAttribute("inquiryAnsDv", inquiryAnsDv);
+			
+		List<InquirySelect> inquiryList = inquiryService.selectInquiryListByInquiryAnsDvAndSearch(inquiryAnsDv, searchFilter, search, page);
+		model.addAttribute("inquiryList", inquiryList);
+		
+		System.out.println("hahahahahah" + inquiryList.size());
+		
+		int inquiryTotalCount = inquiryList.size();
+		
+		int totalPage = 0;
+		
+		if(inquiryTotalCount > 0) {
+			totalPage = (int)Math.ceil(inquiryTotalCount/10.0); // 총 페이지 개수
+		}
+		
+		int totalPageBlock = (int)Math.ceil(totalPage/10.0);
+		int nowPageBlock = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
+		int endPage = 0;
+		
+		if(totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else if(totalPage == 0) {
+			endPage = 1;
+		}
+		else {
+			endPage= totalPage;
+		}
+		
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		
+		return "admin/inquiry/admin-inquiry";
+	}
+	
+	
 }

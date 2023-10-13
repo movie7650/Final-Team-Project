@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class InquirySelect {
 	private int inquiryId; 
+	private int inquiryCount;
 	private int productId; 
 	private String productNm;
 	private int categoryId;

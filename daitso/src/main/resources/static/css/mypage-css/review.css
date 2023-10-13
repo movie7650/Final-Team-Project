@@ -18,7 +18,7 @@
 	text-align:center;
 }
 .mypage-review-table th{
-	width:225px;
+	width:223px;
 	height:50px;
 	background-color:#fafafa;
 	border-top:1px solid #d9d9d9;
@@ -73,4 +73,12 @@
 	font-weight: 500;
 	font-size: 85%;
 	padding:5px 0 5px 0;
+}
+.none-review{
+    width: 680px;
+    margin-left: 167px;
+    margin-top: 200px;
+    font-size: 150%;
+    font-weight: 500;
+    padding-left: 115px;
 }

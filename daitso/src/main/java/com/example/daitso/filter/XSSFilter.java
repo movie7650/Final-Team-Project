@@ -12,7 +12,7 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
-@WebFilter("/admin/inquiry/*")
+@WebFilter("/*")
 public class XSSFilter implements Filter{
 
 	@SuppressWarnings("unused")

@@ -1,0 +1,53 @@
+@charset "UTF-8";
+
+.mypoint-main{
+	display: flex;
+	justify-content: center;
+}
+.point-title{
+	position:absolute;
+	padding-bottom:0.5%;
+	font-size:150%;
+	margin-left:165px;
+	margin-top:-660px;
+	width:855px;
+	border-bottom:solid 3px #668663;
+}
+.point-semi-title{
+	position:absolute;
+	font-weight:bold;
+	font-size:110%;
+	margin-top:-580px;
+	margin-right:540px;
+}
+.my-own-point{
+	float:left;
+	position:absolute;
+	margin-top:-550px;
+	margin-right:500px;
+	font-size:400%;
+}
+.point-rule-container{
+	position:absolute;
+	margin-top:-430px;
+	margin-right:400px;
+	color:#ABABAB;
+}
+.point-table-container{
+	position:absolute;
+	margin-left:165px;
+	margin-top:-250px;
+}
+.point-table-container > table{
+	text-align:center;
+}
+.point-table-tr01 > th{
+	width:10%;
+	padding-top:5px;
+	padding-bottom:5px;
+	border-top:2px solid #668663;
+	border-bottom:2px solid #668663;
+}
+.point-table-tr02 > td{
+	text-align:center;
+}

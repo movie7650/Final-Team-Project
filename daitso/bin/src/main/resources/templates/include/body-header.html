@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Body Header -->
+<div th:fragment="bodyHeader">
+	<div class="header-login-and-sign-up">
+		<div>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/sign-up}" class="korea">회원가입</a></span>
+			<span sec:authorize="isAnonymous()"><a th:href="@{/customer/login}" class="korea">로그인</a></span>
+			<span sec:authorize="isAuthenticated()"><a th:href="@{/customer/logout}" class="korea">로그아웃</a></span>
+			<span sec:authorize="isAuthenticated()"><a id="customer-name"></a></span>
+		</div>
+	</div>
+	<div class="header">
+		<div class="header-box">
+			<div class="header-category-container">
+				<div id="header-category">
+					<div class="header-category-box">
+						<img class="header-category-img" th:src="@{/assets/header/category.svg}">
+						<div class="header-category-content korea">카테고리</div>
+					</div>
+				</div>
+				<div id="header-category-list">
+				</div>
+			</div>
+			<div class="header-logo">
+				<a th:href="@{/}"><img class="header-logo-img" th:src="@{/assets/header/daitso_logo_header.png}"></a>	
+			</div>
+			<div class="header-search">
+				<div class="header-search-box">
+					<form class="header-search-form" action="/product/search" method="get">
+						<div class="header-search-input">
+                        	<input id="search-product" type="text" name="searchText" placeholder="다있소 매장상품을 검색해보세요!" class="korea-input">
+                    	</div>
+                    	<div class="header-search-submit">
+                        	<button class="header-search-btn" type="submit"><img th:src="@{/assets/header/search.svg}"></button>
+                    	</div>
+					</form>
+					<div class="hearder-search-div">
+                        <button class="header-search-btn" onclick="pressMic();"><img th:src="@{/assets/header/microphone-svgrepo-com.svg}"></button>					
+					</div>
+				</div>					
+			</div>
+			<div class="header-mydaitso">
+				<div class="header-mydaitso-box">
+					<a sec:authorize="isAnonymous()" th:href="@{/customer/login}"><img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}"></a>
+					<a sec:authorize="isAuthenticated()" th:href="@{/mypage/orderlist}"><img class="header-mydaitso-img" th:src="@{/assets/header/customer.svg}"></a>
+					<div class="header-mydaitso-content">
+						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;" class="korea">마이다있소</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/mypage/orderlist}" style="color:black; text-decoration: none;" class="korea">마이다있소</a>
+					</div>
+				</div>
+			</div>
+			<div class="header-cart">
+				<div class="header-cart-box">
+					<a sec:authorize="isAnonymous()" th:href="@{/customer/login}"><img class="header-cart-img" th:src="@{/assets/header/cart.svg}"></a>
+					<a sec:authorize="isAuthenticated()" th:href="@{/cart}"><img class="header-cart-img" th:src="@{/assets/header/cart.svg}"></a>
+					<div class="header-cart-content">
+						<a sec:authorize="isAnonymous()" th:href="@{/customer/login}" style="color:black; text-decoration: none;" class="korea">장바구니</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{/cart}" style="color:black; text-decoration: none;" class="korea">장바구니</a>
+					</div>
+				</div>
+			</div>				
+		</div>
+	</div>
+</div>
+</html>

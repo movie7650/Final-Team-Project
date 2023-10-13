@@ -1,0 +1,196 @@
+@charset "UTF-8";
+
+.header-login-and-sign-up {
+	display: flex;
+	justify-content: center;
+	background-color: #F0F0F0;
+	height: 32px;
+}
+
+
+.header-login-and-sign-up div{
+	width: 1100px;
+	height: 100%;
+	padding-right: 5px;
+}
+
+.header-login-and-sign-up span {
+	float: right;
+	margin-left: 10px;	
+	height: 100%;
+	line-height: 32px;
+}
+
+.header-login-and-sign-up span a{
+	color: black;
+	font-size: 13px;
+	font-weight: 400;
+	text-decoration: none;
+	margin-bottom: 10px;
+}
+
+.header {
+	display: flex;
+	justify-content: center;
+}
+
+.header-box {
+	width: 1100px;
+	height: 100px;
+	display: flex;
+	position: relative;
+}
+
+.header-category-container {
+	position:absolute;
+	z-index:2;
+}
+
+.header-category-container:hover #header-category-list {
+	display: block;
+}
+
+#header-category {
+	width: 100px;
+	height: 100px;
+	background-color: #39594e;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.header-category-box {
+	text-align: center;
+}
+
+.header-category-img{
+	width: 30px;
+	height: 30px;
+}
+
+.header-category-content{
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+#header-category-list{
+	width: 1050px;
+	background-color: white;
+	padding: 30px 0 20px 30px;
+	display:none;
+	border: 1px solid #E1E1E1;
+	box-shadow: 5px 5px 5px #E1E1E1;
+}
+
+
+.header-logo{
+	width : 160px;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	margin-left: 170px;
+	position:absolute;
+	z-index:3;
+}
+
+.header-logo-img {
+	width: 100%;
+	height: 40%;
+}
+
+.header-search {
+	height: 100px;
+	display: flex;
+	align-items: center;
+	margin-left: 400px;
+	position:absolute;
+	z-index:3;
+}
+
+
+.header-search-box {
+	display:flex;
+	width: 440px;
+	border-bottom: 3px solid #39594e; 
+}
+
+.header-search-form{
+	display: flex;
+	align-items: center;
+}
+
+.header-search-input{
+	width: 410px;
+}
+
+.header-search-input input{
+	width: 400px;
+	font-size: 15px;
+	border: none;
+	outline: none;
+}
+
+.header-search-btn{
+	border: none;
+	background-color: white;
+	cursor: pointer;
+}
+
+.header-search-btn img{
+	width: 25px;
+	height: 25px;
+}
+
+.header-mydaitso {
+	width: 100px;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content:center;
+	margin-left: 920px;
+	position:absolute;
+	z-index:3;
+}
+
+.header-mydaitso-box {
+	text-align: center;
+}
+
+.header-mydaitso-img{
+	width: 35px;
+	height: 35px;
+}
+
+.header-mydaitso-content{
+	margin-top: 10px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.header-cart {
+	width: 100px;
+	height: 100px;
+	display: flex;
+	justify-content:center;
+	align-items: center;
+	margin-left: 1020px;
+	position:absolute;
+	z-index:3;
+}
+
+.header-cart-box {
+	text-align: center;
+}
+
+.header-cart-img{
+	width: 35px;
+	height: 35px;
+}
+
+.header-cart-content{
+	margin-top: 10px;
+	font-size: 14px;
+	font-weight: bold;
+}

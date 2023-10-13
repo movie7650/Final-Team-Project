@@ -1,0 +1,123 @@
+@charset "UTF-8";
+
+.add-shipping-main{
+	display: flex;
+	justify-content: center;
+}
+
+/* 받는사람이름 입력 */
+.post-receiver-container{
+	margin-top:10%;
+	width:890px;
+	border:solid 1.5px #39594e;
+	margin-left:-43px;
+	
+}
+.post-receiver-container img {
+	width:50px;
+	height:50px;
+}
+.post-receiver-container input{
+	width:700px;
+	border:none;
+	outline:none;
+}
+.post-address-input{
+	width:890px;
+	border-left:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
+	margin-left:-43px;
+
+}
+.post-address-input input{
+	outline:none;
+	
+}
+.post-address-input img{
+	width:50px;
+	height:50px;
+}
+.shipping-receiver-phonenumber{
+	border-left:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
+	margin-left:-43px;
+}
+.shipping-receiver-phonenumber img{
+	width:50px;
+	height:50px;
+}
+.shipping-receiver-phonenumber input{
+	width:700px;
+	border:none;
+	outline:none;
+}
+.shipping-receiver-request{
+	border-left:solid 1.5px #39594e;
+	border-right:solid 1.5px #39594e;
+	border-bottom:solid 1.5px #39594e;
+	margin-left:-43px;
+}
+.shipping-receiver-request img{
+	width:50px;
+	height:50px;
+}
+.shipping-receiver-request input{
+	width:700px;
+	border:none;
+	outline:none;
+}
+.shipping-button-container{
+	float:left;
+	margin-left:30.5%;
+	margin-top:3%;
+}
+#add-shipping-button{
+	width:150px;
+	height:50px;
+	border:none;
+	display:inline-block;
+	background-color:#39594e;
+	color:white;
+	border-radius:5px;
+	font-weight: 500;
+	margin-right: 10px;
+}
+#cancle-add-shipping{
+	width:150px;
+	height:50px;
+	border:solid 1px black;
+	display:inline-block;
+	background-color:white;
+	color:#39594e;
+	border-radius:5px;
+	font-weight: 500;
+}
+
+#find-post-button{
+	background-color:#39594e;
+	color:white;
+	border:none;
+	height:10%;
+	text-align:center;
+	border-radius:5px;
+}
+#shipping-post-number{
+	width:100px;
+	border:solid 2px #e7e7e7;
+	border-radius:5px;
+}
+#shipping-receiver-address{
+	border:solid 2px #e7e7e7;
+	border-radius:5px;
+}
+#shipping-address-detail{
+	border:solid 2px #e7e7e7;
+	border-radius:5px;
+}
+#shipping-address-referto{
+	border:solid 2px #e7e7e7;
+	border-radius:5px;
+}
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+<div class="add-shipping-main">
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+
+<div class="shipping-title">배송지수정하기</div>
+<div style=" margin-right:8px; margin-top:20px;">
+<div class="post-inform-container" th:each="shippingIdInfo : ${shippingIdInfoList}">
+<form th:action="@{/mypage/updateshippingaddr}" method="post">
+	<div class="post-receiver-container">
+		<img th:src="@{/assets/mypage/receiverName.JPG}">
+		<input autocomplete=off required name="shippingReceiverNM" type="text" th:value="${shippingIdInfo.shippingReceiverNM}">
+	</div><!-- post-receiver-container -->
+	<input type="hidden" name="shippingId" th:value="${shippingIdInfo.shippingId}">
+	<div class="post-address-input">
+		<img th:src="@{/assets/mypage/postLocation.JPG}">
+		<input autocomplete=off required type="text" id="shipping-post-number" placeholder="우편번호" readonly>
+		<input autocomplete=off required name="shippingRoadNMAddr" type="text" th:value="${shippingIdInfo.shippingRoadNMAddr}" id="shipping-receiver-address" placeholder="주소" readonly>
+		<input autocomplete=off required name="shippingDaddr" type="text" th:value="${shippingIdInfo.shippingDaddr}" id="shipping-address-detail" placeholder="상세주소">
+		<input autocomplete=off type="text" id="shipping-address-referto" placeholder="참고사항">
+		<input required type="button" id="find-post-button" onclick="kakaoPost()" value="검색">		
+	</div><!-- post-address-input -->
+	
+	<div class="shipping-receiver-phonenumber">
+		<img th:src="@{/assets/mypage/phoneNum.JPG}">
+		<input required name="shippingReceiverTelNO" type="text" maxlength="13" oninput="oninputPhone(this)" th:value="${shippingIdInfo.shippingReceiverTelNO}" placeholder="전화번호 입력">
+	</div><!-- shipping-receiver-phonenumber -->
+	
+	<div class="shipping-receiver-request">
+		<img th:src="@{/assets/mypage/request.JPG}">
+		<input required name="shippingDmnd" type="text" th:value="${shippingIdInfo.shippingDmnd}" placeholder="요청사항">
+	</div><!-- shipping-receiver-request -->
+	<div style="margin-top:5px; margin-left:-30px;">
+	<label>
+		<input type="checkbox" th:if="${shippingIdInfo.shippingDv} == 301" th:value="${shippingIdInfo.shippingDv}" checked onclick="changeShippingCheckStatus(this)">
+		<input type="checkbox" th:unless="${shippingIdInfo.shippingDv} == 301" th:value="${shippingIdInfo.shippingDv}" onclick="changeShippingCheckStatus(this)">
+		<input th:if="${shippingIdInfo.shippingDv} == 301" id="shipping-check-status" name="shippingDv" type="hidden" value=301>
+		<input th:unless="${shippingIdInfo.shippingDv} == 301" id="shipping-check-status" name="shippingDv" type="hidden" value=302>
+		기본배송지로 설정
+	</label>
+	</div>
+	<div class="shipping-button-container">
+		<button id="add-shipping-button" type="submit">저장하기</button>
+	</div><!-- shipping-button-container -->
+	
+</form>
+        <form th:action="@{/mypage/deleteshipping}" method="post">
+        	<input type="hidden" name="shippingId" th:value="${shippingIdInfo.shippingId}">
+		<button id="delete-add-shipping" type="submit" >삭제하기</button>
+		</form>
+</div><!-- post-inform-container -->
+</div>
+<!-- 카카오 도로명주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+const shippingCheckStatus = document.getElementById("shipping-check-status");
+
+function changeShippingCheckStatus(item) {
+	if(item.checked) {
+		shippingCheckStatus.value = 301;
+	} else {
+		shippingCheckStatus.value = 302;
+	}
+}
+
+//전화번호 입력
+function oninputPhone(target) {
+    target.value = target.value
+        .replace(/[^0-9]/g, '')
+        .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
+}
+ 
+ 
+    function kakaoPost() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("shipping-address-referto").value = extraAddr;
+                
+                } else {
+                    document.getElementById("shipping-address-referto").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('shipping-post-number').value = data.zonecode;
+                document.getElementById("shipping-receiver-address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("shipping-address-detail").focus();
+            }
+        }).open();
+    }
+</script>
+</div><!-- add-shipping-main -->
+
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>

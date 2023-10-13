@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+
+	<div class="mypage-inquiry-main">
+		<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+		<div class="mypage-inquiry-title">내 문의관리</div>
+
+		<div style="width: 800px; margin-right: 55px;">
+			<div th:if="${myinquirylist} != null" class="mypage-inquiry-table-container">
+				<table class="mypage-inquiry-table">
+					<tr>
+						<th class="inquiry-table-th-1">상품정보</th>
+						<th class="inquiry-table-th-2">문의내용</th>
+						<th class="inquiry-table-th-3">문의작성일자</th>
+						<th class="inquiry-table-th-4">상태</th>
+						<th class="inquiry-table-th-5">기능</th>
+
+					</tr>
+					<tr style="font-size: 80%; height: 100px;" th:each="myinquiry : ${myinquirylist}">
+						<td>
+							<div class="my-inquiry-product-img"><img style="width:100%; height:100%;" th:src="${myinquiry.productImg}"></div>
+							<div th:text="${myinquiry.productNm}" class="my-inquiry-productNm">남성무지반팔티</div>
+						</td>
+						<td>	
+							<div th:text="${myinquiry.inquiryContent}" class="my-inquiry-content">문의내용</div>
+						</td>
+						<td th:text="${myinquiry.createDt}">23-08-01</td>
+						<td>
+							<div style="color: red; font-weight: 500;" th:if="${myinquiry.inquiryAnsDv}=='W'">답변대기</div>
+							<div style="color: #39594e; font-weight: 500;" th:if="${myinquiry.inquiryAnsDv}=='C'">답변완료</div>
+						</td>
+						<td style="display:flex; flex-direction: column; justify-content: center;">
+							<div style="border:solid 1px white;">
+								<input type="button" th:if="${myinquiry.inquiryAnsDv}=='C'" id="show-reply" th:onclick="new_window([[${myinquiry.inquiryId}]]);" value="답변보기"><br>	
+								<input type="button" th:id="${myinquiry.inquiryId}" class="mypage-inquiry-delete" th:onclick="removeCheck([[${myinquiry.inquiryId}]])" value="삭제">
+							</div>
+						</td>
+
+					</tr>
+				</table><!-- mypage-inquiry-table -->
+				<script>
+					const csrtToken = '[[${_csrf.token}]]';
+					function new_window(item) {
+						window.open("/mypage/myinquiryreply/" + item, "Child",
+								"width=870, height=740, top=50, left=350");
+					}
+					//비동기
+					
+					function removeCheck(inquiryId) {
+						if (confirm("정말 삭제하시겠습니까??") == true) { //확인
+							fetch( window.location.origin + "/mypage/delete/myinquiry/" + inquiryId ,{
+								method: "POST",
+								headers:{
+									"Content-Type": "application/json",
+									"X-CSRF-TOKEN": csrtToken
+								},	
+							})
+							.then((response) => response.json())
+							.then((data) => window.location.reload())
+						} 
+					}
+				</script>
+			</div><!-- mypage-inquiry-table-container -->
+			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">문의내역이 없습니다.</div> 
+		</div><!-- style="width:800px;margin-right:55px;"  -->
+	</div><!-- mypage-inquiry-main -->
+	<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>

@@ -32,6 +32,9 @@ public interface IInquiryService {
 	// 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
 	List<InquirySelect> selectInquiryListByInquiryAnsDv(char inquiryAnsDv, int page);
 	
+	// 검색 -> 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
+	List<InquirySelect> selectInquiryListByInquiryAnsDvAndSearch(char inquiryAnsDv, String searchFilter, String search, int page);
+	
 	// 문의 아이디로 문의 내용 조회
 	InquiryInfo selectInquiryInfoByInquiryId(int inquiryId);
 

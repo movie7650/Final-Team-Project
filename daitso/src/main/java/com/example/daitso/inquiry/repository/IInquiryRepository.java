@@ -38,6 +38,13 @@ public interface IInquiryRepository {
 
 	// 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회 
 	List<InquirySelect> selectInquiryListByCategory(@Param("inquiryAnsDv") char inquiryAnsDv, @Param("start") int start, @Param("end") int end);
+	
+	// 검색 - > 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회 
+	List<InquirySelect> selectInquiryListByCategoryAndSearch( @Param("inquiryAnsDv") char inquiryAnsDv, 
+															  @Param("searchFilter") String searchFilter,
+															  @Param("search") String search,
+															  @Param("start") int start, 
+															  @Param("end") int end );
 
 	// 문의 아이디로 문의 내용 조회
 	InquiryInfo selectInquiryInfoByInquiryId(int inquiryId);
