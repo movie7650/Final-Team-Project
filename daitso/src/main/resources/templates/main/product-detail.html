@@ -334,6 +334,7 @@
 	imageContainer.addEventListener('mouseover', function(){
 		const img = document.querySelector('.img-zoom');
 		img.style.opacity = 1;
+		img.style.zIndex= 2;
 	})
 	imageContainer.addEventListener('mousemove', function(e){
 		const x = e.offsetX / imageContainer.offsetWidth;
@@ -345,6 +346,7 @@
 	imageContainer.addEventListener('mouseout', () => {
 		const img = document.querySelector('.img-zoom');
 	  	img.style.opacity = 0;
+	  	img.style.zIndex = -1;
 	});
 	
 	function cntBtn(division){

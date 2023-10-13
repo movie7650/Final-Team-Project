@@ -233,7 +233,7 @@
     background-color: #F8EBCE;
 }
 .img-zoom {
-	z-index:2;
+	z-index:-1;
 	position: absolute;
 	top: 110px;
 	left: 588px;
