@@ -69,6 +69,16 @@ public class AdminController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@GetMapping("/purchase-count")
+	@ResponseBody
+	public Map<String, Integer> getPurchaseCounts() {
+	    Map<String, Integer> counts = new HashMap<>();
+	    counts.put("depositCount", adminService.selectCountPurchaseDv(401));
+	    counts.put("shippingCount", adminService.selectCountPurchaseDv(402));
+	    counts.put("shippedCount", adminService.selectCountPurchaseDv(403));
+	    return counts;
+	}
+	
 	// 상품 조회하기(카테고리별)
 	@GetMapping("/product")
 	public String selectProductsByCategory( @RequestParam(name = "firstCategoryId", required = false) Integer firstCategoryId,
@@ -304,6 +314,30 @@ public class AdminController {
 	    
 	    try {
 	    	adminService.registerProduct(product, files);
+	        model.addAttribute("message", "상품이 등록되었습니다.");
+	    } catch (DuplicateProductException e) {
+	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
+	    }
+	    
+	    model.addAttribute("searchUrl", "/admin/product");
+	    return "admin/message";
+	}
+	
+	@PostMapping("/product/original")
+	public String registerProductOriginal(ProductCheck product, Model model) {
+		// 입력 필드가 비어 있으면 '-'으로 대체
+	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+	        product.setProductOptionFirst("-");
+	    }
+	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+	        product.setProductOptionSecond("-");
+	    }
+	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+	        product.setProductOptionThird("-");
+	    }
+	    
+	    try {
+	    	adminService.registerProductOriginal(product);
 	        model.addAttribute("message", "상품이 등록되었습니다.");
 	    } catch (DuplicateProductException e) {
 	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");

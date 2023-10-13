@@ -10,7 +10,7 @@
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 
 <div class="shipping-title">배송지추가하기</div>
-<div style=" margin-right:55px; margin-top:20px;">
+<div style=" margin-right:8px; margin-top:20px;">
 <form th:action="@{/mypage/addshipping}" method="post">
 <div class="post-inform-container">
 	<div class="post-receiver-container">
@@ -36,7 +36,7 @@
 		<img th:src="@{/assets/mypage/request.JPG}">
 		<input required name="shippingDmnd" type="text" placeholder="요청사항">
 	</div><!-- shipping-receiver-request -->
-	<div style="margin-top:5px; margin-left:10px;">
+	<div style="margin-top:5px; margin-left:-30px;">
 	<label><input  type="checkbox" name="shippingDv" value=301>기본배송지로 설정</label>
 	</div>
 	<div class="shipping-button-container">

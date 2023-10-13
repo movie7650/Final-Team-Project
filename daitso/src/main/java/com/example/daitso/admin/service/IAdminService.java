@@ -41,6 +41,8 @@ public interface IAdminService {
 	// 상품 등록하기 ★
 	void registerProduct(ProductCheck product, List<MultipartFile> files);
 	
+	void registerProductOriginal(ProductCheck product);
+	
 	//테스트//
 //	void registerProduct(ProductCheck product);
 	
@@ -152,5 +154,7 @@ public interface IAdminService {
 	
 	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
 	List<CustomerChart> getCustomerCounts();
+	
+	int selectCountPurchaseDv(int purchaseDv);
 	
 }

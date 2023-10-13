@@ -74,6 +74,16 @@ public class AdminService implements IAdminService{
 		}
 	}
 	
+	// 기존 상품 등록하기
+	@Transactional
+	public void registerProductOriginal(ProductCheck product) {
+		
+		if (isDuplicateProduct(product)) {
+	        throw new DuplicateProductException("상품이 중복되었습니다.");
+	    }
+		productRepository.registerProduct(product);
+	}
+	
 	//테스트//
 //	@Transactional
 //	public void registerProduct(ProductCheck product) {
@@ -123,9 +133,11 @@ public class AdminService implements IAdminService{
 	}
 		
 	// 상품 삭제하기(그룹)
-	@Override
+	@Transactional
 	public void deleteProductByGroupId(int productGroupId) {
 		productRepository.deleteProductByGroupId(productGroupId);
+		// 상품 삭제시(그룹) 같은 productGroupId인 특별 상품도 삭제하기
+		productRepository.deleteSpecialProductGroup(productGroupId);
 	}
 
 	// 상품ID로 상품 정보 갖고오기
@@ -146,9 +158,11 @@ public class AdminService implements IAdminService{
 	}
 
 	// 상품 삭제하기
-	@Override
+	@Transactional
 	public void deleteProduct(int productId) {
 		productRepository.deleteProduct(productId);
+		// 상품 삭제시 같은 productId인 특별 상품도 삭제하기
+		productRepository.deleteSpecialProduct(productId);
 	}
 	
 	// 상품명을 검색해서 해당 상품 정보 갖고오기
@@ -368,6 +382,10 @@ public class AdminService implements IAdminService{
 		return customerRepository.getCustomerCounts();
 	}
 
-	
+
+	@Override
+	public int selectCountPurchaseDv(int purchaseDv) {
+		return purchaseRepository.selectCountPurchaseDv(purchaseDv);
+	}
 
 }

@@ -268,13 +268,26 @@
 		기능: 상품 삭제하기(그룹)
 		담당자: 이세인
 	-->
-	<delete id="deleteProductByGroupId" parameterType="int">
+	<update id="deleteProductByGroupId" parameterType="int">
     UPDATE product
 	   SET status = 'N',
 	   	   modifier = 'admin',
            modify_dt = systimestamp
      WHERE product_group_id = #{productGroupId}
-	</delete>
+	</update>
+	
+	<!-- 
+		기능: 상품 삭제시(그룹) 특별 상품 삭제하기
+		담당자: 이세인
+	-->
+	<update id="deleteSpecialProductGroup" parameterType="int">
+	    UPDATE special_product
+		   SET status = 'N',
+		       modifier = 'admin',
+		       modify_dt = systimestamp
+		 WHERE TRUNC(create_dt) = TRUNC(SYSDATE) 
+		   AND product_id IN (SELECT product_id FROM product WHERE product_group_id = #{productGroupId})
+	</update>
 
 
 	<!-- 
@@ -384,14 +397,25 @@
 		기능: 상품 삭제하기
 		담당자: 이세인
 	-->
-	<delete id="deleteProduct" parameterType="int">
+	<update id="deleteProduct" parameterType="int">
 	    UPDATE product
-	       SET status = 'N',
+	       SET status    = 'N',
 	           modifier  = 'admin',
                modify_dt = systimestamp 
 	     WHERE product_id = #{productId}
-	</delete>
+	</update>
 
+	<!-- 
+		기능: 상품 삭제시 특별 상품 삭제하기
+		담당자: 이세인
+	-->
+	<update id="deleteSpecialProduct" parameterType="int">
+	    UPDATE special_product
+	       SET status    = 'N',
+	           modifier  = 'admin',
+               modify_dt = systimestamp 
+	     WHERE product_id = #{productId} AND TRUNC(create_dt) = TRUNC(SYSDATE)
+	</update>
 
 	<!-- 
 		기능: 상품 등록하기(상품 등록을 하고, 해당 상품에 상품 코드를 생성하기)
@@ -407,7 +431,6 @@
 		        product_id,
 		        category_id,
 		        product_nm,
-		        product_content,
 		        product_image_first,
 		        product_image_second,
 		        product_image_third,
@@ -423,7 +446,6 @@
 		        product_seq.NEXTVAL,
 		        #{categoryId},
 		        #{productNm},
-		        #{productContent},
 		        #{productImageFirst},
 		        #{productImageSecond},
 		        #{productImageThird},
@@ -445,7 +467,6 @@
 		        product_id,
 		        category_id,
 		        product_nm,
-		        product_content,
 		        product_image_first,
 		        product_image_second,
 		        product_image_third,
@@ -461,7 +482,6 @@
 		        product_seq.NEXTVAL,
 		        #{categoryId},
 		        #{productNm},
-		        #{productContent},
 		        #{productImageFirst},
 		        #{productImageSecond},
 		        #{productImageThird},
@@ -496,6 +516,7 @@
 	       AND product_option_first = #{productOptionFirst}
 	       AND product_option_second = #{productOptionSecond}
 	       AND product_option_third = #{productOptionThird}
+	       AND status = 'Y'
 	</select>
     
     
@@ -504,10 +525,13 @@
 		담당자: 이세인
 	-->
 	<select id="searchProductsByName" resultType="com.example.daitso.product.model.ProductCheck">
-	    SELECT DISTINCT p.product_group_id   AS "productGroupId",
-		        	    c.category_nm        AS "categoryNm",
-		       			p.product_nm         AS "productNm",
-		        		p.category_id        AS "categoryId"
+	    SELECT DISTINCT p.product_group_id   		AS "productGroupId",
+		        	    c.category_nm        		AS "categoryNm",
+		       			p.product_nm         		AS "productNm",
+		        		p.category_id        		AS "categoryId",
+		        		p.product_image_first       AS "productImageFirst",
+                        p.product_image_second      AS "productImageSecond",
+                        p.product_image_third       AS "productImageThird"
 		  FROM product p
 		  JOIN category c 
 		    ON p.category_id = c.category_id AND p.status = 'Y'
@@ -523,11 +547,11 @@
 	  <![CDATA[
 	    SELECT 'Stock Low' AS label, product_nm AS productNm, product_stock AS productStock
 		  FROM product
-		 WHERE product_stock < 10
+		 WHERE product_stock < 10  AND status='Y'
 	 UNION ALL
 		SELECT '재고 10개 이상' AS label, '' AS product_nm, COUNT(*) AS productStock
 		  FROM product
-		 WHERE product_stock >= 10
+		 WHERE product_stock >= 10  AND status='Y'
 	  ]]>
 	</select>
 
@@ -639,7 +663,7 @@
 		WHERE product_group_id = #{productGroupId} and status='Y'
 		<choose>
 			<when test='"사이즈옵션 없음".equals(size)'>
-				and product_option_first is null
+				and product_option_first = '-'
 			</when>
 			<otherwise>
 				and product_option_first = #{size}
@@ -647,7 +671,7 @@
 		</choose>
 		<choose>
 			<when test='"색상옵션 없음".equals(color)'>
-				and product_option_second is null
+				and product_option_second = '-'
 			</when>
 			<otherwise>
 				and product_option_second = #{color}
@@ -655,7 +679,7 @@
 		</choose>
 		<choose>
 			<when test='"기타옵션 없음".equals(other)'>
-				and product_option_third is null
+				and product_option_third = '-'
 			</when>
 			<otherwise>
 				and product_option_third = #{other}

@@ -8,8 +8,9 @@
 /* 받는사람이름 입력 */
 .post-receiver-container{
 	margin-top:10%;
-	width:800px;
+	width:890px;
 	border:solid 1.5px #39594e;
+	margin-left:-43px;
 	
 }
 .post-receiver-container img {
@@ -22,10 +23,11 @@
 	outline:none;
 }
 .post-address-input{
-	width:800px;
+	width:890px;
 	border-left:solid 1.5px #39594e;
 	border-right:solid 1.5px #39594e;
 	border-bottom:solid 1.5px #39594e;
+	margin-left:-43px;
 
 }
 .post-address-input input{
@@ -40,6 +42,7 @@
 	border-left:solid 1.5px #39594e;
 	border-right:solid 1.5px #39594e;
 	border-bottom:solid 1.5px #39594e;
+	margin-left:-43px;
 }
 .shipping-receiver-phonenumber img{
 	width:50px;
@@ -54,6 +57,7 @@
 	border-left:solid 1.5px #39594e;
 	border-right:solid 1.5px #39594e;
 	border-bottom:solid 1.5px #39594e;
+	margin-left:-43px;
 }
 .shipping-receiver-request img{
 	width:50px;
@@ -66,7 +70,7 @@
 }
 .shipping-button-container{
 	float:left;
-	margin-left:32.5%;
+	margin-left:30.5%;
 	margin-top:3%;
 }
 #add-shipping-button{
@@ -77,6 +81,8 @@
 	background-color:#39594e;
 	color:white;
 	border-radius:5px;
+	font-weight: 500;
+	margin-right: 10px;
 }
 #cancle-add-shipping{
 	width:150px;
@@ -86,6 +92,7 @@
 	background-color:white;
 	color:#39594e;
 	border-radius:5px;
+	font-weight: 500;
 }
 
 #find-post-button{
