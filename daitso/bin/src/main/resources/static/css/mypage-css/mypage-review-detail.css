@@ -1,0 +1,92 @@
+@charset "UTF-8";
+.my-detail-review-title {
+	width: 100vw;
+	height: 60px;
+	line-height: 60px;
+	background-color: #424242;
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	padding-left: 30px;
+}
+.detail-review-product-img{
+	width:150px;
+	height:150px;
+	float:left;
+}
+.detail-review-content-title{
+	font-size:18px;
+	font-weight: 600;
+	color:white;
+	background-color: #e8c369;
+	height:60px;
+	padding-left: 30px;
+	line-height: 60px;
+}
+.detail-review-content-container{
+	padding-left:50px;
+	padding-top:50px;
+}
+
+.detail-review-img01{
+	width:70px;
+	height:70px;
+	float:left;
+}
+.detail-review-img02{
+	width:70px;
+	height:70px;
+	float:left;
+}
+.detail-review-img03{
+	width:70px;
+	height:70px;
+	float:left;
+}
+.detail-review-info-title{
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	padding: 15px 0 15px 20px;
+	background-color: #39594E;
+}
+#close-detail-review-window{
+	border: 1px solid #888888;
+	color: #888888;
+	width: 95px;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 600;
+	margin-left: 10px;
+	cursor: pointer;
+	float:right;
+	margin-top:15px;
+	background-color: white;
+}
+.detail-review-img-container{
+	margin-top:60px;
+}
+.detail-review-content{
+	font-size: 18px; 
+	font-weight: 600;
+}
+.my-detail-review-content-title{
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	padding: 15px 0 15px 20px;
+	background-color: #E8C369;
+	margin-top: 30px;
+}
+.detail-review-starpoint{
+	color:orange;
+	font-size: 18px;
+	padding-left:160px; 
+	font-weight: 600;
+}
+.detail-review-starpoint span{
+	color:black;
+}

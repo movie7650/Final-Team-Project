@@ -1,0 +1,68 @@
+.admin-inquiry-complete-title {
+	width: 100vw;
+	height: 60px;
+	line-height: 60px;
+	background-color: #424242;
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	padding-left: 30px;
+}
+
+.admin-inquiry-complete-info-title {
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	padding: 15px 0 15px 20px;
+	background-color: #39594E;
+}
+
+.admin-inquiry-complete-write-title {
+	color: white;
+	font-size: 18px;
+	font-weight: 600;
+	padding: 15px 0 15px 20px;
+	background-color: #E8C369;
+	margin-top: 30px;
+}
+
+.admin-inquiry-complete-btn {
+	background-color: #39594E;
+	color:white;
+	width: 95px;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.admin-inquiry-complete-close {
+	border: 1px solid #888888;
+	color: #888888;
+	width: 95px;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 600;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.admin-inquiry-delete-btn{
+	background-color: white;
+	color:red;
+	border: 1px solid red;
+	width: 95px;
+	text-align: center;
+	height: 45px;
+	line-height: 45px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+}

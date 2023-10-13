@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/user-header :: userHeader}"></head>
+<body>
+	<div class="login-container">
+		<div class="login-logo">
+			<a th:href="@{/}"> <img class="login-logo-img"
+				th:src="@{/assets/header/daitso_logo_header.png}">
+			</a>
+		</div>
+		<div class="login-title-box">
+			<div class="login-title korea">이메일 로그인</div>
+		</div>
+		<div class="login-input-container">
+			<div class="login-input-boxes">
+				<div class="login-form">
+					<form th:action="@{/customer/login}" th:method="post">
+						<div>
+							<div class="login-input-box">
+								<div class="login-input-img-box">
+									<img class="login-input-img"
+										th:src="@{/assets/loginandsignup/email.svg}">
+								</div>
+								<input id="customerEmail" name="username" type="text" class="login-input-value korea-input"
+									placeholder="아이디(이메일)" onchange="checkRegEmail()" required autocomplete="off">
+							</div>
+							<div id="emailConfirm"
+								style="font-size: 14px; margin: 10px 0 0 60px; color:red; display:none">
+							</div>
+							<div class="login-input-box">
+								<div class="login-input-img-box">
+									<img class="login-input-img"
+										th:src="@{/assets/loginandsignup/password.svg}">
+								</div>
+								<input id="customerPw" name="password" type="password" class="login-input-value korea-input"
+									placeholder="비밀번호" autocomplete="current-password" required>
+							</div>
+							<div style="display: flex; justify-content: space-between;">
+								<div class="login-find" style="display:flex;">
+									<input id="password-show-check-box" type="checkbox" style="accent-color: #39594E; width:15px; height:15px;">
+									<div style="margin:1.5px 0 0 5px;" class="korea">비밀번호 표시</div>
+								</div>
+								<div class="login-find">
+									<div style="margin-top: 1.5px;">
+										<a th:href="@{/customer/find/email}" style="color:#39594E; text-decoration:none; " class="korea">아이디/비밀번호 찾기</a>
+									</div>
+								</div>
+							</div>
+							<div th:if="${param.error}">
+								<div style="color:red; font-size:15px; margin-top:10px;" class="korea">
+									이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.
+								</div>
+							</div>
+							<div>
+								<button class="login-btn korea" type="submit">로그인</button>
+							</div>
+							<div class="login-line"></div>
+							<div>
+								<div class="login-sign-up-btn korea" onclick="moveSignUpPage()">회원가입</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div style="text-align: center; margin-top: 50px; font-size: 15px; color: #888888; font-weight: 500;" class="korea">SNS계정으로 간편 로그인/회원가입</div>
+		<div style="display: flex; justify-content: center; margin-top: 20px;">
+			<div style="display: flex; width: 500px; justify-content: center; border: 1px solid #919EAB; border-radius: 5px; padding: 17.5px 0 17.5px 0;">
+				<img th:src="@{/assets/common/logo-google.svg}" style="width: 25px; height: 25px;">
+				<div style="height: 25px; text-align: center; line-height: 25px; margin-left: 10px;">
+					<a href="/oauth2/authorization/google" style="font-size: 16px; color: black; font-weight: 600; text-decoration: none;" class="korea">구글로 로그인하기</a>
+				</div>
+			</div>
+		</div>
+		<div style="display: flex; justify-content: center; margin-top: 10px;">
+			<div style="display: flex; width: 500px; justify-content: center; border: 1px solid #919EAB; border-radius: 5px; padding: 17.5px 0 17.5px 0;">
+				<img th:src="@{/assets/common/logo-naver.svg}" style="width: 25px; height: 25px;">
+				<div style="height: 25px; text-align: center; line-height: 25px; margin-left: 10px;">
+					<a href="/oauth2/authorization/naver" style="font-size: 16px; color: black; font-weight: 600; text-decoration: none;" class="korea">네이버로 로그인하기</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+	
+	// 에러 처리
+ 	const error = [[${error}]];
+	
+	if(error != null){
+		alert(error);	
+	}
+	
+	// 회원가입 페이지 이동
+	function moveSignUpPage(){
+		window.location.href = 'http://localhost:8080/customer/sign-up';
+	}
+	
+	// 이메일 형식확인
+	var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+	
+	function checkRegEmail(){
+		const customerEmailBox = document.getElementById("customerEmail");
+		const customerEmail = document.getElementById("customerEmail").value;
+		const emailConfirm = document.getElementById("emailConfirm");
+		
+		if (customerEmail == 'admin' || customerEmail == ''){
+			customerEmailBox.style.borderBottom = '1px solid #D9D9D9';
+			emailConfirm.style.display = 'none';
+		} 
+		else {
+			if(reg_email.test(customerEmail)){
+				customerEmailBox.style.borderBottom = '1px solid #D9D9D9';
+				emailConfirm.style.display = 'none';
+			} else {
+				customerEmailBox.style.borderBottom = '2px solid red';
+				emailConfirm.style.display = 'block';
+				emailConfirm.innerText = '아이디(이메일)는 이메일 형식으로 입력해주세요'
+			}
+		}
+	}
+	
+	// 비밀번호 표시
+	const passwordShowCheckBox = document.getElementById("password-show-check-box");
+	passwordShowCheckBox.onclick = (e) => {
+		const checked  = e.target.checked;
+		if(checked) {
+			document.getElementById("customerPw").type = 'text';
+			document.getElementById("customerPw").autocomplete = 'off';
+		} else {
+			document.getElementById("customerPw").type = 'password';
+			document.getElementById("customerPw").autocomplete = 'current-password';
+		}
+	}
+</script>
+</html>

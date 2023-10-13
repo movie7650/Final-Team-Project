@@ -154,9 +154,12 @@
   cursor: pointer;
 }
 .none-inquiry{
-	margin-left:300px;
-	margin-top:200px;
-	font-size:150%;
+    width: 680px;
+    margin-left: 190px;
+    margin-top: 210px;
+    font-size: 150%;
+    font-weight: 500;
+    padding-left: 115px;
 }
 
 .reply-content{
