@@ -2,18 +2,13 @@ package com.example.daitso.inquiry.service;
 
 import java.util.List;
 
+import com.example.daitso.inquiry.model.*;
 import org.apache.ibatis.annotations.Param;
-
-import com.example.daitso.inquiry.model.InquiryInfo;
-import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
-import com.example.daitso.inquiry.model.InquiryProduct;
-import com.example.daitso.inquiry.model.InquirySelect;
-import com.example.daitso.inquiry.model.MyInquirySelect;
 
 public interface IInquiryService {
 	
 	//문의글 삽입
-	int insertInquiry(int productGroupId, int cId ,String size, String color, String other, String content);
+	int insertInquiry(InquiryInsertDTO inquiryInsertDTO);
 	
 	//내 문의 작성시간 
 	String selectMyInquiryTime(@Param("inquiryId") int inquiryId);
