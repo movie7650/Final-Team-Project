@@ -53,12 +53,18 @@
 				<div style="display: inline-flex; align-items: flex-end; padding-left: 0px; justify-content: flex-end;">
 					<!-- "조회" 버튼 -->
 					<div class="col-sm-5" style="text-align: end; padding-right: 0px; left:10px;">
-						<button class="btn btn-primary" onclick="searchByCategory()"
-							style="background-color: #b69f93; border-color: #d5bdaf" type="button">조회</button> <!--#ffafcc -->
+						 <button class="btn btn-primary" onclick="searchByCategory()"
+							style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid;" type="button">조회</button> <!--#ffafcc -->
+							
+						<!-- <div class="check">
+						 	<div style="cursor: pointer;" onclick="searchByCategory()">조회</div>
+						</div> -->
 					</div>
+					
+					
 					<!-- "신규등록" 버튼 -->
 					<div class="col-sm-5" style="text-align: end; padding-left: 0px; left: 10px;">
-						<button class="btn btn-primary" style="background-color: #94ccf2;border-color: #a0cfef;width: 90px; margin-left: 10px;"
+						<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d;width: 90px;margin-left: 10px;height: 40px;font-weight: 600;"
 							data-bs-toggle="modal" data-bs-target="#registerNewModal" type="button">신규등록</button>
 					</div>
 				</div>
@@ -67,7 +73,7 @@
 		</div>
 
 		<!-- 카테고리별 상품 조회하기 -->
-		<div style="height: 620px; margin-left: 20px;">
+		<div style="height: 680px; margin-left: 20px;">
 			<table class="table" style="text-align: center; ">
 				<thead>
 					<tr>
@@ -86,10 +92,10 @@
 						<td th:text="${product.productNm}"></td>
 						<td style="display: flex; justify-content: flex-end;">
 							<div class="btn-group">
-								<button class="btn btn-xs"	style="background-color: #f7ba8b; color: #ffff;"
+								<button class="btn btn-xs"	style="background-color: #ffffff; border: solid; border-color: #1a385d;color: #1a385d;font-weight: 600;"
 									data-bs-toggle="modal" data-bs-target="#detailModal"
 									type="button" th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">상세</button>
-								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
+								<button class="btn btn-xs"	style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white"
 									type="button" th:onclick="deleteGroupProduct([[${product.productGroupId}]])">삭제</button>
 							</div>
 						</td>
@@ -293,7 +299,7 @@
 					</button>
 				</div>
 				<!-- ★ -->
-				 <form th:action method="post" enctype="multipart/form-data">
+				 <form th:action method="post" enctype="multipart/form-data" name="registerNewForm">
 				
 				<!-- 테스트 -->
 				<!-- <form th:action method="post"> -->
@@ -639,9 +645,9 @@
 					</div>
 				<!--  </form>  -->
 				<div class="modal-footer">
-					<button class="btn btn-xs" style="background-color: #f7ba8b; border-color:#f7ba8b; color: #ffff" data-bs-toggle="modal" data-bs-target="#registerOriginalModal"
+					<button class="btn btn-xs" style="background-color: #ffffff; border: solid; border-color: #1a385d;color: #1a385d;font-weight: 600;" data-bs-toggle="modal" data-bs-target="#registerOriginalModal"
 							  type="button" onclick="registerExisting()">추가</button> 
-					<button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
+					<button class="btn btn-xs" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button"
 		  					 id="deleteButton">삭제</button>
 				</div>
 			</div>
@@ -655,6 +661,16 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	
 	<script th:inline="javascript">
+	
+	$('#registerNewModal').on('hidden.bs.modal', function (e) {
+		console.log("Efwefwef");
+		/* $(this).find('registerNewForm')[0].reset(); */
+		$('#registerNewForm').each(function() {
+		      this.reset();
+		  });
+
+	});
+	
 	
 	// 이미지 선택하기
     function selectImage(inputId, imageId, productId) {
@@ -1195,10 +1211,10 @@
                           <td>${product.productMaxGet}</td>
                           <td>
 		    				<div class="btn-group">
-		    				 <button class="btn btn-xs" style="background-color: #d9c9eb;border-color: #d9c9eb;color: #ffff"
+		    				 <button class="btn btn-xs" style="background-color: #ffffff; border: solid; border-color: #1a385d;color: #1a385d;font-weight: 600;"
 		    						data-bs-toggle="modal" data-bs-target="#imageModal" onclick = "selectProductByProductId(${product.productId})">이미지</button>
 		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
-		   						style="background-color: #b69f93; color: #ffff" type="button"
+		   							style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button"
 		   						onclick = "selectProductByProductId(${product.productId})">수정</button>
 		    				</div>
 		    			  </td>

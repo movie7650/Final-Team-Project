@@ -117,6 +117,7 @@
 										autocomplete="off">
 								</div>
 							</div>
+							
 							<div class="row mb-3" style="display: flex;align-items: center;justify-content: space-around;">
 								<label for="categoryContent" class="col-form-label" style="margin-left: 23px;">카테고리 내용</label>
 								<div class="col-sm-8" style="right: 32px;">
@@ -129,13 +130,16 @@
 								<label for="categoryImage" class="col-form-label" style=" margin-right: 12px;">이미지</label>
 								<div class="col-sm-8" style=" right: 2px;">
 									<label for="uploadCategoryImage">
-				                       <img id="updateCategoryImage" alt="카테고리 이미지 선택하기" width="440" height="300" style="border: 1px solid black; cursor: pointer;">
+									
+				                      <!-- <img th:if="${categoryImage} == null" th:src="@{/assets/admin/upload.png}" width="50" height="50" style="border: 1px solid black; cursor: pointer;">
+				                      <img th:unless="${categoryImage} == null"id="updateCategoryImage" width="440" height="300" style="border: 1px solid black; cursor: pointer;"/> -->
+				                    	<img id="updateCategoryImage" alt="카테고리 이미지 선택하기" width="440" height="300" style="border: 1px solid black; cursor: pointer;">
 				                    </label>
 				                    <div>	                    	                        
 				                        <!-- 이미지 클릭 시 파일 입력 엘리먼트 클릭 -->
 				                        <input type="file" id="uploadCategoryImage" accept="image/*" style="display: none;" onchange="selectImage('uploadCategoryImage', 'updateCategoryImage', updateCategoryId.value);">
 				                        <!-- 수정 버튼 -->
-				                        <button id="updateButtonFirst" class="btn btn-xs uploadButtons" style="background-color: #f7ba8b; color: #fff; margin-top: 10px;" type="button">수정</button>
+				                        <!-- <button id="updateButtonFirst" class="btn btn-xs uploadButtons" style="background-color: #f7ba8b; color: #fff; margin-top: 10px;" type="button">수정</button> -->
 				                    	<!-- 삭제 버튼 -->
 				                        <button class="btn btn-xs deleteButtons" style="background-color: red; color: #fff; margin-top: 10px;" type="button" 
 				                            onclick="deleteImage('updateCategoryImage', updateCategoryId.value, true)">삭제</button>
@@ -144,8 +148,7 @@
 							</div>
 
 							<div class="modal-footer">
-								<button class="btn btn-primary"
-									style="background-color: #9dbb9a; border-color:#9dbb9a;" type="submit">저장</button>
+								<button id="updateButtonFirst" class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;" type="submit">저장</button>
 								<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
 							</div>
 						</div>
