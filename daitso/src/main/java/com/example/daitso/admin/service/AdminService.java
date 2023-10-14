@@ -3,7 +3,7 @@ package com.example.daitso.admin.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.lang.Exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +53,7 @@ public class AdminService implements IAdminService{
 	
 	// 상품 등록하기 ★
 	@Transactional
-	public void registerProduct(ProductCheck product, List<MultipartFile> files) {
+	public void registerProduct(ProductCheck product, List<MultipartFile> files) throws Exception {
 		List<String> imagePathList = s3Service.upload(files);
 		product.setProductImageFirst(imagePathList.get(0));
 		product.setProductImageSecond(imagePathList.get(1));

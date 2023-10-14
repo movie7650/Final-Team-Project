@@ -9,11 +9,8 @@
 <div class="review-main">
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
 	 <div class="title-review">내 리뷰</div>
-	 <div style="margin-top:10px;">
-	 	<div th:if="${reviewcontentcount}==0">
-	 		<img style="width:800px; border-radius:10px; margin-right:55px; margin-top:100px;" th:src="@{/assets/mypage/nonereview.JPG}">
-	 	</div>
-		 	<div style="margin-top:90px; margin-left:-45px;">
+	 <div style="margin-top:10px; margin-right:8px;">
+		 	<div th:if="${reviewcontentcount} != 0" style="margin-top:90px; margin-left:-45px;">
 		 		<table class="mypage-review-table">
 		 			<tr>
 						<th>상품정보</th>
@@ -27,7 +24,7 @@
 							<div th:text="${mypageReview.productNm}" class="my-review-productNm">남성무지반팔티</div>
 						</td>
 						<td>
-							<div th:text="${mypageReview.reviewTitle}">리뷰제목</div>
+							<div>[(${mypageReview.reviewTitle})]</div>
 						</td>
 			 			<td th:text="${mypageReview.createDt}">리뷰작성일자</td>
 			 			<td>
@@ -40,6 +37,7 @@
 			 		</tr>
 		 		</table>
 			</div>
+			<div th:if="${reviewcontentcount}==0" class="none-review">작성한 리뷰가 없습니다.</div> 
 	 </div>	
 </div><!-- review-main -->
 

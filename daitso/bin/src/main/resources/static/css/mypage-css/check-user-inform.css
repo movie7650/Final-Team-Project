@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+.check-customer-main{
+	display: flex;
+	justify-content: center;
+}
+.check-customer-inform-title{
+	position:absolute;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:890px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
+}
+.update-table-container{
+	margin-top:100px;
+	
+
+}
+
+.update-table-container tr{
+	border:solid 1px #e7e7e7;
+	display:block;
+	float:left;
+	
+}
+.update-table-container th{
+	display:block;
+	border:solid 1px #e7e7e7;
+	background-color:#39594e;
+	color:white;
+	width:200px;
+	height:50px;
+	text-align:center;
+	padding-top:5%;
+	
+}
+.update-table-container td{
+	display:block;
+	border-top:solid 1px #e7e7e7;
+	border-right:solid 1px #e7e7e7;
+	border-bottom:solid 1px #e7e7e7;
+	width:550px;
+	height:50px;
+	padding-top:1.5%;
+	padding-left:2%;
+
+}
+.update-table-container input{
+	outline:none;
+}
+.update-button-container{
+	width:300px;
+	float:right;
+	padding-left:80px;
+}
+.update-button-container button{
+	margin-top:5%;
+	margin-left:1%;
+	width:100px;
+	background-color:#39594e;
+	color:white;
+	border:none;
+	border-radius:5px;
+}
+
+#update-cancle-button{
+	border:solid 1px #39594e;
+	background-color:white;
+	color:black;
+}
+.update-button-container button:focus{
+	border:none;
+	outline:none;
+}

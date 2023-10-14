@@ -14,7 +14,7 @@
 	font-size: 18px;
 	font-weight: 600;
 	padding: 15px 0 15px 20px;
-	background-color: #39594E;
+	background-color: #1a385d;
 }
 
 .admin-inquiry-complete-write-title {
@@ -22,12 +22,12 @@
 	font-size: 18px;
 	font-weight: 600;
 	padding: 15px 0 15px 20px;
-	background-color: #E8C369;
+	background-color: #a5c2f2;
 	margin-top: 30px;
 }
 
 .admin-inquiry-complete-btn {
-	background-color: #39594E;
+	background-color: #1a385d;
 	color:white;
 	width: 95px;
 	text-align: center;

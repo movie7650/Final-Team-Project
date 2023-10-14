@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="bsHeader">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>다있소</title>
+    
+    <!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- CSS File -->
+    <link rel="stylesheet" th:href="@{/css/header-style.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+<!--     <link rel="stylesheet" th:href="@{/css/mypage-css/mypage-bread-board.css}"> -->
+    <link rel="stylesheet" th:href="@{/css/sign-up.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/review.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/order-list.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}">
+<!--     <link rel="stylesheet" th:href="@{/css/my-point.css}"> -->
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-point.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/my-shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/add-shipping.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage-css/check-user-inform.css}">
+    <link rel="stylesheet" th:htef="@{/css/mypage-css/update-user-inform.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-inquiry-complete.css}">
+    <!-- Modal -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- BootStrap -->
+    <link href="../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!--     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.15.0/font/bootstrap-icons.css" rel="stylesheet"> -->
+    <!-- JS -->
+    <script>
+    window.onload = function() {	
+    	    // 스프링 시큐리티에서 사용자 정보(사용자 고유번호) 받아오기
+    	    fetch('http://localhost:8080/customer/customer-id')
+	  		.then((res) => {
+	  			//Promise 반환
+	        	return res.json(); 
+	    	})
+	    	.then((json) => {
+	    		console.log(json);
+	    		let customerId = json;
+	    		if(json !== -1) {
+	    			fetch('http://localhost:8080/customer/customer-nm/' + customerId)
+	    			.then((res) => {
+	    				return res.json();
+	    			})
+	    			.then((json) => {
+	    				document.getElementById("customer-name").innerText = json.customerNm + '님';
+	    				if(json.customerNm == '관리자'){
+	    					document.getElementById("customer-name").setAttribute('href', window.location.origin + '/admin/chart');
+	    				}
+	    			})
+	    		}
+	    	})
+	    	.catch(function(error) {
+	    	      console.log(error);
+	    	});
+    }
+    </script>
+</head>
+</html>

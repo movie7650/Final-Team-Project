@@ -1,0 +1,140 @@
+#customer-find-container {
+	width: 100vw;
+	background-color: #F8F8F8;
+	display: flex;
+	justify-content: center;
+	padding: 20px 0 20px 0;
+}
+
+#customer-find-box {
+	width: 1100px;
+	height: 616px;
+	background-color: white;
+	border: 1px solid #888888;
+	padding: 30px;
+}
+
+#customer-find-title {
+	font-size: 20px;
+	font-weight: 600;
+}
+
+#customer-find-email-title{
+	width: 50%;
+	border: 1px solid #39594E;
+	border-bottom: none;
+	padding: 15px 0 15px 0;
+	cursor:pointer;
+}
+
+#customer-find-pw-title{
+	width: 50%;
+	border: 1px solid #999999;
+	border-bottom: 1px solid #39594E;
+	background-color: #F8F8F8;
+	color: #555555;
+	padding: 15px 0 15px 0;
+	cursor:pointer;
+}
+
+.customer-find-text {
+	width: 30%;
+	background-color: #E8C369;
+	padding: 15px;
+	font-size: 16px;
+	font-weight: 600;
+	border-bottom: 1px solid #CECECE;
+}
+
+.customer-find-input {
+	width: 70%;
+	padding: 15px;
+	border-bottom: 1px solid #CECECE;
+}
+
+.customer-find-input input{
+	width: 40%;
+	outline: none;
+}
+
+#customer-find-pw-btn {
+	background-color: #39594E;
+	color: white;
+	font-size: 17px;
+	font-weight: 600;
+	border-radius: 5px;
+	padding: 15px 25px 15px 25px;
+	cursor: pointer;
+}
+
+.customer-find-info {
+	font-size: 15px;
+	color: #555555;
+	margin-bottom: 5px;
+}
+
+#customer-find-pw-email {
+	margin-top: 50px;
+	background-color: #F8F8F8;
+	border: 1px solid #999999;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+	color: #555555;
+	display: none;
+}
+
+#customer-email-text {
+	margin-top: 50px;
+	background-color: #F8F8F8;
+	border: 1px solid #999999;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+	color: #555555;
+	display: none;
+}
+
+#customer-no-email-text {
+	margin-top: 50px;
+	background-color: #F8F8F8;
+	border: 1px solid #999999;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+	color: #555555;
+	display: none;
+}
+
+.customer-find-pw-email-text {
+	font-size: 20px;
+}
+
+#customer-find-email-text {
+	color: #256B04;
+	font-weight: 500;
+}
+
+#customer-find-input-name-error {
+	font-size: 14px;
+	margin-left: 10px;
+	color: red;
+	visibility: hidden;
+}
+
+#customer-find-input-email-error {
+	font-size: 14px;
+	margin-left: 10px;
+	color: red;
+	visibility: hidden;
+}
+
+#customer-find-email-send-btn {
+	background-color: #256B04;
+	height: 30px;
+	line-height: 30px;
+	color: white;
+	font-size: 13px;
+	padding: 0 10px 0 10px;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-left: 10px;
+	font-weight: 500;
+}

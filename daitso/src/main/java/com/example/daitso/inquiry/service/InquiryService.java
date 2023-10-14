@@ -2,16 +2,11 @@ package com.example.daitso.inquiry.service;
 
 import java.util.List;
 
+import com.example.daitso.inquiry.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.daitso.inquiry.model.Inquiry;
-import com.example.daitso.inquiry.model.InquiryInfo;
-import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
-import com.example.daitso.inquiry.model.InquiryProduct;
-import com.example.daitso.inquiry.model.InquirySelect;
-import com.example.daitso.inquiry.model.MyInquirySelect;
 import com.example.daitso.inquiry.repository.IInquiryRepository;
 import com.example.daitso.product.repository.IProductRepository;
 
@@ -25,11 +20,10 @@ public class InquiryService implements IInquiryService {
 	IProductRepository productRepository;
 
 	@Transactional
-	public int insertInquiry(int productGroupId, int cId, String size, String color, String other, String content) {
-		System.out.println("im here" + productGroupId + size + color + other);
-		int pId = productRepository.selectInquiryProductId(productGroupId, size, color, other);
+	public int insertInquiry(InquiryInsertDTO inquiryInsertDTO) {
+		int pId = productRepository.selectInquiryProductId(inquiryInsertDTO.getProductGroupId(), inquiryInsertDTO.getSize(), inquiryInsertDTO.getColor(), inquiryInsertDTO.getOther());
 		if(pId != 0) {
-			return inquiryRepository.insertInquiry(pId, cId ,content);
+			return inquiryRepository.insertInquiry(pId, inquiryInsertDTO.getCustomerId(), inquiryInsertDTO.getContent());
 		}else {
 			return 0;
 		}
@@ -120,6 +114,14 @@ public class InquiryService implements IInquiryService {
 	public void deleteInquiryAdmin(int inquiryId, int ansInquiryId) {
 		inquiryRepository.deleteInquiryAdmin(ansInquiryId);
 		inquiryRepository.updateInquiryAdminDelete(inquiryId);
+	}
+	
+	// 검색 -> 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
+	@Override
+	public List<InquirySelect> selectInquiryListByInquiryAnsDvAndSearch(char inquiryAnsDv, String searchFilter,
+			String search, int page) {
+		int start = (page-1)*10 + 1;
+		return inquiryRepository.selectInquiryListByCategoryAndSearch(inquiryAnsDv, searchFilter, search, start, start + 9);
 	}
 
 }

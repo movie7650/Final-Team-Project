@@ -2,18 +2,13 @@ package com.example.daitso.inquiry.service;
 
 import java.util.List;
 
+import com.example.daitso.inquiry.model.*;
 import org.apache.ibatis.annotations.Param;
-
-import com.example.daitso.inquiry.model.InquiryInfo;
-import com.example.daitso.inquiry.model.InquiryInfoWithAnswer;
-import com.example.daitso.inquiry.model.InquiryProduct;
-import com.example.daitso.inquiry.model.InquirySelect;
-import com.example.daitso.inquiry.model.MyInquirySelect;
 
 public interface IInquiryService {
 	
 	//문의글 삽입
-	int insertInquiry(int productGroupId, int cId ,String size, String color, String other, String content);
+	int insertInquiry(InquiryInsertDTO inquiryInsertDTO);
 	
 	//내 문의 작성시간 
 	String selectMyInquiryTime(@Param("inquiryId") int inquiryId);
@@ -31,6 +26,9 @@ public interface IInquiryService {
 
 	// 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
 	List<InquirySelect> selectInquiryListByInquiryAnsDv(char inquiryAnsDv, int page);
+	
+	// 검색 -> 페이징 처리 -> 문의 답변 상태별 총 문의 리스트 조회
+	List<InquirySelect> selectInquiryListByInquiryAnsDvAndSearch(char inquiryAnsDv, String searchFilter, String search, int page);
 	
 	// 문의 아이디로 문의 내용 조회
 	InquiryInfo selectInquiryInfoByInquiryId(int inquiryId);

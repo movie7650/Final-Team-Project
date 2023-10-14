@@ -79,14 +79,14 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 내 포인트 목록 가져오기
 		List<Point> points = pointService.selectPoint(customerId);
@@ -130,16 +130,14 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
-		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
-		
 
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 주문번호 카운트
 		int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
@@ -178,15 +176,15 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
-		
+		model.addAttribute("countmyorder", countMyOrder);
+
 		// 주문번호 카운트
 		int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
 		model.addAttribute("purchasenumcount", purchaseNumCount);
@@ -230,19 +228,19 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv401(customerId);
 		model.addAttribute("purchaseList", purchaseList);
-		
+
 		return "mypage/cancle-pay";
 	}
 
@@ -265,25 +263,24 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
+
 		// 상단에 잔여 포인트 출력
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
-		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
 
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
+		int countMyOrder = purchaseService.countMyOrderList(customerId);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv402(customerId);
 		model.addAttribute("purchaseList", purchaseList);
 		return "mypage/mypage-search-shipping";
 	}
@@ -314,17 +311,17 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 주문 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv403(customerId);
 		model.addAttribute("purchaseList", purchaseList);
 		return "mypage/mypage-shipping-complete";
 	}
@@ -355,19 +352,24 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 내가쓴 리뷰 조회
 		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
 		model.addAttribute("mypageReviewList", myReviewList);
 
+		int listSize = myReviewList.size();
+		for (int i = 0; i < listSize; i++) {
+			String reviewContent = myReviewList.get(i).getReviewTitle();
+			System.out.println("hahahahahahahaah" + reviewContent);
+		}
 		// 리뷰컨텐트 카운트
 		int reviewContentCount = reviewService.selectReviewContentCount(customerId);
 		model.addAttribute("reviewcontentcount", reviewContentCount);
@@ -377,7 +379,8 @@ public class MyPageController {
 
 	// 마이페이지-리뷰작성-GET
 	@RequestMapping(value = "/writeReview", method = RequestMethod.GET)
-	public String writeReview(int productId, Model model, RedirectAttributes redirectAttributes, String purchaseNum, int purchaseId) {
+	public String writeReview(int productId, Model model, RedirectAttributes redirectAttributes, String purchaseNum,
+			int purchaseId) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -403,20 +406,21 @@ public class MyPageController {
 		}
 		model.addAttribute("points", points);
 		model.addAttribute("totalPoint", point + "P");
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 리뷰작성 - 내가 주문한 상품 정보 출력
-		List<WriteMyReview> myReviewPurchaseList = reviewService.selectMyPurchase(customerId, productId, purchaseNum, purchaseId);
+		List<WriteMyReview> myReviewPurchaseList = reviewService.selectMyPurchase(customerId, productId, purchaseNum,
+				purchaseId);
 		model.addAttribute("MyReviewPurchaseList", myReviewPurchaseList);
-		
-		//customerId, productId, purchaseNum 값에 따른 리뷰 갯수 카운트
+
+		// customerId, productId, purchaseNum 값에 따른 리뷰 갯수 카운트
 		int countCusProPur = reviewService.countCusProPurId(customerId, productId, purchaseNum);
 		model.addAttribute("countcuspropur", countCusProPur);
 
@@ -426,48 +430,55 @@ public class MyPageController {
 	// 마이페이지-리뷰작성-post
 	@RequestMapping(value = "/writeReview", method = RequestMethod.POST)
 	public String writeReview(WriteMyReview writeMyReview, @RequestParam int productId, @RequestParam int customerId,
-			@RequestParam String purchaseNum,List<MultipartFile> files, RedirectAttributes redirectAttributes) {
-		if(files.size() > 3) {
+			@RequestParam String purchaseNum, List<MultipartFile> files, RedirectAttributes redirectAttributes) {
+		if (files.size() > 3) {
 			redirectAttributes.addFlashAttribute("error", "이미지 최대 업로드 수(3개)를 초과하였습니다.");
 			return "redirect:/mypage/review";
-		} 
+		}
 		List<String> imageList;
 		try {
 			imageList = s3Service.upload(files);
-			
-			if(imageList.size() == 1) {
+
+			if (imageList.size() == 1) {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
 				writeMyReview.setReviewImageSecond("null");
 				writeMyReview.setReviewImageThird("null");
-			} else if(imageList.size() == 2) {
+			} else if (imageList.size() == 2) {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
 				writeMyReview.setReviewImageSecond(imageList.get(1));
 				writeMyReview.setReviewImageThird("null");
-			} else if(imageList.size() == 3){
+			} else if (imageList.size() == 3) {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
 				writeMyReview.setReviewImageSecond(imageList.get(1));
 				writeMyReview.setReviewImageThird(imageList.get(2));
 			}
-			
+
 			reviewService.insertReview(writeMyReview);
-			
+
 		} catch (Exception e) {
 			reviewService.insertReview(writeMyReview);
 		}
-		
+
 		return "redirect:/mypage/review";
 
 	}
-	//마이페이지-리뷰관리-리뷰상세보기
+
+	// 마이페이지-리뷰관리-리뷰상세보기
 	@GetMapping("/mydetailreview/{reviewId}")
 	public String selectDetailReview(@PathVariable int reviewId, Model model) {
-		
-		
+
 		MyReview myReviewList = reviewService.selectMyReview(reviewId);
+//		String reviewContent = myReviewList.getReviewContent();
+//		String reviewContentDecode = HtmlUtils.htmlUnescape(reviewContent);
+
+		// 리뷰내용 xss필터링 해제
+//		model.addAttribute("reviewcontentdecode", reviewContentDecode);
+
 		model.addAttribute("myreviewlist", myReviewList);
-		
+
 		return "mypage/mypage-review-detail";
 	}
+
 	// 마이페이지-내리뷰-리뷰삭제
 	@RequestMapping(value = "/delete/review/{reviewId}", method = RequestMethod.POST)
 	public @ResponseBody String deleteMyReview(@PathVariable int reviewId) {
@@ -475,7 +486,8 @@ public class MyPageController {
 		reviewService.deleteReview(reviewId);
 		return "0";
 	}
-	//내 문의내역 조회
+
+	// 내 문의내역 조회
 	@RequestMapping(value = "/myinquiry")
 	public String myInquiry(Model model, RedirectAttributes redirectAttributes) {
 
@@ -492,22 +504,22 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
+
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
-		
+
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 내 문의내역 조회
 		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
@@ -519,27 +531,26 @@ public class MyPageController {
 
 		return "mypage/mypage-inquiry";
 	}
-	
-	//내 문의에 대한 답변 윈도우창으로 보이기
+
+	// 내 문의에 대한 답변 윈도우창으로 보이기
 	@GetMapping("/myinquiryreply/{inquiryId}")
 	public String myInquiryReply(@PathVariable int inquiryId, Model model) {
-		//내 문의 내용
+		// 내 문의 내용
 		String myInquiry = inquiryService.selectInquiryContent(inquiryId);
-		model.addAttribute("myinquiry",myInquiry);
-		
-		//내문의의 답변내용
+		model.addAttribute("myinquiry", myInquiry);
+
+		// 내문의의 답변내용
 		String myPRInquiry = inquiryService.selectMyInquiryPRIdInquiry(inquiryId);
-		model.addAttribute("myprinquiry",myPRInquiry);
-		
-		//내문의의 시간
+		model.addAttribute("myprinquiry", myPRInquiry);
+
+		// 내문의의 시간
 		String myInquiryTime = inquiryService.selectMyInquiryTime(inquiryId);
-		model.addAttribute("myinquirytime",myInquiryTime);
-		
-		//내 문의의 답변시간
+		model.addAttribute("myinquirytime", myInquiryTime);
+
+		// 내 문의의 답변시간
 		String myInquiryReplyTime = inquiryService.selectMyInquiryReplyTime(inquiryId);
 		model.addAttribute("myinquiryreplytime", myInquiryReplyTime);
-		
-		
+
 		return "mypage/my-inquiry-reply";
 	}
 
@@ -568,7 +579,7 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
+
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -576,14 +587,14 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 사용가능한 쿠폰리스트 출력
 		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService
@@ -619,14 +630,14 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 사용완료 쿠폰리스트 출력
 		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId);
@@ -642,7 +653,7 @@ public class MyPageController {
 
 		// 로그인
 		int customerId = logincheckService.loginCheck();
-		
+
 		// 입력받은 4개의 쿠폰번호 합치기
 		String allCouponNum = couponNum1 + couponNum2 + couponNum3 + couponNum4;
 		// 입력받은 쿠폰번호와 같은 쿠폰번호를 가진 쿠폰 갯수 카운트
@@ -687,14 +698,14 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 유저 정보 리스트
 		List<CheckMyInform> checkmyinform = customerService.selectMyInform(customerId);
@@ -740,14 +751,14 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 내 아이디(이메일) 가져오기
 		String myEmail = customerService.selectMyEmail(customerId);
@@ -768,8 +779,8 @@ public class MyPageController {
 	@RequestMapping(value = "/updateuser", method = RequestMethod.POST)
 	public String updateMyInform(@RequestParam(defaultValue = "") String newEmail,
 			@RequestParam(defaultValue = "") String newName, @RequestParam(defaultValue = "") String newTelNO,
-			@RequestParam(defaultValue = "") String nowPassword,@RequestParam(defaultValue = "")String newPassword,
-			@RequestParam(defaultValue = "") String checkNewPassword,RedirectAttributes redirectAttributes) {
+			@RequestParam(defaultValue = "") String nowPassword, @RequestParam(defaultValue = "") String newPassword,
+			@RequestParam(defaultValue = "") String checkNewPassword, RedirectAttributes redirectAttributes) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -788,13 +799,14 @@ public class MyPageController {
 			customerService.updateMyEmail(customerId, newEmail);
 			return "redirect:/mypage/updateuser";
 		}
-		//입력된 전화번호로 변경
+		// 입력된 전화번호로 변경
 		if (newTelNO != null && !newTelNO.equals("")) {
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
-		//비밀번호 변경
-		if(pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId)) && newPassword.equals(checkNewPassword)) {
+		// 비밀번호 변경
+		if (pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))
+				&& newPassword.equals(checkNewPassword)) {
 			newPassword = pwEncoder.encode(newPassword);
 			customerService.updateMyPassword(customerId, newPassword);
 			System.out.println(newPassword + "###########################" + nowPassword);
@@ -826,14 +838,14 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		
+
 		// 상단 잔여포인트
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
+
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -841,23 +853,23 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
-		
-		//마이페이지-배송지관리-배송지리스트 출력
+		model.addAttribute("countmyorder", countMyOrder);
+
+		// 마이페이지-배송지관리-배송지리스트 출력
 		List<MypageReceiverShipping> mypageReceiverShippingList = shippingService.selectMyShippingInfo(customerId);
-		model.addAttribute("myshippinglist",mypageReceiverShippingList);
-		
-		//shipping_status가 Y인거 갯수 
+		model.addAttribute("myshippinglist", mypageReceiverShippingList);
+
+		// shipping_status가 Y인거 갯수
 		int countShippingStatusY = shippingService.selectShippingStatusY(customerId);
-		model.addAttribute("countshippingstatusy",countShippingStatusY);
-		
+		model.addAttribute("countshippingstatusy", countShippingStatusY);
+
 		return "mypage/my-shipping";
 	}
 
@@ -879,32 +891,32 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
+
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
+		model.addAttribute("countmyorder", countMyOrder);
 
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
 		return "mypage/add-shipping";
 	}
-	
-	//마이페이지-배송지관리-배송지추가 post
-	@RequestMapping(value="/addshipping", method = RequestMethod.POST)
-	public String insertMyshipping(Model model,RedirectAttributes redirectAttributes, 
-									@RequestParam String shippingReceiverNM, @RequestParam String shippingRoadNMAddr,
-									@RequestParam String shippingDaddr, @RequestParam String shippingReceiverTelNO,
-									@RequestParam String shippingDmnd, @RequestParam(defaultValue = "302") int shippingDv) {
+
+	// 마이페이지-배송지관리-배송지추가 post
+	@RequestMapping(value = "/addshipping", method = RequestMethod.POST)
+	public String insertMyshipping(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam String shippingReceiverNM, @RequestParam String shippingRoadNMAddr,
+			@RequestParam String shippingDaddr, @RequestParam String shippingReceiverTelNO,
+			@RequestParam String shippingDmnd, @RequestParam(defaultValue = "302") int shippingDv) {
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 
@@ -912,19 +924,22 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		if(shippingService.countShippingDv301(customerId)>0) {
+		if (shippingService.countShippingDv301(customerId) > 0) {
 			shippingDv = 302;
-			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd,shippingDv);  
+			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
+					shippingReceiverTelNO, shippingDmnd, shippingDv);
 			return "redirect:/mypage/myshipping";
-		}else {
+		} else {
 			shippingDv = 301;
-			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
+					shippingReceiverTelNO, shippingDmnd, shippingDv);
 			return "redirect:/mypage/myshipping";
 		}
 	}
-	//마이페이지-배송지관리-배송지수정
-	@RequestMapping(value="/updateshippingaddr", method = RequestMethod.GET)
-	public String updateShippingAddr(Model model,RedirectAttributes redirectAttributes,@RequestParam int shippingId) {
+
+	// 마이페이지-배송지관리-배송지수정
+	@RequestMapping(value = "/updateshippingaddr", method = RequestMethod.GET)
+	public String updateShippingAddr(Model model, RedirectAttributes redirectAttributes, @RequestParam int shippingId) {
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 
@@ -939,7 +954,7 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
+
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -947,48 +962,51 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
-		//상단 내 주문상품 전체갯수 출력 
+
+		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
-		model.addAttribute("countmyorder",countMyOrder);
-		
-		//상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon =customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon",countUsableCoupon);
-		
-		//선택한 shippingId에 맞는 배송지정보 가져오기 
+		model.addAttribute("countmyorder", countMyOrder);
+
+		// 상단 사용가능한 쿠폰갯수 출력
+		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+		model.addAttribute("countcoupon", countUsableCoupon);
+
+		// 선택한 shippingId에 맞는 배송지정보 가져오기
 		List<MypageReceiverShipping> shippingIdInfo = shippingService.selectShippingIdInfo(shippingId);
 		model.addAttribute("shippingIdInfoList", shippingIdInfo);
-		
+
 		return "mypage/my-shipping-update";
 	}
-	//배송지ID에 따른 배송지 수정하기 
-	@RequestMapping(value="/updateshippingaddr", method=RequestMethod.POST)
-	public String updateShippingIdInfo(@RequestParam int shippingId,@RequestParam String shippingReceiverNM,
-									   @RequestParam String shippingRoadNMAddr, @RequestParam String shippingDaddr,
-									   @RequestParam String shippingReceiverTelNO, @RequestParam String shippingDmnd,
-									   @RequestParam int shippingDv,RedirectAttributes redirectAttributes) {
-		//로그인
+
+	// 배송지ID에 따른 배송지 수정하기
+	@RequestMapping(value = "/updateshippingaddr", method = RequestMethod.POST)
+	public String updateShippingIdInfo(@RequestParam int shippingId, @RequestParam String shippingReceiverNM,
+			@RequestParam String shippingRoadNMAddr, @RequestParam String shippingDaddr,
+			@RequestParam String shippingReceiverTelNO, @RequestParam String shippingDmnd, @RequestParam int shippingDv,
+			RedirectAttributes redirectAttributes) {
+		// 로그인
 		int customerId = logincheckService.loginCheck();
 
 		if (customerId == -1) {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		
-		if(shippingDv == 302) {
-			shippingService.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv);
+
+		if (shippingDv == 302) {
+			shippingService.updateShippingIdInfo(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
+					shippingReceiverTelNO, shippingDmnd, shippingDv);
+		} else {
+			shippingService.updateShippingIdInfo2(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
+					shippingReceiverTelNO, shippingDmnd, shippingDv, customerId);
 		}
-		else {
-			shippingService.updateShippingIdInfo2(shippingId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr, shippingReceiverTelNO, shippingDmnd, shippingDv,customerId);
-		}
-			return "redirect:/mypage/myshipping";
+		return "redirect:/mypage/myshipping";
 	}
-	//배송지 삭제
-	@RequestMapping(value="/deleteshipping", method = RequestMethod.POST)
+
+	// 배송지 삭제
+	@RequestMapping(value = "/deleteshipping", method = RequestMethod.POST)
 	public String deleteShipping(@RequestParam int shippingId) {
 		shippingService.deleteMyshipping(shippingId);
 		return "redirect:/mypage/myshipping";
 	}
-	
+
 }

@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+.table td, .table th {
+    padding: 0.7rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+#table {
+	padding-top: 10px;
+    padding-left: 50px;
+    width: -webkit-fill-available;
+}
+
+/* 모달 */
+.modal-content {
+	opacity: 1;
+	visibility: visible;
+}
+
+.modal-body input {
+	width: 80%;
+	padding: 10px;
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.modal-header{
+	background-color: #c4d8ff;
+}
+
+/* 상품 수정 모달 */
+.update-modal-body input {
+	width: 80%;
+	padding: 10px;
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.span-like-input {
+    border: none; /* 테두리 제거 */
+    background-color: transparent; /* 배경색 제거 */
+    font-weight: bold; /* 글꼴 굵게 설정 */
+    padding: 0; /* 패딩 제거 */
+    outline: none; /* 포커스 시 외곽선 제거 (선택 사항) */
+}
+
+/* 기존 상품 등록 모달 input */
+#productOptionFirst, #productOptionSecond,
+#productOptionThird, #productPrice, #productStock, #productMaxGet{
+	width: 33%;
+	padding: 10px;
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+#productContent {
+	width: 100%;
+	padding: 10px;
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+#getProductGroupId, #getCategoryNm, #getProductNm{
+	border:none;
+	font-weight: bold;
+}
+
+
+div.col-sm-10 {
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+/* 페이지 링크 표시  */
+.pagination {
+	justify-content: center;
+	padding-top: 10px;
+}
+
+.pagination li a {
+	display: -moz-inline-stack;
+	display: inline-block;
+	vertical-align: top;
+	padding: 4px;
+	margin-right: 3px;
+	color: #000;
+	font: bold 12px tahoma;
+	border: 1px solid #eee;
+	text-align: center;
+	text-decoration: none;
+	float: none;
+	width: 26px;
+}
+
+.pagination li a:hover, .pagination1 li a:focus {
+	color: #fff;
+	border: 1px solid #1a385d;
+	background-color: #1a385d;
+}
+
+.page-item.active .page-link {
+	color: black;
+	background-color: #fff;
+	z-index: 3;
+	border-color: #1a385d;
+}
+
+input{
+	accent-color: #6f8095;
+}
