@@ -176,7 +176,11 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-
+		
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -263,7 +267,11 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-
+		
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단에 잔여 포인트 출력
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
@@ -304,7 +312,11 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-
+		
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단에 잔여 포인트 출력
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
@@ -353,6 +365,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);	
+		
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -513,6 +529,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -587,7 +607,11 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-
+		
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -627,6 +651,10 @@ public class MyPageController {
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
@@ -695,6 +723,10 @@ public class MyPageController {
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
@@ -752,6 +784,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -854,6 +890,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -896,6 +936,10 @@ public class MyPageController {
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
@@ -963,6 +1007,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 
+		// 입금/결제 갯수
+		int payCoin = purchaseService.selectPayCoin(customerId);
+		model.addAttribute("payCoinCount", payCoin);
+		
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);

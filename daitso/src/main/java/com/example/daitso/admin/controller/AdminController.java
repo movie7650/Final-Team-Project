@@ -880,8 +880,8 @@ public class AdminController {
 	
 	// 카테고리 수정하기
 	@PostMapping("/category/update")
-	public String updateCategory(Model model, int parentCategoryId, int categoryId) {
-		categoryService.updateCategory(categoryId, parentCategoryId);
+	public String updateCategory(Model model, int pCategoryId, int categoryId) {
+		categoryService.updateCategory(categoryId, pCategoryId);
 		return updateCategory(model);
 	}
 

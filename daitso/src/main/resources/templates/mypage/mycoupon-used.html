@@ -8,10 +8,10 @@
 
 <div class="mypage-coupon-main">
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
-<div class="mypage-coupon-title">쿠폰등록하기</div>
+<div class="mypage-coupon-title">쿠폰조회하기</div>
 
 <div class="coupon-container">
-	<div class="coupon-number-container">
+<!-- 	<div class="coupon-number-container">
 		<div class="coupon-insert-title">쿠폰번호입력</div>
 		
 		<div class="coupon-number-input-container">
@@ -22,9 +22,9 @@
 			<input required autocomplete=off name="couponNum4" type="text" class="coupon-num-01" oninput='maxNum(this, 4)'>
 			<button type="submit">등록하기</button>
 		</form>
-		</div><!-- coupon-number-input-container -->
+		</div>coupon-number-input-container
 		
-	</div><!-- coupon-number-container -->
+	</div>coupon-number-container -->
 	
 	<!-- 4자리만 입력가능하게 하는 JS -->
 	<script th:inline="javascript">
@@ -40,7 +40,7 @@
 	   }	
 	</script>
 	
-	<div class="coupon-table-container">
+	<div class="coupon-table-container" style="margin-top:100px;">
 	
 	
 		<div class="coupon-status-container">
