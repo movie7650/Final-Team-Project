@@ -221,9 +221,9 @@ public class AdminController {
 		session.setAttribute("productPrice", product.getProductPrice());
 		session.setAttribute("productStock", product.getProductStock());
 		session.setAttribute("productMaxGet", product.getProductMaxGet());
-		model.addAttribute("message","상품이 수정되었습니다.");
-		model.addAttribute("searchUrl","/admin/product");
-		return "admin/message";
+		String successMessage = "상품이 수정되었습니다.";
+		model.addAttribute("message", successMessage);
+		return "redirect:/admin/product";
 	}
 	
 	// 상품 삭제하기
@@ -314,15 +314,15 @@ public class AdminController {
 	    
 	    try {
 	    	adminService.registerProduct(product, files);
-	        model.addAttribute("message", "상품이 등록되었습니다.");
+	    	String successMessage = "상품이 등록되었습니다.";
+	    	model.addAttribute("message", successMessage);
 	    } catch (DuplicateProductException e) {
-	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
+	    	String errorMessage = "상품이 중복되었습니다! 다시 등록해주세요.";
+	        model.addAttribute("message", errorMessage);
 	    } catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
-		model.addAttribute("searchUrl", "/admin/product");
-	    return "admin/message";
+		return "redirect:/admin/product";
 	}
 	
 	@PostMapping("/product/original")
@@ -340,13 +340,17 @@ public class AdminController {
 	    
 	    try {
 	    	adminService.registerProductOriginal(product);
-	        model.addAttribute("message", "상품이 등록되었습니다.");
+//	        model.addAttribute("message", "상품이 등록되었습니다.");
+	    	String successMessage = "상품이 등록되었습니다.";
+	    	model.addAttribute("message", successMessage);
 	    } catch (DuplicateProductException e) {
-	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
-	    }
-	    
-	    model.addAttribute("searchUrl", "/admin/product");
-	    return "admin/message";
+//	        model.addAttribute("message", "상품이 중복되었습니다! 다시 등록해주세요.");
+	    	String errorMessage = "상품이 중복되었습니다! 다시 등록해주세요.";
+	        model.addAttribute("message", errorMessage);
+	    }	    
+//	    model.addAttribute("searchUrl", "/admin/product");
+//	    return "admin/message";
+	    return "redirect:/admin/product";
 	}
 	
 	//테스트//
@@ -433,8 +437,9 @@ public class AdminController {
 	    
 	    // 초기값 설정
 	    if (commonCodeId == null) {
-	    	commonCodeId = 0; 
+	        commonCodeId = 401; // 입금/결제
 	    }
+	    
 		List<PurchaseList> purchaselist = adminService.selectPurchaseList(commonCodeId, offset, pageSize);
 	    model.addAttribute("purchaselist", purchaselist);
 
@@ -595,13 +600,11 @@ public class AdminController {
 	                                              @RequestParam(required = false) MultipartFile uploadCategoryImage) {
 		 try {
 	        String imageUrl = null;
-	        
 	        if (uploadCategoryImage != null) {
-	            imageUrl = s3Service.uploadSingle(uploadCategoryImage); // 첫 번째 이미지 업로드
+	            imageUrl = s3Service.uploadSingle(uploadCategoryImage); // 카테고리 이미지 업로드
 	        	System.out.println("uploadCategoryImage imageUrl: " + imageUrl);
 	        }
-	        adminService.updateCategoryImage(categoryId, imageUrl);   
-	        
+	        adminService.updateCategoryImage(categoryId, imageUrl);
 	        return ResponseEntity.ok().build();
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -864,8 +867,6 @@ public class AdminController {
         return customerCounts; 
     }
 
-    
-    
     
     
 	// 카테고리 수정하기

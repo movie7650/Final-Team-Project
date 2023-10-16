@@ -19,13 +19,9 @@
 }
 
 .left-menu{
-	width:130%;
 	padding-bottom:32%;
 	background-color:#efefef;
 	border-bottom:solid 1px #c0c0c0;
-    padding-right: 5px;
-    padding-left: 5px;
-	
 }
 
 .left-menu-a{
@@ -136,13 +132,12 @@
 	color: #fff;
 }
 
-.row{
+/* .row{
 	 align-items: flex-end;
-}
+} */
 
 #table{
 	padding-top: 10px;
-	padding-left: 70px;
 }
 
 .pagination {
