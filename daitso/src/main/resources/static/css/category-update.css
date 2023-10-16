@@ -27,7 +27,7 @@
     cursor: -webkit-grabbing;
 }
 .menu-box {
-  border: 1px solid #a1a1a1;
+  border-top: 1px solid #a1a1a1;
   padding: 10px;
 }
 .menu-box ul {
@@ -41,20 +41,24 @@
   background: #fff;
 }
 .menu-box ul.menu-list > li a {
+  border-radius: 5px;
   background: #fff;
   display: block;
   font-size: 14px;
-  color: black;
+  color: #6f6969;
 }
 .menu-box ul.menu-list > li a:hover {
   cursor: move;
 }
-.menu-box ul.menu-list ul {
+.menu-box ul.menu-list ul li{
   margin-left: 20px;
   margin-top: 5px;
+  margin-bottom: 5px;
 }
+
 .menu-box ul.menu-list ul li a {
-	color: gray;
+	border-radius: 5px;
+	color: #6f6969;
 }
 .menu-box li.menu-highlight {
   border: 1px dashed black !important;
