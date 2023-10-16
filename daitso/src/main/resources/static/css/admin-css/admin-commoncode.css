@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .table td, .table th {
-    padding: 0.7rem;
+    padding: 0.85rem;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
 }

@@ -7,29 +7,27 @@
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-<div class="container-xl" style="max-width: 90%;">
-	<!-- 오른쪽 컨텐츠 -->
-	<div id="table">
-	<div style="font-weight: bold; margin-top: 10px; font-size:17px;">공통코드관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 공통코드 추가/수정/삭제</div>
-		<div class="row"
-			style="padding-bottom: 15px; justify-content: flex-end;">
-			<div class="col-sm-6" style="text-align: end; padding-left: 0px;">
-				<button class="btn btn-primary" style="background-color: #b69f93; border-color:#b69f93;"
+	<div class="container-lg" style="padding-top: 10px">
+
+	<div style="font-weight: bold; margin-top: 20px; font-size:20px;">공통코드 관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 공통코드 조회</div>
+		<div style="padding-bottom: 15px;justify-content: flex-end;border-bottom: 2px solid #1a385d;display: flex;">
+			<div style="text-align: end;">
+				<button class="btn btn-primary" style="background-color: #1a385d; border-color: #1a385d; font-weight: 600;"
 					data-bs-toggle="modal" data-bs-target="#registerModal"
 					type="button">등록</button>
 			</div>
 		</div>
 		<div style="height: 630px;">
-			<table class="table" style="text-align: center;">
+			<table class="table" style="text-align: center; margin-top: 20px; table-layout:fixed">
 				<thead>
 					<tr>
-						<th></th>
-						<th>공통코드ID</th>
-						<th>공통코드명</th>
-						<th>사용여부</th>
-						<th>등록자</th>
-						<th>등록일</th>
-						<th></th>
+						<th style="width: 10%;">순번</th>
+						<th style="width: 10%;">공통코드ID</th>
+						<th style="width: 25%;">공통코드명</th>
+						<th style="width: 10%;">사용여부</th>
+						<th style="width: 10%;">등록자</th>
+						<th style="width: 15%;">등록일</th>
+						<th style="width: 14%;"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -40,12 +38,12 @@
 						<td th:text="${commonCodes.status}"></td>
 						<td th:text="${commonCodes.creator}"></td>
 						<td th:text="${commonCodes.createDt}"></td>
-						<td style="display: flex; justify-content: flex-end;">
+						<td>
 							<div class="btn-group" >
-								<button class="btn btn-xs"	style="background-color: #f7ba8b; color: #ffff"
+								<button class="btn btn-xs"	style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;"
 									data-bs-toggle="modal" data-bs-target="#searchModal"
 									type="button" th:onclick="selectCommonCodesByPr([[${commonCodes.commonCodeId}]])">상세</button>
-								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
+								<button class="btn btn-xs" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white"
 									type="button" th:onclick="deleteCommonCodePr([[${commonCodes.commonCodeId}]])">삭제</button>
 							</div>
 						</td>
@@ -128,9 +126,9 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					 <button class="btn btn-xs" style="background-color: #94ccf2; border-color:#94ccf2; color: #ffff" data-bs-toggle="modal" data-bs-target="#registerExistingModal"
+					 <button class="btn btn-xs" style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;" data-bs-toggle="modal" data-bs-target="#registerExistingModal"
 							  type="button" onclick="registerExisting()">추가</button> 
-					<button class="btn btn-xs" style="background-color: red; color: #fff;" type="button" id="deleteButton">삭제</button>
+					<button class="btn btn-xs" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button" id="deleteButton">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -175,9 +173,9 @@
 
 						
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;"
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 								type="submit" >저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;"  data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 					</div>
 				</form>
@@ -232,9 +230,9 @@
 						    </div>
 						</div>
 					<div class="modal-footer">
-						<button class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;"
+						<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 							type="submit">저장</button>
-						<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;"  data-bs-dismiss="modal">닫기</button>
+						<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 					</div>
 				</form>
 			</div>
@@ -273,9 +271,9 @@
 						</div>
 						<div class="modal-footer">
 						<div id="messageArea" th:text="${message}"></div>
-							<button class="btn btn-primary" style="background-color: #9dbb9a;border-color: #9dbb9a;"
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 								    type="submit">저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
 					</div>
@@ -412,7 +410,7 @@
 	                          <td>${commonCode.createDt}</td>
 	                          <td>
 			   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
-			   							style="background-color: #f7ba8b; color: #ffff" type="button"
+			   							style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button"
 			   						onclick = "selectCommonCode(${commonCode.commonCodeId})">수정</button>
 			   						
 			    			  </td>

@@ -7,25 +7,24 @@
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-	<div class="container-xl" style="max-width: 90%;">
-	<!-- 오른쪽 컨텐츠 -->
-	<div id="table">
-	<div style="font-weight: bold; margin-top: 10px; font-size:17px;">상품관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 카테고리 추가/수정/삭제</div>
-		<div class="row" style="padding-bottom: 10px; justify-content: flex-end;">
-			<div class="col-sm-6" style="text-align: end; padding-left: 0px; right: 10px;">
-				<button class="btn btn-primary" style="background-color: #b69f93; border-color:#b69f93;"
+	<div class="container-lg" style="padding-top: 10px">
+
+	<div style="font-weight: bold; margin-top: 20px; font-size:20px;">상품관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 카테고리 추가/수정/삭제</div>
+		<div style="padding-bottom: 15px;justify-content: flex-end;border-bottom: 2px solid #1a385d;display: flex;">
+			<div style="text-align: end;">
+				<button class="btn btn-primary" style="background-color: #1a385d; border-color: #1a385d; font-weight: 600;"
 					data-bs-toggle="modal" data-bs-target="#registerModal"
 					type="button">등록</button>
 			</div>
 		</div>
-		<div style="height: 640px;">
-			<table class="table" style="text-align: center;">
+		<div style="height: 685px;">
+			<table class="table" style="text-align: center; margin-top: 20px; table-layout:fixed">
 				<thead>
 					<tr>
-						<th></th>
-						<th>카테고리ID</th>
-						<th>카테고리명</th>
-						<th>PATH</th>
+						<th style="width: 10%;">순번</th>
+						<th style="width: 10%;">카테고리ID</th>
+						<th style="width: 15%;">카테고리명</th>
+						<th style="width: 43%;">PATH</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -36,15 +35,15 @@
 						<td th:text="${categorylist.categoryNm}"></td>
 						<td style="text-align: left; padding-left: 30px;"
 							th:text="${categorylist.path}"></td>
-						<td style="display: flex; justify-content: flex-end;">
-							<div class="btn-group">
+						<td>
+							<div class="btn-group" style="left: 40px;">
 								<button class="btn btn-xs"
-									style="background-color: #f7ba8b; color: #ffff"
+									style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;"
 									data-bs-toggle="modal" data-bs-target="#updateModal"
 									type="button"
 									th:onclick="selectCategoryId([[${categorylist.categoryId}]])">수정</button>
 								<button class="btn btn-xs"
-									style="background-color: red; color: #fff" type="button"
+									style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button"
 									th:onclick="deleteCategory([[${categorylist.categoryId}]])">삭제</button>
 							</div>
 						</td>
@@ -130,10 +129,8 @@
 								<label for="categoryImage" class="col-form-label" style=" margin-right: 12px;">이미지</label>
 								<div class="col-sm-8" style=" right: 2px;">
 									<label for="uploadCategoryImage">
-									
-				                      <!-- <img th:if="${categoryImage} == null" th:src="@{/assets/admin/upload.png}" width="50" height="50" style="border: 1px solid black; cursor: pointer;">
-				                      <img th:unless="${categoryImage} == null"id="updateCategoryImage" width="440" height="300" style="border: 1px solid black; cursor: pointer;"/> -->
-				                    	<img id="updateCategoryImage" alt="카테고리 이미지 선택하기" width="440" height="300" style="border: 1px solid black; cursor: pointer;">
+				                    	<img id="updateCategoryImage"  width="440" height="300" style="border: 1px solid black; cursor: pointer;"
+				                    	onerror="this.src='https://daitso.s3.ap-northeast-2.amazonaws.com/img-upload.png'">
 				                    </label>
 				                    <div>	                    	                        
 				                        <!-- 이미지 클릭 시 파일 입력 엘리먼트 클릭 -->
@@ -141,15 +138,15 @@
 				                        <!-- 수정 버튼 -->
 				                        <!-- <button id="updateButtonFirst" class="btn btn-xs uploadButtons" style="background-color: #f7ba8b; color: #fff; margin-top: 10px;" type="button">수정</button> -->
 				                    	<!-- 삭제 버튼 -->
-				                        <button class="btn btn-xs deleteButtons" style="background-color: red; color: #fff; margin-top: 10px;" type="button" 
+				                        <button class="btn btn-xs deleteButtons" style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;" type="button" 
 				                            onclick="deleteImage('updateCategoryImage', updateCategoryId.value, true)">삭제</button>
 	                    			</div>
 								</div>
 							</div>
 
 							<div class="modal-footer">
-								<button id="updateButtonFirst" class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;" type="submit">저장</button>
-								<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+								<button id="updateButtonFirst" class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;" type="submit">저장</button>
+								<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 							</div>
 						</div>
 					</form>
@@ -230,9 +227,10 @@
 						
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #9dbb9a; border-color:#9dbb9a;"
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 								type="submit">저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" 
+							style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 					</form>
 				</div>
@@ -272,13 +270,41 @@
             reader.readAsDataURL(file);
 
             alert('이미지가 선택되었습니다.');
-            console.log(inputId, imageId, categoryId);
+            console.log("inputId :"+inputId, "imageId :"+imageId, "categoryId :"+categoryId);
         } else {
             alert('파일을 선택하세요.');
         }
     }
 
-	// 수정 버튼 클릭 시 서버로 이미지 업로드 요청 
+	/* // 수정 버튼 클릭 시 서버로 이미지 업로드 요청 
+    document.getElementById('updateButtonFirst').addEventListener('click', async function() {
+    	const categoryImageInput = document.getElementById('uploadCategoryImage');
+    	
+    	// 선택한 이미지가 없는 경우 해당 이미지에 대한 수정 요청을 보내지 않음
+        const promises = [];
+        
+        // 선택한 이미지가 있는 경우
+        if (categoryImageInput.files.length > 0) {
+            promises.push(uploadImage('uploadCategoryImage', 'updateCategoryImage'));
+        }
+        
+        try {
+            // 모든 업로드 요청을 병렬로 수행
+            const results = await Promise.all(promises);
+            
+            // 모든 업로드 요청이 성공했을 때 알림 표시
+            if (results.every(result => result === 'success')) {
+                alert('이미지가 수정되었습니다.');
+                location.reload(); 
+            } else {
+                alert('이미지 수정에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('이미지 업로드 오류:', error);
+            alert('이미지 수정에 실패했습니다.');
+        }
+    }); */
+    
     document.getElementById('updateButtonFirst').addEventListener('click', function() {
     	uploadImage('uploadCategoryImage', 'updateCategoryImage');
     });
@@ -320,6 +346,46 @@
             }
         } else {
             alert('카테고리 ID를 입력하세요.');
+        }
+    }
+
+    async function uploadImage(fileInputId, imageId) {
+        const categoryId = updateCategoryId.value;
+   
+        // 서버로 이미지 업로드 요청
+        if (categoryId) {
+            const fileInput = document.getElementById(fileInputId);
+           
+            if (fileInput.files.length > 0) {
+                const formData = new FormData();
+                formData.append('categoryId', categoryId);
+                formData.append(fileInputId, fileInput.files[0]);
+                
+                try {
+                    const response = await fetch('/admin/updateCategoryImage', {
+                        method: 'POST',
+                        headers: {
+                            "X-CSRF-TOKEN": [[${_csrf.token}]]
+                        },
+                        body: formData,
+                    });
+
+                    if (response.ok) {
+                        return 'success'; // 성공적으로 업로드되면 'success' 반환
+                    } else {
+                        return 'error'; // 업로드 실패 시 'error' 반환
+                    }
+                } catch (error) {
+                    console.error('이미지 업로드 오류:', error);
+                    return 'error'; // 업로드 실패 시 'error' 반환
+                }
+            } else {
+                // 파일을 선택하지 않은 경우, 해당 이미지에 대한 수정 요청을 보내지 않음
+                return 'skipped';
+            }
+        } else {
+            alert('카테고리 ID를 입력하세요.');
+            return 'error'; // 상품 ID가 없는 경우 'error' 반환
         }
     }
     
@@ -530,7 +596,6 @@
            .then(response => response.json())
            .then(data => {
                const categorylist = data;
-               console.log("ddd",categorylist);
                document.getElementById("updateCategoryId").value = categorylist.categoryId; 
                document.getElementById("updateCategoryNm").value = categorylist.categoryNm;
                document.getElementById("updateCategoryContent").value = categorylist.categoryContent;

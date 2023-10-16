@@ -4,13 +4,9 @@
     padding: 0.6rem;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
+    
 }
 
-#table {
-	padding-top: 10px;
-    padding-left: 50px;
-    width: -webkit-fill-available;
-}
 
 /* 모달 */
 .modal-content {
@@ -31,6 +27,7 @@
 	background-color: #c4d8ff;
 }
 
+
 /* 상품 수정 모달 */
 .update-modal-body input {
 	width: 80%;
@@ -42,12 +39,13 @@
 }
 
 .span-like-input {
-    border: none; /* 테두리 제거 */
-    background-color: transparent; /* 배경색 제거 */
-    font-weight: bold; /* 글꼴 굵게 설정 */
-    padding: 0; /* 패딩 제거 */
-    outline: none; /* 포커스 시 외곽선 제거 (선택 사항) */
+    border: none;
+    background-color: transparent;
+    font-weight: bold;
+    padding: 0;
+    outline: none;
 }
+
 
 /* 기존 상품 등록 모달 input */
 #productOptionFirst, #productOptionSecond,
@@ -79,6 +77,7 @@ div.col-sm-10 {
 	padding-top: 7px;
 	padding-bottom: 7px;
 }
+
 
 /* 페이지 링크 표시  */
 .pagination {
@@ -114,10 +113,10 @@ div.col-sm-10 {
 	border-color: #1a385d;
 }
 
+
 input{
 	accent-color: #6f8095;
 }
-
 
 .check{
 	width: 180px;
@@ -130,3 +129,51 @@ input{
     border-radius: 5px;
     margin: 0 10px 0 10px;
 }
+
+
+/* .admin-product-thead {
+	width: 100%;
+	text-align: center;
+	justify-content: space-around;
+	display: flex;
+	margin-top: 20px;
+	padding: 12px 0 12px 0;
+	border: 1px solid #1a385d;
+	border-left: none;
+	border-right: none;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+ .admin-product-thead div:nth-child(1){
+	width: 5%;
+}
+
+.admin-product-thead div:nth-child(2){
+	width: 7%;
+}
+
+.admin-product-thead div:nth-child(3){
+	width: 15%;
+}
+
+.admin-product-thead div:nth-child(4){
+	width: 53%;
+}
+
+.admin-product-thead div:nth-child(5){
+	width: 20%;
+}
+
+.tableBody {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    height: 55px;
+    line-height: 55px;
+    font-size: 16px;
+    font-weight: 400;
+    background-color: #F8F8F8;
+    border-bottom: 1px solid #1a385d;
+} */
