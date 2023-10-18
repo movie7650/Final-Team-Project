@@ -119,7 +119,7 @@
 		FROM (
 				SELECT coupon_id, category_id, coupon_nm, coupon_dscnt_rate, coupon_pbl_dt, coupon_epr_dt, rownum as rnum 
 				FROM coupon 
-				WHERE status = 'Y' and coupon_dv = 'E'
+				WHERE status = 'Y' and coupon_dv = '603'
 			 )
 		WHERE rnum between #{start} and #{end}
 	</select>
@@ -129,6 +129,23 @@
 		담당자: 나현웅
 	 -->
 	<select id="countEventCoupon" resultType="int">
-		SELECT count(*) FROM coupon WHERE coupon_dv = 'E' AND status = 'Y'
+		SELECT count(*) FROM coupon WHERE coupon_dv = '603' AND status = 'Y'
 	</select>
+	
+	<!-- 
+		기능 : 이벤트 쿠폰 보유 여부
+		담당자: 나현웅
+	 -->
+	 <select id="getEventCouponCheck" resultType="int">
+	 	SELECT count(*) FROM customer_coupon WHERE customer_id = #{customerId} and coupon_id = #{couponId}
+	 </select>
+	
+	<!-- 
+		기능: 이벤트 쿠폰 다운로드
+		담당자: 나현웅
+	 -->
+	 <insert id="insertEventCoupon">
+	 	INSERT into customer_coupon (customer_coupon_id, customer_id, coupon_id, coupon_use_dv, create_dt, creator)
+		VALUES (customer_coupon_seq.nextval, #{customerId}, #{couponId}, 203, sysdate, #{customerId})
+	 </insert>
 </mapper>

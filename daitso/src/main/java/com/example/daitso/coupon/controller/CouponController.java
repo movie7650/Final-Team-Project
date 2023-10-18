@@ -7,12 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.daitso.check.ILogincheckService;
 import com.example.daitso.coupon.model.CouponEvent;
+import com.example.daitso.coupon.model.CouponEventInsert;
 import com.example.daitso.coupon.service.ICouponService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/coupon")
@@ -31,6 +37,14 @@ public class CouponController {
 		
 		model.addAttribute("customerId", customerId);
 		return "/coupon/coupon-main";
+	}
+	
+	@PostMapping("/download")
+	@ResponseBody
+	public String download(@RequestBody CouponEventInsert coupon) {
+		
+		int num = couponService.insertEventCoupon(coupon);
+		return String.valueOf(num);
 	}
 	
 	@GetMapping("/download/{page}")
@@ -53,6 +67,10 @@ public class CouponController {
 		 }else {
 			 endPage = totalPage;
 		 }
+		 
+		 int customerId = logincheckService.loginCheck();
+		
+		 model.addAttribute("customerId", customerId);
 		  
 		 model.addAttribute("couponList", couponList);
 		 model.addAttribute("totalPageCount", totalPage);
