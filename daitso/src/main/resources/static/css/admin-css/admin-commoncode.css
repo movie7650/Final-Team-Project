@@ -49,27 +49,7 @@
     outline: none; /* 포커스 시 외곽선 제거 (선택 사항) */
 }
 
-/* 기존 상품 등록 모달 input */
-#productOptionFirst, #productOptionSecond,
-#productOptionThird, #productPrice, #productStock, #productMaxGet{
-	width: 33%;
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-#productContent {
-	width: 100%;
-	padding: 10px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-#getProductGroupId, #getCategoryNm, #getProductNm{
+#getCommonCodePr{
 	border:none;
 	font-weight: bold;
 }

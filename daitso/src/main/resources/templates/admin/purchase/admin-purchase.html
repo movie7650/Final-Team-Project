@@ -11,7 +11,8 @@
 	<div class="container-lg" style="padding-top: 10px">
 
 		<div style="font-weight: bold; margin-top: 20px; font-size:20px;">고객관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 결제 관리</div>
-
+		
+		<div style="display: flex; flex-direction: row-reverse;justify-content: space-between; align-items: flex-end;">
 		<div id="searchTextDiv" style="display:flex;justify-content:flex-end;padding-bottom:10px;">
 		    <select id="searchOption" style="height: 32px; padding: 0 5px 0 5px; outline:none;">
 		        <option value="customerNm">회원명</option>
@@ -23,7 +24,8 @@
 		    <input type="button" style="outline:none; background-color: #1a385d; color:white; border:none; border-radius: 5px; font-weight: 500; font-size: 15px; width: 60px; height: 32px; margin-left: 10px;" value="검색" 
 		    	   onclick="searchList()"/>
 		</div>
-
+		<div id="searchCount" style="display: none;"> 검색 결과 : <span id="resultCount"></span> 건</div>
+		</div>
 		
 		<div class="purchaseTable" style="border-top: 2px solid #1a385d; margin-top: 10px;">
 			<div style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px; margin-bottom: 20px;">
@@ -142,7 +144,7 @@
 						 </div>
 							<table class="table" style="text-align:center;">
 								<thead>
-									<tr style="background: aliceblue;">
+									<tr style="background: #f2f2f2;">
 										<th style="border: outset;">상품명</th>
 										<th style="border: outset;">상품가격</th>
 										<th style="border: outset;">수량</th>
@@ -267,7 +269,7 @@
 	    document.getElementById("btn-401").classList.add("unclicked-title");
 	    document.getElementById("btn-402").classList.add("unclicked-title");
 	    document.getElementById("btn-403").classList.add("unclicked-title");
-	    
+
 	    $.ajax({
 	        type: "GET",
 	        url: "/admin/search-purchase",
@@ -275,13 +277,16 @@
 	        success: function (data) {
 	            var tableBody = $('#purchaseTable');
 	            tableBody.empty();
-	
+				console.log(data.totalCount);
+				var totalCount = data.totalCount;
+				$("#resultCount").text(totalCount);
+				$('#searchCount').show();
 	            if (data.data.length === 0) {
 	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
 	                tableBody.append(noResultRow);
 	            } else {
 	                for (var i = 0; i < data.data.length; i++) {
-	                	 var newRow = "<tr>" +
+	                	 var newRow ="<tr>" +
 	                        "<td>" + data.data[i].rn + "</td>" +
 	                        "<td>" + data.data[i].customerNm + "</td>" +
 	                        "<td class='test' data-bs-toggle='modal' data-bs-target='#infoModal' style='cursor:pointer' onclick='getPurchaseDetails(\"" + data.data[i].purchaseNum + "\")'>" + data.data[i].purchaseNum + "</td>"+

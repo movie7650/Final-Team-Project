@@ -9,10 +9,7 @@
 	<select id="selectAllCoupons" resultType="com.example.daitso.coupon.model.CouponCheck">
 	    SELECT *
 		  FROM ( SELECT coupon_id                                    AS "couponId",
-		                SUBSTR(coupon_sn, 1, 4) || '-' || 
-		   				SUBSTR(coupon_sn, 5, 4) || '-' || 
-		    			SUBSTR(coupon_sn, 9, 4) || '-' || 
-		    			SUBSTR(coupon_sn, 13, 4)    				 AS "couponSn",
+		                coupon_dv									 AS "couponDv",
 		                category_id                                  AS "categoryId",
 		                coupon_nm 								     AS "couponNm",
 		                coupon_dscnt_rate 							 AS "couponDscntRate",
@@ -23,7 +20,7 @@
 		           FROM coupon
 		          WHERE status = 'Y'
 		       GROUP BY coupon_id,
-		                coupon_sn,
+		                coupon_dv,
 		                category_id,
 		                coupon_nm,
 		                coupon_dscnt_rate,
@@ -41,7 +38,7 @@
 	<select id="selectCountCoupons">
 	    SELECT COUNT(*)
 		  FROM ( SELECT coupon_id                    AS "couponId",
-                        coupon_sn 		   			 AS "couponSn",
+                        coupon_dv 		   			 AS "couponDv",
                         category_id                  AS "categoryId",
                         coupon_nm 					 AS "couponNm",
                         coupon_dscnt_rate 			 AS "couponDscntRate",
@@ -50,8 +47,8 @@
                         status                       AS "status"
                   FROM  coupon
 		         WHERE  status = 'Y'
-		      GROUP BY   coupon_id,
-                        coupon_sn,
+		      GROUP BY  coupon_id,
+                        coupon_dv,
                         category_id,
                         coupon_nm,
                         coupon_dscnt_rate,
@@ -62,20 +59,83 @@
 			   )
 	</select>
 	
+	
+	<select id="selectCouponsByDv">
+		SELECT *
+	      FROM( SELECT  c.coupon_id                                    AS "couponId",
+				        c.category_id                                  AS "categoryId",
+				        c.coupon_nm 								   AS "couponNm",
+				        c.coupon_dscnt_rate 						   AS "couponDscntRate",
+				        TO_CHAR(c.coupon_pbl_dt, 'YYYY-MM-DD')         AS "couponPblDt",
+				        TO_CHAR(c.coupon_epr_dt, 'YYYY-MM-DD')         AS "couponEprDt",
+				        c.status                                       AS "status",
+		                d.common_code_id                               AS  "commonCodeId",
+				        d.common_code_nm                               AS  "commonCodeNm",
+				        ROW_NUMBER() OVER (ORDER BY coupon_id desc)  AS "rn"
+				  FROM coupon c
+			      JOIN common_code d ON c.coupon_dv = d.common_code_id
+		         WHERE c.status = 'Y'
+			  GROUP BY c.coupon_id,
+				       c.category_id,
+				       c.coupon_nm,
+				       c.coupon_dscnt_rate,
+				       c.coupon_pbl_dt,
+				       c.coupon_epr_dt,
+				       c.status,
+		               d.common_code_id,
+					   d.common_code_nm
+				HAVING 1=1 AND d.common_code_id = #{commonCodeId}
+				)WHERE "rn" BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	
+	</select>
+	
+	<select id="selectCountCouponsByDv">
+	    SELECT COUNT (*)
+		  FROM(	SELECT COUNT(*) 
+				  FROM coupon c
+			      JOIN common_code d ON c.coupon_dv = d.common_code_id
+			  GROUP BY c.coupon_id,
+				       c.category_id,
+				       c.coupon_nm,
+				       c.coupon_dscnt_rate,
+				       c.coupon_pbl_dt,
+				       c.coupon_epr_dt,
+				       c.status,
+		               d.common_code_id,
+					   d.common_code_nm
+				HAVING 1=1
+				  AND d.common_code_id = #{commonCodeId}
+            )
+	</select>
+	
+	
+   <!-- 
+		기능:
+		담당자: 이세인
+	-->
+	<update id="changeCouponDv">
+	    UPDATE coupon
+	       SET coupon_dv = #{commonCodeId},
+	           modifier = 'admin',
+               modify_dt = systimestamp
+	     WHERE coupon_id = #{couponId}
+	</update>
+	
+	
+	
+	
 	<!-- 
 		기능: 쿠폰 등록하기
     	담당자: 이세인
      -->
 	<insert id="registerCoupons">
 	    INSERT INTO coupon ( coupon_id,
-		                     coupon_sn,
 		                     category_id,
 		                     coupon_nm,
 		                     COUPON_DSCNT_RATE,
 		                     COUPON_PBL_DT,
 		                     COUPON_EPR_DT ) 
 			  VALUES ( coupon_seq.NEXTVAL,
-				       #{couponSn},
 				       #{categoryId},
 				       #{couponNm},
 				       #{couponDscntRate},

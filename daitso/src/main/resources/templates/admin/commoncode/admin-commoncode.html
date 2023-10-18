@@ -126,8 +126,8 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					 <button class="btn btn-xs" style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;" data-bs-toggle="modal" data-bs-target="#registerExistingModal"
-							  type="button" onclick="registerExisting()">추가</button> 
+					 <!-- <button class="btn btn-xs" style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;" data-bs-toggle="modal" data-bs-target="#registerExistingModal"
+							  type="button" onclick="registerExisting()">추가</button>  --> <!-- 잠시  -->
 					<button class="btn btn-xs" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button" id="deleteButton">삭제</button>
 				</div>
 			</div>
@@ -183,7 +183,7 @@
 		</div>
 	</div>
 	
-	<!-- 공통코드 등록 모달  -->	
+	<!-- 공통코드 '등록' 모달  -->	
 	<div id="registerModal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document" style="max-width: 600px;">
 			<div class="modal-content">
@@ -239,7 +239,7 @@
 		</div>
 	</div>
 	
-	<!-- 공통코드 추가 모달 -->
+	<!-- 공통코드 '추가' 모달 -->
 	<div id="registerExistingModal" class="modal fade" tabindex="-1" role="dialog" style="overflow-y: auto;">
 		<div class="modal-dialog" role="document" style="max-width: 650px;">
 			<div class="modal-content">
@@ -253,20 +253,26 @@
 				 <form th:action="@{/admin/common-code}" method="post">
 					<div class="modal-body">
 						
-						<!-- <input type="hidden" id="getCategoryId" name="categoryId"> -->
+						<div class="row mb-3" style="display: flex; align-items: center; justify-content: center;">
+							<label for="commonCodeId" class="col-sm-3 col-form-label" style="font-weight: bold;">상위 공통코드</label>
+							<div class="col-sm-8">
+								<input type="number" id="getCommonCodePr" name="commonCodePr" style="outline: none; width: 100%;"readonly="readonly">
+							</div>
+						</div>
 						
 						<div class="row mb-3" style="display: flex; align-items: center; justify-content: center;">
 							<label for="commonCodeId" class="col-sm-3 col-form-label">공통코드ID</label>
 							<div class="col-sm-8">
 								<input type="text" id="commonCodeId" maxlength="10" style="width: 45%;" 
-									name="commonCodeId">
+									name="commonCodeId" onkeyup="inputOnlyNumberFormat(this);" required >
 							</div>
 						</div>
+						
 						<div class="row mb-3" style="display: flex; align-items: center; justify-content: center;">
 							<label for="commonCodeNm" class="col-sm-3 col-form-label">공통코드명</label>
 							<div class="col-sm-8">
 								<input type="text" id="commonCodeNm" maxlength="10" style="width: 45%;" 
-									name="commonCodeNm">
+									name="commonCodeNm" required>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -294,8 +300,8 @@
 
 
     function registerExisting() {
-       document.getElementById("getcommonCodeId").value = document.getElementById("updateCommonCodeID").value;
-       console.log(getcommonCodeId.value);
+       document.getElementById("getCommonCodePr").value = document.getElementById("commonCodePrs").value;
+       console.log(getCommonCodePr);
    } 
 	
  	function selectCommonCodePr() {
@@ -396,8 +402,8 @@
 	         fetch("/admin/check/" + commonCodeId)
 	             .then(response => response.json())
 	             .then(data => {
-	                  const commonCodeTableBody = document.getElementById("commonCodeTableBody");
-
+	                 const commonCodeTableBody = document.getElementById("commonCodeTableBody");
+	                 console.log(data);
 	                 commonCodeTableBody.innerHTML = "";
 	                 data.forEach(commonCode => {
 	                     const row = document.createElement("tr");
@@ -414,6 +420,7 @@
 			   						onclick = "selectCommonCode(${commonCode.commonCodeId})">수정</button>
 			   						
 			    			  </td>
+			    			  <input id="commonCodePrs" type="hidden" value=${commonCode.commonCodePr}></td>
 	                         `;
 	                      commonCodeTableBody.appendChild(row);
 	                  });
@@ -438,6 +445,24 @@
 	        }, 50) //대기시간
 	    } 
 	  	
+	  function uncomma(str) {
+	        str = String(str);
+	        return str.replace(/[^\d]+/g, '');
+	    } 
+	    
+	    // 숫자만 입력받기
+	    function inputOnlyNumberFormat(obj) {
+	        obj.value = onlynumber(uncomma(obj.value));
+	    }
+
+	    function onlynumber(str) {
+		    str = String(str);
+		    
+		    if (str.startsWith('0')) {
+		        return '0';
+		    }
+		    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
+		}
 	</script>
 
 </body>

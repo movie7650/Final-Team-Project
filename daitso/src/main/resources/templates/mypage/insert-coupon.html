@@ -59,6 +59,23 @@
 </div><!-- coupon-container -->
 </div><!--mypage-coupon-main  -->
 
+<div th:if="${countcoupon}!=0" style="display:flex; justify-content: center;">
+<nav  aria-label="Page navigation">
+<ul class="pagination">
+	<li th:if="${nowPageBlock>1}">
+		<a th:href="@{/mypage/mycoupon (page=__${startPage-1}__)}" aria-label="Previous">◀</a>
+	</li>
+
+	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
+		<a th:href="@{/mypage/mycoupon(page=__${i}__)}">[[${i}]]</a>		
+	</li>
+	
+	<li th:if="${nowPageBlock<totalPageBlock}">
+		<a th:href="@{/mypage/mycoupon (page=__${endPage+1}__)}" aria-label="Next">▶</a>
+	</li>
+</ul>
+</nav>
+</div>
 
 <div th:replace="~{/include/footer :: footer}"></div>
 
