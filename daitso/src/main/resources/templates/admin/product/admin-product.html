@@ -165,7 +165,7 @@
 				<!-- <form th:action method="post" enctype="multipart/form-data">  -->
 				
 				<!-- 테스트 -->
-				 <form th:action="@{/admin/product/original}" method="post">
+				 <form id="registerOriginal" th:action="@{/admin/product/original}" method="post">
 					<div class="modal-body">
 						<div class="row mb" style="display: flex; align-items: center; justify-content: center;">
 							<label for="productGroupId" class="col-sm-3 col-form-label">그룹 ID</label>
@@ -273,7 +273,7 @@
 						<div class="modal-footer">
 						<div id="messageArea" th:text="${message}"></div>
 							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
-								onclick="changeData();" type="submit">저장</button>
+								onclick="changeData();" type="button">저장</button>
 							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
@@ -467,7 +467,7 @@
 					<i class="fas fa-times"></i> <!-- "X" 아이콘 -->
 				</button>
 			</div>
-			<form th:action="@{/admin/product/update}" method="post">
+			<form id="updateProduct" th:action="@{/admin/product/update}" method="post">
 				<input type="hidden" id="updateProductId" name="productId">
 				<input type="hidden" id="updateProductGroupId" name="productGroupId">
 				<div class="modal-body">
@@ -528,7 +528,7 @@
 					</div>
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
-								type="submit" onclick="submitForm();">저장</button>
+								type="button" onclick="submitForm();">저장</button>
 							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal" >닫기</button>
 						</div>
 					</div>
@@ -543,6 +543,9 @@
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <h5 class="modal-title">상품 이미지</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+					</button>
 	            </div>
 	            <div class="col-sm-8" style="padding-bottom: 10px; padding-top: 10px;">
 	                <span id="imageProductName" style="font-size: 20px; font-weight: bold;"></span>
@@ -671,20 +674,44 @@
 	
 	<script th:inline="javascript">
 
-	function openMessageModal(message) {
-	    $('#messageModal .modal-body p').text(message);
-	    $('#messageModal').modal('show');
+	function showAlert(message) {
+	    alert(message);
 	}
-
 	
-	$('#registerNewModal').on('hidden.bs.modal', function (e) {
+    //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
+    function submitForm() {
+        const updatePrice = document.getElementById("updateProductPrice");
+        const priceUpdated = uncomma(updatePrice.value);
+        updatePrice.value = priceUpdated;
+        
+        const updateStock = document.getElementById("updateProductStock");
+        const stockUpdated = uncomma(updateStock.value);
+        updateStock.value = stockUpdated;
+       
+        var formData = $("#updateProduct").serialize(); // 폼 데이터 직렬화
+        $.ajax({
+            type: "POST",
+            url: "/admin/product/update", 
+            data: formData, // 직렬화한 폼 데이터를 전송
+            success: function (data) {
+            	 showAlert(data);
+            	 $('#updateModal').modal('hide'); // 모달 닫기
+            },
+            error: function () {
+
+            }
+        });    
+    }
+   
+    
+/* 	$('#registerNewModal').on('hidden.bs.modal', function (e) {
 		console.log("Efwefwef");
 		/* $(this).find('registerNewForm')[0].reset(); */
-		$('#registerNewForm').each(function() {
+	/* 	$('#registerNewForm').each(function() {
 		      this.reset();
 		  });
 
-	});
+	});  */
     
 	// 이미지 선택하기
     function selectImage(inputId, imageId, productId) {
@@ -809,7 +836,7 @@
 	         if (response.ok) {
 	             // 이미지 삭제가 성공한 경우
 	             alert("이미지가 삭제되었습니다.");
-	             location.reload(); 
+	             location.reload();
 	         } else {
 	             // 이미지 삭제 실패한 경우
 	             alert("이미지 삭제에 실패했습니다.");
@@ -834,9 +861,11 @@
 	             // DB에서 이미지 정보 삭제 성공한 경우
 	             /* alert("이미지 정보 삭제에 성공했습니다.");
 	             window.location.href = "/admin/product"; */
+	        	 location.reload();
 	         } else {
 	             // DB에서 이미지 정보 삭제 실패한 경우
 	             /* alert("이미지 정보 삭제에 실패했습니다."); */
+	        	 location.reload();
 	         }
 	     } catch (databaseError) {
 	        /*  console.error("이미지 정보 삭제 실패:", databaseError); */
@@ -858,7 +887,6 @@
 	     try {
 	         // s3에서 이미지 삭제
 	         await deleteImageFromS3(imageUrl);
-	
 	         // 상품 이미지 정보 삭제
 	         await deleteImageFromDatabase(productId, deleteFirstImage, deleteSecondImage, deleteThirdImage);
 	     } catch (error) {
@@ -1102,7 +1130,7 @@
     }); */
 
   	// (그룹)상품 삭제시 확인 메시지 실행해서 삭제하기(DOMParser 사용해서 문자열 형식의 HTML을 파싱하고, 파싱된 DOM을 생성해서 동적으로 <form> 만들어줌)
-    function deleteGroupProduct(productGroupId) {
+/*     function deleteGroupProduct(productGroupId) {
         if (!confirm('그룹 상품을 삭제하시겠습니까?')) {
             return false;
         }
@@ -1117,7 +1145,26 @@
         setTimeout(() => {
             document.getElementById('deleteForm').submit();
         }, 50) //대기시간
-    } 
+    }  */
+    
+    function deleteGroupProduct(productGroupId) {
+        if (!confirm('그룹 상품을 삭제하시겠습니까?')) {
+            return false;
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/product/delete-group",
+            data: { productGroupId: productGroupId },
+            success: function (data) {
+                showAlert(data);
+                location.reload();
+            },
+            error: function () {
+                // 에러 처리
+            }
+        });
+    }
 
     
  	// 천 단위로 comma 찍기
@@ -1150,7 +1197,7 @@
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
 	}
     
-    //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
+/*     //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function submitForm() {
         const updatePrice = document.getElementById("updateProductPrice");
         const priceUpdated = uncomma(updatePrice.value);
@@ -1159,8 +1206,9 @@
         const updateStock = document.getElementById("updateProductStock");
         const stockUpdated = uncomma(updateStock.value);
         updateStock.value = stockUpdated;
+        showAlert("상품이 수정되었습니다.");
     }
-   
+    */
  	//입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function changeData() {
         const changedPrices = document.querySelectorAll("#productPrice");
@@ -1176,6 +1224,21 @@
             const stockChanged = uncomma(changedStock.value);
             changedStock.value = stockChanged;
         }
+        
+        var formData = $("#registerOriginal").serialize(); // 폼 데이터 직렬화
+        $.ajax({
+            type: "POST",
+            url: "/admin/product/original", 
+            data: formData, // 직렬화한 폼 데이터를 전송
+            success: function (data) {
+            	 showAlert(data);
+            	 $('#registerOriginalModal').modal('hide'); // 모달 닫기
+            },
+            error: function () {
+
+            }
+        });    
+
     }
     
     // number 타입 maxlength 걸어주기
@@ -1234,7 +1297,8 @@
 	        .then((data) => {
 	            alert("상품이 삭제되었습니다.");
 	            setTimeout(() => {
-	                window.location.href = "/admin/product";
+	              /*   window.location.href = "/admin/product"; */
+	            location.reload(); 
 	            }, 50);
 	        })
 	        .catch((error) => {

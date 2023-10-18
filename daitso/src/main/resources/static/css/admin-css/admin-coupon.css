@@ -67,3 +67,24 @@
 /*   #thirdCategory {
     display: none;
 } */ 
+
+
+.clicked-title {
+	width: 50%;
+	height: 100%;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid #1a385d;
+	border-bottom: none;
+}
+
+.unclicked-title {
+	width: 50%;
+	height: 100%;
+	border: 1px solid #999999;
+	border-bottom: 1px solid #1a385d;
+	background-color: #F8F8F8;
+	color: #555555;
+	font-weight: 600;
+	cursor: pointer;
+}

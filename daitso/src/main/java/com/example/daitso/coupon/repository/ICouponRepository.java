@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.daitso.coupon.model.CouponCheck;
+import com.example.daitso.purchase.model.PurchaseList;
 
 @Repository
 @Mapper
@@ -17,6 +18,13 @@ public interface ICouponRepository {
 	
 	// 전체 쿠폰 개수 조회하기
 	int selectCountCoupons();
+	
+	//
+	List<CouponCheck> selectCouponsByDv(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
+	
+	//
+	int selectCountCouponsByDv(@Param("commonCodeId") int commonCodeId);
+
 	
 	// 쿠폰 삭제하기
 	void deleteCoupon(int couponId);
