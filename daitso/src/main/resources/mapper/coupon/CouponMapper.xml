@@ -109,7 +109,17 @@
 	</select>
 	
 	
-	
+   <!-- 
+		기능:
+		담당자: 이세인
+	-->
+	<update id="changeCouponDv">
+	    UPDATE coupon
+	       SET coupon_dv = #{commonCodeId},
+	           modifier = 'admin',
+               modify_dt = systimestamp
+	     WHERE coupon_id = #{couponId}
+	</update>
 	
 	
 	
@@ -120,14 +130,12 @@
      -->
 	<insert id="registerCoupons">
 	    INSERT INTO coupon ( coupon_id,
-		                     coupon_sn,
 		                     category_id,
 		                     coupon_nm,
 		                     COUPON_DSCNT_RATE,
 		                     COUPON_PBL_DT,
 		                     COUPON_EPR_DT ) 
 			  VALUES ( coupon_seq.NEXTVAL,
-				       #{couponSn},
 				       #{categoryId},
 				       #{couponNm},
 				       #{couponDscntRate},

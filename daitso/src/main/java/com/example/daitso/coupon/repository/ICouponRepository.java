@@ -25,7 +25,8 @@ public interface ICouponRepository {
 	//
 	int selectCountCouponsByDv(@Param("commonCodeId") int commonCodeId);
 
-	
+	void changeCouponDv(@Param("couponId") int couponId, @Param("commonCodeId") int commonCodeId);
+
 	// 쿠폰 삭제하기
 	void deleteCoupon(int couponId);
 	

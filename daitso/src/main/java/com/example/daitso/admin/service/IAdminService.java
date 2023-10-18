@@ -135,10 +135,13 @@ public interface IAdminService {
 	int selectCountCoupons();
 	
 	//
-	List<CouponCheck> selectCouponsByDv(@Param("commonCodeId") int commonCodeId, @Param("offset") int offset, @Param("pageSize") int pageSize);
+	List<CouponCheck> selectCouponsByDv(int commonCodeId, int offset,  int pageSize);
 	
 	//
-	int selectCountCouponsByDv(@Param("commonCodeId") int commonCodeId);
+	int selectCountCouponsByDv(int commonCodeId);
+	
+
+	void changeCouponDv(int couponId, int commonCodeId);
 	
 	// 쿠폰 삭제하기
 	void deleteCoupon(int couponId);
