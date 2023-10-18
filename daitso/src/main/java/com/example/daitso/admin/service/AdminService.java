@@ -398,4 +398,9 @@ public class AdminService implements IAdminService{
 		return couponRepository.selectCountCouponsByDv(commonCodeId);
 	}
 
+	@Override
+	public void changeCouponDv(int couponId, int commonCodeId) {
+		couponRepository.changeCouponDv(couponId, commonCodeId);
+	}
+
 }

@@ -647,49 +647,121 @@ public class AdminController {
  	    return "admin/product";
  	}
   
+//   	
+//   	// 전체 쿠폰 조회하기
+//   	@GetMapping("/coupon")
+//   	public String selectAllCoupons(@RequestParam(name = "page", defaultValue = "1") int page,
+//             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+//         
+//        int offset = (page - 1) * pageSize;       
+//       
+//       	List<CouponCheck> couponChecks = adminService.selectAllCoupons(offset, pageSize);
+//       
+//       	// 첫 번째 카테고리 불러오기
+//	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+//	    model.addAttribute("firstCategories", firstCategories);
+//	    
+//        // 페이징 정보 전달
+// 	    model.addAttribute("currentPage", page);
+// 	    model.addAttribute("pageSize", pageSize);
+//
+// 	    // 총 상품 개수
+// 	    int totalCount = adminService.selectCountCoupons(); 
+// 	    
+// 	    // 총 페이지 수
+// 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+// 	    
+// 	    model.addAttribute("totalCount", totalCount);
+// 	    model.addAttribute("totalPages", totalPages);
+//        model.addAttribute("couponChecks",couponChecks);
+//         
+//       return "admin/coupon/admin-coupon";
+//   	}
+//   	
+//   	
+// 	// 전체 쿠폰 조회하기
+//   	@GetMapping("/coupons")
+//   	@ResponseBody
+//   	public PageResult<CouponCheck> selectCouponsByDv(@RequestParam(name = "commonCodeId", required = false) int commonCodeId, @RequestParam(name = "page", defaultValue = "1") int page,
+//             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+//         
+//        int offset = (page - 1) * pageSize;       
+//       
+//        // 초기값 설정
+//	    if (commonCodeId == 0) {
+//	        commonCodeId = 601;
+//	    }
+//	    
+//       	List<CouponCheck> couponChecks = adminService.selectCouponsByDv(commonCodeId, offset, pageSize);
+//	    
+//        // 페이징 정보 전달
+// 	    model.addAttribute("currentPage", page);
+// 	    model.addAttribute("pageSize", pageSize);
+//
+// 	    // 총 상품 개수
+// 	    int totalCount = adminService.selectCountCouponsByDv(commonCodeId); 
+// 
+// 	    
+// 	    //페이징된 결과 데이터 넣을 PageResult(페이징된 데이터 목록, 현재 페이지 번호, 총 페이지수 담기)
+//        PageResult<CouponCheck> result = new PageResult<>();
+//        result.setData(couponChecks);
+//        result.setCurrentPage(page);
+//        result.setTotalPages((int) Math.ceil((double) totalCount / pageSize));
+//         
+//        return result;
+//   	}
    	
-   	// 전체 쿠폰 조회하기
+	// 전체 쿠폰 조회하기
    	@GetMapping("/coupon")
-   	public String selectAllCoupons(@RequestParam(name = "page", defaultValue = "1") int page,
+   	public String selectCouponByDv(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
+   			 @RequestParam(name = "page", defaultValue = "1") int page,
              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
          
-        int offset = (page - 1) * pageSize;       
-       
-       	List<CouponCheck> couponChecks = adminService.selectAllCoupons(offset, pageSize);
-       
+//        int offset = (page - 1) * pageSize;       
+//       
+//        // 초기값 설정
+//	    if (commonCodeId == null) {
+//	        commonCodeId = 601; 
+//	    }
+//	    
+//       	List<CouponCheck> couponChecks = adminService.selectCouponsByDv(commonCodeId,offset, pageSize);
+//        model.addAttribute("couponChecks",couponChecks);
+//        
        	// 첫 번째 카테고리 불러오기
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
-	    
-        // 페이징 정보 전달
- 	    model.addAttribute("currentPage", page);
- 	    model.addAttribute("pageSize", pageSize);
-
- 	    // 총 상품 개수
- 	    int totalCount = adminService.selectCountCoupons(); 
- 	    
- 	    // 총 페이지 수
- 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
- 	    
- 	    model.addAttribute("totalCount", totalCount);
- 	    model.addAttribute("totalPages", totalPages);
-        model.addAttribute("couponChecks",couponChecks);
+//	    
+//        // 페이징 정보 전달
+// 	    model.addAttribute("currentPage", page);
+// 	    model.addAttribute("pageSize", pageSize);
+//
+// 	    // 총 상품 개수
+// 	    int totalCount = adminService.selectCountCouponsByDv(commonCodeId); 
+// 	    
+// 	    // 총 페이지 수
+// 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+// 	    
+// 	    model.addAttribute("totalCount", totalCount);
+// 	    model.addAttribute("totalPages", totalPages);
          
        return "admin/coupon/admin-coupon";
    	}
    	
-   	
- 	// 전체 쿠폰 조회하기
+//   	@GetMapping("/coupon") //나중에 바꿔줄거
+//   	public String selectCouponByDv(Model model) {
+//   	    return "admin/coupon/admin-coupon";
+//   	}
+
    	@GetMapping("/coupons")
    	@ResponseBody
-   	public PageResult<CouponCheck> selectCouponsByDv(@RequestParam(name = "commonCodeId", required = false) int commonCodeId, @RequestParam(name = "page", defaultValue = "1") int page,
+   	public PageResult<CouponCheck> selectCouponsByDv(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId, @RequestParam(name = "page", defaultValue = "1") int page,
              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
          
         int offset = (page - 1) * pageSize;       
        
         // 초기값 설정
-	    if (commonCodeId == 0) {
-	        commonCodeId = 601;
+	    if (commonCodeId == null) {
+	        commonCodeId = 0;
 	    }
 	    
        	List<CouponCheck> couponChecks = adminService.selectCouponsByDv(commonCodeId, offset, pageSize);
@@ -711,6 +783,15 @@ public class AdminController {
         return result;
    	}
    	
+    // 쿠폰 상태 변경하기
+    @PostMapping("/coupon/change")
+    public String changeCouponDv(int couponId, int commonCodeId, Model model) {
+        adminService.changeCouponDv(couponId, commonCodeId);
+        model.addAttribute("message","쿠폰이 변경되었습니다.");
+		model.addAttribute("searchUrl","/admin/coupon");
+		return "admin/message";
+    }	 
+    
  	// 쿠폰 삭제하기
  	@PostMapping("/coupon/delete")
  	public String deleteCoupon(@RequestParam int couponId, Model model) {

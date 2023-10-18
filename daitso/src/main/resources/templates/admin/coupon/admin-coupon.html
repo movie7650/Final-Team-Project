@@ -20,13 +20,13 @@
 					type="button">등록</button>
 			</div>
 		</div>
-		<div style="height: 675px;">
+		<div style="height: 695px;">
 		
 		<div>
 			<div style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px; margin-bottom: 20px;">
-				<a class="clicked-title"   id="btnN" type="button" onclick="loadData(601); setActiveButton('btnN');">용도 미정 쿠폰</a>				
-				<a class="unclicked-title" id="btnA" type="button" onclick="loadData(602); setActiveButton('btnA');">전체 고객 대상 쿠폰</a>
-				<a class="unclicked-title" id="btnE" type="button" onclick="loadData(603); setActiveButton('btnE');">프로모션 쿠폰</a>
+				<a class="clicked-title"   id="btn-601" type="button" onclick="loadData(601); setActiveButton('btn-601');">용도 미정 쿠폰</a>				
+				<a class="unclicked-title" id="btn-602" type="button" onclick="loadedData(602); setActiveButton('btn-602');">전체 고객 대상 쿠폰</a>
+				<a class="unclicked-title" id="btn-603" type="button" onclick="loadedData(603); setActiveButton('btn-603');">프로모션 쿠폰</a>
 			</div>
 		</div>
 		
@@ -50,9 +50,8 @@
 	
 		
 		<!-- 페이지 링크 표시 -->
-		<div th:if="${totalCount > 0}">
+		<div>
 			 <ul class="pagination" id="pagination">
-
 			</ul>
 		</div>	  
 		
@@ -143,9 +142,7 @@
 			</div>
 		</div>
 	</div>
-	
-	
-	
+
 	</div>
 
 	</div>
@@ -157,7 +154,13 @@
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script>
 	<script th:inline="javascript">
-	
+
+    // 페이지가 로드될 때 loadData(601) 호출
+    $(document).ready(function() {
+        loadData(601);
+    });
+
+
 	//배송 상태별 데이터 + 페이지
 	function loadData(commonCodeId, page) {
 	    $.ajax({
@@ -165,22 +168,103 @@
 	        url: "/admin/coupons",
 	        data: { commonCodeId: commonCodeId, page: page }, 
 	        success: function (data) {
+	        	console.log(data);
 	            var tableBody = $('#couponTable');
 	            tableBody.empty(); 
 	            if (data.length === 0) {
-	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
-	                tableBody.append(noResultRow);
+	                /* var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow); */
 	            } else {
 	            	for (var i = 0; i < data.data.length; i++) {	            		
  	                    var newRow = "<tr>" +
 	                        "<td>" + data.data[i].rn + "</td>" +
 	                        "<td>" + data.data[i].couponNm + "</td>" +
-	                        "<td>" + data.data[i].couponDscntRate + "</td>" +
+	                        "<td>" + data.data[i].couponDscntRate + '%' + "</td>" +
 	                        "<td>" + data.data[i].couponPblDt + "</td>" +
 	                        "<td>" + data.data[i].couponEprDt + "</td>" +
 	                        "<td>" + data.data[i].commonCodeNm + "</td>" +
 	                        "<td>" +
-	                        "</td>";
+	                        "<form action='/admin/coupon/change' method='post' style='display:flex; align-items: center; justify-content: space-evenly;'>" +
+	                        "<input type='hidden' name='couponId' value='" + data.data[i].couponId + "'>"+
+	                        "<select onchange='this.form.submit()' name='commonCodeId' class='form-select'>" +
+	                        "<option value='601' " + (data.data[i].commonCodeId === 601 ? 'selected' : '') + ">용도 미정</option>" +
+	                        "<option value='602' " + (data.data[i].commonCodeId === 602 ? 'selected' : '') + ">전체 고객 대상</option>" +
+	                        "<option value='603' " + (data.data[i].commonCodeId === 603 ? 'selected' : '') + ">프로모션</option>" +
+	                        "</select>" +
+	                        "</form>" +
+	                        "</td>" +
+	                        "</tr>";  
+	                    tableBody.append(newRow);
+	                }
+	            }
+
+	            /// 페이징 정보 업데이트
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            
+	            // 첫 페이지로 이동하는 링크
+	             var firstLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+				    "<a class='page-link' onclick='loadData(" + commonCodeId + ")' aria-label='First'><span aria-hidden='true'>&laquo;</span></a>" +
+				    "</li>";
+				 pagination.append(firstLink);
+
+	            // 이전 페이지로 이동하는 링크
+	            var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&lsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(prevLink);
+
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + i + ")'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+
+	            // 다음 페이지로 이동하는 링크
+	            var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&rsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(nextLink);
+	            
+	            // 마지막 페이지로 이동하는 링크
+	             var lastLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+		             "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
+		             "</li>";
+	        	 pagination.append(lastLink);
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
+	        }
+	    });
+	}
+	
+	function loadedData(commonCodeId, page) {
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/coupons",
+	        data: { commonCodeId: commonCodeId, page: page }, 
+	        success: function (data) {
+	        	console.log(data);
+	            var tableBody = $('#couponTable');
+	            tableBody.empty(); 
+	            if (data.length === 0) {
+	                /* var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow); */
+	            } else {
+	            	for (var i = 0; i < data.data.length; i++) {	            		
+ 	                    var newRow = "<tr>" +
+	                        "<td>" + data.data[i].rn + "</td>" +
+	                        "<td>" + data.data[i].couponNm + "</td>" +
+	                        "<td>" + data.data[i].couponDscntRate + '%' + "</td>" +
+	                        "<td>" + data.data[i].couponPblDt + "</td>" +
+	                        "<td>" + data.data[i].couponEprDt + "</td>" +
+	                        "<td>" + data.data[i].commonCodeNm + "</td>" +
+	                        "<td>" +
+	                        "<div class='btn-group'>" +
+	                        "<button class='btn btn-xs' style='background-color: #1a385d; border-color: #1a385d; font-weight: 600; color:white'" +
+	                        "type='button' onclick='deleteCoupon(" + data.data[i].couponId + ")'>삭제</button>" +
+	                        "</td>" +
 	                        "</tr>";  
 	                    tableBody.append(newRow);
 	                }
@@ -229,9 +313,9 @@
 	
 	function setActiveButton(buttonId) {
 	    // 모든 버튼 초기화 (unclicked-title 스타일로 변경)
-	    document.getElementById("btnN").classList.add("unclicked-title");
-	    document.getElementById("btnA").classList.add("unclicked-title");
-	    document.getElementById("btnE").classList.add("unclicked-title");
+	    document.getElementById("btn-601").classList.add("unclicked-title");
+	    document.getElementById("btn-602").classList.add("unclicked-title");
+	    document.getElementById("btn-603").classList.add("unclicked-title");
 
 	    // 선택한 버튼 스타일 변경 (clicked-title 스타일로 변경)
 	    document.getElementById(buttonId).classList.remove("unclicked-title");
