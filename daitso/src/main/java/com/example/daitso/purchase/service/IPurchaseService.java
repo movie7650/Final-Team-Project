@@ -1,6 +1,7 @@
 package com.example.daitso.purchase.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -15,19 +16,19 @@ public interface IPurchaseService {
 	void insertPurchase(PurchaseInsert purchaseInsert);
 
 	// purchase_dv가 401(입금/결제) 인 상품 가져오기
-	List<PurchaseCheck> selectPurchaseDv401(int customerId);
+	List<PurchaseCheck> selectPurchaseDv401(int customerId, int page);
 
 	// purchase_dv가 402(배송중) 인 상품 가져오기
-	List<PurchaseCheck> selectPurchaseDv402(int customerId);
+	List<PurchaseCheck> selectPurchaseDv402(int customerId, int page);
 
 	// purchase_dv가 403(배송완료) 인 상품 가져오기
-	List<PurchaseCheck> selectPurchaseDv403(int customerId);
+	List<PurchaseCheck> selectPurchaseDv403(int customerId, int page);
 
 	// 내 주문상품 전체 갯수
 	int countMyOrderList(int customerId);
 
 	// 전체주문상품가져오기
-	List<PurchaseCheck> selectAllOrderProduct(int customerId);
+	List<PurchaseCheck> selectAllOrderProduct(int customerId, int page); // I서비스
 
 	// 전체상품이름가져오기
 	List<PurchaseCheck> selectAllProductNm(int customerId);

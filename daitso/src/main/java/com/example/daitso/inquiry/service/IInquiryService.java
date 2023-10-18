@@ -40,7 +40,7 @@ public interface IInquiryService {
 	InquiryInfoWithAnswer selectInquiryInfoWithAnswerByInquiryId(int inquiryId);
 	
 	//내 문의글 조회 
-	List<MyInquirySelect> selectMyInquiry(int customerId);
+	List<MyInquirySelect> selectMyInquiry(int customerId,int page);
 	
 	//내 문의글 삭제
 	void deleteMyInquiry(@Param("inquiryId")int inquiryId);

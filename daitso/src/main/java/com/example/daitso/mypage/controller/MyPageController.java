@@ -1,6 +1,6 @@
 package com.example.daitso.mypage.controller;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +34,8 @@ import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.service.IReviewService;
 import com.example.daitso.shipping.model.MypageReceiverShipping;
 import com.example.daitso.shipping.service.IShippingService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/mypage")
@@ -102,8 +104,8 @@ public class MyPageController {
 
 	// 마이페이지-주문목록 컨트롤러
 	@RequestMapping(value = "/orderlist", method = RequestMethod.GET)
-	public String selectPurchase(Model model, RedirectAttributes redirectAttributes) {
-
+	public String selectPurchase(Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "1") int page, HttpSession session) {
+		
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 
@@ -142,10 +144,36 @@ public class MyPageController {
 		// 주문번호 카운트
 		int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
 		model.addAttribute("purchasenumcount", purchaseNumCount);
-
+		
+		//페이징처리 
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);		
+		
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId,page);
 		model.addAttribute("purchaseList", purchaseList);
+		
+		int bbsCount = purchaseService.countMyOrderList(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
 
 		return "mypage/order-list";
 	}
@@ -204,7 +232,7 @@ public class MyPageController {
 
 	// 마이페이지-주문조회-입금/결제
 	@RequestMapping("/canclepay")
-	public String canclePay(Model model, RedirectAttributes redirectAttributes) {
+	public String canclePay(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -240,17 +268,43 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-
+		
+		//페이징처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);	
+		
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv401(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv401(customerId,page);
 		model.addAttribute("purchaseList", purchaseList);
-
+		
+		int bbsCount = purchaseService.selectPayCoin(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
+		
 		return "mypage/cancle-pay";
 	}
 
 	// 마이페이지-주문조회-배송중
 	@RequestMapping("/searchshipping")
-	public String searchShipping(Model model, RedirectAttributes redirectAttributes) {
+	public String searchShipping(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -287,15 +341,42 @@ public class MyPageController {
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
 
+		//페이징처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);
+		
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv402(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv402(customerId,page);
 		model.addAttribute("purchaseList", purchaseList);
+		
+		int bbsCount = purchaseService.selectShipping(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
+		
 		return "mypage/mypage-search-shipping";
 	}
 
 	// 마이페이지-주문조회-배송완료
 	@RequestMapping("/shippingcomplete")
-	public String shippingComplete(Model model, RedirectAttributes redirectAttributes) {
+	public String shippingComplete(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -332,15 +413,42 @@ public class MyPageController {
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
 
+		//페이징처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);
+		
 		// 주문 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv403(customerId);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv403(customerId,page);
 		model.addAttribute("purchaseList", purchaseList);
+		
+		int bbsCount = purchaseService.selectShippingComplete(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
+		
 		return "mypage/mypage-shipping-complete";
 	}
 
 	// 마이페이지-리뷰관리 컨트롤러
 	@RequestMapping("/review")
-	public String Review(Model model, RedirectAttributes redirectAttributes) {
+	public String Review(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -376,19 +484,46 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-
+		
+		// 리뷰컨텐트 카운트
+		int reviewContentCount = reviewService.selectReviewContentCount(customerId);
+		model.addAttribute("reviewcontentcount", reviewContentCount);
+		
+		//페이징처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);		
+		
 		// 내가쓴 리뷰 조회
-		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId);
+		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId,page);
 		model.addAttribute("mypageReviewList", myReviewList);
+		
+		int bbsCount = reviewService.selectReviewContentCount(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
 
 		int listSize = myReviewList.size();
 		for (int i = 0; i < listSize; i++) {
 			String reviewContent = myReviewList.get(i).getReviewTitle();
 			System.out.println("hahahahahahahaah" + reviewContent);
 		}
-		// 리뷰컨텐트 카운트
-		int reviewContentCount = reviewService.selectReviewContentCount(customerId);
-		model.addAttribute("reviewcontentcount", reviewContentCount);
 
 		return "mypage/review";
 	}
@@ -505,7 +640,7 @@ public class MyPageController {
 
 	// 내 문의내역 조회
 	@RequestMapping(value = "/myinquiry")
-	public String myInquiry(Model model, RedirectAttributes redirectAttributes) {
+	public String myInquiry(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -541,13 +676,40 @@ public class MyPageController {
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
 
-		// 내 문의내역 조회
-		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId);
-		model.addAttribute("myinquirylist", myInquiryList);
-
 		// 내 문의 status='Y'인것 조회
 		int inquiryStatusY = inquiryService.countInquiryStatusY(customerId);
 		model.addAttribute("myInquiryStatusY", inquiryStatusY);
+		
+		//페이징처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);
+		
+		// 내 문의내역 조회
+		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId,page);
+		model.addAttribute("myinquirylist", myInquiryList);
+		
+		int bbsCount = inquiryService.countInquiryStatusY(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
+
 
 		return "mypage/mypage-inquiry";
 	}
@@ -583,7 +745,7 @@ public class MyPageController {
 
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
 	@GetMapping("/mycoupon")
-	public String insertCoupon(Model model, RedirectAttributes redirectAttributes) {
+	public String insertCoupon(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -619,18 +781,42 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-
+		
+		//페이징 처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);	
+		
 		// 사용가능한 쿠폰리스트 출력
-		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService
-				.selectUsableCoupon(customerId);
+		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon(customerId,page);
 		model.addAttribute("selectCustomerCouponList", selectUsableCustomerCouponList);
-
+		
+		int bbsCount = customerCouponService.countUsableCustomerCoupon(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
+		
 		return "mypage/insert-coupon";
 	}
 
 	// 마이페이지-쿠폰등록 및 쿠폰사용완료리스트 컨트롤러
 	@GetMapping("/mycoupon-used")
-	public String usedCoupon(Model model, RedirectAttributes redirectAttributes) {
+	public String usedCoupon(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -666,11 +852,40 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
+		
+		//사용불가능한 쿠폰 갯수 
+		int countCantUseCoupon = customerCouponService.countCantUseCustomerCoupon(customerId);
+		model.addAttribute("cantusecoupon", countCantUseCoupon);
 
+		//페이징처리
+		session.setAttribute("page", page);
+		model.addAttribute("customerId",customerId);
+		
 		// 사용완료 쿠폰리스트 출력
-		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId);
+		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId,page);
 		model.addAttribute("banCustomerCouponList", selectBanCustomerCouponList);
-
+		
+		int bbsCount = customerCouponService.countCantUseCustomerCoupon(customerId);
+		int totalPage = 0;
+		if(bbsCount > 0) {
+			totalPage=(int)Math.ceil(bbsCount/10.0);
+		}
+		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
+		int nowPageBlock   = (int)Math.ceil(page/10.0);
+		int startPage = (nowPageBlock-1)*10 + 1;
+		int endPage = 0;
+		if(totalPage > nowPageBlock*10) {
+			endPage = nowPageBlock*10;
+		}else {
+			endPage = totalPage;
+		}
+		model.addAttribute("totalPageCount", totalPage);
+		model.addAttribute("nowPage", page);
+		model.addAttribute("totalPageBlock", totalPageBlock);
+		model.addAttribute("nowPageBlock", nowPageBlock);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage",endPage);
+		
 		return "mypage/mycoupon-used";
 	}
 

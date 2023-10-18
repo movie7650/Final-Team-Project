@@ -30,8 +30,13 @@
 			기능: 내 주문목록조회
 			담당자: 윤상영
 		 -->
+		 
+		 
 	<select id="selectAllOrderProduct" parameterType="int" resultType="com.example.daitso.purchase.model.PurchaseCheck">
-		SELECT pur.product_id 					AS "productId",	
+	SELECT *
+            From(
+            SELECT ROW_NUMBER() OVER(ORDER by pur.create_dt DESC) AS row_num,
+               pur.product_id 					AS "productId",	
 			   pur.customer_id 					AS "customerId",
 			   purchase_count					AS	"purchaseCount",
 			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
@@ -45,20 +50,24 @@
 			   ( SELECT COUNT(*) 
 			       FROM review 
 			      WHERE purchase_id = pur.purchase_id 
-			        AND customer_id=#{customerId} 
+			        AND customer_id=#{customerId}
 			        AND status = 'Y' ) 			AS "reviewCount"	   
 	   	  FROM purchase pur, product p, common_code cc
-	   	 WHERE customer_id=#{customerId} 
-	   	   AND pur.product_id = p.product_id
+	   	 WHERE customer_id=#{customerId}
+           AND pur.product_id = p.product_id
 	   	   AND pur.purchase_dv = cc.common_code_id
-	  ORDER BY purchase_id DESC
+         )
+	 WHERE row_num BETWEEN #{start} AND #{end}
 	</select>
 		<!--		 
 			기능: purchase_dv가 401(입금/결제) 인 상품 출력
 			담당자: 윤상영
 		 -->
 		 <select id="selectPurchaseDv401" resultType="com.example.daitso.purchase.model.PurchaseCheck" parameterType="int">
-		 	SELECT pur.product_id 					AS "productId",	
+	 	SELECT*
+        FROM (
+     	SELECT ROW_NUMBER() OVER(ORDER by pur.create_dt DESC) AS row_num,
+                   pur.product_id 					AS "productId",	
        			   pur.customer_id 					AS "customerId",
        			   purchase_count					AS	"purchaseCount",
        			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
@@ -72,21 +81,25 @@
        			   ( SELECT COUNT(*) 
            					FROM review 
           					WHERE purchase_id = pur.purchase_id 
-            				AND customer_id=#{customerId} 
+            				AND customer_id=34
             				AND status = 'Y' ) 			AS "reviewCount"	   
   			  FROM purchase pur, product p, common_code cc
- 			 WHERE customer_id=#{customerId} 
+ 			 WHERE customer_id=34
    			   AND pur.product_id = p.product_id
    			   AND pur.purchase_dv = cc.common_code_id
    			   AND pur.purchase_dv = 401
-		  ORDER BY purchase_id DESC
+               )
+		   WHERE row_num BETWEEN #{start} AND #{end}
 		 </select>
 		 <!--		 
 			기능: purchase_dv가 402(배송중) 인 상품 출력
 			담당자: 윤상영
 		 -->
 		  <select id="selectPurchaseDv402" resultType="com.example.daitso.purchase.model.PurchaseCheck" parameterType="int">
-		 	SELECT pur.product_id 					AS "productId",	
+		 		SELECT*
+        FROM (
+     	SELECT ROW_NUMBER() OVER(ORDER by pur.create_dt DESC) AS row_num,
+                   pur.product_id 					AS "productId",	
        			   pur.customer_id 					AS "customerId",
        			   purchase_count					AS	"purchaseCount",
        			   TO_CHAR(pur.purchase_price, 'FM999,999,999') AS "purchasePrice",
@@ -100,15 +113,15 @@
        			   ( SELECT COUNT(*) 
            					FROM review 
           					WHERE purchase_id = pur.purchase_id 
-            				AND customer_id=#{customerId} 
+            				AND customer_id=34
             				AND status = 'Y' ) 			AS "reviewCount"	   
   			  FROM purchase pur, product p, common_code cc
- 			 WHERE customer_id=#{customerId} 
+ 			 WHERE customer_id=34
    			   AND pur.product_id = p.product_id
    			   AND pur.purchase_dv = cc.common_code_id
    			   AND pur.purchase_dv = 402
-   			   <!-- AND pur.purchase_dv = #{purchaseDv} -->
-		  ORDER BY purchase_id DESC
+               )
+		   WHERE row_num BETWEEN #{start} AND #{end}
 		 </select>
 		 <!--		 
 			기능: purchase_dv가 403(배송완료) 인 상품 출력

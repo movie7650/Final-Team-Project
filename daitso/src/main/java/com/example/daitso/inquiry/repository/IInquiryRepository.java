@@ -59,7 +59,7 @@ public interface IInquiryRepository {
 	InquiryInfoWithAnswer selectInquiryInfoWithAnswerByInquiryId(int inquiryId);
 	
 	//내 문의글 조회 
-	List<MyInquirySelect> selectMyInquiry(int customerId);
+	List<MyInquirySelect> selectMyInquiry(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
 	
 	//내 문의글 삭제
 	void deleteMyInquiry(@Param("inquiryId")int inquiryId);

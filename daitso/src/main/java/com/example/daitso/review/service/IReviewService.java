@@ -20,8 +20,9 @@ public interface IReviewService {
 	
 	//내가 주문한 상품의 상품정보 가져오기
 	List<WriteMyReview> selectMyPurchase(@Param("customerId") int customerId, @Param("productId") int productId, @Param("purchaseNum") String purchaseNum, @Param("purchaseId") int purchaseId);
-
-	List<MypageReviewCheck> selectReviewAll(int customerId);
+	
+	//내가 쓴 리뷰 목록 조회하기
+	List<MypageReviewCheck> selectReviewAll(int customerId,int page);
 	
 	void selectReview(int reviewId);
 	
