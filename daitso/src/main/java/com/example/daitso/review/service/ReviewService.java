@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.daitso.review.model.MyReview;
 import com.example.daitso.review.model.MypageReviewCheck;
 import com.example.daitso.review.model.Review;
+import com.example.daitso.review.model.ReviewHeartDTO;
 import com.example.daitso.review.model.ReviewProductDetail;
 import com.example.daitso.review.model.WriteMyReview;
 import com.example.daitso.review.repository.IReviewRepository;
@@ -60,10 +62,10 @@ public class ReviewService implements IReviewService{
 		return reviewRepository.selectProductReviewCount(groupId);
 	}
 
-	@Override
-	public int insertReviewHeart(int reviewId, int customerId) {
-		reviewRepository.insertReviewHeart(reviewId, customerId);
-		int num = reviewRepository.selectReviewHeartCount(reviewId);
+	@Transactional
+	public int insertReviewHeart(ReviewHeartDTO reviewHeartDTO) {
+		reviewRepository.insertReviewHeart(reviewHeartDTO.getReviewId(), reviewHeartDTO.getCustomerId());
+		int num = reviewRepository.selectReviewHeartCount(reviewHeartDTO.getReviewId());
 		return num;
 	}
 	@Override
