@@ -2,6 +2,7 @@ package com.example.daitso.purchase.repository;
 
 import java.util.List;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -21,16 +22,16 @@ public interface IPurchaseRepository {
 	void insertPurchase(PurchaseInsert purchaseInsert);
 
 	// 전체주문상품가져오기
-	List<PurchaseCheck> selectAllOrderProduct(int customerId);
+	List<PurchaseCheck> selectAllOrderProduct(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end); 
 
 	// purchase_dv가 401(입금/결제) 인 상품 가져오기
-	List<PurchaseCheck> selectPurchaseDv401(int customerId);
+	List<PurchaseCheck> selectPurchaseDv401(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
 
 	// purchase_dv가 402(배송중) 인 상품 가져오기
-	List<PurchaseCheck> selectPurchaseDv402(int customerId);
+	List<PurchaseCheck> selectPurchaseDv402(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
 
 	// purchase_dv가 403(배송완료) 인 상품 가져오기
-	List<PurchaseCheck> selectPurchaseDv403(int customerId);
+	List<PurchaseCheck> selectPurchaseDv403(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
 
 	// 전체주문상품이름가져오기
 	List<PurchaseCheck> selectAllProductNm(int customerId);

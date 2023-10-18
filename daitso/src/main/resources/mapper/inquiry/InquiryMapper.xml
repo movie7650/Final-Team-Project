@@ -194,21 +194,25 @@
 		담당자: 윤상영
 	 -->
 	<select id="selectMyInquiry" resultType="com.example.daitso.inquiry.model.MyInquirySelect" parameterType="int">
-	SELECT p.product_nm 			as "productNm",
-           customer_id 				as "customerId",
-           inquiry_pr_id 			as "inquiryPrId",
-           inquiry_content 			as "inquiryContent",
-           inquiry_ans_dv 			as "inquiryAnsDv",
-           i.create_dt          	as "createDt",
-           i.creator            	as "creator",
-           inquiry_id           	as "inquiryId",
-           i.product_id				as "productId",
-           p.product_image_first	as "productImg"
-	  FROM inquiry i
-	  JOIN product p on p.product_id = i.product_id
-	 WHERE i.customer_id = #{customerId}
-	   AND i.status='Y'
-  ORDER BY i.create_dt desc
+          	SELECT *
+            From(
+		            SELECT ROW_NUMBER() OVER(ORDER by i.create_dt DESC) AS row_num,
+				           p.product_nm 			as "productNm",
+				           customer_id 				as "customerId",
+				           inquiry_pr_id 			as "inquiryPrId",
+				           inquiry_content 			as "inquiryContent",
+				           inquiry_ans_dv 			as "inquiryAnsDv",
+				           i.create_dt          	as "createDt",
+				           i.creator            	as "creator",
+				           inquiry_id           	as "inquiryId",
+				           i.product_id				as "productId",
+				           p.product_image_first	as "productImg"
+					  FROM inquiry i
+					  JOIN product p on p.product_id = i.product_id
+					 WHERE i.customer_id = 34
+					   AND i.status='Y'
+       		)
+       		WHERE row_num between #{start} and #{end}
  	</select>
 	<!-- 
 		기능: 내가 쓴 문의 삭제하기 

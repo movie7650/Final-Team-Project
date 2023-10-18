@@ -10,13 +10,16 @@ import com.example.daitso.cart.model.CartCouponApply;
 public interface ICustomerCouponService {
 	
 	//사용가능한 쿠폰 리스트 출력
-	List<SelectCustomerCoupon> selectUsableCoupon(int customerId);
+	List<SelectCustomerCoupon> selectUsableCoupon(int customerId, int page);
 	
 	//사용자 사용가능한 쿠폰 count
 	int countUsableCustomerCoupon(int customerId);
 	
+	//사용자 사용불가능한 쿠폰 count
+	int countCantUseCustomerCoupon(int customerId);
+	
 	//사용불가능한 쿠폰 리스트 출력
-	List<SelectCustomerCoupon> selectBanCoupon(int customerId);
+	List<SelectCustomerCoupon> selectBanCoupon(int customerId, int page);
 	
 	//사용자 쿠폰등록
 	void insertCustomerCoupon(String customerId,String allCouponNum);

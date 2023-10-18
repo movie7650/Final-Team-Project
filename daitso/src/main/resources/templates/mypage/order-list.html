@@ -22,8 +22,11 @@
 	</div><!-- order-category -->
 	<div style="margin-top:200px; padding-right:55px;">
 	<div style="width:800px;" th:if="${purchasenumcount}== 0">
-		<img style="width:800px; border-radius:10px;" th:src="@{/assets/mypage/noneorder.JPG}">
-	</div>  
+			<div style="background-color: #f3f3f3; text-align:center; width:855px; margin-bottom:50px; margin-left:-25px; height: 450px;">
+				<div style="font-weight:600; font-size: 30px; padding-top:140px;">주문한 <span style="color:#e8c369;">상품</span>이 없습니다.</div>
+				<button id="goto-order-button" onclick="location.href='/'">주문하러가기</button>
+			</div>
+ 	</div>  
 		<th:block>
 			<div th:each="purchase : ${purchaseList}" class="order-list-container">
 				<div class="order-list-container-01">
@@ -62,8 +65,23 @@
 
 </form>
 
+<div th:if="${purchasenumcount}!= 0" style="display:flex; justify-content: center;">
+<nav  aria-label="Page navigation">
+<ul class="pagination">
+	<li th:if="${nowPageBlock>1}">
+		<a th:href="@{/mypage/orderlist (page=__${startPage-1}__)}" aria-label="Previous">◀</a>
+	</li>
 
-
+	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
+		<a th:href="@{/mypage/orderlist (page=__${i}__)}">[[${i}]]</a>		
+	</li>
+	
+	<li th:if="${nowPageBlock<totalPageBlock}">
+		<a th:href="@{/mypage/orderlist (page=__${endPage+1}__)}" aria-label="Next">▶</a>
+	</li>
+</ul>
+</nav>
+</div>
 
 
 

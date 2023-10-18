@@ -19,14 +19,17 @@ public class CustomerCouponService implements ICustomerCouponService {
 	@Autowired
 	ICustomerCouponRepository customerCouponRepository;
 	
+	//사용가능한 쿠폰목록 조회
 	@Override
-	public List<SelectCustomerCoupon> selectUsableCoupon(int customerId) {
-		return customerCouponRepository.selectUsableCoupon(customerId);
+	public List<SelectCustomerCoupon> selectUsableCoupon(int customerId, int page) {
+		int start = (page-1)*10 + 1;
+		return customerCouponRepository.selectUsableCoupon(customerId,start, start+9);
 	}
-	
+	//사용불가능한 쿠폰 목록 출력
 	@Override
-	public List<SelectCustomerCoupon> selectBanCoupon(int customerId) {
-		return customerCouponRepository.selectBanCoupon(customerId);
+	public List<SelectCustomerCoupon> selectBanCoupon(int customerId, int page) {
+		int start = (page-1)*10 + 1;
+		return customerCouponRepository.selectBanCoupon(customerId, start, start+9);
 	}
 	
 	@Override
@@ -60,5 +63,10 @@ public class CustomerCouponService implements ICustomerCouponService {
 	@Override
 	public int countUsableCustomerCoupon(int customerId) {
 		return customerCouponRepository.countUsableCustomerCoupon(customerId);
+	}
+	//사용자 사용불가능한 쿠폰 갯수 count
+	@Override
+	public int countCantUseCustomerCoupon(int customerId) {
+		return customerCouponRepository.countCantUseCustomerCoupon(customerId);
 	}
 }

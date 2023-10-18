@@ -84,7 +84,10 @@
 			담당자: 윤상영
 		 -->
 	<select id="selectReviewAll" resultType="com.example.daitso.review.model.MypageReviewCheck" parameterType="int">
-	SELECT  	  re.review_title 			AS "reviewTitle",
+       	SELECT *
+        from(
+                    SELECT ROW_NUMBER() OVER(ORDER by re.create_dt DESC) AS row_num,
+                    re.review_title 			AS "reviewTitle",
 	 			  re.review_id 	  			AS "reviewId",
 	              NVL(cnt,0) 				AS "reviewHeartCount", 
 	              p.product_nm 				AS "productNm",
@@ -98,8 +101,10 @@
 	FROM   review re
 	left join product p on re.product_id = p.product_id
 	left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
-	WHERE re.customer_id=#{customerId} 
+	WHERE re.customer_id=34
 	  AND re.status='Y'
+      )
+      where row_num between #{start} and #{end}
 	</select>
 
 	<!-- 
@@ -113,7 +118,7 @@
 	</update>
 
 	<!-- 
-			기능: 리뷰 내용 카운트
+			기능: 내가쓴 리뷰 내용 카운트
 			담당자: 윤상영
 		 -->
 	<select id="selectReviewContentCount" resultType="int" parameterType="int">
