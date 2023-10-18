@@ -101,7 +101,7 @@
 	FROM   review re
 	left join product p on re.product_id = p.product_id
 	left join(select count(review_id) as cnt , review_id from review_heart group by review_id) s on re.review_id = s.review_id
-	WHERE re.customer_id=34
+	WHERE re.customer_id=#{customerId}
 	  AND re.status='Y'
       )
       where row_num between #{start} and #{end}
