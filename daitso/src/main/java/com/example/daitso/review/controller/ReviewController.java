@@ -35,6 +35,6 @@ public class ReviewController {
 	@PostMapping("/heart/update")
 	@ResponseBody
 	public Integer reviewHeart(@RequestBody ReviewHeartDTO reviewHeartDTO){
-		return reviewService.insertReviewHeart(reviewHeartDTO.getReviewId(), reviewHeartDTO.getCustomerId());
+		return reviewService.insertReviewHeart(reviewHeartDTO);
 	}
 }
