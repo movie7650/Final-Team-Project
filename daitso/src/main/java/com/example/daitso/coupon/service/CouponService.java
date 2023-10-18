@@ -4,14 +4,39 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.daitso.coupon.model.Coupon;
+import com.example.daitso.coupon.model.CouponEvent;
+import com.example.daitso.coupon.model.CouponEventInsert;
 import com.example.daitso.coupon.repository.ICouponRepository;
 
 @Service
 public class CouponService implements ICouponService {
 
+	@Autowired
+	ICouponRepository couponRepository;
+	
+	@Override
+	public List<CouponEvent> selectEventCoupon(int page) {
+		int start = 9 * (page-1) + 1; 
+		return couponRepository.selectEventCoupon(start, start+8);
+	}
 
+	@Override
+	public int countEventCoupon() {
+		return couponRepository.countEventCoupon();
+	}
 
+	@Transactional
+	public int insertEventCoupon(CouponEventInsert coupon) {
+		int check = couponRepository.getEventCouponCheck(coupon.getCustomerId(), coupon.getCouponId());
+		if(check == 0) {
+			return 	couponRepository.insertEventCoupon(coupon.getCustomerId(), coupon.getCouponId());
+		}
+		else {
+			return -1;
+		}
+	}
 
 }
