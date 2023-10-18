@@ -9,7 +9,7 @@ import lombok.Setter;
 public class CouponCheck {
 	private int couponId;
 	private int categoryId;
-	private String couponSn;
+	private int couponDv;
 	private String couponNm;
 	private int couponDscntRate;
 	private String couponPblDt;
@@ -20,6 +20,9 @@ public class CouponCheck {
 	private Date modifyDt;
 	private String modifier;
 	private int couponTerm;
+	
+	private String commonCodeNm;
+	private int commonCodeId;
 	
 	private int rn;
 }

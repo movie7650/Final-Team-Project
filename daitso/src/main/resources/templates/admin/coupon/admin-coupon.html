@@ -21,34 +21,30 @@
 			</div>
 		</div>
 		<div style="height: 675px;">
+		
+		<div>
+			<div style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px; margin-bottom: 20px;">
+				<a class="clicked-title"   id="btnN" type="button" onclick="loadData(601); setActiveButton('btnN');">용도 미정 쿠폰</a>				
+				<a class="unclicked-title" id="btnA" type="button" onclick="loadData(602); setActiveButton('btnA');">전체 고객 대상 쿠폰</a>
+				<a class="unclicked-title" id="btnE" type="button" onclick="loadData(603); setActiveButton('btnE');">프로모션 쿠폰</a>
+			</div>
+		</div>
+		
 			<table class="table" style="text-align: center; table-layout:fixed">
 				<thead>
 					<tr>
 						<th style="width: 7%;">순번</th>
-						<th style="width: 20%;">쿠폰 일련번호</th>
 						<th style="width: 30%;">쿠폰명</th>
-						<th>할인율</th>
-						<th>쿠폰 발행일</th>
-						<th>쿠폰 만료일</th>
+						<th style="width: 10%;">할인율</th>
+						<th style="width: 12%;">쿠폰 발행일</th>
+						<th style="width: 12%;">쿠폰 만료일</th>
+						<th style="width: 15%;">쿠폰 구분</th>
 						<th></th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr th:each="couponCheck : ${couponChecks}">
-						<td th:text="${couponCheck.rn}"></td>
-						<td th:text="${couponCheck.couponSn}"></td>
-						<td th:text="${couponCheck.couponNm}"></td>
-						<td th:text="${couponCheck.couponDscntRate + '%'}"></td>
-						<td th:text="${couponCheck.couponPblDt}"></td>
-						<td th:text="${couponCheck.couponEprDt}"></td>
-						<td>
-							<div class="btn-group">
-								<button class="btn btn-xs"	style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" 
-									type="button" th:onclick="deleteCoupon([[${couponCheck.couponId}]])">삭제</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
+				<tbody id="couponTable">		
+
+				</tbody> 
 			</table>
 		</div>
 	
@@ -56,45 +52,7 @@
 		<!-- 페이지 링크 표시 -->
 		<div th:if="${totalCount > 0}">
 			 <ul class="pagination" id="pagination">
-			 <!-- 첫 페이지로 이동하는 화살표 -->
-		        <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
-		            <a class="page-link"
-		                th:href="@{/admin/coupon(page=1, pageSize=${pageSize})}"
-		                aria-label="First"> <span aria-hidden="true">&laquo;</span>
-		            </a>
-		        </li>
-				<!-- 이전 페이지 -->
-				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
-					<!-- 이전 페이지로 이동하는 링크 -->
-					<a class="page-link"
-					th:href="@{/admin/coupon(page=${currentPage - 1}, pageSize=${pageSize})}"
-					aria-label="Previous"> <span aria-hidden="true">&lsaquo;</span>
-					</a>
-				</li>
 
-				<!-- 페이지 번호 링크 -->
-				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}" class="page-item" th:classappend="${page == currentPage} ? active">
-					<a class="page-link"
-					th:href="@{/admin/coupon(page=${page}, pageSize=${pageSize})}"
-					th:text="${page}">
-					</a>
-				</li>
-
-				<!-- 다음 페이지 -->
-				<li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled"> <!-- 현재 페이지가 마지막 페이지면 비활성화 -->
-					<!-- 다음 페이지로 이동하는 링크 -->
-					<a class="page-link" 
-					th:href="@{/admin/coupon(page=${currentPage + 1}, pageSize=${pageSize})}"
-					aria-label="Next"> <span aria-hidden="true">&rsaquo;</span>
-					</a>
-				</li>
-			 <!-- 마지막 페이지로 이동하는 화살표 -->
-	        <li class="page-item" th:classappend="${currentPage == totalPages} ? disabled">
-	            <a class="page-link"
-	                th:href="@{/admin/coupon(page=${totalPages}, pageSize=${pageSize})}"
-	                aria-label="Last"> <span aria-hidden="true">&raquo;</span>
-	            </a>
-	        </li>
 			</ul>
 		</div>	  
 		
@@ -107,9 +65,9 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
 					</button>
-				</div>
-				 
-				 <form action="/admin/coupon" method="POST" onsubmit="return generateAndSubmitCoupon()"> 
+				</div>			 
+				 <!-- <form action="/admin/coupon" method="POST" onsubmit="return generateAndSubmitCoupon()">  -->
+				 <form action="/admin/coupon" method="POST"> 
                 	<input type="hidden" id="couponSn" name="couponSn" value="">
 					<div class="modal-body">		
 						<div style="display: flex; align-items: flex-end; padding-bottom: 10px; margin-left: 10px;">
@@ -199,7 +157,87 @@
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script>
 	<script th:inline="javascript">
+	
+	//배송 상태별 데이터 + 페이지
+	function loadData(commonCodeId, page) {
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/coupons",
+	        data: { commonCodeId: commonCodeId, page: page }, 
+	        success: function (data) {
+	            var tableBody = $('#couponTable');
+	            tableBody.empty(); 
+	            if (data.length === 0) {
+	                var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow);
+	            } else {
+	            	for (var i = 0; i < data.data.length; i++) {	            		
+ 	                    var newRow = "<tr>" +
+	                        "<td>" + data.data[i].rn + "</td>" +
+	                        "<td>" + data.data[i].couponNm + "</td>" +
+	                        "<td>" + data.data[i].couponDscntRate + "</td>" +
+	                        "<td>" + data.data[i].couponPblDt + "</td>" +
+	                        "<td>" + data.data[i].couponEprDt + "</td>" +
+	                        "<td>" + data.data[i].commonCodeNm + "</td>" +
+	                        "<td>" +
+	                        "</td>";
+	                        "</tr>";  
+	                    tableBody.append(newRow);
+	                }
+	            }
 
+	            /// 페이징 정보 업데이트
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            
+	            // 첫 페이지로 이동하는 링크
+	             var firstLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+				    "<a class='page-link' onclick='loadData(" + commonCodeId + ")' aria-label='First'><span aria-hidden='true'>&laquo;</span></a>" +
+				    "</li>";
+				 pagination.append(firstLink);
+
+	            // 이전 페이지로 이동하는 링크
+	            var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&lsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(prevLink);
+
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + i + ")'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+
+	            // 다음 페이지로 이동하는 링크
+	            var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&rsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(nextLink);
+	            
+	            // 마지막 페이지로 이동하는 링크
+	             var lastLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+		             "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
+		             "</li>";
+	        	 pagination.append(lastLink);
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
+	        }
+	    });
+	}
+	
+	function setActiveButton(buttonId) {
+	    // 모든 버튼 초기화 (unclicked-title 스타일로 변경)
+	    document.getElementById("btnN").classList.add("unclicked-title");
+	    document.getElementById("btnA").classList.add("unclicked-title");
+	    document.getElementById("btnE").classList.add("unclicked-title");
+
+	    // 선택한 버튼 스타일 변경 (clicked-title 스타일로 변경)
+	    document.getElementById(buttonId).classList.remove("unclicked-title");
+	    document.getElementById(buttonId).classList.add("clicked-title");
+	}
+	
 	window.onload = function() {
         // 두 번째, 세 번째 선택 필드 초기 숨김
         document.getElementById("secondCategorys").style.display = "none";
@@ -266,7 +304,7 @@
 	    }
 	});
 
-	// 쿠폰 중복 확인 후 등록하기
+	/* // 쿠폰 중복 확인 후 등록하기
 	function generateAndSubmitCoupon() {
 	    var maxAttempts = 3; // 최대 시도 횟수
 	    var attempts = 0;
@@ -320,7 +358,7 @@
 	                throw new Error('서버 오류');
 	            }
 	        });
-	}
+	} */
 	
 	// 쿠폰 등록시 선택한 카테고리 정보 갖고오기
 	function updateSelectCategoryId() {
@@ -440,10 +478,6 @@
         });
     }); */
 
-
-
-
-	 
   </script>
 
 </body>

@@ -9,7 +9,7 @@ import lombok.Setter;
 public class Coupon {
 	private int couponId;
 	private int categoryId;
-	private String couponSn;
+	private int couponDv;
 	private String couponNm;
 	private int couponDscntRate;
 	private String couponPblDt;
