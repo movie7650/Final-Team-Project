@@ -209,7 +209,7 @@
 				           p.product_image_first	as "productImg"
 					  FROM inquiry i
 					  JOIN product p on p.product_id = i.product_id
-					 WHERE i.customer_id = 34
+					 WHERE i.customer_id = #{customerId}
 					   AND i.status='Y'
        		)
        		WHERE row_num between #{start} and #{end}

@@ -81,7 +81,7 @@
        			   ( SELECT COUNT(*) 
            					FROM review 
           					WHERE purchase_id = pur.purchase_id 
-            				AND customer_id=34
+            				AND customer_id=#{customerId}
             				AND status = 'Y' ) 			AS "reviewCount"	   
   			  FROM purchase pur, product p, common_code cc
  			 WHERE customer_id=34
@@ -113,7 +113,7 @@
        			   ( SELECT COUNT(*) 
            					FROM review 
           					WHERE purchase_id = pur.purchase_id 
-            				AND customer_id=34
+            				AND customer_id=#{customerId}
             				AND status = 'Y' ) 			AS "reviewCount"	   
   			  FROM purchase pur, product p, common_code cc
  			 WHERE customer_id=34

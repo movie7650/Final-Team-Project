@@ -14,7 +14,7 @@
 					   c.coupon_epr_dt 							       AS "couponEprDt",
                	   	   cc.common_code_nm							   AS "couponUseDv"
 		 		  FROM	 coupon c, customer_coupon cusc, common_code cc
-				 WHERE customer_id=34
+				 WHERE customer_id=#{customerId}
           		   AND c.coupon_id = cusc.coupon_id 
           		   AND cusc.coupon_use_dv = cc.common_code_id
 		 		   AND cusc.coupon_use_dv=203
@@ -40,7 +40,7 @@
 	<select id="countCantUseCustomerCoupon" resultType="int" parameterType="int">
 		   SELECT count(*) 
 		  	 FROM customer_coupon 
-       	 	WHERE customer_id=34
+       	 	WHERE customer_id=#{customerId}
 		  AND NOT coupon_use_dv = 203
 	</select>
 	
@@ -57,7 +57,7 @@
 						   c.coupon_epr_dt 							       AS "couponEprDt",
 	               	   	   cc.common_code_nm							   AS "couponUseDv"
 			 		  FROM coupon c, customer_coupon cusc, common_code cc
-					 WHERE customer_id=34
+					 WHERE customer_id=#{customerId}
 	          		   AND c.coupon_id = cusc.coupon_id 
 	          		   AND cusc.coupon_use_dv = cc.common_code_id
 			 		   AND NOT cusc.coupon_use_dv=203
