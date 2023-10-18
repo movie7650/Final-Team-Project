@@ -72,8 +72,9 @@
 		<a th:href="@{/mypage/orderlist (page=__${startPage-1}__)}" aria-label="Previous">◀</a>
 	</li>
 
-	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
-		<a th:href="@{/mypage/orderlist (page=__${i}__)}">[[${i}]]</a>		
+	<li th:onclick ="|location.href='@{/mypage/orderlist (page=__${i}__)}'|"
+	th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
+		<a th:href="@{/mypage/orderlist (page=__${i}__)}">[[${i}]]</a>
 	</li>
 	
 	<li th:if="${nowPageBlock<totalPageBlock}">
