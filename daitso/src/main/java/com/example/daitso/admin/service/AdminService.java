@@ -388,4 +388,14 @@ public class AdminService implements IAdminService{
 		return purchaseRepository.selectCountPurchaseDv(purchaseDv);
 	}
 
+	@Override
+	public List<CouponCheck> selectCouponsByDv(int commonCodeId, int offset, int pageSize) {
+		return couponRepository.selectCouponsByDv(commonCodeId, offset, pageSize);
+	}
+
+	@Override
+	public int selectCountCouponsByDv(int commonCodeId) {
+		return couponRepository.selectCountCouponsByDv(commonCodeId);
+	}
+
 }

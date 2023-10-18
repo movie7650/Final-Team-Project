@@ -106,7 +106,7 @@
 					    	<i class="fas fa-times"></i>
 						</button>
 					</div>
-					<form th:action="@{/admin/update/category}" method="post">
+					<form id="updateForm" th:action="@{/admin/update/category}" method="post">
 						<div class="modal-body">
 							<input type="hidden" id="updateCategoryId" name="categoryId">
 							<div class="row mb-3" style="display: flex;align-items: center;justify-content: space-evenly;">
@@ -121,7 +121,7 @@
 								<label for="categoryContent" class="col-form-label" style="margin-left: 23px;">카테고리 내용</label>
 								<div class="col-sm-8" style="right: 32px;">
 									<textarea id="updateCategoryContent" name="categoryContent"
-										style="height: 200px; width: 440px" autocomplete="off"></textarea>
+										style="height: 100px; width: 440px" autocomplete="off"></textarea>
 								</div>
 							</div>
 							
@@ -145,7 +145,7 @@
 							</div>
 
 							<div class="modal-footer">
-								<button id="updateButtonFirst" class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;" type="submit">저장</button>
+								<button id="updateButtonFirst" class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;" type="button" onclick="updateCategory()";>저장</button>
 								<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 							</div>
 						</div>
@@ -165,7 +165,7 @@
 						</button>
 					</div>
 					 <!--  <form th:action="@{/admin/category}" th:method="post"> -->
-					 <form th:action method="post" enctype="multipart/form-data"> 
+					 <form id="registerCategory" th:action method="post" enctype="multipart/form-data"> 
 						<div class="modal-body">
 							<div style="display: flex;margin-bottom: 5px;">
 								<label for="categoryId" class="col-sm-2 col-form-label">카테고리 유형</label>
@@ -227,8 +227,8 @@
 						
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
-								type="submit">저장</button>
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;" onclick="submitData()";
+								type="button">저장</button>
 							<button type="button" class="btn btn-secondary" 
 							style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
@@ -247,6 +247,45 @@
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
+	 
+	function showAlert(message) {
+	    alert(message);
+	}
+	
+	 function updateCategory() {
+	        var formData = $("#updateForm").serialize(); // 폼 데이터 직렬화
+	        $.ajax({
+	            type: "POST",
+	            url: "/admin/update/category", 
+	            data: formData, // 직렬화한 폼 데이터를 전송
+	            success: function (data) {
+	            	 showAlert(data);
+	            	 $('#updateModal').modal('hide'); // 모달 닫기
+	            },
+	            error: function () {
+
+	            }
+	        });    
+
+	    }
+	 
+	 // 멀티파일이여서 다시해야함!!!!
+	 function submitData() {
+	        var formData = $("#registerCategory").serialize(); // 폼 데이터 직렬화
+	        $.ajax({
+	            type: "POST",
+	            url: "/admin/category", 
+	            data: formData, // 직렬화한 폼 데이터를 전송
+	            success: function (data) {
+	            	 showAlert(data);
+	            	 $('#registerModal').modal('hide'); // 모달 닫기
+	            },
+	            error: function () {
+
+	            }
+	        });    
+
+	    }
 	 
 	// 이미지 선택하기
     function selectImage(inputId, imageId, categoryId) {
@@ -333,6 +372,7 @@
                 .then(response => {
                     if (response.ok) {
                         alert('이미지가 수정되었습니다.');
+                        location.reload();
                     } else {
                         alert('이미지 수정에 실패했습니다.');
                     }
@@ -427,8 +467,8 @@
 	
 	         if (databaseResponse.ok) {
 	             // DB에서 이미지 정보 삭제 성공한 경우
-	             alert("이미지 정보 삭제에 성공했습니다.");
-	             window.location.href = "/admin/category";
+	            /*  alert("이미지 정보 삭제에 성공했습니다."); */
+	             location.reload();
 	         } else {
 	             // DB에서 이미지 정보 삭제 실패한 경우
 	             alert("이미지 정보 삭제에 실패했습니다.");
@@ -573,7 +613,7 @@
 	}   
 	
 	// 카테고리 삭제시 확인 메시지 실행해서 삭제하기
-    function deleteCategory(categoryId) {
+/*     function deleteCategory(categoryId) {
         if (!confirm('해당 카테고리를 삭제하시겠습니까?')) {
             return false;
         }
@@ -587,8 +627,27 @@
         document.body.append(form);
         setTimeout(() => {
             document.getElementById('deleteForm').submit();
-        }, 50) //대기시간
-    }  
+        }, 50) 
+    }  */ 
+	
+    function deleteCategory(categoryId) {
+    	if (!confirm('해당 카테고리를 삭제하시겠습니까?')) {
+            return false;
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/category/delete",
+            data: { categoryId: categoryId },
+            success: function (data) {
+                showAlert(data);
+                location.reload();
+            },
+            error: function () {
+                // 에러 처리
+            }
+        });
+    }
     
     // 카테고리 수정을 위한 카테고리ID로 카테고리 정보 갖고오기
     function selectCategoryId(categoryId) {
