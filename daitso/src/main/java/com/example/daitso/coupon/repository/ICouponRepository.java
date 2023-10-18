@@ -33,4 +33,10 @@ public interface ICouponRepository {
 	
 	// 이벤트 쿠폰 개수 조회하기
 	int countEventCoupon();
+	
+	// 이벤트 쿠폰 다운도르
+	int insertEventCoupon(@Param("customerId") int customerId, @Param("couponId") int couponId);
+	
+	// 이벤트 쿠폰 보유 여부 확인
+	int getEventCouponCheck(@Param("customerId") int customerId, @Param("couponId") int couponId);
 }

@@ -5,7 +5,7 @@
 				<p class="margin-b-0" style="max-width:214.94px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${coupon.couponNm}]]</p>
 				<p class="margin-b-0" style="font-size:30px; font-weight:500">[[${coupon.couponDscntRate}]]%</p>
 				<p class="margin-b-0">유효기한 : [[${coupon.couponEprDt}]]</p>
-				<div class="d-flex justify-content-center align-items-center" style="height:55px; cursor:pointer" th:onclick="getCoupon([[${coupon.couponId}]])">
+				<div class="d-flex justify-content-center align-items-center" style="height:55px; cursor:pointer" th:onclick="getCoupon([[${coupon.couponId}]], [[${customerId}]], [[${_csrf.token}]])">
 					<div>
 						<span>쿠폰 다운받기</span>
 						<img style="height:20px" src="/images/download.png"></img>							
