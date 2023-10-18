@@ -84,7 +84,7 @@
             				AND customer_id=#{customerId}
             				AND status = 'Y' ) 			AS "reviewCount"	   
   			  FROM purchase pur, product p, common_code cc
- 			 WHERE customer_id=34
+ 			 WHERE customer_id=#{customerId}
    			   AND pur.product_id = p.product_id
    			   AND pur.purchase_dv = cc.common_code_id
    			   AND pur.purchase_dv = 401
@@ -116,7 +116,7 @@
             				AND customer_id=#{customerId}
             				AND status = 'Y' ) 			AS "reviewCount"	   
   			  FROM purchase pur, product p, common_code cc
- 			 WHERE customer_id=34
+ 			 WHERE customer_id=#{customerId}
    			   AND pur.product_id = p.product_id
    			   AND pur.purchase_dv = cc.common_code_id
    			   AND pur.purchase_dv = 402
