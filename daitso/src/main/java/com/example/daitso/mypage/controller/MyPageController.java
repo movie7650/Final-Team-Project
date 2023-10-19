@@ -589,11 +589,16 @@ public class MyPageController {
 		List<String> imageList;
 		try {
 			imageList = s3Service.upload(files);
-
 			if (imageList.size() == 1) {
-				writeMyReview.setReviewImageFirst(imageList.get(0));
-				writeMyReview.setReviewImageSecond("null");
-				writeMyReview.setReviewImageThird("null");
+				if("https://daitso.s3.ap-northeast-2.amazonaws.com/".equals(imageList.get(0))) {
+					writeMyReview.setReviewImageFirst("null");
+					writeMyReview.setReviewImageSecond("null");
+					writeMyReview.setReviewImageThird("null");					
+				}else {
+					writeMyReview.setReviewImageFirst(imageList.get(0));
+					writeMyReview.setReviewImageSecond("null");
+					writeMyReview.setReviewImageThird("null");										
+				}
 			} else if (imageList.size() == 2) {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
 				writeMyReview.setReviewImageSecond(imageList.get(1));
@@ -602,8 +607,7 @@ public class MyPageController {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
 				writeMyReview.setReviewImageSecond(imageList.get(1));
 				writeMyReview.setReviewImageThird(imageList.get(2));
-			}
-
+			} 
 			reviewService.insertReview(writeMyReview);
 
 		} catch (Exception e) {

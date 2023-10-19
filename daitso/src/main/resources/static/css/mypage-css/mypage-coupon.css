@@ -100,7 +100,6 @@ input[type="number"]::-webkit-inner-spin-button {
 	margin-left:-40px;
 }
 .coupon-table-container th{
-    width: 223px;
     height: 50px;
     background-color: #fafafa;
     border-top: 1px solid #d9d9d9;
@@ -109,7 +108,11 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 17px;
     font-weight: 500;
 }
-
+.coupon-table-container td{
+	height:50px;
+	padding-top:10px;
+	border-bottom:solid 1px #d9d9d9;
+}
 .empty{
 	height:400px;
 }
