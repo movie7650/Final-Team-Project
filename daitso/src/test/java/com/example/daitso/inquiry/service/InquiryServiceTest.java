@@ -27,7 +27,7 @@ class InquiryServiceTest {
     @Transactional
     void 문의글삽입() {
         //given
-    	List<MyInquirySelect> myInquiryListBefore = inquiryService.selectMyInquiry(17);
+    	int myInquiryListBefore = inquiryService.countInquiryStatusY(17);
         InquiryInsertDTO inquiryInsertDTO = InquiryInsertDTO.builder()
                 .productGroupId(5)
                 .size("1kg")
@@ -41,7 +41,7 @@ class InquiryServiceTest {
         inquiryService.insertInquiry(inquiryInsertDTO);
         
         // then
-        List<MyInquirySelect> myInquiryListAfter = inquiryService.selectMyInquiry(17);
-        assertThat(myInquiryListBefore.size()+1).isEqualTo(myInquiryListAfter.size());
+        int myInquiryListAfter = inquiryService.countInquiryStatusY(17);
+        assertThat(myInquiryListAfter).isEqualTo(myInquiryListBefore + 1);
     }
 }
