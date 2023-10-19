@@ -30,8 +30,8 @@ public class PurchaseService implements IPurchaseService {
 	// 전체주문상품가져오기
 	@Override
 	public List<PurchaseCheck> selectAllOrderProduct(int customerId, int page) {
-		int start = (page-1)*10 + 1;
-		return purchaseRepository.selectAllOrderProduct(customerId,start,start+9);
+		int start = (page-1)*3 + 1;
+		return purchaseRepository.selectAllOrderProduct(customerId,start,start+2);
 	} // 서비스
 
 	// 구매취소
@@ -94,22 +94,22 @@ public class PurchaseService implements IPurchaseService {
 	// purchase_dv가 401(입금/결제)인 상품 가져오기
 	@Override
 	public List<PurchaseCheck> selectPurchaseDv401(int customerId, int page) {
-		int start = (page-1)*10 + 1;
-		return purchaseRepository.selectPurchaseDv401(customerId,start, start+9);
+		int start = (page-1)*3 + 1;
+		return purchaseRepository.selectPurchaseDv401(customerId,start, start+2);
 	}
 
 	// purchase_dv가 402(배송중) 인 상품 가져오기
 	@Override
 	public List<PurchaseCheck> selectPurchaseDv402(int customerId, int page) {
-		int start = (page-1)*10 + 1;
-		return purchaseRepository.selectPurchaseDv402(customerId,start, start+9);
+		int start = (page-1)*3 + 1;
+		return purchaseRepository.selectPurchaseDv402(customerId,start, start+2);
 	}
 
 	// purchase_dv가 403(배송완료) 인 상품 가져오기
 	@Override
 	public List<PurchaseCheck> selectPurchaseDv403(int customerId, int page) {
-		int start = (page-1)*10 + 1;
-		return purchaseRepository.selectPurchaseDv403(customerId,start, start+9);
+		int start = (page-1)*3 + 1;
+		return purchaseRepository.selectPurchaseDv403(customerId,start, start+2);
 	}
 
 }

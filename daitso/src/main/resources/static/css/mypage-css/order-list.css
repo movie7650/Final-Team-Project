@@ -209,9 +209,7 @@
 	text-decoration: none;
 	font: bold 15px tahoma;
 }
-/* .pagination01 li>a:hover{
-	color:white;
-} */
+
 .pagination01 li.active {
   
   border: 2px solid #39594E;
@@ -223,8 +221,11 @@
 .pagination01 li:hover:not(.active){
 	background-color: #39594E;
 	border:2px solid #39594E;
+} 
+.pagination01 li:hover:not(.active) > a{
 	color:white;
 } 
+
 #goto-order-button{
     width: 180px;
     text-align: center;

@@ -156,12 +156,12 @@ public class MyPageController {
 		int bbsCount = purchaseService.countMyOrderList(customerId);
 		int totalPage = 0;
 		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+			totalPage=(int)Math.ceil(bbsCount/3.0);
 		}
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+		int startPage = (nowPageBlock-1)*3 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -280,12 +280,12 @@ public class MyPageController {
 		int bbsCount = purchaseService.selectPayCoin(customerId);
 		int totalPage = 0;
 		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+			totalPage=(int)Math.ceil(bbsCount/3.0);
 		}
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+		int startPage = (nowPageBlock-1)*3 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -352,12 +352,12 @@ public class MyPageController {
 		int bbsCount = purchaseService.selectShipping(customerId);
 		int totalPage = 0;
 		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+			totalPage=(int)Math.ceil(bbsCount/3.0);
 		}
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+		int startPage = (nowPageBlock-1)*3 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -424,12 +424,12 @@ public class MyPageController {
 		int bbsCount = purchaseService.selectShippingComplete(customerId);
 		int totalPage = 0;
 		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+			totalPage=(int)Math.ceil(bbsCount/3.0);
 		}
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+		int startPage = (nowPageBlock-1)*3 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
