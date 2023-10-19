@@ -58,7 +58,7 @@
 				
 			<tr th:each="selectBanCustomerCoupon : ${banCustomerCouponList}">
 				<td th:text="${selectBanCustomerCoupon.couponNm}">10%할인쿠폰</td>
-				<td th:text="${selectBanCustomerCoupon.couponDscntRate}">10%</td>
+				<td th:text="|${selectBanCustomerCoupon.couponDscntRate}%|">10%</td>
 				<td th:text="${selectBanCustomerCoupon.couponEprDt}">24.08.01</td>
 				<td th:text="${selectBanCustomerCoupon.couponUseDv}">사용완료</td>
 			</tr>
