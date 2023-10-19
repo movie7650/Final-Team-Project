@@ -69,7 +69,7 @@ public class AdminController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	// 입금/결제, 배송중, 배송완료 건수 조회하기
+	// 입금/결제, 배송중, 배송완료 건수 조회하기(관리자 페이지 상단에 출력)
 	@GetMapping("/purchase-count")
 	@ResponseBody
 	public Map<String, Integer> getPurchaseCounts() {
@@ -327,8 +327,42 @@ public class AdminController {
 		return "redirect:/admin/product";
 	}
 	
+//	@PostMapping("/product/original")
+//	@ResponseBody
+//	public ResponseEntity<String> registerProductOriginal(ProductCheck product, Model model) {
+//		// 입력 필드가 비어 있으면 '-'으로 대체
+//	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+//	        product.setProductOptionFirst("-");
+//	    }
+//	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+//	        product.setProductOptionSecond("-");
+//	    }
+//	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+//	        product.setProductOptionThird("-");
+//	    }
+//	    
+//	    try {
+//	    	adminService.registerProductOriginal(product);
+//	    	String message = "상품이 등록되었습니다.";
+//	    	return ResponseEntity.ok(message); // 성공적인 응답 반환
+//	    } catch (DuplicateProductException e) {
+//	    	String message = "상품이 중복되었습니다! 다시 등록해주세요.";
+//	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message); // 실패 응답 반환
+//	    }	    
+//	}
+	
+	// 중복 예외처리
+//	@ExceptionHandler(DuplicateProductException.class)
+//    public String handleDuplicateProductException(DuplicateProductException e, Model model) {
+//        model.addAttribute("message", e.getMessage());
+//        model.addAttribute("searchUrl", "/admin/product");
+//        return "admin/message";
+//    }
+	
 	@PostMapping("/product/original")
-	public ResponseEntity<String> registerProductOriginal(ProductCheck product, Model model) {
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> registerProductOriginal(ProductCheck product, Model model) {
+		 Map<String, String> response = new HashMap<>();
 		// 입력 필드가 비어 있으면 '-'으로 대체
 	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
 	        product.setProductOptionFirst("-");
@@ -342,21 +376,15 @@ public class AdminController {
 	    
 	    try {
 	    	adminService.registerProductOriginal(product);
-	    	String message = "상품이 등록되었습니다.";
-	    	return ResponseEntity.ok(message); // 성공적인 응답 반환
+	    	 response.put("success", "true");
+	         response.put("message", "상품이 등록되었습니다.");
+	         return ResponseEntity.ok(response); // 성공적인 응답 반환
 	    } catch (DuplicateProductException e) {
-	    	String message = "상품이 중복되었습니다! 다시 등록해주세요.";
-	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message); // 실패 응답 반환
+	    	response.put("success", "false");
+	        response.put("message", "상품이 중복되었습니다. 다시 등록해주세요.");
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); // 실패 응답 반환
 	    }	    
-	}
-	
-	// 중복 예외처리
-	@ExceptionHandler(DuplicateProductException.class)
-    public String handleDuplicateProductException(DuplicateProductException e, Model model) {
-        model.addAttribute("message", e.getMessage());
-        model.addAttribute("searchUrl", "/admin/product");
-        return "admin/message";
-    }
+	}	
 	
 	// 상품명으로 상품 검색하기
     @GetMapping("/product/search")
@@ -712,46 +740,51 @@ public class AdminController {
 //   	}
    	
 	// 전체 쿠폰 조회하기
+//   	@GetMapping("/coupon")
+//   	public String selectCouponByDv(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
+//   			 @RequestParam(name = "page", defaultValue = "1") int page,
+//             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
+//         
+////        int offset = (page - 1) * pageSize;       
+////       
+////        // 초기값 설정
+////	    if (commonCodeId == null) {
+////	        commonCodeId = 601; 
+////	    }
+////	    
+////       	List<CouponCheck> couponChecks = adminService.selectCouponsByDv(commonCodeId,offset, pageSize);
+////        model.addAttribute("couponChecks",couponChecks);
+////        
+//       	// 첫 번째 카테고리 불러오기
+//	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
+//	    model.addAttribute("firstCategories", firstCategories);
+////	    
+////        // 페이징 정보 전달
+//// 	    model.addAttribute("currentPage", page);
+//// 	    model.addAttribute("pageSize", pageSize);
+////
+//// 	    // 총 상품 개수
+//// 	    int totalCount = adminService.selectCountCouponsByDv(commonCodeId); 
+//// 	    
+//// 	    // 총 페이지 수
+//// 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+//// 	    
+//// 	    model.addAttribute("totalCount", totalCount);
+//// 	    model.addAttribute("totalPages", totalPages);
+//         
+//       return "admin/coupon/admin-coupon";
+//   	}
+   	
+ 	// 첫 번째 카테고리 담아서 admin-coupon 페이지로
    	@GetMapping("/coupon")
-   	public String selectCouponByDv(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId,
-   			 @RequestParam(name = "page", defaultValue = "1") int page,
-             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, Model model) {
-         
-//        int offset = (page - 1) * pageSize;       
-//       
-//        // 초기값 설정
-//	    if (commonCodeId == null) {
-//	        commonCodeId = 601; 
-//	    }
-//	    
-//       	List<CouponCheck> couponChecks = adminService.selectCouponsByDv(commonCodeId,offset, pageSize);
-//        model.addAttribute("couponChecks",couponChecks);
-//        
-       	// 첫 번째 카테고리 불러오기
+   	public String selectCouponByDv(Model model) {
+   		// 첫 번째 카테고리 불러오기
 	    List<Category> firstCategories = categoryService.getAllFirstCategoryIdAndName();
 	    model.addAttribute("firstCategories", firstCategories);
-//	    
-//        // 페이징 정보 전달
-// 	    model.addAttribute("currentPage", page);
-// 	    model.addAttribute("pageSize", pageSize);
-//
-// 	    // 총 상품 개수
-// 	    int totalCount = adminService.selectCountCouponsByDv(commonCodeId); 
-// 	    
-// 	    // 총 페이지 수
-// 	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
-// 	    
-// 	    model.addAttribute("totalCount", totalCount);
-// 	    model.addAttribute("totalPages", totalPages);
-         
-       return "admin/coupon/admin-coupon";
+   	    return "admin/coupon/admin-coupon";
    	}
-   	
-//   	@GetMapping("/coupon") //나중에 바꿔줄거
-//   	public String selectCouponByDv(Model model) {
-//   	    return "admin/coupon/admin-coupon";
-//   	}
 
+   	// 
    	@GetMapping("/coupons")
    	@ResponseBody
    	public PageResult<CouponCheck> selectCouponsByDv(@RequestParam(name = "commonCodeId", required = false) Integer commonCodeId, @RequestParam(name = "page", defaultValue = "1") int page,
@@ -772,7 +805,6 @@ public class AdminController {
 
  	    // 총 상품 개수
  	    int totalCount = adminService.selectCountCouponsByDv(commonCodeId); 
- 
  	    
  	    //페이징된 결과 데이터 넣을 PageResult(페이징된 데이터 목록, 현재 페이지 번호, 총 페이지수 담기)
         PageResult<CouponCheck> result = new PageResult<>();
@@ -785,20 +817,26 @@ public class AdminController {
    	
     // 쿠폰 상태 변경하기
     @PostMapping("/coupon/change")
-    public String changeCouponDv(int couponId, int commonCodeId, Model model) {
+    @ResponseBody
+    public  ResponseEntity<String> changeCouponDv(int couponId, int commonCodeId, Model model) {
         adminService.changeCouponDv(couponId, commonCodeId);
-        model.addAttribute("message","쿠폰이 변경되었습니다.");
-		model.addAttribute("searchUrl","/admin/coupon");
-		return "admin/message";
+//      model.addAttribute("message","쿠폰이 변경되었습니다.");
+//		model.addAttribute("searchUrl","/admin/coupon");
+//		return "admin/message";
+        String message = "쿠폰이 변경되었습니다.";
+		return ResponseEntity.ok(message);
     }	 
     
  	// 쿠폰 삭제하기
  	@PostMapping("/coupon/delete")
- 	public String deleteCoupon(@RequestParam int couponId, Model model) {
+ 	@ResponseBody
+ 	public ResponseEntity<String> deleteCoupon(@RequestParam int couponId, Model model) {
  		adminService.deleteCoupon(couponId);
- 		model.addAttribute("message","쿠폰이 삭제되었습니다.");
- 		model.addAttribute("searchUrl","/admin/coupon");
- 		return "admin/message";
+// 		model.addAttribute("message","쿠폰이 삭제되었습니다.");
+// 		model.addAttribute("searchUrl","/admin/coupon");
+// 		return "admin/message";
+ 	    String message = "쿠폰이 삭제되었습니다.";
+ 		return ResponseEntity.ok(message);
  	}	
  	
  	// 쿠폰 등록하기

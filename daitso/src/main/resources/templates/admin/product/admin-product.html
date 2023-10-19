@@ -73,13 +73,6 @@
 						<th></th>
 					</tr>
 				</thead> 
-<!-- 				<div class="admin-product-thead">
-					<div>순번</div>
-					<div>그룹 ID</div>
-					<div>카테고리명</div>
-					<div>상품명</div>
-					<div></div>
-				</div> -->
 				<tbody id="tableBody" style="text-align: center;">
 					<tr th:each="product : ${products}">
 						<td th:text="${product.rn}"></td>
@@ -162,9 +155,7 @@
 					</button>
 				</div>
 								<!-- ★ -->
-				<!-- <form th:action method="post" enctype="multipart/form-data">  -->
-				
-				<!-- 테스트 -->
+				<!-- <form th:action method="post" enctype="multipart/form-data">  -->				
 				 <form id="registerOriginal" th:action="@{/admin/product/original}" method="post">
 					<div class="modal-body">
 						<div class="row mb" style="display: flex; align-items: center; justify-content: center;">
@@ -271,7 +262,6 @@
 						<input type="hidden" id="getProductImageSecond" name="productImageSecond">
 						<input type="hidden" id="getProductImageThird" name="productImageThird">
 						<div class="modal-footer">
-						<div id="messageArea" th:text="${message}"></div>
 							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 								onclick="changeData();" type="button">저장</button>
 							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
@@ -1209,6 +1199,17 @@
         showAlert("상품이 수정되었습니다.");
     }
     */
+    
+    function showAlerts(message, success) {
+        if (success === "true") {
+            alert(message);
+            $('#registerOriginalModal').modal('hide'); // 모달 닫기
+        } else {
+            // 상품 등록이 실패한 경우
+            alert(message);
+        }
+    }
+    
  	//입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function changeData() {
         const changedPrices = document.querySelectorAll("#productPrice");
@@ -1231,15 +1232,18 @@
             url: "/admin/product/original", 
             data: formData, // 직렬화한 폼 데이터를 전송
             success: function (data) {
-            	 showAlert(data);
-            	 $('#registerOriginalModal').modal('hide'); // 모달 닫기
+            	console.log(data);
+                showAlerts(data.message, data.success);
             },
-            error: function () {
-
+            error: function (xhr, status, error) { //오류 응답의 경우, data 객체가 정의되지 않음. 대신에 responseJSON과 responseText 객체 내에 오류 응답이 포함되어 있음
+                var response = xhr.responseJSON;
+                console.log(response.message);
+                showAlerts(response.message, response.success);
             }
         });    
 
     }
+ 	
     
     // number 타입 maxlength 걸어주기
     function maxLengthCheck(object){
