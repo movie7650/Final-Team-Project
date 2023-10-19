@@ -104,7 +104,7 @@
 		               d.common_code_id,
 					   d.common_code_nm
 				HAVING 1=1
-				  AND d.common_code_id = #{commonCodeId}
+				  AND c.status= 'Y' and d.common_code_id = #{commonCodeId}
             )
 	</select>
 	
