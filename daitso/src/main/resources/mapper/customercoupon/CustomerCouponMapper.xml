@@ -10,7 +10,7 @@
 	  FROM (
                 SELECT ROW_NUMBER() OVER(ORDER by cusc.create_dt DESC) AS row_num,
                 	   c.coupon_nm 									   AS "couponNm",
-					   c.coupon_dscnt_rate 					  	   	   AS "couponDscntRate", 
+					   c.coupon_dscnt_rate 				  	   	   	   AS "couponDscntRate", 
 					   c.coupon_epr_dt 							       AS "couponEprDt",
                	   	   cc.common_code_nm							   AS "couponUseDv"
 		 		  FROM	 coupon c, customer_coupon cusc, common_code cc

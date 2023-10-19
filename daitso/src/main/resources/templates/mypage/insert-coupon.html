@@ -43,7 +43,7 @@
 				
 			<tr th:each="selectCustomerCoupon : ${selectCustomerCouponList}">
 				<td th:text="${selectCustomerCoupon.couponNm}">쿠폰명</td>
-				<td th:text="${selectCustomerCoupon.couponDscntRate}">할인율</td>
+				<td th:text="|${selectCustomerCoupon.couponDscntRate}%|">할인율</td>
 				<td th:text="${selectCustomerCoupon.couponEprDt}">만료일</td>
 				<td	th:text="${selectCustomerCoupon.couponUseDv}">사용가능여부</td>
 			</tr>
