@@ -35,5 +35,5 @@ public interface ICustomerCouponService {
 	
 	//존재하는 쿠폰의 ID 카운트
 	int countExistCouponId(@Param("allCouponNum") String allCouponNum);
-	
+
 }

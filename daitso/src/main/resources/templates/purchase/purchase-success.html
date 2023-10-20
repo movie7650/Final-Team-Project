@@ -33,7 +33,8 @@
 					</div>
 					<div style="display: flex;">
 						<div>배송주소</div>
-						<div th:text="${purchaseSuccess.shippingRoadNmAddr} + ' ' + ${purchaseSuccess.shippingDaddr}">서울</div>
+						<div th:if="${purchaseSuccess.shippingDaddr}" th:text="${purchaseSuccess.shippingRoadNmAddr} + ' ' + ${purchaseSuccess.shippingDaddr}">서울</div>
+						<div th:unless="${purchaseSuccess.shippingDaddr}" th:text="${purchaseSuccess.shippingRoadNmAddr}">서울</div>
 					</div>
 					<div style="display: flex;">
 						<div>배송요청사항</div>

@@ -1,5 +1,6 @@
 package com.example.daitso.customercoupon.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,9 @@ public class CustomerCouponService implements ICustomerCouponService {
 	// 적용가능한 쿠폰 조회
 	@Override
 	public List<CartCouponApply> getCouponsByCustomerId(int categoryId, int customerId) {
-		return customerCouponRepository.getCouponsByCustomerId(categoryId, customerId);
+		return customerCouponRepository.getCouponsByCustomerId(categoryId, customerId);	
 	}
+		
 	//존재하는 쿠폰 카운트
 	@Override
 	public int countExistCouponSn(String customerId, String allCouponNum) {
