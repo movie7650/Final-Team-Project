@@ -1,6 +1,6 @@
 package com.example.daitso.mypage.controller;
 
-import java.util.List; 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -104,8 +104,9 @@ public class MyPageController {
 
 	// 마이페이지-주문목록 컨트롤러
 	@RequestMapping(value = "/orderlist", method = RequestMethod.GET)
-	public String selectPurchase(Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "1") int page, HttpSession session) {
-		
+	public String selectPurchase(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
+
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
 
@@ -144,28 +145,28 @@ public class MyPageController {
 		// 주문번호 카운트
 		int purchaseNumCount = purchaseService.selectPurchaseNumCount(customerId);
 		model.addAttribute("purchasenumcount", purchaseNumCount);
-		
-		//페이징처리 
+
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);		
-		
+		model.addAttribute("customerId", customerId);
+
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId,page);
+		List<PurchaseCheck> purchaseList = purchaseService.selectAllOrderProduct(customerId, page);
 		model.addAttribute("purchaseList", purchaseList);
-		
+
 		int bbsCount = purchaseService.countMyOrderList(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/3.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 3.0);
 		}
-		
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -173,7 +174,7 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
+		model.addAttribute("endPage", endPage);
 
 		return "mypage/order-list";
 	}
@@ -204,11 +205,11 @@ public class MyPageController {
 			point = "0";
 		}
 		model.addAttribute("totalPoint", point + "P");
-		
+
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -232,7 +233,8 @@ public class MyPageController {
 
 	// 마이페이지-주문조회-입금/결제
 	@RequestMapping("/canclepay")
-	public String canclePay(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String canclePay(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -268,28 +270,28 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-		
-		//페이징처리
+
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);	
-		
+		model.addAttribute("customerId", customerId);
+
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv401(customerId,page);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv401(customerId, page);
 		model.addAttribute("purchaseList", purchaseList);
-		
+
 		int bbsCount = purchaseService.selectPayCoin(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/3.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 3.0);
 		}
-		
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -297,14 +299,15 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
-		
+		model.addAttribute("endPage", endPage);
+
 		return "mypage/cancle-pay";
 	}
 
 	// 마이페이지-주문조회-배송중
 	@RequestMapping("/searchshipping")
-	public String searchShipping(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String searchShipping(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -321,11 +324,11 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
+
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단에 잔여 포인트 출력
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
@@ -341,27 +344,27 @@ public class MyPageController {
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
 
-		//페이징처리
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);
-		
+		model.addAttribute("customerId", customerId);
+
 		// 구매 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv402(customerId,page);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv402(customerId, page);
 		model.addAttribute("purchaseList", purchaseList);
-		
+
 		int bbsCount = purchaseService.selectShipping(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/3.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 3.0);
 		}
-		
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -369,14 +372,15 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
-		
+		model.addAttribute("endPage", endPage);
+
 		return "mypage/mypage-search-shipping";
 	}
 
 	// 마이페이지-주문조회-배송완료
 	@RequestMapping("/shippingcomplete")
-	public String shippingComplete(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String shippingComplete(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -393,11 +397,11 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
+
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단에 잔여 포인트 출력
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
@@ -413,27 +417,27 @@ public class MyPageController {
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
 
-		//페이징처리
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);
-		
+		model.addAttribute("customerId", customerId);
+
 		// 주문 목록 출력
-		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv403(customerId,page);
+		List<PurchaseCheck> purchaseList = purchaseService.selectPurchaseDv403(customerId, page);
 		model.addAttribute("purchaseList", purchaseList);
-		
+
 		int bbsCount = purchaseService.selectShippingComplete(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/3.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 3.0);
 		}
-		
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -441,14 +445,15 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
-		
+		model.addAttribute("endPage", endPage);
+
 		return "mypage/mypage-shipping-complete";
 	}
 
 	// 마이페이지-리뷰관리 컨트롤러
 	@RequestMapping("/review")
-	public String Review(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String Review(Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "1") int page,
+			HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -475,8 +480,8 @@ public class MyPageController {
 
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
-		model.addAttribute("payCoinCount", payCoin);	
-		
+		model.addAttribute("payCoinCount", payCoin);
+
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -484,32 +489,32 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-		
+
 		// 리뷰컨텐트 카운트
 		int reviewContentCount = reviewService.selectReviewContentCount(customerId);
 		model.addAttribute("reviewcontentcount", reviewContentCount);
-		
-		//페이징처리
+
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);		
-		
+		model.addAttribute("customerId", customerId);
+
 		// 내가쓴 리뷰 조회
-		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId,page);
+		List<MypageReviewCheck> myReviewList = reviewService.selectReviewAll(customerId, page);
 		model.addAttribute("mypageReviewList", myReviewList);
-		
+
 		int bbsCount = reviewService.selectReviewContentCount(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/5.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 5.0);
 		}
-		
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -517,7 +522,7 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
+		model.addAttribute("endPage", endPage);
 
 		int listSize = myReviewList.size();
 		for (int i = 0; i < listSize; i++) {
@@ -548,7 +553,7 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
+
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
@@ -594,14 +599,14 @@ public class MyPageController {
 		try {
 			imageList = s3Service.upload(files);
 			if (imageList.size() == 1) {
-				if("https://daitso.s3.ap-northeast-2.amazonaws.com/".equals(imageList.get(0))) {
+				if ("https://daitso.s3.ap-northeast-2.amazonaws.com/".equals(imageList.get(0))) {
 					writeMyReview.setReviewImageFirst("null");
 					writeMyReview.setReviewImageSecond("null");
-					writeMyReview.setReviewImageThird("null");					
-				}else {
+					writeMyReview.setReviewImageThird("null");
+				} else {
 					writeMyReview.setReviewImageFirst(imageList.get(0));
 					writeMyReview.setReviewImageSecond("null");
-					writeMyReview.setReviewImageThird("null");										
+					writeMyReview.setReviewImageThird("null");
 				}
 			} else if (imageList.size() == 2) {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
@@ -611,7 +616,7 @@ public class MyPageController {
 				writeMyReview.setReviewImageFirst(imageList.get(0));
 				writeMyReview.setReviewImageSecond(imageList.get(1));
 				writeMyReview.setReviewImageThird(imageList.get(2));
-			} 
+			}
 			reviewService.insertReview(writeMyReview);
 
 		} catch (Exception e) {
@@ -648,7 +653,8 @@ public class MyPageController {
 
 	// 내 문의내역 조회
 	@RequestMapping(value = "/myinquiry")
-	public String myInquiry(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String myInquiry(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -675,7 +681,7 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -687,28 +693,28 @@ public class MyPageController {
 		// 내 문의 status='Y'인것 조회
 		int inquiryStatusY = inquiryService.countInquiryStatusY(customerId);
 		model.addAttribute("myInquiryStatusY", inquiryStatusY);
-		
-		//페이징처리
+
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);
-		
+		model.addAttribute("customerId", customerId);
+
 		// 내 문의내역 조회
-		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId,page);
+		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId, page);
 		model.addAttribute("myinquirylist", myInquiryList);
-		
+
 		int bbsCount = inquiryService.countInquiryStatusY(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/5.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 5.0);
 		}
-		
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -716,8 +722,7 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
-
+		model.addAttribute("endPage", endPage);
 
 		return "mypage/mypage-inquiry";
 	}
@@ -753,7 +758,8 @@ public class MyPageController {
 
 	// 마이페이지-쿠폰등록 및 사용가능쿠폰조회 컨트롤러
 	@GetMapping("/mycoupon")
-	public String insertCoupon(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String insertCoupon(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -777,11 +783,11 @@ public class MyPageController {
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
-		
+
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -789,27 +795,28 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-		
-		//페이징 처리
+
+		// 페이징 처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);	
-		
+		model.addAttribute("customerId", customerId);
+
 		// 사용가능한 쿠폰리스트 출력
-		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon(customerId,page);
+		List<SelectCustomerCoupon> selectUsableCustomerCouponList = customerCouponService.selectUsableCoupon(customerId,
+				page);
 		model.addAttribute("selectCustomerCouponList", selectUsableCustomerCouponList);
-		
+
 		int bbsCount = customerCouponService.countUsableCustomerCoupon(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
 		}
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -817,14 +824,15 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
-		
+		model.addAttribute("endPage", endPage);
+
 		return "mypage/insert-coupon";
 	}
 
 	// 마이페이지-쿠폰등록 및 쿠폰사용완료리스트 컨트롤러
 	@GetMapping("/mycoupon-used")
-	public String usedCoupon(Model model, RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "1") int page, HttpSession session) {
+	public String usedCoupon(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 
 		// spring security -> 사용자 고유번호 받아오기
 		int customerId = logincheckService.loginCheck();
@@ -848,7 +856,7 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
@@ -860,31 +868,32 @@ public class MyPageController {
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
-		
-		//사용불가능한 쿠폰 갯수 
+
+		// 사용불가능한 쿠폰 갯수
 		int countCantUseCoupon = customerCouponService.countCantUseCustomerCoupon(customerId);
 		model.addAttribute("cantusecoupon", countCantUseCoupon);
 
-		//페이징처리
+		// 페이징처리
 		session.setAttribute("page", page);
-		model.addAttribute("customerId",customerId);
-		
+		model.addAttribute("customerId", customerId);
+
 		// 사용완료 쿠폰리스트 출력
-		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId,page);
+		List<SelectCustomerCoupon> selectBanCustomerCouponList = customerCouponService.selectBanCoupon(customerId,
+				page);
 		model.addAttribute("banCustomerCouponList", selectBanCustomerCouponList);
-		
+
 		int bbsCount = customerCouponService.countCantUseCustomerCoupon(customerId);
 		int totalPage = 0;
-		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+		if (bbsCount > 0) {
+			totalPage = (int) Math.ceil(bbsCount / 10.0);
 		}
-		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
-		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*10 + 1;
+		int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+		int nowPageBlock = (int) Math.ceil(page / 10.0);
+		int startPage = (nowPageBlock - 1) * 10 + 1;
 		int endPage = 0;
-		if(totalPage > nowPageBlock*10) {
-			endPage = nowPageBlock*10;
-		}else {
+		if (totalPage > nowPageBlock * 10) {
+			endPage = nowPageBlock * 10;
+		} else {
 			endPage = totalPage;
 		}
 		model.addAttribute("totalPageCount", totalPage);
@@ -892,8 +901,8 @@ public class MyPageController {
 		model.addAttribute("totalPageBlock", totalPageBlock);
 		model.addAttribute("nowPageBlock", nowPageBlock);
 		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage",endPage);
-		
+		model.addAttribute("endPage", endPage);
+
 		return "mypage/mycoupon-used";
 	}
 
@@ -942,7 +951,7 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
@@ -964,7 +973,8 @@ public class MyPageController {
 
 	// 마이페이지-개인정보조회- 비밀번호일치 확인
 	@RequestMapping(value = "/checkuser", method = RequestMethod.POST)
-	public String checkMyPassword(Model model,RedirectAttributes redirectAttributes, @RequestParam String customerPW, @RequestParam String mypassword) {
+	public String checkMyPassword(Model model, RedirectAttributes redirectAttributes, @RequestParam String customerPW,
+			@RequestParam String mypassword) {
 		// 비밀번호 일치 확인
 		if (pwEncoder.matches(mypassword, customerPW)) {
 			return "redirect:/mypage/updateuser";
@@ -1031,40 +1041,42 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		//입력된 아이디(이메일)이 있는지 갯수 세기 
+		// 입력된 아이디(이메일)이 있는지 갯수 세기
 		int countNewEmail = customerService.countNewEmail(newEmail);
 		System.out.println("ahahahahahahhahah" + countNewEmail);
-		if(countNewEmail > 0) {
+		if (countNewEmail > 0) {
 			redirectAttributes.addFlashAttribute("msg", "중복된 이메일 입니다.");
 			return "redirect:/mypage/updateuser";
 		}
 		// 입력된 이메일 이름 전화번호 한번에 변경
-		if (newName != null && !newName.equals("") && newEmail != null && !newEmail.equals("") && countNewEmail == 0 && newTelNO != null && !newTelNO.equals("") ) {
+		if (newName != null && !newName.equals("") && newEmail != null && !newEmail.equals("") && countNewEmail == 0
+				&& newTelNO != null && !newTelNO.equals("")) {
 			customerService.updateMyName(customerId, newName);
 			customerService.updateMyEmail(customerId, newEmail);
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
-		//입력된 이름, 이메일 변경
-		if(newName != null && !newName.equals("") && newEmail != null && !newEmail.equals("") && countNewEmail == 0) {
+		// 입력된 이름, 이메일 변경
+		if (newName != null && !newName.equals("") && newEmail != null && !newEmail.equals("") && countNewEmail == 0) {
 			customerService.updateMyName(customerId, newName);
 			customerService.updateMyEmail(customerId, newEmail);
 			return "redirect:/mypage/updateuser";
 		}
-		//입력된 이름, 전화번호 변경
-		if(newName != null && !newName.equals("") && newTelNO != null && !newTelNO.equals("")) {
+		// 입력된 이름, 전화번호 변경
+		if (newName != null && !newName.equals("") && newTelNO != null && !newTelNO.equals("")) {
 			customerService.updateMyName(customerId, newName);
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
-		//입력된 이메일,전화번호 변경
-		if(newEmail != null && !newEmail.equals("") && countNewEmail == 0 && newTelNO != null && !newTelNO.equals("")) {
+		// 입력된 이메일,전화번호 변경
+		if (newEmail != null && !newEmail.equals("") && countNewEmail == 0 && newTelNO != null
+				&& !newTelNO.equals("")) {
 			customerService.updateMyEmail(customerId, newEmail);
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
-		//입력된 이름으로 변경
-		if(newName != null && !newName.equals("")) {
+		// 입력된 이름으로 변경
+		if (newName != null && !newName.equals("")) {
 			customerService.updateMyName(customerId, newName);
 			return "redirect:/mypage/updateuser";
 		}
@@ -1078,20 +1090,21 @@ public class MyPageController {
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
-		//새 비밀번호와 새비밀번호확인이 일치하지 않을 때
-		if(pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))
+		// 새 비밀번호와 새비밀번호확인이 일치하지 않을 때
+		if (pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))
 				&& !newPassword.equals(checkNewPassword)) {
 			redirectAttributes.addFlashAttribute("msg2", "새비밀번호일치하지않음");
 			return "redirect:/mypage/updateuser";
 		}
-		//현재비밀번호를 잘못입력했을 때
-		if(nowPassword != null && !nowPassword.equals("") &&!pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))){
+		// 현재비밀번호를 잘못입력했을 때
+		if (nowPassword != null && !nowPassword.equals("")
+				&& !pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))) {
 			redirectAttributes.addFlashAttribute("msg3", "현재비밀번호일치하지않음");
 			return "redirect:/mypage/updateuser";
 		}
 		// 비밀번호 변경
-		if (pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))
-				&& newPassword!=null && !newPassword.equals("") && newPassword.equals(checkNewPassword)) {
+		if (pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId)) && newPassword != null
+				&& !newPassword.equals("") && newPassword.equals(checkNewPassword)) {
 			newPassword = pwEncoder.encode(newPassword);
 			redirectAttributes.addFlashAttribute("msg1", "비밀번호변경완료");
 			customerService.updateMyPassword(customerId, newPassword);
@@ -1109,8 +1122,8 @@ public class MyPageController {
 			customerService.updateMyPassword(customerId, newPassword);
 
 			return "redirect:/mypage/updateuser";
-			}
-		
+		}
+
 	}
 
 	// 마이페이지-배송지관리-배송지목록출력
@@ -1143,7 +1156,7 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단 사용가능한 쿠폰갯수 출력
 		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
 		model.addAttribute("countcoupon", countUsableCoupon);
@@ -1189,7 +1202,7 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);
@@ -1218,15 +1231,21 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		if (shippingService.countShippingDv301(customerId) > 0) {
-			System.out.println("dkdkdkdkdkdk");
+		System.out.println("hahahahahahahahaah" + shippingDv);
+		if (shippingService.countShippingDv301(customerId) == 0 && shippingDv == 301) {
+			shippingDv = 301;
+			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
+					shippingReceiverTelNO, shippingDmnd, shippingDv);
+			return "redirect:/mypage/myshipping";
+		}
+		if (shippingService.countShippingDv301(customerId) > 0 && shippingDv == 301) {
 			redirectAttributes.addFlashAttribute("addShippingMsg", "이미기본배송지있음");
 			shippingDv = 302;
 			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
 					shippingReceiverTelNO, shippingDmnd, shippingDv);
 			return "redirect:/mypage/myshipping";
 		} else {
-			shippingDv = 301;
+			shippingDv = 302;
 			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
 					shippingReceiverTelNO, shippingDmnd, shippingDv);
 			return "redirect:/mypage/myshipping";
@@ -1262,7 +1281,7 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
+
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
 		model.addAttribute("countmyorder", countMyOrder);

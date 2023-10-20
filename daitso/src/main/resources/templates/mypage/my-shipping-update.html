@@ -52,7 +52,7 @@
 </form>
         <form th:action="@{/mypage/deleteshipping}" method="post">
         	<input type="hidden" name="shippingId" th:value="${shippingIdInfo.shippingId}">
-		<button id="delete-add-shipping" type="submit" >삭제하기</button>
+		<button id="delete-add-shipping" type="submit" onclick="removeCheck(); return false;">삭제하기</button>
 		</form>
 </div><!-- post-inform-container -->
 </div>
@@ -61,7 +61,7 @@
 <script th:src="@{/js/mic.js}"></script>
 <script>
 
-const shippingCheckStatus = document.getElementById("shipping-check-status");
+const shippingCheckStatus = document.getElementById("shipping-check-status")
 
 function changeShippingCheckStatus(item) {
 	if(item.checked) {
@@ -128,6 +128,17 @@ function oninputPhone(target) {
     }
 </script>
 </div><!-- add-shipping-main -->
+<script>
+function removeCheck(){
+	if(confirm("정말 삭제하시겠습니까?") == true){
+		document.removefrm.submit();
+	}else{
+		return false;
+	}
+}
+
+	
+</script>
 
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
