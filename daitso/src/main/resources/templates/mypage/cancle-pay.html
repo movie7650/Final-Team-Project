@@ -4,9 +4,9 @@
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
-<form th:action="@{/mypage/order-list}" method="post">
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<form th:action="@{/mypage/order-list}" method="post">
 
 
  <div class="order-list-main"> 
@@ -21,7 +21,10 @@
 	</div><!-- order-category -->
 	<div style="margin-top:200px; padding-right:55px;">
  	<div style="width:800px;" th:if="${payCoinCount}== 0">
- 				<img style="width:800px; border-radius:10px;" th:src="@{/assets/mypage/paycoin.JPG}">
+ 				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:855px; margin-left:-25px; height: 450px;">
+				<div style="font-weight:600; font-size: 30px; padding-top:140px;"><span style="color:#e8c369;">입금/결제</span> 상품이 없습니다.</div>
+				<button id="goto-order-button" onclick="location.href='/'">주문하러가기</button>
+			</div>
  	</div> 
 		<th:block th:each="purchase : ${purchaseList}">
 			<div th:if="${purchase.purchaseDv}==401" class="order-list-container">
@@ -57,7 +60,24 @@
 
 </form>
 
+<div th:if="${payCoinCount}!= 0" style="display:flex; justify-content: center;">
+<nav  aria-label="Page navigation">
+<ul class="pagination01">
+	<li th:if="${nowPageBlock>1}">
+		<a th:href="@{/mypage/canclepay (page=__${startPage-1}__)}" aria-label="Previous">◀</a>
+	</li>
 
+	<li th:onclick ="|location.href='@{/mypage/canclepay (page=__${i}__)}'|"
+	th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
+		<a th:href="@{/mypage/canclepay(page=__${i}__)}">[[${i}]]</a>		
+	</li>
+	
+	<li th:if="${nowPageBlock<totalPageBlock}">
+		<a th:href="@{/mypage/canclepay (page=__${endPage+1}__)}" aria-label="Next">▶</a>
+	</li>
+</ul>
+</nav>
+</div>
 
 
 
@@ -65,4 +85,5 @@
 
 <div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script th:src="@{/js/mic.js}"></script>
 </html>

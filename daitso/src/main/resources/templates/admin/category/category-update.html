@@ -3,22 +3,30 @@
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" th:href="@{/css/category-update.css}">
-
+<style>
+.header-logo-img {
+    width: 100%;
+    height: 47%;
+}
+</style>
 <body>
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-	<!-- 오른쪽 컨텐츠 -->
-	<div id="table">
-		<div style="width:950px">
-			<hr style="border: 1px solid;"></hr>
+	<div class="container-lg" style="padding-top:10px;">
+		<!-- 오른쪽 컨텐츠 -->
+		<div id="table">
+			<div style="font-weight: bold; margin-top: 10px; font-size:20px;">상품관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 상품 카테고리 관리</div>
+			<div style="padding-bottom: 10px; margin-top:10px; text-align: right;">
+				<div class="btn btn-primary video-btn">페이지 사용영상
+					<div class="video-block">
+						<video src="/video/manual.mp4" loop muted autoplay style="width:100%; height:100%;"></video>
+					</div>
+				</div>
+			</div>
+			<div class="menu-box">
+	      		<ul class="menu-list sortable ul0"  value="root" style="width:100%"></ul>	
+	   		</div>	
 		</div>
-		<h3>카테고리 관리</h3>	
-		<div style="width:950px">
-			<hr style="border: 1px solid; "></hr>	
-		</div>
-		<div class="menu-box" style="width:950px">
-      		<ul class="menu-list sortable ul0"  value="root" style="width:100%"></ul>	
-   		</div>	
 	</div>
 	</div>
 	</div>
@@ -47,31 +55,38 @@
 	const categoryList = /*[[${categoryList}]]*/
 	/*]]>*/
 	
+	videoBtn = document.querySelector('.video-btn');
 	
+	videoBtn.addEventListener('mouseover', (event) => {
+		  const menuBox = document.querySelector('.menu-box');
+		  menuBox.style.marginTop= "515px";
+	});
+	videoBtn.addEventListener('mouseout', (event) => {
+		  const menuBox = document.querySelector('.menu-box');
+		  
+		  menuBox.style.marginTop= "0px";
+	});
 	function updateCategory(){
 		var child = '';
 		var parent = '';
 		if(el.parentElement.className == ''){
-			console.log(el.parentElement.parentElement);	
 			child = el.className.substring(2);
-			parent = el.parentElement.parentElement.className.substring(2);
+			pCategoryId = el.parentElement.parentElement.className.substring(2);
 		}else{
 			child = el.className.substring(2);
-			console.log(el.parentElement);	
-			console.log(el.parentElement);	
 			if(el.parentElement.className.substring(0,4) == "menu"){
-				parent = 0;		
+				pCategoryId = 0;		
 			}
 			else{
-				parent = el.parentElement.className.substring(2);
+				pCategoryId = el.parentElement.className.substring(2);
 			}
 		}
 	  	let tag = document.createElement('form');
 		
 		let pEle = document.createElement('input');
 		pEle.setAttribute('type','hidden');
-		pEle.setAttribute('name', 'parentCategoryId');
-		pEle.setAttribute('value', parent);
+		pEle.setAttribute('name', 'pCategoryId');
+		pEle.setAttribute('value', pCategoryId);
 	
 		let cEle = document.createElement('input');
 		cEle.setAttribute('type','hidden');
@@ -83,14 +98,14 @@
 		tag.setAttribute('method', 'post');
 		tag.setAttribute('action', '/admin/category/update');
 		document.body.appendChild(tag);
-		tag.submit();   
+		tag.submit();
 	}
 
 	categoryList.map((data,idx) => {
 		if(data.lv == 1){
 			const elements = `<li class="li${data.categoryId}">
-								<a onmouseup="drag(event)" style="background-color:#605f5f; color:white; font-size:20px; border:1px solid #605f5f">
-									<img style="width:50px; height:35px" src="/assets/common/folder-open-solid.svg">${data.categoryNm}
+								<a onmouseup="drag(event)" style="padding-left: 10px; display:flex; align-items:center; height:40px; font-size:20px; border:1px solid #b6b6b6">
+									≡ ${data.categoryNm}
 								</a>
 							  </li>`
 			sortableBox.innerHTML += elements;
@@ -99,7 +114,9 @@
 			if(data.lv > categoryList[idx-1].lv){
 				const elements = `<ul class="ul${data.categoryPrId}">
 									<li class="li${data.categoryId}">
-										<a onmouseup="drag(event)" style="font-size:20px; border:1px solid ">└${data.categoryNm}</a>
+										<a onmouseup="drag(event)" style="padding-left: 10px; display:flex; align-items:center; height:40px; font-size:20px; border:1px solid #b6b6b6 ">
+											└ ${data.categoryNm}
+										</a>
 									</li>
 								  </ul>`
 				const parent = document.querySelector(`.li${data.categoryPrId}`)
@@ -107,7 +124,9 @@
 			}
 			else if(data.lv <= categoryList[idx-1].lv){
 				const elements = `<li class="li${data.categoryId}">
-									<a onmouseup="drag(event)" style="font-size:20px; border:1px solid">└${data.categoryNm}</a>
+										<a onmouseup="drag(event)" style="padding-left: 10px; display:flex; align-items:center; height:40px; font-size:20px; border:1px solid #b6b6b6 ">
+											└ ${data.categoryNm}
+										</a>
 								  </li>`
 				const parent = document.querySelector(`.ul${data.categoryPrId}`)
 				parent.innerHTML += elements;			
@@ -117,11 +136,13 @@
 	
 	
 	function drag(event){
+
 		const text = event.target.textContent;
 		const cName = event.target.parentElement.className.split(' ');
+		console.log("cName : " + cName);
 		const data = document.querySelector(`.${cName[0]}`);
 		el = data;
-		text.charAt(0) == '└' ? openModal(text.substring(1)) : openModal(text);
+		openModal(text);
 	}
 	
 	

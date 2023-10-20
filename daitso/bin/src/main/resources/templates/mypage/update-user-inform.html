@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+
+<div class="update-customer-main">
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+<div class="update-customer-title">회원정보수정</div>
+<div style="margin-right:102px;">
+<div class="update-table-container-01">
+<form th:action="@{/mypage/updateuser}" method="post">
+	<table class="update-table">
+		<tr>
+			<th>아이디(이메일)</th>
+			<th>이름</th>
+			<th>휴대폰번호</th>
+			<th>현재 비밀번호 </th>
+			<th>새 비밀번호</th>
+			<th>새 비밀번호 확인</th> 
+		</tr>
+		
+		<tr>
+			<td>
+				<div style="float:left;" th:text="${MyEmail}">이메일</div>
+				<input autocomplete=off name="newEmail" type="email" id="change-email-input" hidden>
+				<button id="change-email" onclick="showEmailInput()" type="button">이메일변경</button>
+			</td>
+			<td>
+				<div style="float:left;" th:text="${MyName}">이름	</div>
+				<input autocomplete=off name="newName" type="text" id="change-name-input" hidden>
+				<button  id="change-name" onclick="showNameInput()" type="button">이름변경</button>
+			</td>
+			<td>
+				<div style="float:left;" th:text="${MyTelNo}">전화번호</div>
+				<input autocomplete=off maxlength="13" oninput="oninputPhone(this)" name="newTelNO" type="text" id="change-phonenumber-input" hidden>
+				<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
+			</td>
+			<td><input name="nowPassword" type="password"></td>
+			<td><input name="newPassword" type="password"></td>
+			<td><input name="checkNewPassword" type="password"> 
+		</tr>
+	</table>
+			<script>
+				function showEmailInput(){
+					document.getElementById("change-email-input").removeAttribute("hidden");
+				}
+				function showNameInput(){
+					document.getElementById("change-name-input").removeAttribute("hidden");
+				}
+				function showPhoneNumberInput(){
+					document.getElementById("change-phonenumber-input").removeAttribute("hidden");
+				}
+				function oninputPhone(target) {
+				    target.value = target.value
+				        .replace(/[^0-9]/g, '')
+				        .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
+				}
+			</script>
+	<div class="update-user-button-container">
+		<button type="submit" id="update-user-bottom-button">저장하기</button>
+	</div><!--update-user-button-container  -->
+</form>
+		<button th:onclick="|location.href='@{/mypage/orderlist}'|" id="update-user-bottom-button01">취소하기</button>
+</div><!-- update-table-container-01 -->
+</div>
+
+</div><!-- update-customer-main -->
+
+
+
+
+<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+</html>

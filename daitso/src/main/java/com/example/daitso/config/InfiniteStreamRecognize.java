@@ -133,12 +133,9 @@ public class InfiniteStreamRecognize {
         }
       }
     }
-    System.out.println("flag1");
-    
-    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/keys/kcc-final-prj-c26abc6adbe3.json"));
-    //Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("C:\\kcc-final-prj-c26abc6adbe3.json"));
-    SpeechSettings settings =
-    SpeechSettings.newBuilder().setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
+
+    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("C:\\kcc-final-prj-c26abc6adbe3.json"));
+    SpeechSettings settings = SpeechSettings.newBuilder().setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
     // Creating microphone input buffer thread
     MicBuffer micrunnable = new MicBuffer();
     Thread micThread = new Thread(micrunnable);

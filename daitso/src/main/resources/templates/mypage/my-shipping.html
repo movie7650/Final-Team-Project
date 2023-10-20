@@ -11,7 +11,7 @@
 
 <div class="shipping-title">배송지관리</div>
 <div style="margin-right:55px; margin-top:90px; padding-bottom:20px;">
-	<div style="text-align:center; font-size:130%; padding-top:70px;" th:if="${countshippingstatusy}==0" class="address-container">배송지가 없습니다. 배송지를 추가해주세요!</div>
+	<div style="text-align:center; font-size:130%; padding-top:85px;" th:if="${countshippingstatusy}==0" class="address-container">배송지가 없습니다. 배송지를 추가해주세요!</div>
 	<div th:each="mypageshippinglist : ${myshippinglist}" class="address-container">
 		<!-- <div th:if="${mypageshippinglist.shippingDv}=='일반배송지'" class="nomal-address"></div> -->
 			<div th:if="${mypageshippinglist.shippingDv}=='기본배송지'" class="base-address">기본배송지</div>
@@ -19,7 +19,7 @@
 		<div style="margin-top: 10px;" th:text="|${mypageshippinglist.shippingRoadNMAddr} ${mypageshippinglist.shippingDaddr}|">주령자 주소</div>
 		<div th:text="${mypageshippinglist.shippingReceiverTelNO}">수령자 전화번호</div>
 		<div style="margin-top:10px;" th:text="${mypageshippinglist.shippingDmnd}">요청사항</div>
-		<div style="margin-top:15px;"><button type="submit" th:onclick="|location.href='@{/mypage/updateshippingaddr}?shippingId=__${mypageshippinglist.shippingId}__'|">수정</button></div>
+		<div style="margin-top:25px;"><button type="submit" th:onclick="|location.href='@{/mypage/updateshippingaddr}?shippingId=__${mypageshippinglist.shippingId}__'|">수정</button></div>
 	</div><!-- address-container -->
 	
 	<input type="button" value="배송지 추가하기" th:onclick="|location.href='@{/mypage/addshipping}'|"class="add-address-container">
@@ -29,4 +29,5 @@
 <div th:replace="~{/include/footer :: footer}"></div>
 
 </body>
+<script th:src="@{/js/mic.js}"></script>
 </html>

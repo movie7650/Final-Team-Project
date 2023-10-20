@@ -12,7 +12,7 @@
 		<div class="mypage-inquiry-title">내 문의관리</div>
 
 		<div style="width: 800px; margin-right: 55px;">
-			<div th:if="${myinquirylist} != null" class="mypage-inquiry-table-container">
+			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
 				<table class="mypage-inquiry-table">
 					<tr>
 						<th class="inquiry-table-th-1">상품정보</th>
@@ -28,7 +28,7 @@
 							<div th:text="${myinquiry.productNm}" class="my-inquiry-productNm">남성무지반팔티</div>
 						</td>
 						<td>	
-							<div th:text="${myinquiry.inquiryContent}" class="my-inquiry-content">문의내용</div>
+							<div class="my-inquiry-content">[(${myinquiry.inquiryContent})]</div>
 						</td>
 						<td th:text="${myinquiry.createDt}">23-08-01</td>
 						<td>
@@ -67,9 +67,36 @@
 					}
 				</script>
 			</div><!-- mypage-inquiry-table-container -->
-			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">문의내역이 없습니다.</div> 
+			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">
+				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:890px; margin-left:-42px; margin-top:110px; height: 545px;">
+					<div style="font-weight:600; font-size: 30px; padding-top:170px;"><span style="color:#e8c369;">문의사항</span>이 없습니다.</div>
+					<button id="goto-order-button" onclick="location.href='/'">문의하러가기</button>
+				</div>
+
+			</div> 
 		</div><!-- style="width:800px;margin-right:55px;"  -->
 	</div><!-- mypage-inquiry-main -->
+	
+	
+	<div th:if="${myInquiryStatusY} !=0" style="display:flex; justify-content: center;">
+<nav  aria-label="Page navigation">
+<ul class="pagination01">
+	<li th:if="${nowPageBlock>1}">
+		<a th:href="@{/mypage/myinquiry (page=__${startPage-1}__)}" aria-label="Previous">◀</a>
+	</li>
+
+	<li	th:onclick ="|location.href='@{/mypage/myinquiry (page=__${i}__)}'|"
+	 th:each="i: ${#numbers.sequence(startPage, endPage)}" th:classappend="${i==nowPage}?active">
+		<a th:href="@{/mypage/myinquiry (page=__${i}__)}">[[${i}]]</a>		
+	</li>
+	
+	<li th:if="${nowPageBlock<totalPageBlock}">
+		<a th:href="@{/mypage/myinquiry (page=__${endPage+1}__)}" aria-label="Next">▶</a>
+	</li>
+</ul>
+</nav>
+</div>
 	<div th:replace="~{/include/footer :: footer}"></div>
 </body>
+<script th:src="@{/js/mic.js}"></script>
 </html>

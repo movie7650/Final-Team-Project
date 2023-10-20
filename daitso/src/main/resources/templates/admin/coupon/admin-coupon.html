@@ -10,93 +10,47 @@
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
 
-	<div class="container-xl" style="max-width: 90%;">
-	<!-- 오른쪽 컨텐츠 -->
-	<div id="table">
-	<div style="font-weight: bold; margin-top: 10px; font-size:17px;">쿠폰관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 쿠폰 등록/수정/삭제</div>
-		<div class="row"
-			style="padding-bottom: 15px; justify-content: flex-end;">
-			<div class="col-sm-6" style="text-align: end; padding-left: 0px; right: 10px;">
-				<button class="btn btn-primary" style="background-color: #b69f93; border-color:#b69f93;"
+	<div class="container-lg" style="padding-top: 10px">
+
+		<div style="font-weight: bold; margin-top: 20px; font-size:20px;">쿠폰관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 쿠폰 등록/수정/삭제</div>
+		<div style="padding-bottom: 15px;justify-content: flex-end;border-bottom: 2px solid #1a385d;display: flex;margin-bottom: 20px;">
+			<div style="text-align: end;">
+				<button class="btn btn-primary" style="background-color: #1a385d; border-color: #1a385d; font-weight: 600;"
 					data-bs-toggle="modal" data-bs-target="#registerModal"
 					type="button">등록</button>
 			</div>
 		</div>
-		<div style="height: 645px;">
-			<table class="table" style="text-align: center;">
+		<div style="height: 695px;">
+		
+		<div>
+			<div style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px; margin-bottom: 20px;">
+				<a class="clicked-title"   id="btn-601" type="button" onclick="loadData(601); setActiveButton('btn-601');">용도 미정 쿠폰</a>				
+				<a class="unclicked-title" id="btn-602" type="button" onclick="loadedData(602); setActiveButton('btn-602');">전체 고객 대상 쿠폰</a>
+				<a class="unclicked-title" id="btn-603" type="button" onclick="loadedData(603); setActiveButton('btn-603');">프로모션 쿠폰</a>
+			</div>
+		</div>
+		
+			<table class="table" style="text-align: center; table-layout:fixed">
 				<thead>
 					<tr>
-						<th></th>
-						<th>쿠폰 일련번호</th>
-						<th>쿠폰명</th>
-						<th>할인율</th>
-						<th>쿠폰 발행일</th>
-						<th>쿠폰 만료일</th>
-						<th></th>
+						<th style="width: 7%;">순번</th>
+						<th style="width: 30%;">쿠폰명</th>
+						<th style="width: 10%;">할인율</th>
+						<th style="width: 12%;">쿠폰 발행일</th>
+						<th style="width: 12%;">쿠폰 만료일</th>
+						<th style="width: 15%;">쿠폰 구분</th>
+						<th style="width: 10%;"></th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr th:each="couponCheck : ${couponChecks}">
-						<td th:text="${couponCheck.rn}"></td>
-						<td th:text="${couponCheck.couponSn}"></td>
-						<td th:text="${couponCheck.couponNm}"></td>
-						<td th:text="${couponCheck.couponDscntRate + '%'}"></td>
-						<td th:text="${couponCheck.couponPblDt}"></td>
-						<td th:text="${couponCheck.couponEprDt}"></td>
-						<td style="display: flex; justify-content: flex-end;">
-							<div class="btn-group">
-								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
-									type="button" th:onclick="deleteCoupon([[${couponCheck.couponId}]])">삭제</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
+				<tbody id="couponTable">		
+
+				</tbody> 
 			</table>
 		</div>
 	
-		
 		<!-- 페이지 링크 표시 -->
-		<div th:if="${totalCount > 0}">
+		<div>
 			 <ul class="pagination" id="pagination">
-			 <!-- 첫 페이지로 이동하는 화살표 -->
-		        <li class="page-item" th:classappend="${currentPage == 1} ? disabled">
-		            <a class="page-link"
-		                th:href="@{/admin/coupon(page=1, pageSize=${pageSize})}"
-		                aria-label="First"> <span aria-hidden="true">&laquo;</span>
-		            </a>
-		        </li>
-				<!-- 이전 페이지 -->
-				<li class="page-item" th:classappend="${currentPage == 1} ? disabled"> <!-- 현재 페이지가 1이면 비활성화 -->
-					<!-- 이전 페이지로 이동하는 링크 -->
-					<a class="page-link"
-					th:href="@{/admin/coupon(page=${currentPage - 1}, pageSize=${pageSize})}"
-					aria-label="Previous"> <span aria-hidden="true">&lsaquo;</span>
-					</a>
-				</li>
-
-				<!-- 페이지 번호 링크 -->
-				<li th:each="page : ${#numbers.sequence(1, totalPages, 1)}" class="page-item" th:classappend="${page == currentPage} ? active">
-					<a class="page-link"
-					th:href="@{/admin/coupon(page=${page}, pageSize=${pageSize})}"
-					th:text="${page}">
-					</a>
-				</li>
-
-				<!-- 다음 페이지 -->
-				<li class="page-item" th:classappend="${currentPage * pageSize >= totalCount} ? disabled"> <!-- 현재 페이지가 마지막 페이지면 비활성화 -->
-					<!-- 다음 페이지로 이동하는 링크 -->
-					<a class="page-link" 
-					th:href="@{/admin/coupon(page=${currentPage + 1}, pageSize=${pageSize})}"
-					aria-label="Next"> <span aria-hidden="true">&rsaquo;</span>
-					</a>
-				</li>
-			 <!-- 마지막 페이지로 이동하는 화살표 -->
-	        <li class="page-item" th:classappend="${currentPage == totalPages} ? disabled">
-	            <a class="page-link"
-	                th:href="@{/admin/coupon(page=${totalPages}, pageSize=${pageSize})}"
-	                aria-label="Last"> <span aria-hidden="true">&raquo;</span>
-	            </a>
-	        </li>
 			</ul>
 		</div>	  
 		
@@ -109,9 +63,9 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
 					</button>
-				</div>
-				 
-				 <form action="/admin/coupon" method="POST" onsubmit="return generateAndSubmitCoupon()"> 
+				</div>			 
+				 <!-- <form action="/admin/coupon" method="POST" onsubmit="return generateAndSubmitCoupon()">  -->
+				 <form action="/admin/coupon" method="POST"> 
                 	<input type="hidden" id="couponSn" name="couponSn" value="">
 					<div class="modal-body">		
 						<div style="display: flex; align-items: flex-end; padding-bottom: 10px; margin-left: 10px;">
@@ -160,7 +114,7 @@
 						</div>
 												
 						<div style="display: flex; align-items: center; margin-bottom: 10px;">
-							<label for="couponDscntRate" style="margin-left: 10px; margin-right: 11px;">쿠폰 할인율(%)</label>
+							<label for="couponDscntRate" style="margin-left: 10px;margin-right: 45px;">할인율(%)</label>
 							<div>
 								<input type="number" min="1" max="100"
 								id="couponDscntRate" name="couponDscntRate" style="width: 80%;"	autocomplete="off" required>
@@ -177,9 +131,9 @@
 						</div> 
 						
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #9dbb9a;border-color: #9dbb9a;"
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 								 type="submit">저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
 					</div>
@@ -187,9 +141,7 @@
 			</div>
 		</div>
 	</div>
-	
-	
-	
+
 	</div>
 
 	</div>
@@ -202,6 +154,196 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script>
 	<script th:inline="javascript">
 
+	function showAlert(message) {
+	    alert(message);
+	}
+	
+    // 페이지가 로드될 때 loadData(601) 호출
+    $(document).ready(function() {
+        loadData(601);
+    });
+
+
+	//배송 상태별 데이터 + 페이지
+	function loadData(commonCodeId, page) {
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/coupons",
+	        data: { commonCodeId: commonCodeId, page: page }, 
+	        success: function (data) {
+	        	console.log(data);
+	            var tableBody = $('#couponTable');
+	            tableBody.empty(); 
+	            if (data.length === 0) {
+	                /* var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow); */
+	            } else {
+	            	for (var i = 0; i < data.data.length; i++) {	            		
+ 	                    var newRow = "<tr>" +
+	                        "<td>" + data.data[i].rn + "</td>" +
+	                        "<td>" + data.data[i].couponNm + "</td>" +
+	                        "<td>" + data.data[i].couponDscntRate + '%' + "</td>" +
+	                        "<td>" + data.data[i].couponPblDt + "</td>" +
+	                        "<td>" + data.data[i].couponEprDt + "</td>" +
+	                        "<td>" +
+	                        "<div class='common-code-form' style='display:flex; align-items: center; justify-content: space-evenly;'>" +
+	                        "<input type='hidden' name='couponId' value='" + data.data[i].couponId + "'>"+
+	                        "<select class='common-code-select' name='commonCodeId'>" +
+	                        "<option value='601' " + (data.data[i].commonCodeId === 601 ? 'selected' : '') + ">용도 미정</option>" +
+	                        "<option value='602' " + (data.data[i].commonCodeId === 602 ? 'selected' : '') + ">전체 고객 대상</option>" +
+	                        "<option value='603' " + (data.data[i].commonCodeId === 603 ? 'selected' : '') + ">프로모션</option>" +
+	                        "</select>" +
+	                        "</div>" +
+	                        "</td>" +
+	                        "</tr>";  
+	                    tableBody.append(newRow);
+	                }
+	            }
+	            setupChangeCouponDvHandlers(); // 쿠폰 변경 처리 핸들러 설정
+
+	            /// 페이징 정보 업데이트
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            
+	            // 첫 페이지로 이동하는 링크
+	             var firstLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+				    "<a class='page-link' onclick='loadData(" + commonCodeId + ")' aria-label='First'><span aria-hidden='true'>&laquo;</span></a>" +
+				    "</li>";
+				 pagination.append(firstLink);
+
+	            // 이전 페이지로 이동하는 링크
+	            var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&lsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(prevLink);
+
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + i + ")'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+
+	            // 다음 페이지로 이동하는 링크
+	            var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&rsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(nextLink);
+	            
+	            // 마지막 페이지로 이동하는 링크
+	             var lastLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+		             "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
+		             "</li>";
+	        	 pagination.append(lastLink);
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
+	        }
+	    });
+	}
+	
+	// 쿠폰 변경 처리 핸들러 설정
+	function setupChangeCouponDvHandlers() {
+	    $(".common-code-select").on("change", function() {
+	        var couponId = $(this).siblings("input[name='couponId']").val();
+	        var commonCodeId = $(this).val();
+
+	        // 비동기 요청 보내기
+	        $.ajax({
+	            type: "POST",
+	            url: "/admin/coupon/change",
+	            data: { couponId: couponId, commonCodeId: commonCodeId },
+	            success: function (data) {
+	                showAlert(data);
+	                location.reload(); 
+	            }
+	        });
+	    });
+	}
+	
+	function loadedData(commonCodeId, page) {
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/coupons",
+	        data: { commonCodeId: commonCodeId, page: page }, 
+	        success: function (data) {
+	        	console.log(data);
+	            var tableBody = $('#couponTable');
+	            tableBody.empty(); 
+	            if (data.length === 0) {
+	                /* var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow); */
+	            } else {
+	            	for (var i = 0; i < data.data.length; i++) {	            		
+ 	                    var newRow = "<tr>" +
+	                        "<td>" + data.data[i].rn + "</td>" +
+	                        "<td>" + data.data[i].couponNm + "</td>" +
+	                        "<td>" + data.data[i].couponDscntRate + '%' + "</td>" +
+	                        "<td>" + data.data[i].couponPblDt + "</td>" +
+	                        "<td>" + data.data[i].couponEprDt + "</td>" +
+	                        "<td>" + data.data[i].commonCodeNm + "</td>" +
+	                        "<td>" +
+	                        "<div class='btn-group'>" +
+	                        "<button class='btn btn-xs' style='background-color: #1a385d; border-color: #1a385d; font-weight: 600; color:white'" +
+	                        "type='button' onclick='deleteCoupon(" + data.data[i].couponId + ", " + data.data[i].commonCodeId + ")'>삭제</button>" +
+	                        "</td>" +
+	                        "</tr>";  
+	                    tableBody.append(newRow);
+	                }
+	            }
+
+	            /// 페이징 정보 업데이트
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            
+	            // 첫 페이지로 이동하는 링크
+	             var firstLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+				    "<a class='page-link' onclick='loadedData(" + commonCodeId + ")' aria-label='First'><span aria-hidden='true'>&laquo;</span></a>" +
+				    "</li>";
+				 pagination.append(firstLink);
+
+	            // 이전 페이지로 이동하는 링크
+	            var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadedData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&lsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(prevLink);
+
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link' onclick='loadedData(" + commonCodeId + ", " + i + ")'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+
+	            // 다음 페이지로 이동하는 링크
+	            var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadedData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&rsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(nextLink);
+	            
+	            // 마지막 페이지로 이동하는 링크
+	             var lastLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+		             "<a class='page-link' onclick='loadedData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
+		             "</li>";
+	        	 pagination.append(lastLink);
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
+	        }
+	    });
+	}
+	
+	function setActiveButton(buttonId) {
+	    // 모든 버튼 초기화 (unclicked-title 스타일로 변경)
+	    document.getElementById("btn-601").classList.add("unclicked-title");
+	    document.getElementById("btn-602").classList.add("unclicked-title");
+	    document.getElementById("btn-603").classList.add("unclicked-title");
+
+	    // 선택한 버튼 스타일 변경 (clicked-title 스타일로 변경)
+	    document.getElementById(buttonId).classList.remove("unclicked-title");
+	    document.getElementById(buttonId).classList.add("clicked-title");
+	}
+	
 	window.onload = function() {
         // 두 번째, 세 번째 선택 필드 초기 숨김
         document.getElementById("secondCategorys").style.display = "none";
@@ -268,7 +410,7 @@
 	    }
 	});
 
-	// 쿠폰 중복 확인 후 등록하기
+	/* // 쿠폰 중복 확인 후 등록하기
 	function generateAndSubmitCoupon() {
 	    var maxAttempts = 3; // 최대 시도 횟수
 	    var attempts = 0;
@@ -322,7 +464,7 @@
 	                throw new Error('서버 오류');
 	            }
 	        });
-	}
+	} */
 	
 	// 쿠폰 등록시 선택한 카테고리 정보 갖고오기
 	function updateSelectCategoryId() {
@@ -402,20 +544,22 @@
 	}   
 	
 	// 쿠폰 삭제시 확인 메시지 실행해서 삭제하기
-    function deleteCoupon(couponId) {
+    function deleteCoupon(couponId, commonCodeId) {
         if (!confirm('해당 쿠폰을 삭제하시겠습니까?')) {
             return false;
         }
-        const formHtml = `
-            <form id="deleteForm" action="/admin/coupon/delete?couponId=${couponId}" method="post">
-            </form>
-        `;
-        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
-        const form = doc.body.firstChild;
-        document.body.append(form);
-        setTimeout(() => {
-            document.getElementById('deleteForm').submit();
-        }, 50) //대기시간
+        $.ajax({
+            type: "POST",
+            url: "/admin/coupon/delete",
+            data: { couponId: couponId },
+            success: function (data) {
+                showAlert(data);
+                loadedData(commonCodeId);
+               
+            },
+            error: function () {
+            }
+        });
     }  
 
 	 // Datepicker를 사용해서 날짜 입력받기
@@ -442,10 +586,6 @@
         });
     }); */
 
-
-
-
-	 
   </script>
 
 </body>

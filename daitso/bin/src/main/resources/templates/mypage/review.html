@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+	
+<div class="review-main">
+<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+	 <div class="title-review">내 리뷰</div>
+	 <div style="margin-top:10px;">
+	 	<div th:if="${reviewcontentcount}==0">
+	 		<img style="width:800px; border-radius:10px; margin-right:55px; margin-top:100px;" th:src="@{/assets/mypage/nonereview.JPG}">
+	 	</div>
+		 	<div style="margin-top:90px; margin-left:-45px;">
+		 		<table class="mypage-review-table">
+		 			<tr>
+						<th>상품정보</th>
+						<th>리뷰제목</th>
+						<th>리뷰작성일자</th>
+						<th>기능</th>
+					</tr>
+			 		<tr style="font-size: 80%;" th:each="mypageReview : ${mypageReviewList}"> 
+			 			<td>
+			 				<div class="my-review-product-img"><img style="width:100%; height:100%;" th:src="${mypageReview.productImg}"></div>
+							<div th:text="${mypageReview.productNm}" class="my-review-productNm">남성무지반팔티</div>
+						</td>
+						<td>
+							<div th:text="${mypageReview.reviewTitle}">리뷰제목</div>
+						</td>
+			 			<td th:text="${mypageReview.createDt}">리뷰작성일자</td>
+			 			<td>
+			 				<div style="border:solid 1px white; padding-top:20px;">
+		 						<input type="button" id="show-review" th:onclick="new_window([[${mypageReview.reviewId}]]);" value="리뷰보기"><br>
+		 						<input class="review-id" type="hidden" name="reviewId" th:value="${mypageReview.reviewId}">
+								<button type="button" th:id="${mypageReview.reviewId}" class="mypage-inquiry-delete" th:onclick="removeCheck([[${mypageReview.reviewId}]])">삭제</button>
+		 					</div>
+		 				</td>
+			 		</tr>
+		 		</table>
+			</div>
+	 </div>	
+</div><!-- review-main -->
+
+
+	<div th:replace="~{/include/footer :: footer}"></div>
+<script>
+const csrtToken = '[[${_csrf.token}]]';
+function new_window(item) {
+	window.open("/mypage/mydetailreview/" + item, "Child",
+			"width=870, height=740, top=50, left=350");
+}
+function removeCheck(reviewId) {
+	if (confirm("정말 삭제하시겠습니까??") == true) { //확인
+		fetch( window.location.origin + "/mypage/delete/review/" + reviewId ,{
+			method: "POST",
+			headers:{
+				"Content-Type": "application/json",
+				"X-CSRF-TOKEN": csrtToken
+			},	
+		})
+		.then((response) => response.json())
+		.then((data) => window.location.reload())
+	} 
+}
+	
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>메인</title>
+
+</head>
+<div th:replace="~{/include/main-header :: main-header}"></div>
+<body style="overflow-x:scroll">
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div class="d-flex flex-column justify-content-center align-items-center" style="margin-bottom: 50px; position:relative">
+		<div class="main-back"></div>
+		<div style="width:100%; height:350px">
+			<div id="carouselExampleInterval" class="carousel slide"  data-bs-ride="carousel">
+  			<div class="carousel-inner" style="transition: transform 0.3s ease-in-out;">
+			    <div class="carousel-item active" data-bs-interval="4000">
+			    	<a href="/product/sale">
+						<img class="d-block w-100" th:src="@{/images/banner.png}" style="width:100%; height:350px" alt="...">
+			    	</a>
+			    </div>
+			    <div class="carousel-item" data-bs-interval="4000">
+			      <img class="d-block w-100" th:src="@{/images/banner2.png}" style="width:100%; height:350px" alt="...">
+			    </div>
+			  </div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+			    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			    <span class="visually-hidden">Previous</span>
+			  </button>
+			  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+			    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+			    <span class="visually-hidden">Next</span>
+			  </button>
+			</div>
+		</div>
+		<div>
+			<div class="decalcomania" style="margin-top: 30px">
+				<span style="font-size: 22px; margin-left: 15px; font-weight:bold">오늘의 <span style="color:#e5e500">인기</span> 상품</span>
+				<th:block th:if="${productList.size() != 0}">
+					<div class="window" style="width:1180px; position:relative; overflow:hidden">
+						<button class="carousel-btn" style="top: 230px; position:absolute" onclick="prev('P')"><</button>
+						<div class="popular-container d-flex justify-content-evenly align-items-center margin-b-10" style="flex-wrap: nowrap">
+							<th:block th:each="product : ${productList}">
+								<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.specialProductGroupId}]])" style="margin-left: 15px; width: 230px; height: 450px;">
+									<img style="border:1px solid #d9d9d9; padding: 10px; width: 100%; height: 250px" th:src="${product.productImageFirst}">
+									<div style="padding: 0 5px 0 5px">
+										<p class="font-s-15" style="margin-top: 10px; margin-bottom: 0px; max-width:218px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${product.specialProductNm}]]</p>
+										<p style="font-size:16px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></p>
+										<p style="font-size:14px; margin-top:8px; margin-bottom:0px">상품리뷰([[${product.rCnt}]])</p>
+										<div class="star-parent">
+											<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
+												<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+											</div>
+											<div class="star-base">
+												<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</th:block>			
+						</div>
+						<button class="carousel-btn" style="top: 230px; left:1150px; position:absolute" onclick="next('P')">></button>
+					</div>
+				</th:block>
+				<th:block th:if="${productList.size() == 0}">
+					<div class="window d-flex justify-content-center align-items-center" style="width:1132px; height: 400px;">
+						<p style="font-size:30px; font-weight:bold">인기 상품 준비중</p>
+					</div>
+				</th:block>			
+			</div>
+ 			<div style="margin-top: 25px">
+				<span style="font-size: 22px; margin-left: 15px; font-weight:bold">오늘의 <span style="color:red">세일</span> 상품</span>
+				<div class="window" style="margin-bottom: 100px; width: 1180px; position:relative; overflow: hidden">
+					<button class="carousel-btn" onclick="prev('S')" style="top: 230px; position:absolute"><</button>
+					<div class="sale-container d-flex justify-content-evenly align-items-center margin-b-10" style="margin-top: 12px; flex-wrap: nowrap">
+						<th:block th:each="product : ${saleProductList}">
+							<div class="product-box" th:onclick="goProductDetail([[${product.productId}]], [[${product.productGroupId}]])" style="padding:10px; background-color:white; margin-left: 15px; width: 230px; height: 450px;">
+								<img style="border:1px solid #d9d9d9; padding: 10px; width: 100%; height: 250px" th:src="${product.productImageFirst}">
+								<div style="padding: 0 5px 0 5px">
+									<p class="font-s-15" style="margin-top: 10px; margin-bottom: 0px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${product.productNm}]]</p>
+									<span style="font-size:14px; text-decoration: line-through; margin-bottom: 0px; color:#5e5e5e" data-th-text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA') + '원'}"></span>
+									<span style="font-weight: 500; font-size:12px; color:#5e5e5e"> 10%</span>
+									<p style="margin-top: -5px; font-size:16px; font-weight:bold; margin-bottom: 0px; color:#cb1400" data-th-text="${#numbers.formatInteger(product.productPrice * 0.9, 3, 'COMMA') + '원'}"></p>
+									<p style="font-size:14px; margin-top:8px; margin-bottom:0px">상품리뷰([[${product.reviewCount}]])</p>
+									<div class="star-parent">
+										<div class="star-fill" th:style="'width: ' + ${product.reviewStarPoint} + '%;'">
+											<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+										</div>
+										<div class="star-base">
+											<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</th:block>			
+					</div>
+					<button class="carousel-btn" style="top: 230px; left:1150px; position:absolute" onclick="next('S')">></button>
+				</div>
+			</div> 	
+			<div style="margin-top: 30px">
+				<span style="font-size: 20px; margin-left: 15px; font-weight:bold">다있소 <span style="color:#9c27b0">추천</span> 카테고리</span>
+				<div class="recommand-box-frame d-flex" style="height: 1100px; border: solid 2px #f0f0f0; margin-top: 30px ">
+					<div class="d-flex flex-column align-items-center justify-content-center" style="width:100%">
+						<div class="d-flex" style="margin-bottom: 10px; width:97%; height: 32%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[0].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; background-image: url(' + ${categoryList[0].categoryImage} + ')'">
+								<div class="re-box-child">
+									<p>[[${categoryList[0].categoryContent}]]</p>
+								</div>
+							</div>
+							<div class="re-box" th:onclick="goCategory([[${categoryList[1].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; margin-left:15px; background-image: url(' + ${categoryList[1].categoryImage} + ')'">
+								<div class="re-box-child">
+									<p>[[${categoryList[1].categoryContent}]]</p>
+								</div>
+							</div>
+						</div>
+						<div class="d-flex" style="margin-bottom: 10px; width:97%; height: 32%">
+							<div class="re-box" th:onclick="goCategory([[${categoryList[2].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; background-image: url(' + ${categoryList[2].categoryImage} + ')'">
+								<div class="re-box-child">
+									<p>[[${categoryList[2].categoryContent}]]</p>
+								</div>
+							</div>
+							<div class="re-box" th:onclick="goCategory([[${categoryList[3].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; margin-left:15px; background-image: url(' + ${categoryList[3].categoryImage} + ')'">
+								<div class="re-box-child">
+									<p>[[${categoryList[3].categoryContent}]]</p>
+								</div>
+							</div>
+						</div>						
+						<div class="d-flex" th:onclick="goCategory([[${categoryList[4].categoryId}]])" style="width:97%; height: 32%">
+							<div class="re-box" th:style="'flex: 1; background-size: 100% 100%; background-image: url(' + ${categoryList[4].categoryImage} + ')' ">
+								<div class="re-box-child">
+									<p>[[${categoryList[4].categoryContent}]]</p>
+								</div>
+							</div>
+							<div class="re-box" th:onclick="goCategory([[${categoryList[5].categoryId}]])" th:style="'flex: 1; background-size:100% 100%; margin-left:15px; background-image: url(' + ${categoryList[5].categoryImage} + ')'">
+								<div class="re-box-child">
+									<p>[[${categoryList[5].categoryContent}]]</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+		</div>
+	</div>
+	<div th:replace="~{/include/footer :: footer}"></div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script th:src="@{/js/mic.js}"></script>
+<script th:inline="javascript">
+	const saleContainer = document.querySelector('.sale-container')
+	const popularContainer = document.querySelector('.popular-container');
+	productList = /*[[${productList}]]*/
+	console.log(productList.length);
+	saleProductList = /*[[${saleProductList}]]*/
+	
+	document.querySelector('.sale-container').style.width = `${saleProductList.length * 290}px`; 
+	document.querySelector('.popular-container').style.width = `${productList.length * 290}px`; 
+
+	//캐러셀 이전 버튼
+	function prev(selector){
+		if(selector == 'S'){
+			//요소 이동 속도
+			saleContainer.style.transitionDuration = '500ms';
+			//x축 방향 이동 위치
+			saleContainer.style.transform = `translateX(290px)`;
+			//transition속성 완료시 실행 즉 여기선 transitionDuration이 완료되면 실행
+			saleContainer.ontransitionend = () => reorganizeEl('prev', 'S');
+		}
+		else if(selector == 'P'){
+			popularContainer.style.transitionDuration = '500ms';
+			popularContainer.style.transform = `translateX(290px)`;
+			popularContainer.ontransitionend = () => reorganizeEl('prev', 'P');
+			
+		}
+	}
+	
+	//캐러셀 이후 버튼
+	function next(selector){
+		if(selector == 'S'){
+			saleContainer.style.transitionDuration = '500ms';
+			saleContainer.style.transform = `translateX(-290px)`;
+			saleContainer.ontransitionend = () => reorganizeEl('next', 'S');
+		}
+		else if(selector == 'P'){
+			popularContainer.style.transitionDuration = '500ms';
+			popularContainer.style.transform = `translateX(-290px)`;
+			popularContainer.ontransitionend = () => reorganizeEl('next', 'P');
+			
+		}
+	}
+	
+	function reorganizeEl(selectedBtn, selector) {
+		if(selector == 'S'){
+			//요소 위치 초기화(이동 효과만 주고 초기화시킴)
+			saleContainer.style.transform = '';
+			//요소 위치 초기화시 이동 속도 초기화(이동 속도를 주면 다시 돌아가는 모습이 보임)
+			saleContainer.style.transitionDuration = '';	
+			//appendChild(): 한 노드를 특정 부모 노드의 자식 노드 리스트 중 마지막 자식으로 붙임
+			//insertBefore(): 참조된 노드 앞에 특정 부모 노드의 자식 노드를 삽입
+		  (selectedBtn === 'prev') ? saleContainer.insertBefore(saleContainer.lastElementChild, saleContainer.firstElementChild): saleContainer.appendChild(saleContainer.firstElementChild);			
+		}
+		else if(selector == 'P'){
+			popularContainer.style.transform = '';
+			popularContainer.style.transitionDuration = '';		
+		  (selectedBtn === 'prev') ? popularContainer.insertBefore(popularContainer.lastElementChild, popularContainer.firstElementChild): popularContainer.appendChild(popularContainer.firstElementChild);			
+			
+		}
+	}
+
+	// 카테고리 추천 상품 프레임을 다른 프레임과 맞춰주기
+	const decalcomania = document.querySelector('.decalcomania');
+	document.querySelector('.recommand-box-frame').style.width = decalcomania.offsetWidth
+
+	function goProductDetail(id, groupId){
+	let tag = document.createElement('form');
+	
+	tag.setAttribute('method', 'get');
+	tag.setAttribute('action', `/product/${id}/${groupId}`);
+	document.body.appendChild(tag);
+	tag.submit(); 
+	}
+	
+	function goCategory(categoryId){
+		console.log(categoryId);
+		window.location.href = `/category/${categoryId}`;
+	}
+</script>
+</html>

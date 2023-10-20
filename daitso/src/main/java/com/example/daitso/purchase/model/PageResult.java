@@ -11,4 +11,5 @@ public class PageResult<T> {
     private List<T> data;
     private int currentPage;
     private int totalPages;
+    private int totalCount;
 }

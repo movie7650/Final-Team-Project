@@ -1,0 +1,123 @@
+@charset "UTF-8";
+.write-review-main{
+	display: flex;
+	justify-content: center;
+}
+
+.write-review-title{
+	position:absolute;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:890px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
+}
+.review-text-area{
+	width:720px;
+	height:300px;
+	border:solid 2px #e7e7e7;
+	border-radius:5px;
+	resize:none;
+	margin-left: 10px;
+}
+
+.review-input input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: inner-spin-button;    
+    opacity: 1;
+}
+.review-input input{
+	margin-left:10px;
+	border:solid 1.5px #668663;
+	border-radius:10px;
+}
+/* 파일첨부버튼 CSS */
+.insert {
+	margin:20px 0 50px 0;
+    display: block;
+    width: 600px;
+ 
+}
+.insert .file-list {
+    height: 100px;
+    overflow: auto;
+    border: 2px solid #e7e7e7;
+    padding: 10px;
+    border-radius:10px;
+}
+.insert .file-list .filebox p {
+    font-size: 14px;
+    margin-top: 10px;
+    display: inline-block;
+}
+.insert .file-list .filebox .delete i{
+    color: #ff5353;
+    margin-left: 5px;
+}
+.write-review-button-container{
+	display:flex;
+	justify-content: center;
+	padding-bottom:50px;
+}
+#save-button{
+	width:140px;
+	height:50px;
+	margin-right:5px;
+	background-color:#39594e;
+	color:white;
+	font-weight: 600;
+	border-radius: 5px;
+	border:none;
+}
+#cancle-button{
+	width:140px;
+	margin-left:5px;
+	background-color:white;
+	border: 2px solid #39594e;
+	border-radius: 5px;
+	font-weight: 600;
+}
+.already-review-back{
+	margin-left:280px;
+	margin-top:50px;
+	width:300px;
+	height:50px;
+	background-color: white;
+	border:solid 2px #39594e;
+	color:#39594e;
+	border-radius:10px;
+}
+
+.rating {
+   position: relative;
+   width: 180px;
+   background: transparent;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: .3em;
+   padding: 5px;
+   overflow: hidden;
+}
+
+.rating__star {
+   font-size: 1.3em;
+   cursor: pointer;
+   color: #dabd18b2;
+   transition: filter linear .3s;
+}
+
+.rating__result {
+	margin-left: 10px;
+	font-weight: 500;
+}
+.my-product-review-date{
+	font-size:14px;
+	margin-left:3px;
+	display:block;
+	margin-top:8px;
+	font-weight: 500;
+}
+

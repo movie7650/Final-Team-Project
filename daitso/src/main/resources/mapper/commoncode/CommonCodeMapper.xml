@@ -72,7 +72,8 @@
                common_code_nm     AS "commonCodeNm",
                status 			  AS "status",
                creator			  AS "creator",
-               create_dt		  AS "createDt"
+               create_dt		  AS "createDt",
+               common_code_pr    AS "commonCodePr"
           FROM common_code
          WHERE common_code_pr = #{commonCodeId}
 	  ORDER BY common_code_id
@@ -90,6 +91,7 @@
                 create_dt 		  AS "createDt"
 		  FROM common_code
 	     WHERE common_code_id = #{commonCodeId}
+	  ORDER BY common_code_id
 	</select>
 
 	 <!-- 

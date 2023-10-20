@@ -24,7 +24,8 @@ public interface IReviewRepository {
 	//내가 주문한 상품의 상품정보가져오기
 	List<WriteMyReview> selectMyPurchase(@Param("customerId") int customerId, @Param("productId") int productId, @Param("purchaseNum") String purchaseNum, @Param("purchaseId") int purchaseId);
 	
-	List<MypageReviewCheck> selectReviewAll(int customerId);
+	//내 리뷰 목록 출력 
+	List<MypageReviewCheck> selectReviewAll(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
 	
 	void selectReview(int reviewId);
 	

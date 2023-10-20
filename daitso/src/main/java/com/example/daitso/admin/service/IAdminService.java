@@ -39,7 +39,7 @@ public interface IAdminService {
 	void deleteProduct(int productId);
 	
 	// 상품 등록하기 ★
-	void registerProduct(ProductCheck product, List<MultipartFile> files);
+	void registerProduct(ProductCheck product, List<MultipartFile> files) throws Exception;
 	
 	void registerProductOriginal(ProductCheck product);
 	
@@ -133,6 +133,15 @@ public interface IAdminService {
 	
 	// 전체 쿠폰 개수 조회하기
 	int selectCountCoupons();
+	
+	//
+	List<CouponCheck> selectCouponsByDv(int commonCodeId, int offset,  int pageSize);
+	
+	//
+	int selectCountCouponsByDv(int commonCodeId);
+	
+
+	void changeCouponDv(int couponId, int commonCodeId);
 	
 	// 쿠폰 삭제하기
 	void deleteCoupon(int couponId);

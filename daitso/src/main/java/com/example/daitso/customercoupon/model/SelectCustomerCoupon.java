@@ -16,7 +16,7 @@ public class SelectCustomerCoupon {
 	private String couponSn;
 	private int customerId;
 	private String couponNm;
-	private double couponDscntRate;
+	private int couponDscntRate;
 	private Date couponEprDt;
 	private String couponUseDv;
 	private String allCouponNum;

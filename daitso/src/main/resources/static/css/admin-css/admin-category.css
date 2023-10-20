@@ -11,11 +11,11 @@
     border-top: 1px solid #dee2e6;
 }
 
-#table {
+/* #table {
 	padding-top: 10px;
     padding-left: 50px;
     width: -webkit-fill-available;
-}
+} */
 
 /* 기존 상품 등록 모달 input */
 #productOptionFirst, #productOptionSecond,

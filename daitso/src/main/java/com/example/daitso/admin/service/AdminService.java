@@ -3,7 +3,7 @@ package com.example.daitso.admin.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.lang.Exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +53,7 @@ public class AdminService implements IAdminService{
 	
 	// 상품 등록하기 ★
 	@Transactional
-	public void registerProduct(ProductCheck product, List<MultipartFile> files) {
+	public void registerProduct(ProductCheck product, List<MultipartFile> files) throws Exception {
 		List<String> imagePathList = s3Service.upload(files);
 		product.setProductImageFirst(imagePathList.get(0));
 		product.setProductImageSecond(imagePathList.get(1));
@@ -386,6 +386,21 @@ public class AdminService implements IAdminService{
 	@Override
 	public int selectCountPurchaseDv(int purchaseDv) {
 		return purchaseRepository.selectCountPurchaseDv(purchaseDv);
+	}
+
+	@Override
+	public List<CouponCheck> selectCouponsByDv(int commonCodeId, int offset, int pageSize) {
+		return couponRepository.selectCouponsByDv(commonCodeId, offset, pageSize);
+	}
+
+	@Override
+	public int selectCountCouponsByDv(int commonCodeId) {
+		return couponRepository.selectCountCouponsByDv(commonCodeId);
+	}
+
+	@Override
+	public void changeCouponDv(int couponId, int commonCodeId) {
+		couponRepository.changeCouponDv(couponId, commonCodeId);
 	}
 
 }

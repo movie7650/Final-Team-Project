@@ -1,0 +1,76 @@
+@charset "UTF-8";
+.review-main{
+	display: flex;
+	justify-content: center;
+	
+}
+.title-review{
+	position:absolute;
+	padding-bottom:10px;
+	font-size:25px;
+	margin-left:195px;
+	margin-top:15px;
+	width:890px;
+	border-bottom:solid 2px #39594e;
+	font-weight:600;
+}
+.mypage-review-table{
+	text-align:center;
+}
+.mypage-review-table th{
+	width:225px;
+	height:50px;
+	background-color:#fafafa;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	vertical-align: middle;
+	font-size:17px;
+	font-weight: 500;
+}
+.mypage-review-table td{
+	font-size:15px;
+	vertical-align: middle;
+	padding-bottom:5px;
+	height:120px;
+	border-bottom:solid 1px #d9d9d9;
+}
+.my-review-product-img{
+	margin-top:10px;
+	width:80px; 
+	height:80px; 
+	float:left;
+}
+.my-review-productNm{
+	width:135px;
+	margin-top:30px;
+	overflow:hidden; 
+	text-overflow: ellipsis; 
+	white-space:nowrap;
+	padding-left:25px;
+}
+.mypage-review-table button{
+	border:solid 1px red;
+	width:70px;
+	background-color:white;
+	color:red;
+	margin-top:10px;
+	border-radius:5px;
+	font-weight: 500;
+	font-size: 85%;
+	padding:5px 0 5px 0;
+	}
+	
+.mypage-review-table button:focus{
+	outline:none;
+}	
+
+#show-review{
+	border:solid 1px #39594e;
+	width:70px;
+	background-color:white;
+	border-radius:5px;
+	color:#39594e;
+	font-weight: 500;
+	font-size: 85%;
+	padding:5px 0 5px 0;
+}

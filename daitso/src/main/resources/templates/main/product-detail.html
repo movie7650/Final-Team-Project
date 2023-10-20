@@ -132,9 +132,10 @@
 								</div>
 								<p style="color:gray">[[${review.productNm}]] [[${review.options}]]</p>
 							</div>
-							<div class="d-flex" style="height:100px; margin-bottom:10px">
-								<!-- 나중에 th:each로 이미지 가져오자. 지금은 없으니 sample image로 대체 -->
-								<img style="width: 100px; height: 100%" th:src="${review.reviewImageFirst}">
+							<div class="d-flex" style="margin-bottom:10px">
+								<img style="width: 100px; height: 100px" th:if="${review.reviewImageFirst != 'null'}" th:src="${review.reviewImageFirst}">
+								<img style="width: 100px; height: 100px" th:if="${review.reviewImageSecond != 'null'}" th:src="${review.reviewImageSecond}">
+								<img style="width: 100px; height: 100px" th:if="${review.reviewImageThird != 'null'}" th:src="${review.reviewImageThird}">
 							</div>
 							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
 							<p>[[${review.reviewContent}]]</p>
@@ -648,40 +649,42 @@
 				data.forEach(review => {
 					const rElement = `
 						<div>
-						<p style="margin-bottom:0px">${review.customerNm}</p>
-						<div style="height:24px">
-							<div class="star-parent">
-								<div class="star-fill" style="width: ${review.reviewStarPoint}%;">
-									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-								</div>
-								<div class="star-base">
-									<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span style="font-size:10px">${review.createDt}</span>
+							<p style="margin-bottom:0px">${review.customerNm}</p>
+							<div style="height:24px">
+								<div class="star-parent">
+									<div class="star-fill" style="width: ${review.reviewStarPoint}%;">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+									</div>
+									<div class="star-base">
+										<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span style="font-size:10px">${review.createDt}</span>
+									</div>
 								</div>
 							</div>
+							<p style="color:gray">${review.productNm} ${review.options}</p>
 						</div>
-						<p style="color:gray">${review.productNm} ${review.options}</p>
-					</div>
-					<div class="d-flex" style="height:100px; margin-bottom:10px">
-						<img style="width: 100px; height: 100%" src="${review.reviewImageFirst}">
-					</div>
-					<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
-					<p>${review.reviewContent}</p>
-					<div class="review-heart${review.reviewId}">
-						${review.clickCheck == 0 ? 
-								`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" onclick="heartClick(${review.reviewId})">
-									<img src="/assets/common/thumbs-up-regular.svg" style="width:20%; margin-left:10px;"></img>
+						<div class="d-flex" style="margin-bottom:10px">
+							${review.reviewImageFirst != 'null' ? ` <img style="width: 100px; height: 100px" src=${review.reviewImageFirst}> ` : `` }
+							${review.reviewImageSecond != 'null' ? ` <img style="width: 100px; height: 100px" src=${review.reviewImageSecond}> ` : `` }
+							${review.reviewImageThird != 'null' ? ` <img style="width: 100px; height: 100px" src=${review.reviewImageThird}> ` : `` }
+						</div>
+						<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
+						<p>${review.reviewContent}</p>
+						<div class="review-heart${review.reviewId}">
+							${review.clickCheck == 0 ? 
+									`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid; cursor: pointer" onclick="heartClick(${review.reviewId})">
+										<img src="/assets/common/thumbs-up-regular.svg" style="width:20%; margin-left:10px;"></img>
+										<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
+									</div>`
+							
+							: 
+								`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" >
+									<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;"></img>
 									<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
-								</div>`
-						
-						: 
-							`<div class="d-flex" style="width: 100px; height: 30px; border: 1px solid;" >
-								<img src="/assets/common/thumbs-up-solid.svg" style="width:20%; margin-left:10px;"></img>
-								<span style="font-weight:bold; font-size: 11px; align-self:center">도움돼요(${review.reviewHeartCount})</span>
-							</div> `
-						}						
-					</div>
-					<hr></hr>
-					`
+								</div> `
+							}						
+						</div>
+						<hr></hr>
+						`
 					reviewBody.innerHTML += rElement;
 				})
 			}
@@ -708,8 +711,8 @@
     });
 	
 	function insertInquiry(productGroupId){
-	 	_csrf = JSON.parse(`[[${_csrf}]]`); 
-		_csrf = 1
+	 	_csrf = JSON.parse(`[[${_csrf}]]`);
+
 		if(customerId == -1){
 			window.alert('로그인이 필요한 기능입니다.');
 		}else{

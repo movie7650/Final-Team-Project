@@ -4,21 +4,15 @@
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<!-- <style>
-.container {
-            zoom: 0.95; 
-        	}
-</style> -->
 <body>
+
 	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
 	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
-	<div class="container-xl" style="max-width: 90%;">
-	<!-- 오른쪽 컨텐츠 -->
-	<div id="table">
-		<div style="font-weight: bold; margin-top: 10px; font-size:17px;">상품관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 상품정보 추가/수정/삭제</div>
-		
-		<div class="row" style="margin-bottom: 10px;">
-			<div class="col" style="z-index: 1; display: flex; justify-content: space-between; margin-top: 10px; margin-bottom: 10px;">
+	<div class="container-lg" style="padding-top: 10px">
+
+		<div style="font-weight: bold; margin-top: 20px; font-size:20px;">상품관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 상품정보 추가/수정/삭제</div>
+		<div style="margin-bottom: 20px;">
+			<div class="col" style="/* z-index: 1; */display: flex;justify-content: space-between;margin-top: 10px;border-bottom: 2px solid #1a385d;padding-bottom: 20px;padding-left: 0px;padding-right: 0px;">
 				
 				<div class="col-sm-5" style="display: inline-flex; align-items: flex-end; padding-left: 0px;">
 					<!-- "첫 번째 카테고리" -->
@@ -50,15 +44,16 @@
 					</div>
 				</div>
 
-				<div style="display: inline-flex; align-items: flex-end; padding-left: 0px; justify-content: flex-end;">
+				<div style="display: inline-flex; align-items: flex-end; margin-right: 30px;justify-content: flex-end;">
 					<!-- "조회" 버튼 -->
 					<div class="col-sm-5" style="text-align: end; padding-right: 0px; left:10px;">
-						<button class="btn btn-primary" onclick="searchByCategory()"
-							style="background-color: #b69f93; border-color: #d5bdaf" type="button">조회</button> <!--#ffafcc -->
+						 <button class="btn btn-primary" onclick="searchByCategory()"
+							style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;" type="button">조회</button>
 					</div>
+					
 					<!-- "신규등록" 버튼 -->
 					<div class="col-sm-5" style="text-align: end; padding-left: 0px; left: 10px;">
-						<button class="btn btn-primary" style="background-color: #94ccf2;border-color: #a0cfef;width: 90px; margin-left: 10px;"
+						<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d;width: 90px;margin-left: 10px;height: 40px;font-weight: 600;"
 							data-bs-toggle="modal" data-bs-target="#registerNewModal" type="button">신규등록</button>
 					</div>
 				</div>
@@ -67,29 +62,29 @@
 		</div>
 
 		<!-- 카테고리별 상품 조회하기 -->
-		<div style="height: 620px; margin-left: 20px;">
-			<table class="table" style="text-align: center; ">
-				<thead>
+		<div style="height: 660px;">
+			<table class="table">
+			 <thead style="text-align: center; table-layout: fixed;">
 					<tr>
-						<th>순번</th>
-						<th>그룹 ID</th>
-						<th>카테고리명</th>
-						<th>상품명</th>
-						<th ></th>
+						<th style="width: 10%;">순번</th>
+						<th style="width: 10%;">그룹 ID</th>
+						<th style="width: 15%;">카테고리명</th>
+						<th style="width: 43%;">상품명</th>
+						<th></th>
 					</tr>
-				</thead>
-				<tbody id="tableBody">
+				</thead> 
+				<tbody id="tableBody" style="text-align: center;">
 					<tr th:each="product : ${products}">
 						<td th:text="${product.rn}"></td>
 						<td th:text="${product.productGroupId}"></td>
 						<td th:text="${product.categoryNm}"></td>
 						<td th:text="${product.productNm}"></td>
-						<td style="display: flex; justify-content: flex-end;">
-							<div class="btn-group">
-								<button class="btn btn-xs"	style="background-color: #f7ba8b; color: #ffff;"
+						<td>
+							<div class="btn-group" style="left: 40px;">
+								<button class="btn btn-xs"	style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;"
 									data-bs-toggle="modal" data-bs-target="#detailModal"
 									type="button" th:onclick="selectProductsByGroupId([[${product.productGroupId}]])">상세</button>
-								<button class="btn btn-xs"	style="background-color: red; color: #fff" 
+								<button class="btn btn-xs"	style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white"
 									type="button" th:onclick="deleteGroupProduct([[${product.productGroupId}]])">삭제</button>
 							</div>
 						</td>
@@ -146,8 +141,7 @@
 		</div>
 
 	  
-	  
-	</div>
+
 	</div>
 
 	<!-- 기존 상품 등록 모달 ("추가" 버튼) -->
@@ -161,10 +155,8 @@
 					</button>
 				</div>
 								<!-- ★ -->
-				<!-- <form th:action method="post" enctype="multipart/form-data">  -->
-				
-				<!-- 테스트 -->
-				 <form th:action="@{/admin/product/original}" method="post">
+				<!-- <form th:action method="post" enctype="multipart/form-data">  -->				
+				 <form id="registerOriginal" th:action="@{/admin/product/original}" method="post">
 					<div class="modal-body">
 						<div class="row mb" style="display: flex; align-items: center; justify-content: center;">
 							<label for="productGroupId" class="col-sm-3 col-form-label">그룹 ID</label>
@@ -229,7 +221,7 @@
 								style="color: red">* 재고</label>
 							<div class="col-sm-8">
 								<input type="text" maxlength="7" id="productStock" style="width: 45%;" 
-									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
+									name="productStock" onkeyup="inputNumberFormat(this);"
 									placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div>
@@ -270,10 +262,9 @@
 						<input type="hidden" id="getProductImageSecond" name="productImageSecond">
 						<input type="hidden" id="getProductImageThird" name="productImageThird">
 						<div class="modal-footer">
-						<div id="messageArea" th:text="${message}"></div>
-							<button class="btn btn-primary" style="background-color: #9dbb9a;border-color: #9dbb9a;"
-								onclick="changeData();" type="submit">저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
+								onclick="changeData();" type="button">저장</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
 					</div>
@@ -293,16 +284,16 @@
 					</button>
 				</div>
 				<!-- ★ -->
-				 <form th:action method="post" enctype="multipart/form-data">
+				 <form th:action method="post" enctype="multipart/form-data" name="registerNewForm">
 				
 				<!-- 테스트 -->
 				<!-- <form th:action method="post"> -->
 					<div class="modal-body">
 						<div id="searchTextDiv" style="display:flex;align-items: center;margin-left: 20px;width: inherit;">
 							<input id="searchText" style="width:23%;height: 40px;" type="text" onkeypress="if( event.keyCode == 13 ){searchByName();}">  
-							<input type="button" class="btn btn-primary" style="width:8%; height: 42px; background-color: #c1a99c" value="검색" onclick="searchByName()"/>
-						</div>
-
+							<button type="button" class="btn btn-primary" style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;" 
+							value="검색" onclick="searchByName()">검색</button>
+							</div>
 						<table class="table" style="text-align: center;">
 							<thead>
 								 <tr style="display: none;">
@@ -311,11 +302,10 @@
 									<th>상품명</th>
 								</tr>
 							</thead>
-							<tbody id="searchTable">
+							<tbody id="searchTable" style=" border: solid;">
 							</tbody>
 						</table>
-						<input type="hidden" id="selectsCategoryId" name="categoryId">
-						
+						<input type="hidden" id="selectsCategoryId" name="categoryId">				
 							
 							<div style="display: flex; align-items: center; margin-bottom: 15px;">
 								<label for="categoryId" class="col-sm-2 col-form-label"
@@ -409,7 +399,7 @@
 								style="color: red; padding-left: 40px;">* 재고</label>
 							<div class="col-sm-8"  style="padding-left: 60px;">
 								<input type="text" maxlength="7" id="productStock"
-									name="productStock" onkeyup="inputOnlyNumberFormat(this);"
+									name="productStock" onkeyup="inputNumberFormat(this);"
 									 style="width: 46%;" placeholder="* 필수 입력 항목입니다." required>
 							</div>
 						</div>
@@ -445,9 +435,9 @@
 						</div> -->
 						
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #9dbb9a;border-color: #9dbb9a;"
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
 								onclick="changeData()" type="submit">저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
 					</div>
@@ -467,7 +457,7 @@
 					<i class="fas fa-times"></i> <!-- "X" 아이콘 -->
 				</button>
 			</div>
-			<form th:action="@{/admin/product/update}" method="post">
+			<form id="updateProduct" th:action="@{/admin/product/update}" method="post">
 				<input type="hidden" id="updateProductId" name="productId">
 				<input type="hidden" id="updateProductGroupId" name="productGroupId">
 				<div class="modal-body">
@@ -515,8 +505,8 @@
 					<div class="row mb-3" style="display: flex; align-items: center; justify-content: space-evenly;">
 						<label for="productStock" class="col-sm-3 col-form-label">수량</label>
 						<div class="col-sm-8">
-								<input type="number" maxlength="7" oninput="maxLengthCheck(this)" id="updateProductStock" name="productStock"
-									onkeyup="inputOnlyNumberFormat(this);" required>
+								<input type="text" maxlength="7" oninput="maxLengthCheck(this)" id="updateProductStock" name="productStock"
+									onkeyup="inputNumberFormat(this);" required>
 							</div>
 						</div>				
 					 <div class="row mb-3" style="display: flex; align-items: center; justify-content: space-evenly;">
@@ -527,9 +517,9 @@
 						</div>
 					</div>
 						<div class="modal-footer">
-							<button class="btn btn-primary" style="background-color: #9dbb9a;border-color: #9dbb9a;"
-								type="submit" onclick="submitForm()">저장</button>
-							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal" >닫기</button>
+							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
+								type="button" onclick="submitForm();">저장</button>
+							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal" >닫기</button>
 						</div>
 					</div>
 				</form>
@@ -537,13 +527,15 @@
 		</div>
 	</div>
 
-
 	<!-- 이미지 모달 ("이미지" 버튼) -->
 	<div id="imageModal" class="modal fade" tabindex="-1" role="dialog">
 	    <div class="modal-dialog" role="document" style="max-width: 1000px;">
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <h5 class="modal-title">상품 이미지</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					    <i class="fas fa-times"></i> <!-- "X" 아이콘 -->
+					</button>
 	            </div>
 	            <div class="col-sm-8" style="padding-bottom: 10px; padding-top: 10px;">
 	                <span id="imageProductName" style="font-size: 20px; font-weight: bold;"></span>
@@ -552,23 +544,29 @@
 	                <div class="col-sm-4" style="display: flex;align-items: center;flex-direction: column;">
 	                    <!-- 첫 번째 이미지 -->
 	                    <label for="uploadFirstImage">
-	                        <img id="updateProductImageFirst" alt="첫 번째 이미지 선택하기" width="250" height="300" style="border: 2px solid #9ea5ae; cursor: pointer;">
+	                         <img id="updateProductImageFirst"  alt="두 번째 이미지 선택하기"  width="250" height="300" style="border: 2px solid #9ea5ae; cursor: pointer;"
+	                         onerror="this.src='https://daitso.s3.ap-northeast-2.amazonaws.com/img-upload.png'">							
 	                    </label>
 	                    <div>	                    	                        
 	                        <!-- 이미지 클릭 시 파일 입력 엘리먼트 클릭 -->
 	                        <input type="file" id="uploadFirstImage" accept="image/*" style="display: none;" onchange="selectImage('uploadFirstImage', 'updateProductImageFirst', updateProductId.value);">
 	                        <!-- 수정 버튼 -->
 	                        <!-- <button id="updateButtonFirst" class="btn btn-xs uploadButtons" style="background-color: skyblue; color: #fff; margin-top: 10px;" type="button">수정</button>
-	                    	 --><!-- 삭제 버튼 -->
-	                        <button class="btn btn-xs deleteButtons" style="background-color: red; color: #fff; margin-top: 10px;" type="button" 
+	                    	 -->
+	                    	 <!-- 삭제 버튼 -->
+	                        <button class="btn btn-xs deleteButtons" style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;" type="button" 
 	                            onclick="deleteImage('updateProductImageFirst', updateProductId.value, true, false, false)">삭제</button>
+                            <!-- <button type="button" class="btn btn-xs deleteButtons" style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;margin-right: 210px;">
+					            <span style="font-size: 18px; cursor: pointer;" onclick="deleteImage('updateProductImageFirst', updateProductId.value, true, false, false)">&#10006;</span>
+					        </button>  -->
 	                    </div>
 	                </div>
 	
 	                <!-- 두 번째 이미지 -->
 	                <div class="col-sm-4" style="display: flex;align-items: center;flex-direction: column;">
 	                    <label for="uploadSecondImage">
-	                        <img id="updateProductImageSecond" alt="두 번째 이미지 선택하기" width="250" height="300" style="border: 2px solid #9ea5ae; cursor: pointer;">
+	                        <img id="updateProductImageSecond" alt="두 번째 이미지 선택하기" width="250" height="300" style="border: 2px solid #9ea5ae; cursor: pointer;"
+	                        onerror="this.src='https://daitso.s3.ap-northeast-2.amazonaws.com/img-upload.png'">
 	                    </label>
 	                    <div>
 	                   		<!-- 이미지 클릭 시 파일 입력 엘리먼트 클릭 -->
@@ -576,7 +574,7 @@
 	                        <!-- 수정 버튼 -->
 	                        <!-- <button id="updateButtonSecond" class="btn btn-xs uploadButtons" style="background-color: skyblue; color: #fff; margin-top: 10px;" type="button">수정</button>
 	                    	 --><!-- 삭제 버튼 -->
-	                        <button class="btn btn-xs deleteButtons" style="background-color: red; color: #fff; margin-top: 10px;" type="button" 
+	                        <button class="btn btn-xs deleteButtons" style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;" type="button" 
 	                            onclick="deleteImage('updateProductImageSecond', updateProductId.value, false, true, false)">삭제</button>
 	                    </div>
 	                </div>
@@ -584,7 +582,8 @@
 	                <!-- 세 번째 이미지 -->
 	                <div class="col-sm-4" style="display: flex;align-items: center;flex-direction: column;">
 	                    <label for="uploadThirdImage">
-	                        <img id="updateProductImageThird" alt="세 번째 이미지 선택하기" width="250" height="300" style="border:  2px solid #9ea5ae; cursor: pointer;">
+	                        <img id="updateProductImageThird"  alt="세 번째 이미지 선택하기" width="250" height="300"  style="border: 2px solid #9ea5ae; cursor: pointer;"
+	                        onerror="this.src='https://daitso.s3.ap-northeast-2.amazonaws.com/img-upload.png'">
 	                    </label>
 	                    <div>
 	                        <!-- 이미지 클릭 시 파일 입력 엘리먼트 클릭 -->
@@ -592,19 +591,19 @@
 	                        <!-- 수정 버튼 -->
 	                         <!-- <button id="updateButtonThird" class="btn btn-xs uploadButtons" style="background-color: skyblue; color: #fff; margin-top: 10px;" type="button">수정</button>
 	                    	  --><!-- 삭제 버튼 -->
-	                        <button class="btn btn-xs deleteButtons" style="background-color: red; color: #fff; margin-top: 10px;" type="button" 
+	                        <button class="btn btn-xs deleteButtons" style="background-color: #ffffff;border-color: #1a385d;color: #1a385d;font-weight: 600;border: solid 2px;" type="button" 
 	                            onclick="deleteImage('updateProductImageThird', updateProductId.value, false, false, true)">삭제</button>
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="modal-footer" style="display: flex; align-items: flex-end;">
-	                <button id="updateButton" class="btn btn-xs uploadButtons" style="background-color: #9dbb9a;border-color: #9dbb9a; color: #fff; margin-top: 10px;" type="button">저장</button>
-	                <button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1;" data-bs-dismiss="modal">닫기</button>
+	                <button id="updateButton" class="btn btn-xs uploadButtons" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white; margin-top: 10px;" type="button">저장</button>
+	                <button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 	            </div>
 	        </div>
 	    </div>
 	</div>
-
+	
 
 	<!-- 그룹별 상품 조회 모달 ("상세" 버튼) -->
 	<div id="detailModal" class="modal fade" tabindex="-1" role="dialog">
@@ -639,13 +638,22 @@
 					</div>
 				<!--  </form>  -->
 				<div class="modal-footer">
-					<button class="btn btn-xs" style="background-color: #f7ba8b; border-color:#f7ba8b; color: #ffff" data-bs-toggle="modal" data-bs-target="#registerOriginalModal"
-							  type="button" onclick="registerExisting()">추가</button> 
-					<button class="btn btn-xs" style="background-color: red; color: #fff;" type="button"
+					<button class="btn btn-xs" style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;" data-bs-toggle="modal" data-bs-target="#registerOriginalModal"
+							  type="button" onclick="registerExisting();">추가</button> 
+					<button class="btn btn-xs" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button"
 		  					 id="deleteButton">삭제</button>
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div id="messageModal" class="modal fade" tabindex="-1" role="dialog">
+	    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 550px;">
+	        <!-- 모달 내용 -->
+	        <div class="modal-body">
+	            <p th:text="${message}"></p> <!-- 메시지를 여기에 표시 -->
+	        </div>
+	    </div>
 	</div>
 
 	</div>
@@ -655,7 +663,46 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	
 	<script th:inline="javascript">
+
+	function showAlert(message) {
+	    alert(message);
+	}
 	
+    //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
+    function submitForm() {
+        const updatePrice = document.getElementById("updateProductPrice");
+        const priceUpdated = uncomma(updatePrice.value);
+        updatePrice.value = priceUpdated;
+        
+        const updateStock = document.getElementById("updateProductStock");
+        const stockUpdated = uncomma(updateStock.value);
+        updateStock.value = stockUpdated;
+       
+        var formData = $("#updateProduct").serialize(); // 폼 데이터 직렬화
+        $.ajax({
+            type: "POST",
+            url: "/admin/product/update", 
+            data: formData, // 직렬화한 폼 데이터를 전송
+            success: function (data) {
+            	 showAlert(data);
+            	 $('#updateModal').modal('hide'); // 모달 닫기
+            },
+            error: function () {
+
+            }
+        });    
+    }
+   
+    
+/* 	$('#registerNewModal').on('hidden.bs.modal', function (e) {
+		console.log("Efwefwef");
+		/* $(this).find('registerNewForm')[0].reset(); */
+	/* 	$('#registerNewForm').each(function() {
+		      this.reset();
+		  });
+
+	});  */
+    
 	// 이미지 선택하기
     function selectImage(inputId, imageId, productId) {
         // 파일 입력 엘리먼트 가져오기
@@ -685,51 +732,17 @@
         }
     }
 
-    // 수정 버튼 클릭 시 서버로 이미지 업로드 요청
-/*      document.getElementById('updateButtonFirst').addEventListener('click', function() {
-    	uploadImage('uploadFirstImage', 'updateProductImageFirst');
-    });
-
-    document.getElementById('updateButtonSecond').addEventListener('click', function() {
-    	uploadImage('uploadSecondImage', 'updateProductImageSecond');
-    });
-
-    document.getElementById('updateButtonThird').addEventListener('click', function() {
-    	uploadImage('uploadThirdImage', 'updateProductImageThird');
-    });  */
-    
-    /* document.getElementById('updateButton').addEventListener('click', function() {
-        uploadImage('uploadFirstImage', 'updateProductImageFirst', 1);
-        uploadImage('uploadSecondImage', 'updateProductImageSecond', 2);
-        uploadImage('uploadThirdImage', 'updateProductImageThird', 3);
-    }); */
-    
-    /* document.getElementById('updateButton').addEventListener('click', function() {
-        const firstImageInput = document.getElementById('uploadFirstImage');
-        const secondImageInput = document.getElementById('uploadSecondImage');
-        const thirdImageInput = document.getElementById('uploadThirdImage');
-
-        // 선택한 이미지가 없는 경우 해당 이미지에 대한 수정 요청을 보내지 않음
-        if (firstImageInput.files.length > 0) {
-            uploadImage('uploadFirstImage', 'updateProductImageFirst', 1);
-        }
-        if (secondImageInput.files.length > 0) {
-            uploadImage('uploadSecondImage', 'updateProductImageSecond', 2);
-        }
-        if (thirdImageInput.files.length > 0) {
-            uploadImage('uploadThirdImage', 'updateProductImageThird', 3);
-        }
-    }); */
 
     document.getElementById('updateButton').addEventListener('click', async function() {
         const firstImageInput = document.getElementById('uploadFirstImage');
         const secondImageInput = document.getElementById('uploadSecondImage');
         const thirdImageInput = document.getElementById('uploadThirdImage');
+            	
         
         // 선택한 이미지가 없는 경우 해당 이미지에 대한 수정 요청을 보내지 않음
         const promises = [];
         
-        //선 택한 이미지가 있는 경우
+        // 선택한 이미지가 있는 경우
         if (firstImageInput.files.length > 0) {
             promises.push(uploadImage('uploadFirstImage', 'updateProductImageFirst', 1));
         }
@@ -746,7 +759,7 @@
             
             // 모든 업로드 요청이 성공했을 때 알림 표시
             if (results.every(result => result === 'success')) {
-                alert('모든 이미지가 성공적으로 수정되었습니다.');
+                alert('이미지가 성공적으로 수정되었습니다.');
                 location.reload(); 
             } else {
                 alert('일부 이미지 수정에 실패했습니다.');
@@ -757,124 +770,6 @@
         }
     });
         
-    /* function uploadImage(fileInputId, imageId) {
-        const productId = updateProductId.value;
-        
-        // 서버로 이미지 업로드 요청
-        if (productId) {
-            const fileInput = document.getElementById(fileInputId);
-           
-            if (fileInput.files.length > 0) {
-                const formData = new FormData();
-                formData.append('productId', productId);
-                formData.append(fileInputId, fileInput.files[0]);
-                
-                console.log(formData);
-                
-                fetch('/admin/updateProductImages', {
-                    method: 'POST',
-                    headers: {                    	
-        	            "X-CSRF-TOKEN": [[${_csrf.token}]]
-        	        },       	        
-                    body: formData,
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('이미지가 수정되었습니다.');
-                    } else {
-                        alert('이미지 수정에 실패했습니다.');
-                    }
-                })
-                .catch(error => {
-                    console.error('이미지 업로드 오류:', error);
-                    alert('이미지 수정에 실패했습니다.');
-                });
-            } else {
-                alert('파일을 선택하세요.');
-            }
-        } else {
-            alert('상품 ID를 입력하세요.');
-        }
-    } */
-    
-    /* function uploadImage(fileInputId, imageId, selector) {
-        const productId = updateProductId.value;
-
-        // 서버로 이미지 업로드 요청
-        if (productId) {
-            const fileInput = document.getElementById(fileInputId);
-
-            if (fileInput.files.length > 0) {
-                const formData = new FormData();
-                formData.append('productId', productId);
-                formData.append('selector', selector); // 선택자(selector) 추가
-                formData.append(fileInputId, fileInput.files[0]);
-
-                fetch('/admin/updateProductImages', {
-                    method: 'POST',
-                    headers: {
-                        "X-CSRF-TOKEN": [[${_csrf.token}]]
-                    },
-                    body: formData,
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            alert('이미지가 수정되었습니다.');
-                        } else {
-                            alert('이미지 수정에 실패했습니다.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('이미지 업로드 오류:', error);
-                        alert('이미지 수정에 실패했습니다.');
-                    });
-            } else {
-                alert('파일을 선택하세요.');
-            }
-        } else {
-            alert('상품 ID를 입력하세요.');
-        }
-    } */
-    
-    /* function uploadImage(fileInputId, imageId, selector) {
-        const productId = updateProductId.value;
-
-        // 서버로 이미지 업로드 요청
-        if (productId) {
-            const fileInput = document.getElementById(fileInputId);
-
-            if (fileInput.files.length > 0) {
-                const formData = new FormData();
-                formData.append('productId', productId);
-                formData.append('selector', selector); // 선택자(selector) 추가
-                formData.append(fileInputId, fileInput.files[0]);
-
-                fetch('/admin/updateProductImages', {
-                    method: 'POST',
-                    headers: {
-                        "X-CSRF-TOKEN": [[${_csrf.token}]]
-                    },
-                    body: formData,
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            alert('이미지가 수정되었습니다.');
-                        } else {
-                            alert('이미지 수정에 실패했습니다.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('이미지 업로드 오류:', error);
-                        alert('이미지 수정에 실패했습니다.');
-                    });
-            } else {
-                // 파일을 선택하지 않은 경우, 해당 이미지에 대한 수정 요청을 보내지 않음
-            }
-        } else {
-            alert('상품 ID를 입력하세요.');
-        }
-    } */
-    
     async function uploadImage(fileInputId, imageId, selector) {
         const productId = updateProductId.value;
 
@@ -931,7 +826,7 @@
 	         if (response.ok) {
 	             // 이미지 삭제가 성공한 경우
 	             alert("이미지가 삭제되었습니다.");
-	             location.reload(); 
+	             location.reload();
 	         } else {
 	             // 이미지 삭제 실패한 경우
 	             alert("이미지 삭제에 실패했습니다.");
@@ -956,9 +851,11 @@
 	             // DB에서 이미지 정보 삭제 성공한 경우
 	             /* alert("이미지 정보 삭제에 성공했습니다.");
 	             window.location.href = "/admin/product"; */
+	        	 location.reload();
 	         } else {
 	             // DB에서 이미지 정보 삭제 실패한 경우
 	             /* alert("이미지 정보 삭제에 실패했습니다."); */
+	        	 location.reload();
 	         }
 	     } catch (databaseError) {
 	        /*  console.error("이미지 정보 삭제 실패:", databaseError); */
@@ -980,7 +877,6 @@
 	     try {
 	         // s3에서 이미지 삭제
 	         await deleteImageFromS3(imageUrl);
-	
 	         // 상품 이미지 정보 삭제
 	         await deleteImageFromDatabase(productId, deleteFirstImage, deleteSecondImage, deleteThirdImage);
 	     } catch (error) {
@@ -988,7 +884,7 @@
 	     }
 	 }
 	 
-	 
+	
     // 상품 수정을 위한 상품ID로 상품 정보 갖고오기
     function selectProductByProductId(productId) {
          fetch("/admin/product/update/" + productId)
@@ -1001,21 +897,18 @@
                 document.getElementById("updateProductNm").value = product.productNm; //textContent는 span
                 document.getElementById("updateProductCode").textContent = product.productCode;
                 
-                /* document.getElementById("updateProductOptionFirst").value = product.productOptionFirst;
-                document.getElementById("updateProductOptionSecond").value = product.productOptionSecond;
-                document.getElementById("updateProductOptionThird").value = product.productOptionThird; */
                 document.getElementById("updateProductOptionFirst").textContent = product.productOptionFirst;
                 document.getElementById("updateProductOptionSecond").textContent = product.productOptionSecond;
                 document.getElementById("updateProductOptionThird").textContent = product.productOptionThird;
                 
                 document.getElementById("updateProductPrice").value = comma(product.productPrice);
-                document.getElementById("updateProductStock").value = product.productStock;
+                document.getElementById("updateProductStock").value = comma(product.productStock);
                 document.getElementById("updateProductMaxGet").value = product.productMaxGet;
                 
              	// 이미지 설정
                 document.getElementById("updateProductImageFirst").src = product.productImageFirst;
                 document.getElementById("updateProductImageSecond").src = product.productImageSecond;
-                document.getElementById("updateProductImageThird").src = product.productImageThird; 
+                document.getElementById("updateProductImageThird").src = product.productImageThird;
                 
                 document.getElementById("updateProductGroupId").value = product.productGroupId; 
                 
@@ -1191,14 +1084,14 @@
                           <td>${product.productOptionSecond}</td>
                           <td>${product.productOptionThird}</td>
                           <td>${comma(product.productPrice)}</td>
-                          <td>${product.productStock}</td>
+                          <td>${comma(product.productStock)}</td>
                           <td>${product.productMaxGet}</td>
                           <td>
 		    				<div class="btn-group">
-		    				 <button class="btn btn-xs" style="background-color: #d9c9eb;border-color: #d9c9eb;color: #ffff"
+		    				 <button class="btn btn-xs" style="background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600;"
 		    						data-bs-toggle="modal" data-bs-target="#imageModal" onclick = "selectProductByProductId(${product.productId})">이미지</button>
 		   						<button class="btn btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal" 
-		   						style="background-color: #b69f93; color: #ffff" type="button"
+		   							style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white" type="button"
 		   						onclick = "selectProductByProductId(${product.productId})">수정</button>
 		    				</div>
 		    			  </td>
@@ -1227,7 +1120,7 @@
     }); */
 
   	// (그룹)상품 삭제시 확인 메시지 실행해서 삭제하기(DOMParser 사용해서 문자열 형식의 HTML을 파싱하고, 파싱된 DOM을 생성해서 동적으로 <form> 만들어줌)
-    function deleteGroupProduct(productGroupId) {
+/*     function deleteGroupProduct(productGroupId) {
         if (!confirm('그룹 상품을 삭제하시겠습니까?')) {
             return false;
         }
@@ -1242,7 +1135,26 @@
         setTimeout(() => {
             document.getElementById('deleteForm').submit();
         }, 50) //대기시간
-    } 
+    }  */
+    
+    function deleteGroupProduct(productGroupId) {
+        if (!confirm('그룹 상품을 삭제하시겠습니까?')) {
+            return false;
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/product/delete-group",
+            data: { productGroupId: productGroupId },
+            success: function (data) {
+                showAlert(data);
+                location.reload();
+            },
+            error: function () {
+                // 에러 처리
+            }
+        });
+    }
 
     
  	// 천 단위로 comma 찍기
@@ -1275,13 +1187,29 @@
 	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
 	}
     
-    //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
+/*     //입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function submitForm() {
         const updatePrice = document.getElementById("updateProductPrice");
         const priceUpdated = uncomma(updatePrice.value);
         updatePrice.value = priceUpdated;
+        
+        const updateStock = document.getElementById("updateProductStock");
+        const stockUpdated = uncomma(updateStock.value);
+        updateStock.value = stockUpdated;
+        showAlert("상품이 수정되었습니다.");
     }
-   
+    */
+    
+    function showAlerts(message, success) {
+        if (success === "true") {
+            alert(message);
+            $('#registerOriginalModal').modal('hide'); // 모달 닫기
+        } else {
+            // 상품 등록이 실패한 경우
+            alert(message);
+        }
+    }
+    
  	//입력된 가격 필드 값을 콤마 제거하고 숫자로 변환해 저장하기
     function changeData() {
         const changedPrices = document.querySelectorAll("#productPrice");
@@ -1290,7 +1218,32 @@
             const priceChanged = uncomma(changedPrice.value);
             changedPrice.value = priceChanged;
         }
+        
+        const changedStocks = document.querySelectorAll("#productStock");
+        for (let i = 0; i < changedStocks.length; i++) {
+            const changedStock = changedStocks[i];
+            const stockChanged = uncomma(changedStock.value);
+            changedStock.value = stockChanged;
+        }
+        
+        var formData = $("#registerOriginal").serialize(); // 폼 데이터 직렬화
+        $.ajax({
+            type: "POST",
+            url: "/admin/product/original", 
+            data: formData, // 직렬화한 폼 데이터를 전송
+            success: function (data) {
+            	console.log(data);
+                showAlerts(data.message, data.success);
+            },
+            error: function (xhr, status, error) { //오류 응답의 경우, data 객체가 정의되지 않음. 대신에 responseJSON과 responseText 객체 내에 오류 응답이 포함되어 있음
+                var response = xhr.responseJSON;
+                console.log(response.message);
+                showAlerts(response.message, response.success);
+            }
+        });    
+
     }
+ 	
     
     // number 타입 maxlength 걸어주기
     function maxLengthCheck(object){
@@ -1299,7 +1252,6 @@
         }    
       }
  
-    
  	// 체크 박스 선택, 해제
   	function selectAll(selectAll) {
   		// productCheckbox 모든 체크 박스 요소들 가져오기
@@ -1349,7 +1301,8 @@
 	        .then((data) => {
 	            alert("상품이 삭제되었습니다.");
 	            setTimeout(() => {
-	                window.location.href = "/admin/product";
+	              /*   window.location.href = "/admin/product"; */
+	            location.reload(); 
 	            }, 50);
 	        })
 	        .catch((error) => {
@@ -1545,12 +1498,12 @@
 	                         "<td>" + product.productGroupId + "</td>" +
 	                         "<td>" + product.categoryNm + "</td>" +
 	                         "<td>" + product.productNm + "</td>" +
-	                         "<td style='display: flex; justify-content: flex-end;'>" +
-	                         "<div class='btn-group'>" +
-	                         "<button class='btn btn-xs' style='background-color: #f7ba8b; color: #ffff' " +
+	                         "<td>" +
+	                         "<div class='btn-group'style='left: 40px;'>" +
+	                         "<button class='btn btn-xs' style='background-color: #ffffff;border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600' " +
 	                         "data-bs-toggle='modal' data-bs-target='#detailModal' type='button' " +
 	                         "onclick='selectProductsByGroupId(" + product.productGroupId + ")'>상세</button>" +
-	                         "<button class='btn btn-xs' style='background-color: red; color: #fff' " +
+	                         "<button class='btn btn-xs' style='background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white' " +
 	                         "type='button' onclick='deleteGroupProduct(" + product.productGroupId + ")'>삭제</button>" +
 	                         "</div>" +
 	                         "</td>" +

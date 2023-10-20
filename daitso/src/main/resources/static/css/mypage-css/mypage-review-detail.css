@@ -13,6 +13,7 @@
 	width:150px;
 	height:150px;
 	float:left;
+	box-shadow: 2px 2px 2px 2px gray;
 }
 .detail-review-content-title{
 	font-size:18px;
