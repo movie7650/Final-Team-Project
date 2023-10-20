@@ -32,7 +32,7 @@ public interface ICustomerCouponRepository {
 	// 쿠폰 유효기간 지났는지 확인 -> 지나면 만료로 바꾸기
 	void checkCouponEprDt();
 	
-	// 적용가능한 쿠폰 조회
+	// 적용가능한 쿠폰 조회 -> 다운로드에서 받은 쿠폰
 	List<CartCouponApply> getCouponsByCustomerId(@Param("categoryId") int categoryId,@Param("customerId") int customerId);
 	
 	// 구매 성공시 사용했던 쿠폰 coupon_use_dv 상태바꾸기
@@ -43,5 +43,8 @@ public interface ICustomerCouponRepository {
 	
 	//존재하는 쿠폰의 ID 카운트
 	int countExistCouponId(@Param("allCouponNum") String allCouponNum);
+
+	// 적용가능한 쿠폰 조회 -> 공통 쿠폰(일괄)
+	List<CartCouponApply> getCouponsByCustomerIdCommon(int categoryId);
 
 }
