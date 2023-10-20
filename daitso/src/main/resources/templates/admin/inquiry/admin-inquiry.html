@@ -48,10 +48,11 @@
 				<div>문의 내용</div>
 				<div>문의 상태</div>
 			</div>
+			<div th:if="${#lists.size(inquiryList)} == 0" style="width:100%; text-align:center; margin-top: 50px; font-weight: 500; font-size: 20px;">찾으시는 데이터가 없습니다.</div>
 			<div class="admin-inquiry-tbody" th:each="inquiry : ${inquiryList}">
 				<div th:text="${inquiry.inquiryId}" style="width: 10%;">문의 ID</div>
 				<div style="width: 20%;"><a th:href="@{/product/__${inquiry.productId}__/__${inquiry.categoryId}__}" th:text="${inquiry.productNm}" style="color:black; text-decoration: none;">상품명</a></div>
-				<div th:text="${inquiry.inquiryContent}" style="width: 45%;">문의 내용</div>
+				<div style="width: 45%;">[(${inquiry.inquiryContent})]</div>
 				<div th:if="${inquiryAnsDv} == 'W'" style="width: 10%; display: flex; align-items: center;" >
 					<div class="admin-inquiry-btn" th:onclick="inquiryComplete([[${inquiry.inquiryId}]], 'W')">문의 답변</div>
 				</div>
