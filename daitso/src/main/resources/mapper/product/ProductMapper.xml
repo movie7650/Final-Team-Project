@@ -60,24 +60,24 @@
 									   	CONNECT BY PRIOR category_id = category_pr_id
 									  )
 				 AND p.status = 'Y'
+				 <choose>
+				 	<when test='"normal".equals(sort)'>
+						 ORDER BY product_id			 	
+				 	</when>
+				 	<when test='"highPrice".equals(sort)'>
+				 		ORDER BY product_price DESC
+				 	</when>
+				 	<when test='"lowPrice".equals(sort)'>
+				 		ORDER BY product_price
+				 	</when>
+				 	<when test='"highRate".equals(sort)'>
+				 		ORDER BY review_star_point DESC
+				 	</when>
+				</choose>
 	            )
 	        WHERE snum = 1
 	    ) 
 	    WHERE rnum between #{start} and #{end}
-	    <choose>
-		 	<when test='"normal".equals(sort)'>
-				 ORDER BY product_id			 	
-		 	</when>
-		 	<when test='"highPrice".equals(sort)'>
-		 		ORDER BY product_price DESC
-		 	</when>
-		 	<when test='"lowPrice".equals(sort)'>
-		 		ORDER BY product_price
-		 	</when>
-		 	<when test='"highRate".equals(sort)'>
-		 		ORDER BY review_star_point DESC
-		 	</when>
-		</choose>
 	</select>
 
 
@@ -811,7 +811,7 @@
 				category_id AS categoryId,
 				product_image_first AS productImageFirst,
 				product_nm AS productNm,
-				NVL(review_star_point,0) AS reviewStarPoint,
+				review_star_point AS reviewStarPoint,
 				NVL(review_count,0) AS reviewCount,
 				product_content AS productContent,
 				product_stock AS productStock,
@@ -823,7 +823,7 @@
 					product_price, rownum as rnum
 			FROM(
 				SELECT p.product_id		AS		product_id,  discount_rate, row_number() over (partition by p.product_group_id order by product_price) snum,
-						p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, review_star_point, review_count
+						p.product_group_id, category_id, product_nm, product_content, product_price, product_stock, product_image_first, NVL(review_star_point,0) AS review_star_point, review_count
 				FROM product p
 				LEFT JOIN  (
 							SELECT product_group_id, round(avg(review_star_point) * 20,0) AS review_star_point, count(review_star_point) AS review_count
@@ -846,7 +846,7 @@
 						ORDER BY p.product_price
 					</when>
 					<when test='"highRate".equals(sort)'>
-						ORDER BY review_star_point
+						ORDER BY review_star_point DESC
 					</when>
 				</choose>
 			)
