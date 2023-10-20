@@ -3,7 +3,6 @@
 .mypage-inquiry-main{
 	display: flex;
 	justify-content: center;
-	margin-bottom:100px;
 }
 .mypage-inquiry-title{
 	position:absolute;
@@ -24,15 +23,7 @@
 .mypage-inquiry-table{
 	text-align:center;
 }
-/* .mypage-inquiry-table th{
-	height:50px;
-	background-color:#fafafa;
-	border-top:1px solid #d9d9d9;
-	border-bottom:1px solid #d9d9d9;
-	vertical-align: middle;
-	font-size:17px;
-	font-weight: 500;
-} */
+
 .inquiry-table-th-1{
 	width:260px;
 	height:50px;

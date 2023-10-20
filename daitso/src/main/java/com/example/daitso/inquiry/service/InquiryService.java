@@ -73,8 +73,8 @@ public class InquiryService implements IInquiryService {
 	//내가 작성한 문의글 조회
 	@Override
 	public List<MyInquirySelect> selectMyInquiry(int customerId, int page) {
-		int start = (page-1)*10 + 1;
-		return inquiryRepository.selectMyInquiry(customerId,start,start+9);
+		int start = (page-1)*5 + 1;
+		return inquiryRepository.selectMyInquiry(customerId,start,start+4);
 	}
 	
 	//내 문의글 삭제

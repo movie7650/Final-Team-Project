@@ -130,4 +130,9 @@ public class CustomerService implements ICustomerService {
 		customerRepository.updateMyPassword(customerId, newPassword);
 		
 	}
+	//새로 입력된 이메일의 중복체크를 위한 카운트
+	@Override
+	public int countNewEmail(String newEmail) {
+		return customerRepository.countNewEmail(newEmail);
+	}
 }

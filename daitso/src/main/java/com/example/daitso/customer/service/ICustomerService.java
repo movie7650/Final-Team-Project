@@ -59,6 +59,9 @@ public interface ICustomerService {
 
 	// 내 이메일 변경하기
 	void updateMyEmail(@Param("customerId") int customerId, @Param("newEmail") String newEmail);
+	
+	//새로 입력된 이메일(아이디)의 중복확인을 위한 카운트
+	int countNewEmail(@Param("newEmail")String newEmail);
 
 	// 내 전화번호 변경하기
 	void updateMyTelNO(@Param("customerId") int customerId, @Param("newTelNO") String newTelNO);

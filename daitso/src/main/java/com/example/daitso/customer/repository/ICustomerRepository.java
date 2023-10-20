@@ -68,6 +68,9 @@ public interface ICustomerRepository {
 
 	// 내 이메일 변경하기
 	void updateMyEmail(@Param("customerId") int customerId, @Param("newEmail") String newEmail);
+	
+	//새로 입력된 이메일(아이디)의 중복확인을 위한 카운트
+	int countNewEmail(@Param("newEmail")String newEmail);
 
 	// 내 전화번호 변경하기
 	void updateMyTelNO(@Param("customerId") int customerId, @Param("newTelNO") String newTelNO);
@@ -85,6 +88,8 @@ public interface ICustomerRepository {
 	// 소셜 로그인 아이디 중복확인
 	Optional<CustomerSecurity> findByCustomerEmailWithSocial(@Param("customerEmail") String customerEmail,
 			@Param("loginMethod") String loginMethod);
+	
+	
 
 	// 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기
 	List<CustomerChart> getCustomerCounts();
