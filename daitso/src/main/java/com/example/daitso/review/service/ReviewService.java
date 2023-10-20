@@ -27,8 +27,8 @@ public class ReviewService implements IReviewService{
 	//내 리뷰 조회하기
 	@Override
 	public List<MypageReviewCheck> selectReviewAll(int customerId, int page) {
-		int start = (page-1)*10 + 1;
-		return reviewRepository.selectReviewAll(customerId,start, start+9);
+		int start = (page-1)*5 + 1;
+		return reviewRepository.selectReviewAll(customerId,start, start+4);
 	}
 
 	@Override

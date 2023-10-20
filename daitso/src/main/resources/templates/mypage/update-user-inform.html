@@ -68,8 +68,28 @@
 </div>
 
 </div><!-- update-customer-main -->
-
-
+<script>
+		   var msg = '[[${msg}]]';
+		   if(msg === '중복된 이메일 입니다.') {
+		       alert("중복된 이메일 입니다.");
+		   }
+		   var msg1 = '[[${msg1}]]';
+		   if(msg1 === '비밀번호변경완료') {
+		       alert("비밀번호가 변경되었습니다.");
+		   }
+		   var msg2 = '[[${msg2}]]';
+		   if(msg2 === '새비밀번호일치하지않음') {
+		       alert("새 비밀번호와 새 비밀번호확인이 일치하지 않습니다.");
+		   }
+		   var msg3 = '[[${msg3}]]';
+		   if(msg3 === '현재비밀번호일치하지않음') {
+		       alert("현재비밀번호가 일치하지 않습니다.");
+		   }
+		   var msg4 = '[[${msg4}]]';
+		   if(msg4 === '변경된정보없음') {
+		       alert("변경된 정보가 없습니다.");
+		   }
+</script>
 
 
 <div th:replace="~{/include/footer :: footer}"></div>

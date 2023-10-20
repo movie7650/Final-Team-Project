@@ -259,7 +259,15 @@
    		   SET customer_pw = #{newPassword}
    		 WHERE customer_id = #{customerId}  
    	</update>
-
+   	 <!-- 
+    	기능: 새로 입력한 이메일이 기존에 있는 이메일 인지 확인
+    	담당자: 윤상영
+    	-->
+	<select id="countNewEmail" resultType="int" parameterType="String">
+		  SELECT count(customer_email) as  "customerEmailCount"
+          FROM customer
+          WHERE customer_email = #{newEmail}
+	</select>
 
 	<!-- 
 		기능: 현재 시간을 기준으로 5개월 동안의 월별 회원가입 수 조회하기

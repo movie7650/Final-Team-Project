@@ -161,7 +161,7 @@ public class MyPageController {
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*3 + 1;
+		int startPage = (nowPageBlock-1)*10 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -285,7 +285,7 @@ public class MyPageController {
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*3 + 1;
+		int startPage = (nowPageBlock-1)*10 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -357,7 +357,7 @@ public class MyPageController {
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*3 + 1;
+		int startPage = (nowPageBlock-1)*10 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -429,7 +429,7 @@ public class MyPageController {
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
 		int nowPageBlock   = (int)Math.ceil(page/10.0);
-		int startPage = (nowPageBlock-1)*3 + 1;
+		int startPage = (nowPageBlock-1)*10 + 1;
 		int endPage = 0;
 		if(totalPage > nowPageBlock*10) {
 			endPage = nowPageBlock*10;
@@ -500,7 +500,7 @@ public class MyPageController {
 		int bbsCount = reviewService.selectReviewContentCount(customerId);
 		int totalPage = 0;
 		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+			totalPage=(int)Math.ceil(bbsCount/5.0);
 		}
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
@@ -699,7 +699,7 @@ public class MyPageController {
 		int bbsCount = inquiryService.countInquiryStatusY(customerId);
 		int totalPage = 0;
 		if(bbsCount > 0) {
-			totalPage=(int)Math.ceil(bbsCount/10.0);
+			totalPage=(int)Math.ceil(bbsCount/5.0);
 		}
 		
 		int totalPageBlock = (int)(Math.ceil(totalPage/10.0));
@@ -935,13 +935,6 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 
-		// 상단 잔여포인트
-		String point = pointService.selectTotalPoint(customerId);
-		if (point == null) {
-			point = "0";
-		}
-		model.addAttribute("totalPoint", point + "P");
-
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -971,11 +964,12 @@ public class MyPageController {
 
 	// 마이페이지-개인정보조회- 비밀번호일치 확인
 	@RequestMapping(value = "/checkuser", method = RequestMethod.POST)
-	public String checkMyPassword(Model model, @RequestParam String customerPW, @RequestParam String mypassword) {
+	public String checkMyPassword(Model model,RedirectAttributes redirectAttributes, @RequestParam String customerPW, @RequestParam String mypassword) {
 		// 비밀번호 일치 확인
 		if (pwEncoder.matches(mypassword, customerPW)) {
 			return "redirect:/mypage/updateuser";
 		} else {
+			redirectAttributes.addFlashAttribute("msg", "비밀번호를 다시 확인해 주세요.");
 			return "redirect:/mypage/checkuser";
 		}
 	}
@@ -992,13 +986,6 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 
-		// 상단 잔여포인트
-		String point = pointService.selectTotalPoint(customerId);
-		if (point == null) {
-			point = "0";
-		}
-		model.addAttribute("totalPoint", point + "P");
-
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -1010,10 +997,6 @@ public class MyPageController {
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
-		
-		// 상단 사용가능한 쿠폰갯수 출력
-		int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
-		model.addAttribute("countcoupon", countUsableCoupon);
 
 		// 상단 내 주문상품 전체갯수 출력
 		int countMyOrder = purchaseService.countMyOrderList(customerId);
@@ -1034,7 +1017,7 @@ public class MyPageController {
 		return "mypage/update-user-inform";
 	}
 
-	// 회원정보수정- 이름수정
+	// 회원정보수정- post
 	@RequestMapping(value = "/updateuser", method = RequestMethod.POST)
 	public String updateMyInform(@RequestParam(defaultValue = "") String newEmail,
 			@RequestParam(defaultValue = "") String newName, @RequestParam(defaultValue = "") String newTelNO,
@@ -1048,13 +1031,45 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-		// 입력된 이름으로 변경
-		if (newName != null && !newName.equals("")) {
+		//입력된 아이디(이메일)이 있는지 갯수 세기 
+		int countNewEmail = customerService.countNewEmail(newEmail);
+		System.out.println("ahahahahahahhahah" + countNewEmail);
+		if(countNewEmail > 0) {
+			redirectAttributes.addFlashAttribute("msg", "중복된 이메일 입니다.");
+			return "redirect:/mypage/updateuser";
+		}
+		// 입력된 이메일 이름 전화번호 한번에 변경
+		if (newName != null && !newName.equals("") && newEmail != null && !newEmail.equals("") && countNewEmail == 0 && newTelNO != null && !newTelNO.equals("") ) {
+			customerService.updateMyName(customerId, newName);
+			customerService.updateMyEmail(customerId, newEmail);
+			customerService.updateMyTelNO(customerId, newTelNO);
+			return "redirect:/mypage/updateuser";
+		}
+		//입력된 이름, 이메일 변경
+		if(newName != null && !newName.equals("") && newEmail != null && !newEmail.equals("") && countNewEmail == 0) {
+			customerService.updateMyName(customerId, newName);
+			customerService.updateMyEmail(customerId, newEmail);
+			return "redirect:/mypage/updateuser";
+		}
+		//입력된 이름, 전화번호 변경
+		if(newName != null && !newName.equals("") && newTelNO != null && !newTelNO.equals("")) {
+			customerService.updateMyName(customerId, newName);
+			customerService.updateMyTelNO(customerId, newTelNO);
+			return "redirect:/mypage/updateuser";
+		}
+		//입력된 이메일,전화번호 변경
+		if(newEmail != null && !newEmail.equals("") && countNewEmail == 0 && newTelNO != null && !newTelNO.equals("")) {
+			customerService.updateMyEmail(customerId, newEmail);
+			customerService.updateMyTelNO(customerId, newTelNO);
+			return "redirect:/mypage/updateuser";
+		}
+		//입력된 이름으로 변경
+		if(newName != null && !newName.equals("")) {
 			customerService.updateMyName(customerId, newName);
 			return "redirect:/mypage/updateuser";
 		}
 		// 입력된 이메일로 변경
-		if (newEmail != null && !newEmail.equals("")) {
+		if (newEmail != null && !newEmail.equals("") && countNewEmail == 0) {
 			customerService.updateMyEmail(customerId, newEmail);
 			return "redirect:/mypage/updateuser";
 		}
@@ -1063,14 +1078,26 @@ public class MyPageController {
 			customerService.updateMyTelNO(customerId, newTelNO);
 			return "redirect:/mypage/updateuser";
 		}
+		//새 비밀번호와 새비밀번호확인이 일치하지 않을 때
+		if(pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))
+				&& !newPassword.equals(checkNewPassword)) {
+			redirectAttributes.addFlashAttribute("msg2", "새비밀번호일치하지않음");
+			return "redirect:/mypage/updateuser";
+		}
+		//현재비밀번호를 잘못입력했을 때
+		if(nowPassword != null && !nowPassword.equals("") &&!pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))){
+			redirectAttributes.addFlashAttribute("msg3", "현재비밀번호일치하지않음");
+			return "redirect:/mypage/updateuser";
+		}
 		// 비밀번호 변경
 		if (pwEncoder.matches(nowPassword, customerService.selectMyPassword(customerId))
-				&& newPassword.equals(checkNewPassword)) {
+				&& newPassword!=null && !newPassword.equals("") && newPassword.equals(checkNewPassword)) {
 			newPassword = pwEncoder.encode(newPassword);
+			redirectAttributes.addFlashAttribute("msg1", "비밀번호변경완료");
 			customerService.updateMyPassword(customerId, newPassword);
-			System.out.println(newPassword + "###########################" + nowPassword);
 			return "redirect:/mypage/updateuser";
 		} else {
+			redirectAttributes.addFlashAttribute("msg4", "변경된정보없음");
 			newEmail = customerService.selectMyEmail(customerId);
 			newName = customerService.selectMyName(customerId);
 			newTelNO = customerService.selectMyTelNo(customerId);
@@ -1082,8 +1109,8 @@ public class MyPageController {
 			customerService.updateMyPassword(customerId, newPassword);
 
 			return "redirect:/mypage/updateuser";
-		}
-
+			}
+		
 	}
 
 	// 마이페이지-배송지관리-배송지목록출력
