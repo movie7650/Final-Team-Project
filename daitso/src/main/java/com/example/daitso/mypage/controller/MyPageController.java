@@ -1219,6 +1219,8 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 		if (shippingService.countShippingDv301(customerId) > 0) {
+			System.out.println("dkdkdkdkdkdk");
+			redirectAttributes.addFlashAttribute("addShippingMsg", "이미기본배송지있음");
 			shippingDv = 302;
 			shippingService.insertMyshipping(customerId, shippingReceiverNM, shippingRoadNMAddr, shippingDaddr,
 					shippingReceiverTelNO, shippingDmnd, shippingDv);
