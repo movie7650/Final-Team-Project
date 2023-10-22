@@ -133,9 +133,9 @@
 								<p style="color:gray">[[${review.productNm}]] [[${review.options}]]</p>
 							</div>
 							<div class="d-flex" style="margin-bottom:10px">
-								<img style="width: 100px; height: 100px" th:if="${review.reviewImageFirst != 'null'}" th:src="${review.reviewImageFirst}">
-								<img style="width: 100px; height: 100px" th:if="${review.reviewImageSecond != 'null'}" th:src="${review.reviewImageSecond}">
-								<img style="width: 100px; height: 100px" th:if="${review.reviewImageThird != 'null'}" th:src="${review.reviewImageThird}">
+								<img style="cursor: pointer; width: 100px; height: 100px" th:onclick="openModalImg([[${review.reviewImageFirst}]])" th:if="${review.reviewImageFirst != 'null'}" th:src="${review.reviewImageFirst}">
+								<img style="cursor: pointer; width: 100px; height: 100px" th:onclick="openModalImg([[${review.reviewImageSecond}]])" th:if="${review.reviewImageSecond != 'null'}" th:src="${review.reviewImageSecond}">
+								<img style="cursor: pointer; width: 100px; height: 100px" th:onclick="openModalImg([[${review.reviewImageThird}]])" th:if="${review.reviewImageThird != 'null'}" th:src="${review.reviewImageThird}">
 							</div>
 							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
 							<p>[[${review.reviewContent}]]</p>
@@ -223,6 +223,16 @@
 		</div>
 	</div>
 </div>
+<div class="modal-img">
+	<div class="modal-frame">
+		<div class="modal-img-frame" style="background-color:#e5e5e5">
+			<div class="d-flex justify-content-between align-items-center" style="margin: 0 10px 0 10px; height: 55px">
+				<h5 style="margin:0px">이미지</h5>
+				<div onclick="closeModalImg()"><span style="font-size:30px; cursor:pointer">×</span></div>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal">
 	<div class="modal-frame">
 		<div style="background-color:#e5e5e5">
@@ -282,6 +292,7 @@
 <script th:inline="javascript">	
 	const body = document.querySelector("body");
 	const modal = document.querySelector(".modal");
+	const modalImg = document.querySelector(".modal-img");
 	const cntInput = document.querySelector(".cnt-input");
 	const hiddenProductId = document.querySelector('.hidden-product-id');
 	const totalPrice = document.querySelector(".total-price");
@@ -698,9 +709,25 @@
 		modal.classList.toggle('show');
 	}
 	
+	//이미지 팝업창 열기
+	function openModalImg(src){
+		//show 클래스 toggle(여기서는 modal 클래스에 show가 없으니 추가됨)
+		modalImg.classList.toggle('show');
+		const imgFrame = document.querySelector('.modal-img-frame');
+		const el = `
+					<div><img src=${src}></img></div>
+					`
+		imgFrame.innerHTML += el;
+	}
+	
 	//문의하기 팝업창 닫기
 	function closeModal(){
 		modal.classList.toggle('show');
+	}
+	
+	//이미지 팝업창 닫기
+	function closeModalImg(){
+		modalImg.classList.toggle('show');
 	}
 	
 	//문의하기 팝업창 이외에 다른 화면 클릭 시 닫기
