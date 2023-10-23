@@ -21,7 +21,7 @@
 	
 	<div class="my-detail-review-content-title">리뷰내용</div>
 	<div style="padding: 20px; border: 1px solid #888888; border-top: none; height: 230px; position: relative;">
-		<div  class="detail-review-content">[(${myreviewlist.reviewContent})]</div>
+		<div style="padding-left:15px;" class="detail-review-content">[(${myreviewlist.reviewContent})]</div>
 	<div class="detail-review-img-container">
 		<div class="detail-review-img01"th:if="${myreviewlist.reviewImageFirst} != 'null'"><img style="width:100%; height: 100%;" th:src="${myreviewlist.reviewImageFirst}"></div>
 		<div class="detail-review-img02" th:if="${myreviewlist.reviewImageSecond} != 'null'"><img style="width:100%; height: 100%;" th:src="${myreviewlist.reviewImageSecond}"></div>

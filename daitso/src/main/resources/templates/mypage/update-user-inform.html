@@ -25,18 +25,21 @@
 		<tr>
 			<td>
 				<div style="float:left;" th:text="${MyEmail}">이메일</div>
-				<input autocomplete=off name="newEmail" type="email" id="change-email-input" hidden>
+				<input autocomplete=off name="newEmail" type="email" id="change-email-input" style="display:none">
 				<button id="change-email" onclick="showEmailInput()" type="button">이메일변경</button>
+				<button id="close-change-email" onclick="hiddenEmailInput()" type="button" style="display:none">닫기</button>
 			</td>
 			<td>
 				<div style="float:left;" th:text="${MyName}">이름	</div>
-				<input autocomplete=off name="newName" type="text" id="change-name-input" hidden>
+				<input autocomplete=off name="newName" type="text" id="change-name-input" style="display:none">
 				<button  id="change-name" onclick="showNameInput()" type="button">이름변경</button>
+				<button id="close-change-name" onclick="hiddenNameInput()" type="button" style="display:none">닫기</button>
 			</td>
 			<td>
 				<div style="float:left;" th:text="${MyTelNo}">전화번호</div>
-				<input autocomplete=off maxlength="13" oninput="oninputPhone(this)" name="newTelNO" type="text" id="change-phonenumber-input" hidden>
+				<input autocomplete=off maxlength="13" oninput="oninputPhone(this)" name="newTelNO" type="text" id="change-phonenumber-input" style="display:none">
 				<button  id="change-phonenumber" onclick="showPhoneNumberInput()" type="button">번호변경</button>
+				<button id="close-change-phonenumber" onclick="hiddenPhoneNumberInput()" type="button" style="display:none">닫기</button>
 			</td>
 			<td><input name="nowPassword" type="password"></td>
 			<td><input name="newPassword" type="password"></td>
@@ -44,15 +47,44 @@
 		</tr>
 	</table>
 			<script>
+				//이메일 수정창 보이기
 				function showEmailInput(){
-					document.getElementById("change-email-input").removeAttribute("hidden");
+					document.getElementById("change-email-input").style.display="inline-block";
+					document.getElementById("close-change-email").style.display="inline-block";
+					document.getElementById("change-email").style.display="none";
 				}
-				function showNameInput(){
-					document.getElementById("change-name-input").removeAttribute("hidden");
+				//이메일 수정창 숨기기
+				function hiddenEmailInput(){
+					document.getElementById("change-email-input").style.display="none";
+					document.getElementById("change-email").style.display="inline-block";
+					document.getElementById("close-change-email").style.display="none";
 				}
+				//이름 수정창 보이기
+					function showNameInput(){
+					document.getElementById("change-name-input").style.display="inline-block";
+					document.getElementById("close-change-name").style.display="inline-block";
+					document.getElementById("change-name").style.display="none";
+				}
+				//이름 수정창 숨기기
+				function hiddenNameInput(){
+					document.getElementById("change-name-input").style.display="none";
+					document.getElementById("change-name").style.display="inline-block";
+					document.getElementById("close-change-name").style.display="none"; 
+				}
+				//전화번호 수정창 보이기
 				function showPhoneNumberInput(){
-					document.getElementById("change-phonenumber-input").removeAttribute("hidden");
+					document.getElementById("change-phonenumber-input").style.display="inline-block";
+					document.getElementById("close-change-phonenumber").style.display="inline-block";
+					document.getElementById("change-phonenumber").style.display="none";
 				}
+				
+				//전화번호 수정창 숨기기
+				function hiddenPhoneNumberInput(){
+					document.getElementById("change-phonenumber-input").style.display="none";
+					document.getElementById("change-phonenumber").style.display="inline-block";
+					document.getElementById("close-change-phonenumber").style.display="none"; 
+				}
+				//전화번호 표현식
 				function oninputPhone(target) {
 				    target.value = target.value
 				        .replace(/[^0-9]/g, '')
@@ -89,6 +121,19 @@
 		   if(msg4 === '변경된정보없음') {
 		       alert("변경된 정보가 없습니다.");
 		   }
+		   var msg5 = '[[${msg5}]]';
+		   if(msg5 === '이름변경됨') {
+		       alert("이름이 변경되었습니다.");
+		   }
+		   var msg6 = '[[${msg6}]]';
+		   if(msg6 === '이메일변경됨') {
+		       alert("이메일이 변경되었습니다.");
+		   }
+		   var msg7 = '[[${msg7}]]';
+		   if(msg7 === '전화번호변경됨') {
+		       alert("전화번호가 변경되었습니다.");
+		   }
+		   
 </script>
 
 

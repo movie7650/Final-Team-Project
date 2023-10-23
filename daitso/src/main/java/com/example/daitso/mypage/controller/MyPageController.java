@@ -1078,16 +1078,19 @@ public class MyPageController {
 		// 입력된 이름으로 변경
 		if (newName != null && !newName.equals("")) {
 			customerService.updateMyName(customerId, newName);
+			redirectAttributes.addFlashAttribute("msg5", "이름변경됨");
 			return "redirect:/mypage/updateuser";
 		}
 		// 입력된 이메일로 변경
 		if (newEmail != null && !newEmail.equals("") && countNewEmail == 0) {
 			customerService.updateMyEmail(customerId, newEmail);
+			redirectAttributes.addFlashAttribute("msg6", "이메일변경됨");
 			return "redirect:/mypage/updateuser";
 		}
 		// 입력된 전화번호로 변경
 		if (newTelNO != null && !newTelNO.equals("")) {
 			customerService.updateMyTelNO(customerId, newTelNO);
+			redirectAttributes.addFlashAttribute("msg7", "전화번호변경됨");
 			return "redirect:/mypage/updateuser";
 		}
 		// 새 비밀번호와 새비밀번호확인이 일치하지 않을 때
