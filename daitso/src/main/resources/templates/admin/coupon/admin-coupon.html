@@ -65,7 +65,7 @@
 					</button>
 				</div>			 
 				 <!-- <form action="/admin/coupon" method="POST" onsubmit="return generateAndSubmitCoupon()">  -->
-				 <form action="/admin/coupon" method="POST"> 
+				 <form id ="registerCoupon" th:action="@{/admin/coupon}" method="post"> 
                 	<input type="hidden" id="couponSn" name="couponSn" value="">
 					<div class="modal-body">		
 						<div style="display: flex; align-items: flex-end; padding-bottom: 10px; margin-left: 10px;">
@@ -132,7 +132,7 @@
 						
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
-								 type="submit">저장</button>
+								 type="button" onclick="submitForm()">저장</button>
 							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
@@ -333,6 +333,33 @@
 	    });
 	}
 	
+
+	
+    function submitForm() {
+    	
+    	var couponNm  = document.getElementById("couponNm").value;
+    	var couponDscntRate  = document.getElementById("couponDscntRate").value;
+    	var combinedCouponNm = couponNm  + " " + couponDscntRate  + "%";
+    	
+     	// 쿠폰명 입력란의 값을 combinedCouponNm으로 설정
+        document.getElementById("couponNm").value = combinedCouponNm;
+    	
+        var formData = $("#registerCoupon").serialize(); // 폼 데이터 직렬화
+        $.ajax({
+            type: "POST",
+            url: "/admin/coupon", 
+            data: formData, // 직렬화한 폼 데이터를 전송
+            success: function (data) {
+            	 showAlert(data);
+            	 $('#registerModal').modal('hide'); // 모달 닫기
+            	 location.reload(); 
+            },
+            error: function () {
+
+            }
+        });    
+    }
+	
 	function setActiveButton(buttonId) {
 	    // 모든 버튼 초기화 (unclicked-title 스타일로 변경)
 	    document.getElementById("btn-601").classList.add("unclicked-title");
@@ -349,6 +376,7 @@
         document.getElementById("secondCategorys").style.display = "none";
         document.getElementById("thirdCategorys").style.display = "none";
     };
+    
     
  	function showSecondCategoryField() {
         // 첫 번째 카테고리 선택값 가져오기
