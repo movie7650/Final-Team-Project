@@ -22,5 +22,6 @@ public class SelectCustomerCoupon {
 	private String allCouponNum;
 	private int existCounponSn;
 	private int myCouponCount;
+	private Date couponUseDt;
 
 }

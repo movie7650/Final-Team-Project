@@ -55,7 +55,8 @@
 	                	   c.coupon_nm 									   AS "couponNm",
 						   c.coupon_dscnt_rate 					  	   	   AS "couponDscntRate", 
 						   c.coupon_epr_dt 							       AS "couponEprDt",
-	               	   	   cc.common_code_nm							   AS "couponUseDv"
+	               	   	   cc.common_code_nm							   AS "couponUseDv",
+               	   	   	   cusc.coupon_use_dt							   AS "couponUseDt"
 			 		  FROM coupon c, customer_coupon cusc, common_code cc
 					 WHERE customer_id=#{customerId}
 	          		   AND c.coupon_id = cusc.coupon_id 
