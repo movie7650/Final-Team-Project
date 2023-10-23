@@ -212,6 +212,7 @@ public class AdminController {
 	@PostMapping("/product/update")
 	@ResponseBody
 	public ResponseEntity<String> updateProduct(Product product, Model model, HttpSession session) {
+		try {
 		adminService.updateProduct(product);
 		model.addAttribute("product", product);
 	   	session.setAttribute("productCode", product.getProductCode());
@@ -225,6 +226,10 @@ public class AdminController {
 		session.setAttribute("productMaxGet", product.getProductMaxGet());
 		String message = "상품이 수정되었습니다.";
 		return ResponseEntity.ok(message);
+		} catch (Exception e) {
+	    	String message = "필수 정보를 모두 입력해주세요.";
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
 	}
 	
 	// 상품 삭제하기
@@ -539,26 +544,44 @@ public class AdminController {
 	}
 	
 	// 카테고리 정보 수정하기
- 	@PostMapping("/update/category")
- 	@ResponseBody
- 	public ResponseEntity<String> updateCategoryInfo(CategoryCheck categoryCheck, Model model, HttpSession session) { 	    
- 		adminService.updateCategoryInfo(categoryCheck);
- 		model.addAttribute("categoryCheck", categoryCheck);
- 	   	session.setAttribute("categoryId",categoryCheck.getCategoryId());
- 		session.setAttribute("categoryNm",categoryCheck.getCategoryNm());
- 		session.setAttribute("categoryContent",categoryCheck.getCategoryContent());
- 		session.setAttribute("categoryImage",categoryCheck.getCategoryImage());
-		String message = "카테고리가 수정되었습니다.";
-		return ResponseEntity.ok(message);
- 	}
+// 	@PostMapping("/update/category")
+// 	@ResponseBody
+// 	public ResponseEntity<String> updateCategoryInfo(CategoryCheck categoryCheck, Model model, HttpSession session) { 	    
+// 		adminService.updateCategoryInfo(categoryCheck);
+// 		model.addAttribute("categoryCheck", categoryCheck);
+// 	   	session.setAttribute("categoryId",categoryCheck.getCategoryId());
+// 		session.setAttribute("categoryNm",categoryCheck.getCategoryNm());
+// 		session.setAttribute("categoryContent",categoryCheck.getCategoryContent());
+// 		session.setAttribute("categoryImage",categoryCheck.getCategoryImage());
+//		String message = "카테고리가 수정되었습니다.";
+//		return ResponseEntity.ok(message);
+// 	}
+	@PostMapping("/update/category")
+	@ResponseBody
+	public ResponseEntity<String> updateCategoryInfo(CategoryCheck categoryCheck, Model model, HttpSession session) {    
+	    try {
+	        adminService.updateCategoryInfo(categoryCheck);
+	        model.addAttribute("categoryCheck", categoryCheck);
+	        session.setAttribute("categoryId", categoryCheck.getCategoryId());
+	        session.setAttribute("categoryNm", categoryCheck.getCategoryNm());
+	        session.setAttribute("categoryContent", categoryCheck.getCategoryContent());
+	        session.setAttribute("categoryImage", categoryCheck.getCategoryImage());
+
+	        String message = "카테고리가 수정되었습니다.";
+	        return ResponseEntity.ok(message);
+	    } catch (Exception e) {
+//	        String message = "카테고리 수정 중 오류가 발생했습니다: " + e.getMessage();
+	    	String message = "필수 입력 항목을 입력해주세요.";
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+	    }
+	}
+
  	
  	// 카테고리 등록하기 ★
 	@PostMapping("/category")
 	@ResponseBody
 	public ResponseEntity<String> registerCategories(CategoryCheck categoryCheck, Model model, @RequestPart MultipartFile file) {
 		adminService.registerCategories(categoryCheck, file);
-//		model.addAttribute("message","카테고리가 등록되었습니다.");
-//		model.addAttribute("searchUrl","/admin/category");
 		String message = "카테고리가 등록되었습니다.";
 		return ResponseEntity.ok(message);
 	}
@@ -841,7 +864,8 @@ public class AdminController {
  	
  	// 쿠폰 등록하기
  	@PostMapping("/coupon")
- 	public String registerCoupons(CouponCheck couponCheck, Model model) {
+ 	@ResponseBody
+ 	public ResponseEntity<String> registerCoupons(CouponCheck couponCheck, Model model) {
 // 		 if (adminService.isCouponSnUnique(couponSn)) {
 // 		     couponCheck.setCouponSn(couponSn);
 // 		     adminService.registerCoupons(couponCheck);
@@ -850,9 +874,11 @@ public class AdminController {
 // 		     model.addAttribute("message", "쿠폰 등록에 실패하였습니다. 다시 시도해주세요.");
 // 		 }
  		adminService.registerCoupons(couponCheck);
- 		 model.addAttribute("message", "쿠폰이 등록되었습니다.");
- 		 model.addAttribute("searchUrl", "/admin/coupon");
- 		 return "admin/message";
+// 		 model.addAttribute("message", "쿠폰이 등록되었습니다.");
+// 		 model.addAttribute("searchUrl", "/admin/coupon");
+// 		 return "admin/message";
+ 		String message = "쿠폰이 등록되었습니다.";
+ 	    return ResponseEntity.ok(message);
  	}
  	
 // 	// 쿠폰 중복 확인하기
