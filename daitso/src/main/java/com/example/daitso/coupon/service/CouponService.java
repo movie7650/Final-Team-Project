@@ -30,13 +30,13 @@ public class CouponService implements ICouponService {
 
 	@Transactional
 	public int insertEventCoupon(CouponEventInsert coupon) {
-		int check = couponRepository.getEventCouponCheck(coupon.getCustomerId(), coupon.getCouponId());
-		if(check == 0) {
-			return 	couponRepository.insertEventCoupon(coupon.getCustomerId(), coupon.getCouponId());
-		}
-		else {
-			return -1;
-		}
+		validateDuplicateCoupon(coupon);
+		return 	couponRepository.insertEventCoupon(coupon.getCustomerId(), coupon.getCouponId());
+	}
+	
+	private void validateDuplicateCoupon(CouponEventInsert coupon) {
+		int num = couponRepository.getEventCouponCheck(coupon.getCustomerId(), coupon.getCouponId());
+		if(num > 0) throw new IllegalStateException("이미 존재하는 쿠폰입니다.");
 	}
 
 }

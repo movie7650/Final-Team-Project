@@ -1,22 +1,24 @@
-<div class="d-flex flex-wrap" style="width:1100px; min-height:690px;">
-	<th:block th:each="coupon : ${couponList}">
-		<div class="d-flex" style="width:350px; height:210px; padding:10px; margin-bottom:20px">
-			<div style="flex:4; border-top-right-radius: 10px 10px; border-bottom-right-radius: 10px 10px; border:1px solid; padding:30px;">
-				<p class="margin-b-0" style="max-width:214.94px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${coupon.couponNm}]]</p>
-				<p class="margin-b-0" style="font-size:30px; font-weight:500">[[${coupon.couponDscntRate}]]%</p>
-				<p class="margin-b-0">유효기한 : [[${coupon.couponEprDt}]]</p>
-				<div class="d-flex justify-content-center align-items-center" style="height:55px; cursor:pointer" th:onclick="getCoupon([[${coupon.couponId}]], [[${customerId}]], [[${_csrf.token}]])">
-					<div>
-						<span>쿠폰 다운받기</span>
-						<img style="height:20px" src="/images/download.png"></img>							
+<div style="min-height:690px;">
+	<div class="d-flex flex-wrap" style="width:1100px;">
+		<th:block th:each="coupon : ${couponList}">
+			<div class="d-flex" style="width:350px; height:210px; padding:10px; margin-bottom:20px">
+				<div style="flex:4; border-top-right-radius: 10px 10px; border-bottom-right-radius: 10px 10px; border:1px solid; padding:30px;">
+					<p class="margin-b-0" style="max-width:214.94px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">[[${coupon.couponNm}]]</p>
+					<p class="margin-b-0" style="font-size:30px; font-weight:500">[[${coupon.couponDscntRate}]]%</p>
+					<p class="margin-b-0">유효기한 : [[${coupon.couponEprDt}]]</p>
+					<div class="d-flex justify-content-center align-items-center" style="height:55px; cursor:pointer" th:onclick="getCoupon([[${coupon.couponId}]], [[${customerId}]], [[${_csrf.token}]])">
+						<div>
+							<span>쿠폰 다운받기</span>
+							<img style="height:20px" src="/images/download.png"></img>							
+						</div>
 					</div>
 				</div>
+				<div class="d-flex justify-content-center align-items-center" style="flex:1; border-top-left-radius: 10px 10px; border-bottom-left-radius: 10px 10px; background-color:#39594e">
+					<span style="font-weight:500; font-size:19px; color:white; writing-mode: vertical-lr">COUPON</span>
+				</div>
 			</div>
-			<div class="d-flex justify-content-center align-items-center" style="flex:1; border-top-left-radius: 10px 10px; border-bottom-left-radius: 10px 10px; background-color:#39594e">
-				<span style="font-weight:500; font-size:19px; color:white; writing-mode: vertical-lr">COUPON</span>
-			</div>
-		</div>
-	</th:block>
+		</th:block>
+	</div>
 </div>
 <div class="d-flex justify-content-center align-items-center">
 	<div th:replace="~{/include/coupon-paging :: coupon-paging}"></div>
