@@ -284,7 +284,7 @@
 					</button>
 				</div>
 				<!-- ★ -->
-				 <form th:action method="post" enctype="multipart/form-data" name="registerNewForm">
+				 <form th:action method="post" enctype="multipart/form-data" id="registerNewForm">
 				
 				<!-- 테스트 -->
 				<!-- <form th:action method="post"> -->
@@ -309,7 +309,7 @@
 							
 							<div style="display: flex; align-items: center; margin-bottom: 15px;">
 								<label for="categoryId" class="col-sm-2 col-form-label"
-									style="padding-left: 25px;">카테고리</label>
+									style="padding-left: 25px; color:red">* 카테고리</label>
 							<div style="display: flex;margin-left: 45px;">
 								<!-- 첫 번째 카테고리 -->
 								<div style="margin-right: 5px;">
@@ -317,7 +317,7 @@
 									<select id="firstCategory"	name="firstCategory"
 										onchange="getSecondForRegister(this.value, 'unsyn')"
 										style="padding-left: 5px; padding-right: 5px; border-radius: 8px;">
-										<option value="">전체</option>
+										<option value="">선택</option>
 										<option th:each="category : ${firstCategories}"
 											th:value="${category.categoryId}"
 											th:text="${category.categoryNm}"></option>
@@ -343,10 +343,10 @@
 							</div>
 							</div>
 							<div class="row mb-3" style="display: flex; align-items: center; ">
-								<label for="productNm" class="col-sm-2 col-form-label" style="padding-left: 39px;">상품명</label>
+								<label for="productNm" class="col-sm-2 col-form-label" style="padding-left: 39px; color: red;">* 상품명</label>
 								<div class="col-sm-8" style="padding-left: 50px;">
 									<input type="text" id="selectsProductNm" maxlength="40" style="margin-left: 10px;"
-										name="productNm">
+										name="productNm" placeholder="* 필수 입력 항목입니다." required>
 								</div>
 							</div>
 						
@@ -436,7 +436,7 @@
 						
 						<div class="modal-footer">
 							<button class="btn btn-primary" style="background-color: #1a385d;border-color: #1a385d; font-weight: 600; color:white;"
-								onclick="changeData()" type="submit">저장</button>
+								onclick="chageData()" type="submit">저장</button>
 							<button type="button" class="btn btn-secondary" style="color: #fff; background-color: #c1c1c1;border-color: #c1c1c1; font-weight: 600;" data-bs-dismiss="modal">닫기</button>
 						</div>
 
@@ -647,14 +647,14 @@
 		</div>
 	</div>
 
-	<div id="messageModal" class="modal fade" tabindex="-1" role="dialog">
+<!-- 	<div id="messageModal" class="modal fade" tabindex="-1" role="dialog">
 	    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 550px;">
-	        <!-- 모달 내용 -->
+	        모달 내용
 	        <div class="modal-body">
-	            <p th:text="${message}"></p> <!-- 메시지를 여기에 표시 -->
+	            <p th:text="${message}"></p> 메시지를 여기에 표시
 	        </div>
 	    </div>
-	</div>
+	</div> -->
 
 	</div>
 	</div>
@@ -678,6 +678,12 @@
         const stockUpdated = uncomma(updateStock.value);
         updateStock.value = stockUpdated;
        
+        //required 부분
+        if (!updatePrice.value || !updateStock.value || !updateProductMaxGet.value) {
+            showAlert("필수 입력 항목을 입력해주세요.");
+            return;
+        }
+     
         var formData = $("#updateProduct").serialize(); // 폼 데이터 직렬화
         $.ajax({
             type: "POST",
@@ -687,21 +693,12 @@
             	 showAlert(data);
             	 $('#updateModal').modal('hide'); // 모달 닫기
             },
-            error: function () {
-
+            error: function (xhr, status, error) {
+            	showAlert(xhr.responseText);
             }
         });    
     }
    
-    
-/* 	$('#registerNewModal').on('hidden.bs.modal', function (e) {
-		console.log("Efwefwef");
-		/* $(this).find('registerNewForm')[0].reset(); */
-	/* 	$('#registerNewForm').each(function() {
-		      this.reset();
-		  });
-
-	});  */
     
 	// 이미지 선택하기
     function selectImage(inputId, imageId, productId) {
@@ -916,6 +913,7 @@
                 
             }); 
     }
+    
     
     
 	// 리로드해도 선택한 값들 유지하려고 (조회 페이지에서 다시 순서대로 클릭 안해도 해당 값들이 나오고 새로고침해도 계속 유지됨)
@@ -1218,14 +1216,15 @@
             const priceChanged = uncomma(changedPrice.value);
             changedPrice.value = priceChanged;
         }
-        
-        const changedStocks = document.querySelectorAll("#productStock");
-        for (let i = 0; i < changedStocks.length; i++) {
-            const changedStock = changedStocks[i];
-            const stockChanged = uncomma(changedStock.value);
-            changedStock.value = stockChanged;
+        const productPrice = document.getElementById("productPrice");
+        const productStock = document.getElementById("productStock");
+        const productMaxGet = document.getElementById("productMaxGet");
+
+        if (!productPrice.value || !productStock.value || !productMaxGet.value) {
+            showAlert("필수 입력 항목을 입력해주세요.");
+            return;
         }
-        
+
         var formData = $("#registerOriginal").serialize(); // 폼 데이터 직렬화
         $.ajax({
             type: "POST",
@@ -1242,8 +1241,69 @@
             }
         });    
 
-    }
+    } 
  	
+   /*  function uploadData() {
+        const form = document.getElementById('registerNewForm');
+        const formData = new FormData(form);
+        const changedPrices = document.querySelectorAll("#productPrice");
+        for (let i = 0; i < changedPrices.length; i++) {
+            const changedPrice = changedPrices[i];
+            const priceChanged = uncomma(changedPrice.value);
+            changedPrice.value = priceChanged;
+        }
+        
+        const productPrice = document.getElementById("productPrice");
+        const productNm = document.getElementById("productNm");
+        const productStock = document.getElementById("productStock");
+        const productMaxGet = document.getElementById("productMaxGet");
+        const files = document.getElementById("files");
+
+        if (!productPrice.value || !productNm.value || !productStock.value || !productMaxGet.value || !files.files.length) {
+            showAlert("필수 입력 항목을 입력해주세요.");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/product",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data);
+                showAlerts(data.message, data.success);
+            },
+            error: function (xhr, status, error) {
+                var response = xhr.responseJSON;
+                console.log(response.message);
+                showAlerts(response.message, response.success);
+            }
+        });
+    } */
+
+
+    
+ 	
+	 // 모달 열 때 입력 필드 초기화
+    $('#registerOriginalModal').on('show.bs.modal', function (e) {
+        // 모든 입력 필드 초기화
+        var inputElements = document.querySelectorAll('#registerOriginalModal input, #registerOriginalModal textarea, #registerOriginalModal select');
+        for (var i = 0; i < inputElements.length; i++) {
+            inputElements[i].value = "";
+        }
+    });
+	 
+ 	// 모달 열 때 입력 필드 초기화
+    $('#registerNewModal').on('show.bs.modal', function (e) {
+    	// 검색 결과 초기화
+        $('#searchTable').empty();
+    	
+        // 모든 입력 필드 초기화
+        var inputElements = document.querySelectorAll('#registerNewModal input, #registerNewModal textarea, #registerNewModal select');
+        for (var i = 0; i < inputElements.length; i++) {
+            inputElements[i].value = "";
+        }
+    });
     
     // number 타입 maxlength 걸어주기
     function maxLengthCheck(object){
@@ -1312,6 +1372,41 @@
 	}); 
 
 	
+	/* window.onload = function() {
+	        // 두 번째, 세 번째 선택 필드 초기 숨김
+	        document.getElementById("secondCategorys").style.display = "none";
+	        document.getElementById("thirdCategorys").style.display = "none";
+	    };
+	    
+	 function showSecondCategoryField() {
+	        // 첫 번째 카테고리 선택값 가져오기
+	        var selectedValue = document.getElementById("firstCategory").value;
+	        
+	        // 선택한 값에 따라 두 번째 카테고리 필드 표시/숨기기
+	        var secondCategoryField = document.getElementById("secondCategorys");
+	        if (selectedValue == "") {
+	            secondCategoryField.style.display = "block";
+	        } else {
+	            secondCategoryField.style.display = "none";
+	        }
+	        
+	        // 선택한 값에 따라 세 번째 카테고리 필드 숨기기
+	        document.getElementById("thirdCategorys").style.display = "none";
+	    }
+	    
+	    function showThirdCategoryField() {
+	        // 두 번째 카테고리 선택값 가져오기
+	        var selectedValue = document.getElementById("secondCategorys").value;
+	        
+	        // 선택한 값에 따라 세 번째 카테고리 필드 표시/숨기기
+	        var thirdCategoryField = document.getElementById("thirdCategorys");
+	        if (selectedValue !== "") {
+	            thirdCategoryField.style.display = "block";
+	        } else {
+	            thirdCategoryField.style.display = "none";
+	        }
+	    } */
+	    
 	//신규 상품 등록에서 categoryId 선택받기
 	function updateSelectCategoryId() {
 	    var selectedSecondCategory = $("#secondCategorys").val();

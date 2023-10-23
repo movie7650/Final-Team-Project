@@ -110,23 +110,23 @@
 						<div class="modal-body">
 							<input type="hidden" id="updateCategoryId" name="categoryId">
 							<div class="row mb-3" style="display: flex;align-items: center;justify-content: space-evenly;">
-								<label for="categoryNm" class="col-form-label">카테고리명</label>
+								<label for="categoryNm" class="col-form-label" style="color:red">* 카테고리명</label>
 								<div class="col-sm-8" style="padding-left: 5px;">
-									<input type="text" id="updateCategoryNm" name="categoryNm"
-										autocomplete="off">
+									<input type="text" id="updateCategoryNm" name="categoryNm"  maxlength="16"
+										autocomplete="off" placeholder="* 필수 입력 항목입니다." required>
 								</div>
 							</div>
 							
 							<div class="row mb-3" style="display: flex;align-items: center;justify-content: space-around;">
 								<label for="categoryContent" class="col-form-label" style="margin-left: 23px;">카테고리 내용</label>
 								<div class="col-sm-8" style="right: 32px;">
-									<textarea id="updateCategoryContent" name="categoryContent"
+									<textarea id="updateCategoryContent" name="categoryContent" maxlength="40"
 										style="height: 100px; width: 440px" autocomplete="off"></textarea>
 								</div>
 							</div>
 							
 							<div class="row mb-3" style="display: flex;align-items: center;justify-content: space-evenly;">
-								<label for="categoryImage" class="col-form-label" style=" margin-right: 12px;">이미지</label>
+								<label for="categoryImage" class="col-form-label" style=" margin-right: 12px; color:red;">* 이미지</label>
 								<div class="col-sm-8" style=" right: 2px;">
 									<label for="uploadCategoryImage">
 				                    	<img id="updateCategoryImage"  width="440" height="300" style="border: 1px solid black; cursor: pointer;"
@@ -168,7 +168,7 @@
 					 <form id="registerCategory" th:action method="post" enctype="multipart/form-data"> 
 						<div class="modal-body">
 							<div style="display: flex;margin-bottom: 5px;">
-								<label for="categoryId" class="col-sm-2 col-form-label">카테고리 유형</label>
+								<label for="categoryId" class="col-sm-2 col-form-label" style="color:red">* 유형</label>
 								<input type="hidden" id="selectsCategoryId" name="categoryId">
 									<div style="padding-left: 5px; display: flex; align-items: center;">
 									<!-- 첫 번째 카테고리 -->
@@ -204,19 +204,19 @@
 							</div>
 							
 								<div style="margin-bottom: 5px;">
-							        <label for="categoryNm" class="col-sm-2 col-form-label">카테고리명</label>
-							        <input type="text" id="categoryNm" name="categoryNm" placeholder="등록할 카테고리 이름을 입력하세요." required>
+							        <label for="categoryNm" class="col-sm-2 col-form-label" style="color:red">* 카테고리명</label>
+							        <input type="text" id="categoryNm" name="categoryNm"  maxlength="16" placeholder="* 필수 입력 항목입니다." required>
 							    </div>
 							
 							    <div style="display:flex;">
 							        <label for="categoryContent" class="col-sm-2 col-form-label">상세 내용</label>
 							        <div class="col-sm-10" style="padding-left: 5px;">
-							            <textarea id="categoryContent" name="categoryContent" style="height: 200px; width: 510px"
-							            placeholder="카테고리의 상세 내용을 입력해주세요." ></textarea>
+							            <textarea id="categoryContent" name="categoryContent" maxlength="40" style="height: 200px; width: 510px"
+							            placeholder="카테고리의 상세 내용을 입력해주세요."></textarea>
 							        </div>
 							    </div>
 								  <div style="display: flex;justify-content: flex-start;align-items: center;">
-									<label for="categoryImage" class="col-sm-2 col-form-label"> 이미지</label>
+									<label for="categoryImage" class="col-sm-2 col-form-label"style="color:red">* 이미지</label>
 									<div class="col-sm-8" style="padding-left: 5px;">
 										<input type="file" id="file" name="file" onchange="fileCheck()"
 											accept=".gif, .jpg, .png, .jpeg" multiple required>																		
@@ -252,6 +252,17 @@
 	    alert(message);
 	}
 	
+	 // 모달 열 때 입력 필드 초기화
+    $('#registerModal').on('show.bs.modal', function (e) {
+        // 모든 입력 필드 초기화
+        var inputElements = document.querySelectorAll('#registerModal input, #registerModal textarea, #registerModal select');
+        for (var i = 0; i < inputElements.length; i++) {
+            inputElements[i].value = "";
+        }
+        document.getElementById("secondCategorys").style.display = "none";
+        document.getElementById("thirdCategorys").style.display = "none";
+    });
+	 
 	 function updateCategory() {
 	        var formData = $("#updateForm").serialize(); // 폼 데이터 직렬화
 	        $.ajax({
@@ -261,16 +272,17 @@
 	            success: function (data) {
 	            	 showAlert(data);
 	            	 $('#updateModal').modal('hide'); // 모달 닫기
+	            	 location.reload(); 
 	            },
-	            error: function () {
-
+	            error: function (xhr, status, error) {
+	            	showAlert(xhr.responseText);
 	            }
 	        });    
 
 	    }
 	 
-	 // 멀티파일이여서 다시해야함!!!!
-	 function submitData() {
+	
+/* 	 function submitData() {
 	        var formData = $("#registerCategory").serialize(); // 폼 데이터 직렬화
 	        $.ajax({
 	            type: "POST",
@@ -285,7 +297,35 @@
 	            }
 	        });    
 
+	    } */
+	    
+	    function submitData() {
+	    	
+			 const categoryNm = document.getElementById("categoryNm");
+			 const file = document.getElementById("file");
+
+			 if (!categoryNm.value || !file.value) {
+			     showAlert("필수 입력 항목을 입력해주세요.");
+			     return;
+			 }
+			 
+	        var formData = new FormData(document.getElementById("registerCategory")); // FormData 객체 생성 (form id)
+	        $.ajax({
+	            type: "POST",
+	            url: "/admin/category",
+	            data: formData, // FormData 객체를 전송
+	            processData: false, // 필요한 설정: FormData 객체의 자동 처리를 중단
+	            contentType: false, // 필요한 설정: Content-Type 헤더 설정을 중단
+	            success: function (data) {
+	                showAlert(data);
+	                $('#registerModal').modal('hide'); // 모달 닫기
+	            },
+	            error: function () {
+	                // 에러 처리
+	            }
+	        });
 	    }
+
 	 
 	// 이미지 선택하기
     function selectImage(inputId, imageId, categoryId) {
