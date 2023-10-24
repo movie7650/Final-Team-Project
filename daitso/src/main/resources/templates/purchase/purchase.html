@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="include/header :: header"></head>
 <body>
 	<div style="display: flex; justify-content: center">
 		<div style="width: 57%">
@@ -163,7 +163,7 @@
 			</div>
 		</div>
 	</div>
-	<div th:replace="~{/include/footer :: footer}"></div>
+	<div th:replace="include/footer :: footer"></div>
 </body>
 <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 <script type="text/javascript" th:inline="javascript">

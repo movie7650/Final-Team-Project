@@ -12,11 +12,11 @@
 		<div class="mypage-inquiry-title">내 문의관리</div>
 
 		<div style="width: 800px; margin-right: 55px;">
-			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
 					 <div class="inquiry-status-container">
 						<div class="reply-waiting">답변대기</div>
 						<div class="reply-completed"><a th:href="@{/mypage/inquiry-reply-completed}">답변완료</a></div>
 					</div><!-- inquiry-status-container --> 
+			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
 				<table class="mypage-inquiry-table">
 					<tr>
 						<th class="inquiry-table-th-1">상품정보</th>

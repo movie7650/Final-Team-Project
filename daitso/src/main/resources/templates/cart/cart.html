@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="include/header :: header"></head>
 <body>
 	<div class="cart-container">
 		<div class="cart-boxes">
@@ -13,7 +13,7 @@
 					</div>
 				</div>
 			</div> -->
-			<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+			<div th:replace="include/body-header :: bodyHeader"></div>
 			<div style="display: flex; justify-content: center">
 				<div class="cart-box">
 					<div style="width: 1100px;">
@@ -220,7 +220,7 @@
 					</div>
 				</div>
 			</div>
-			<div th:replace="~{/include/footer :: footer}"></div>
+			<div th:replace="include/footer :: footer"></div>
 		</div>
 	</div>
 </body>

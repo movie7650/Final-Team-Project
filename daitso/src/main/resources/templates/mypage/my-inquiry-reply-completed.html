@@ -12,11 +12,11 @@
 		<div class="mypage-inquiry-title">내 문의관리</div>
 
 		<div style="width: 800px; margin-right: 55px;">
-			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
 					 <div class="inquiry-status-container">
 						<div class="reply-reply-waiting"><a th:href="@{/mypage/myinquiry}">답변대기</a></div>
 						<div class="reply-reply-completed">답변완료</div>
-					</div><!-- inquiry-status-container --> 
+					</div><!-- inquiry-status-container -->  
+			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
 				<table class="mypage-inquiry-table">
 					<tr>
 						<th class="inquiry-table-th-1">상품정보</th>
@@ -73,8 +73,8 @@
 			</div><!-- mypage-inquiry-table-container -->
 			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">
 				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:890px; margin-left:-42px; margin-top:110px; height: 545px;">
-					<div style="font-weight:600; font-size: 30px; padding-top:170px;"><span style="color:#e8c369;">문의사항</span>이 없습니다.</div>
-					<button id="goto-order-button" onclick="location.href='/'">문의하러가기</button>
+					<div style="font-weight:600; font-size: 30px; padding-top:170px;"><span style="color:#e8c369;">답변완료</span>된 문의가 없습니다.</div>
+					<!-- <button id="goto-order-button" onclick="location.href='/'">문의하러가기</button> -->
 				</div>
 
 			</div> 

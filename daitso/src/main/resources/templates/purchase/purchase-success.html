@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="include/header :: header"></head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
 <div id="purchase-success-container">
 	<div id="purchase-success-box">
 		<div class="purchase-success-title">주문완료</div>
@@ -71,7 +71,7 @@
 		</div>
 	</div>
 </div>
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 <script type="text/javascript" th:inline="javascript">
 	var today = new Date();
