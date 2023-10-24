@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 
 <div class="mypoint-main">
 <div class="point-title">내 포인트</div>
@@ -41,6 +41,6 @@
 
 </div><!-- mypoint-main -->
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 </html>

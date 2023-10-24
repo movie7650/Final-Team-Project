@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}"></head>
+<head th:replace="include/header :: header"></head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
 <div id="customer-find-container">
 	<div id="customer-find-box">
 		<div id="customer-find-title">계정정보 찾기</div>
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 </div>
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 <script th:inline="javascript">
 	

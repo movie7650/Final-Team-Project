@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 
 <div class="add-shipping-main">
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 
 <div class="shipping-title">배송지수정하기</div>
 <div style=" margin-right:8px; margin-top:20px;">
@@ -140,6 +140,6 @@ function removeCheck(){
 	
 </script>
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 </html>
