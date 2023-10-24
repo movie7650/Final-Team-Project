@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
 <form th:action="@{/mypage/order-list}" method="post">
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 
 
 <div class="detail-order-main">
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 	<div class="detail-order-title">주문상세보기</div>
 	
 	<div style="margin-top:150px; margin-right:2.5px;">
@@ -61,6 +61,6 @@
 
 </form> 
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 </html>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 
 <div class="check-customer-main">
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 <div class="check-customer-inform-title">회원정보확인</div>
 <div style="margin-right:101.5px;">
 <div class="update-table-container">
@@ -47,7 +47,7 @@
 
 
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 <script th:src="@{/js/mic.js}"></script>
 </html>

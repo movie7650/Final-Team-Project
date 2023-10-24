@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <title>카테고리별 상품 리스트</title>
 </head>
-<div th:replace="~{/include/header :: header}"></div>
+<div th:replace="include/header :: header"></div>
 <body style="overflow-x:scroll">
-	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<div th:replace="include/body-header :: bodyHeader"></div>
 	<div class="product-body">
 		<div class="product-path-bar">
 			<th:block th:if="${categoryId == 'noCategory'}">
@@ -81,15 +81,15 @@
 		</div>
 		<div class="d-block">
 			<div th:if='${categoryId != "noCategory"}' class="d-flex justify-content-center mb-4">
-				<div th:replace="~{/include/product-paging :: product-paging}"></div>			
+				<div th:replace="include/product-paging :: product-paging"></div>			
 			</div>
 			<div th:if='${categoryId == "noCategory"}' class="d-flex justify-content-center mb-4">
-				<div th:replace="~{/include/product-search-paging :: product-search-paging}"></div>			
+				<div th:replace="include/product-search-paging :: product-search-paging"></div>			
 			</div>
 		</div>
 			
 	</div>
-	<div th:replace="~{/include/footer :: footer}"></div>
+	<div th:replace="include/footer :: footer"></div>
 	<script th:src="@{/js/mic.js}"></script>
 	<script th:inline="javascript">
 	
