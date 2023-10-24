@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div> 
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div> 
 
 
  <div class="write-review-main">
- <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+ <div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 	<div class="write-review-title">리뷰작성하기</div>
 	<div style="margin-top:100px; padding-right:55px;">
 		<th:block th:each="myReviewPurchase : ${MyReviewPurchaseList}">
@@ -79,7 +79,7 @@
 	
 </div><!-- write-review-main -->
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 <script>
 	const ratingStars = [...document.getElementsByClassName("rating__star")];

@@ -43,7 +43,7 @@ public class HelloController {
 		model.addAttribute("saleProductList", sList);
 		model.addAttribute("categoryList", cList);
 		
-		return "/main/main";
+		return "main/main";
 	}
 	
 	@GetMapping("voice")

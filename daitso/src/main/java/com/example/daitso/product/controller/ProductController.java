@@ -50,7 +50,7 @@ public class ProductController {
 	
 	@GetMapping("")
 	public String main() {
-		return "/main/main";
+		return "main/main";
 	}
 	
 	//상품 정보 조회하기(리뷰, 문의글 포함)
@@ -116,7 +116,7 @@ public class ProductController {
 		model.addAttribute("oListThird", oListThird);
 		model.addAttribute("inquiryList", inquiryList);
 		
-		return "/main/product-detail";
+		return "main/product-detail";
 	}
 	
 	//상품 옵션 변경하기
@@ -199,7 +199,7 @@ public class ProductController {
 		model.addAttribute("productList", list);
 		model.addAttribute("path", searchText);
 
-		return "/main/product";
+		return "main/product";
 	}
 	
 	@GetMapping("/sale")
@@ -207,7 +207,7 @@ public class ProductController {
 		List<Product> sList = productService.saleProductList();
 		
 		model.addAttribute("sList", sList);
-		return "/main/product-sale";
+		return "main/product-sale";
 	}
 	
 }

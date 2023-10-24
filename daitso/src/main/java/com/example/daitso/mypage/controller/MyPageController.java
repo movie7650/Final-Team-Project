@@ -651,7 +651,7 @@ public class MyPageController {
 		return "0";
 	}
 
-	// 내 문의내역 조회
+	// 내 문의내역 조회 - 답변대기 조회
 	@RequestMapping(value = "/myinquiry")
 	public String myInquiry(Model model, RedirectAttributes redirectAttributes,
 			@RequestParam(defaultValue = "1") int page, HttpSession session) {
@@ -691,7 +691,7 @@ public class MyPageController {
 		model.addAttribute("countmyorder", countMyOrder);
 
 		// 내 문의 status='Y'인것 조회
-		int inquiryStatusY = inquiryService.countInquiryStatusY(customerId);
+		int inquiryStatusY = inquiryService.countInquiryReplyWaitingStatusY(customerId);
 		model.addAttribute("myInquiryStatusY", inquiryStatusY);
 
 		// 페이징처리
@@ -699,10 +699,10 @@ public class MyPageController {
 		model.addAttribute("customerId", customerId);
 
 		// 내 문의내역 조회
-		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiry(customerId, page);
+		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiryReplyWaiting(customerId, page);
 		model.addAttribute("myinquirylist", myInquiryList);
 
-		int bbsCount = inquiryService.countInquiryStatusY(customerId);
+		int bbsCount = inquiryService.countInquiryReplyWaitingStatusY(customerId);
 		int totalPage = 0;
 		if (bbsCount > 0) {
 			totalPage = (int) Math.ceil(bbsCount / 5.0);
@@ -726,7 +726,80 @@ public class MyPageController {
 
 		return "mypage/mypage-inquiry";
 	}
+	//문의내역조회 - 답변완료 조회
+	@RequestMapping("/inquiry-reply-completed")
+	public String inquiryReplyCompleted(Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
+		// spring security -> 사용자 고유번호 받아오기
+				int customerId = logincheckService.loginCheck();
 
+				if (customerId == -1) {
+					redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
+					return "redirect:/customer/login";
+				}
+				// 상단 잔여포인트
+				String point = pointService.selectTotalPoint(customerId);
+				if (point == null) {
+					point = "0";
+				}
+				model.addAttribute("totalPoint", point + "P");
+
+				// 상단에 배송완료 갯수 출력
+				int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
+				model.addAttribute("shippingCompleteCount", shipCompleteCount);
+
+				// 상단에 배송중갯수 출력
+				int shipCount01 = purchaseService.selectShipping(customerId);
+				model.addAttribute("shipCount", shipCount01);
+
+				// 입금/결제 갯수
+				int payCoin = purchaseService.selectPayCoin(customerId);
+				model.addAttribute("payCoinCount", payCoin);
+
+				// 상단 사용가능한 쿠폰갯수 출력
+				int countUsableCoupon = customerCouponService.countUsableCustomerCoupon(customerId);
+				model.addAttribute("countcoupon", countUsableCoupon);
+
+				// 상단 내 주문상품 전체갯수 출력
+				int countMyOrder = purchaseService.countMyOrderList(customerId);
+				model.addAttribute("countmyorder", countMyOrder);
+
+				// 내 문의 status='Y'인것 조회
+				int inquiryStatusY = inquiryService.countInquiryReplyCompletedStatusY(customerId);
+				model.addAttribute("myInquiryStatusY", inquiryStatusY);
+
+				// 페이징처리
+				session.setAttribute("page", page);
+				model.addAttribute("customerId", customerId);
+
+				// 내 문의내역 조회
+				List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiryReplyCompleted(customerId, page);
+				model.addAttribute("myinquirylist", myInquiryList);
+
+				int bbsCount = inquiryService.countInquiryReplyCompletedStatusY(customerId);
+				int totalPage = 0;
+				if (bbsCount > 0) {
+					totalPage = (int) Math.ceil(bbsCount / 5.0);
+				}
+
+				int totalPageBlock = (int) (Math.ceil(totalPage / 10.0));
+				int nowPageBlock = (int) Math.ceil(page / 10.0);
+				int startPage = (nowPageBlock - 1) * 10 + 1;
+				int endPage = 0;
+				if (totalPage > nowPageBlock * 10) {
+					endPage = nowPageBlock * 10;
+				} else {
+					endPage = totalPage;
+				}
+				model.addAttribute("totalPageCount", totalPage);
+				model.addAttribute("nowPage", page);
+				model.addAttribute("totalPageBlock", totalPageBlock);
+				model.addAttribute("nowPageBlock", nowPageBlock);
+				model.addAttribute("startPage", startPage);
+				model.addAttribute("endPage", endPage);
+		
+		return "mypage/my-inquiry-reply-completed";
+	}
 	// 내 문의에 대한 답변 윈도우창으로 보이기
 	@GetMapping("/myinquiryreply/{inquiryId}")
 	public String myInquiryReply(@PathVariable int inquiryId, Model model) {

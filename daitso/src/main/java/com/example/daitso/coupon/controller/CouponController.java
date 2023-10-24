@@ -3,6 +3,8 @@ package com.example.daitso.coupon.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,10 +43,15 @@ public class CouponController {
 	
 	@PostMapping("/download")
 	@ResponseBody
-	public String download(@RequestBody CouponEventInsert coupon) {
+	public ResponseEntity<String> download(@RequestBody CouponEventInsert coupon) {
+			
+		try {
+			int num = couponService.insertEventCoupon(coupon);			
+			return new ResponseEntity<>(String.valueOf(num), HttpStatus.OK);
+		}catch(IllegalStateException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
-		int num = couponService.insertEventCoupon(coupon);
-		return String.valueOf(num);
 	}
 	
 	@GetMapping("/download/{page}")

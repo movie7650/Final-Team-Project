@@ -1,5 +1,6 @@
 package com.example.daitso.config;
 
+import com.amazonaws.auth.policy.Resource;
 import com.google.api.gax.core.FixedCredentialsProvider;
 
 import com.google.api.gax.rpc.ClientStream;
@@ -22,6 +23,8 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Duration;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -34,6 +37,7 @@ import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.TargetDataLine;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -133,8 +137,13 @@ public class InfiniteStreamRecognize {
         }
       }
     }
+    
+    String filePath = "keys/kcc-final-prj-c26abc6adbe3.json";
 
-    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("C:\\kcc-final-prj-c26abc6adbe3.json"));
+    ClassPathResource resource = new ClassPathResource(filePath);
+   
+    InputStream inputStream = resource.getInputStream();
+    Credentials credentials = GoogleCredentials.fromStream(inputStream);
     SpeechSettings settings = SpeechSettings.newBuilder().setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
     // Creating microphone input buffer thread
     MicBuffer micrunnable = new MicBuffer();
@@ -142,7 +151,6 @@ public class InfiniteStreamRecognize {
     ResponseObserver<StreamingRecognizeResponse> responseObserver = null;
     try (SpeechClient client = SpeechClient.create(settings)) {
       ClientStream<StreamingRecognizeRequest> clientStream;
-      System.out.println("flag2");
       responseObserver =
           new ResponseObserver<StreamingRecognizeResponse>() {
 

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 <form th:action="@{/mypage/order-list}" method="post">
 
 
  <div class="order-list-main"> 
- <div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+ <div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 	<div class="title-order-list">입금/결제</div>
 		
 	<div class="order-category">
@@ -83,7 +83,7 @@
 
 
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 </body>
 <script th:src="@{/js/mic.js}"></script>
 </html>

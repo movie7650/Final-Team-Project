@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 
 <div class="mypage-coupon-main">
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 <div class="mypage-coupon-title">쿠폰조회하기</div>
 
 <div class="coupon-container">	
@@ -45,7 +45,7 @@
 				<td th:text="${selectCustomerCoupon.couponNm}">쿠폰명</td>
 				<td th:text="|${selectCustomerCoupon.couponDscntRate}%|">할인율</td>
 				<td th:text="${selectCustomerCoupon.couponEprDt}">만료일</td>
-				<td	th:text="${selectCustomerCoupon.couponUseDv}">사용가능여부</td>
+				<td style="color:blue;"	th:text="${selectCustomerCoupon.couponUseDv}">사용가능여부</td>
 			</tr>
 		</table>
 		
@@ -78,7 +78,7 @@
 </nav>
 </div>
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 
 </body>
 <script th:src="@{/js/mic.js}"></script>

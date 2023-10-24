@@ -9,8 +9,8 @@
 	</li>
 	
 	<li th:each="i: ${#numbers.sequence(startPage, endPage)}" th:if="${i != 0}" th:classappend="${i==nowPage}?active">
-		<button th:onclick="couponPaging([[${i}]])" th:if="${i==nowPage}" style="background-color:white; font:bold 12px tahoma; width:26px; height:26px; cursor:pointer; border:2px solid #39594e"><span>[[${i}]]</span></button>
-		<button th:onclick="couponPaging([[${i}]])" th:if="${i!=nowPage}" style="background-color:white; font:bold 12px tahoma; width:26px; height:26px; cursor:pointer; border:1px solid #39594e" ><span>[[${i}]]</span></button>
+		<button class="paging-btn-active" th:onclick="couponPaging([[${i}]])" th:if="${i==nowPage}"><span>[[${i}]]</span></button>
+		<button class="paging-btn" th:onclick="couponPaging([[${i}]])" th:if="${i!=nowPage}"><span>[[${i}]]</span></button>
 	</li>
 	
 	<li th:if="${nowPageBlock<totalPageBlock}">
