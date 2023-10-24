@@ -190,10 +190,10 @@
     		CONNECT BY PRIOR inquiry_id = inquiry_pr_id
 	</select>
 	<!-- 
-		기능: 내가 쓴 문의 조회하기
+		기능: 내가 쓴 문의 답변대기 조회하기
 		담당자: 윤상영
 	 -->
-	<select id="selectMyInquiry" resultType="com.example.daitso.inquiry.model.MyInquirySelect" parameterType="int">
+	<select id="selectMyInquiryReplyWaiting" resultType="com.example.daitso.inquiry.model.MyInquirySelect" parameterType="int">
           	SELECT *
             From(
 		            SELECT ROW_NUMBER() OVER(ORDER by i.create_dt DESC) AS row_num,
@@ -210,10 +210,49 @@
 					  FROM inquiry i
 					  JOIN product p on p.product_id = i.product_id
 					 WHERE i.customer_id = #{customerId}
+					 AND i.inquiry_ans_dv = 'W'
 					   AND i.status='Y'
        		)
        		WHERE row_num between #{start} and #{end}
  	</select>
+ 	<!-- 
+		기능: 내가 쓴 문의 답변완료 조회하기
+		담당자: 윤상영
+	 -->
+	 <select id="selectMyInquiryReplyCompleted" resultType="com.example.daitso.inquiry.model.MyInquirySelect" parameterType="int">
+	 	SELECT *
+            From(
+		            SELECT ROW_NUMBER() OVER(ORDER by i.create_dt DESC) AS row_num,
+				           p.product_nm 			as "productNm",
+				           customer_id 				as "customerId",
+				           inquiry_pr_id 			as "inquiryPrId",
+				           inquiry_content 			as "inquiryContent",
+				           inquiry_ans_dv 			as "inquiryAnsDv",
+				           i.create_dt          	as "createDt",
+				           i.creator            	as "creator",
+				           inquiry_id           	as "inquiryId",
+				           i.product_id				as "productId",
+				           p.product_image_first	as "productImg"
+					  FROM inquiry i
+					  JOIN product p on p.product_id = i.product_id
+					 WHERE i.customer_id = #{customerId}
+					 AND i.inquiry_ans_dv = 'C'
+					   AND i.status='Y'
+       		)
+       		WHERE row_num between #{start} and #{end}
+	 </select>
+	 	<!-- 
+		기능: 내가 쓴 문의 답변완료 갯수카운트
+		담당자: 윤상영
+	 -->
+	 <select id="countInquiryReplyCompletedStatusY" resultType="int" parameterType="int">
+	 	SELECT count( inquiry_content) as "inquiryStatusYCount"
+       	  FROM inquiry i
+       	 WHERE i.customer_id=#{customerId}
+       	   AND i.inquiry_ans_dv = 'C'
+           AND i.status='Y'
+	 </select>
+	 
 	<!-- 
 		기능: 내가 쓴 문의 삭제하기 
 		담당자: 윤상영
@@ -224,13 +263,14 @@
 	  WHERE inquiry_id = #{inquiryId}
 	 </update>
   	<!-- 
-		기능: inquiry status Y 인거 카운트
+		기능: inquiry status Y 인 답변대기 카운트
 		담당자: 윤상영
 	 -->
-	 <select id="countInquiryStatusY" resultType="int" parameterType="int"> 
+	 <select id="countInquiryReplyWaitingStatusY" resultType="int" parameterType="int"> 
 	 	SELECT count( inquiry_content) as "inquiryStatusYCount"
        	  FROM inquiry i
        	 WHERE i.customer_id=#{customerId}
+       	   AND i.inquiry_ans_dv = 'W'
            AND i.status='Y'
 	 </select>
  	<!-- 
