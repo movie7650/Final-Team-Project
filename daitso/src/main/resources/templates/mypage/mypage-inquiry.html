@@ -16,7 +16,7 @@
 						<div class="reply-waiting">답변대기</div>
 						<div class="reply-completed"><a th:href="@{/mypage/inquiry-reply-completed}">답변완료</a></div>
 					</div><!-- inquiry-status-container --> 
-			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
+			<div th:if="${myInquiryStatusY} !=0 or ${countreplycompleted} !=0 " class="mypage-inquiry-table-container">
 				<table class="mypage-inquiry-table">
 					<tr>
 						<th class="inquiry-table-th-1">상품정보</th>
@@ -72,7 +72,7 @@
 				</script>
 			</div><!-- mypage-inquiry-table-container -->
 			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">
-				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:890px; margin-left:-42px; margin-top:110px; height: 545px;">
+				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:890px; margin-left:-42px; margin-top:20px; height: 481px;">
 					<div style="font-weight:600; font-size: 30px; padding-top:170px;"><span style="color:#e8c369;">문의사항</span>이 없습니다.</div>
 					<button id="goto-order-button" onclick="location.href='/'">문의하러가기</button>
 				</div>

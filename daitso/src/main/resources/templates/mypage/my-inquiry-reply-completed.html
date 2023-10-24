@@ -16,7 +16,7 @@
 						<div class="reply-reply-waiting"><a th:href="@{/mypage/myinquiry}">답변대기</a></div>
 						<div class="reply-reply-completed">답변완료</div>
 					</div><!-- inquiry-status-container -->  
-			<div th:if="${myInquiryStatusY} !=0 " class="mypage-inquiry-table-container">
+			<div th:if="${myInquiryStatusY} !=0" class="mypage-inquiry-table-container">
 				<table class="mypage-inquiry-table">
 					<tr>
 						<th class="inquiry-table-th-1">상품정보</th>
@@ -26,7 +26,7 @@
 						<th class="inquiry-table-th-5">기능</th>
 
 					</tr>
-					<tr style="font-size: 80%; height: 100px;" th:each="myinquiry : ${myinquirylist}">
+					<tr style="font-size: 80%; height: 100px;" th:each="myinquiry : ${myinquirycompletelist}">
 						<td>
 							<div class="my-inquiry-product-img"><img style="width:100%; height:100%;" th:src="${myinquiry.productImg}"></div>
 							<div th:text="${myinquiry.productNm}" class="my-inquiry-productNm">남성무지반팔티</div>
@@ -72,9 +72,9 @@
 				</script>
 			</div><!-- mypage-inquiry-table-container -->
 			<div th:if="${myInquiryStatusY}==0" class="none-inquiry">
-				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:890px; margin-left:-42px; margin-top:110px; height: 545px;">
+				<div style="background-color: #f3f3f3; margin-bottom:50px; text-align:center; width:890px; margin-left:-42px; margin-top:20px; height: 481px;">
 					<div style="font-weight:600; font-size: 30px; padding-top:170px;"><span style="color:#e8c369;">답변완료</span>된 문의가 없습니다.</div>
-					<!-- <button id="goto-order-button" onclick="location.href='/'">문의하러가기</button> -->
+					<button id="goto-order-button" onclick="location.href='/'">문의하러가기</button>
 				</div>
 
 			</div> 

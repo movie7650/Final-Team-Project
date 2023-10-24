@@ -15,7 +15,7 @@
 	font-weight:600;
 }
 .mypage-inquiry-table-container{
-	margin-top:100px;
+	margin-top:30px;
     margin-left: -43px;
     width: 890px; 
 	
@@ -150,9 +150,10 @@
 	padding-top:10px;
 }
 .inquiry-status-container{
-	width:855px;
-	margin-bottom:30px;
-	margin-left:1.5px;
+	width: 855px;
+    margin-bottom: 30px;
+    margin-left: -41.5px;
+    margin-top: 90px;
 }
 .reply-waiting{
 	padding-top:1.5%;

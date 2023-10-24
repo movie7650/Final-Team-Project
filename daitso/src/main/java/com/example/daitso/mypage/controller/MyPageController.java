@@ -697,7 +697,11 @@ public class MyPageController {
 		// 페이징처리
 		session.setAttribute("page", page);
 		model.addAttribute("customerId", customerId);
-
+		
+		//답변완료 갯수 조회
+		int countReplyCompleted = inquiryService.countInquiryReplyCompletedStatusY(customerId);
+		model.addAttribute("countreplycompleted", countReplyCompleted);
+		
 		// 내 문의내역 조회
 		List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiryReplyWaiting(customerId, page);
 		model.addAttribute("myinquirylist", myInquiryList);
@@ -764,17 +768,21 @@ public class MyPageController {
 				int countMyOrder = purchaseService.countMyOrderList(customerId);
 				model.addAttribute("countmyorder", countMyOrder);
 
-				// 내 문의 status='Y'인것 조회
+				// 내 문의 답변완료 카운트 조회
 				int inquiryStatusY = inquiryService.countInquiryReplyCompletedStatusY(customerId);
 				model.addAttribute("myInquiryStatusY", inquiryStatusY);
-
+				
+				//내 문의  답변대기 카운트
+				int countReplyWaiting = inquiryService.countInquiryReplyWaitingStatusY(customerId);
+				model.addAttribute("countreplywaiting",countReplyWaiting);
+				
 				// 페이징처리
 				session.setAttribute("page", page);
 				model.addAttribute("customerId", customerId);
 
-				// 내 문의내역 조회
+				// 내 문의내역 조회 - 답변완료 조회
 				List<MyInquirySelect> myInquiryList = inquiryService.selectMyInquiryReplyCompleted(customerId, page);
-				model.addAttribute("myinquirylist", myInquiryList);
+				model.addAttribute("myinquirycompletelist", myInquiryList);
 
 				int bbsCount = inquiryService.countInquiryReplyCompletedStatusY(customerId);
 				int totalPage = 0;
