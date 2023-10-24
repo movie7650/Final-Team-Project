@@ -72,9 +72,9 @@ public class InquiryService implements IInquiryService {
 	}
 	//내가 작성한 문의글 조회
 	@Override
-	public List<MyInquirySelect> selectMyInquiry(int customerId, int page) {
+	public List<MyInquirySelect> selectMyInquiryReplyWaiting(int customerId, int page) {
 		int start = (page-1)*5 + 1;
-		return inquiryRepository.selectMyInquiry(customerId,start,start+4);
+		return inquiryRepository.selectMyInquiryReplyWaiting(customerId,start,start+4);
 	}
 	
 	//내 문의글 삭제
@@ -82,10 +82,10 @@ public class InquiryService implements IInquiryService {
 	public void deleteMyInquiry(int inquiryId) {
 		inquiryRepository.deleteMyInquiry(inquiryId);		
 	}
-	//내문의 status가 Y 인 개수
+	//내문의 status가 Y인 답변대기 개수
 	@Override
-	public int countInquiryStatusY(int customerId) {
-		return inquiryRepository.countInquiryStatusY(customerId);
+	public int countInquiryReplyWaitingStatusY(int customerId) {
+		return inquiryRepository.countInquiryReplyWaitingStatusY(customerId);
 	}
 	// inquiryId값에 따른 문의내역과 문의답변 가져오기
 	@Override
@@ -124,5 +124,17 @@ public class InquiryService implements IInquiryService {
 		int start = (page-1)*10 + 1;
 		return inquiryRepository.selectInquiryListByCategoryAndSearch(inquiryAnsDv, searchFilter, search, start, start + 9);
 	}
+	// 내문의조회 - 답변완료 조회
+	@Override
+	public List<MyInquirySelect> selectMyInquiryReplyCompleted(int customerId, int page) {
+		int start = (page-1)*5 + 1;
+		return inquiryRepository.selectMyInquiryReplyCompleted(customerId, start, start+4);
+	}
+	// 내문의조회 - 답변완료 갯수
+	@Override
+	public int countInquiryReplyCompletedStatusY(int customerId) {
+		return inquiryRepository.countInquiryReplyCompletedStatusY(customerId);
+	}
+
 
 }

@@ -27,7 +27,7 @@
 	</div>coupon-number-container -->
 	
 	<!-- 4자리만 입력가능하게 하는 JS -->
-	<script th:inline="javascript">
+<!-- 	<script th:inline="javascript">
 	function maxNum(el, maxlength) {
 		  if(el.value.length > maxlength)  {
 		    el.value 
@@ -38,7 +38,7 @@
 	   if(error){
 		   alert(error);
 	   }	
-	</script>
+	</script> -->
 	
 	<div class="coupon-table-container" style="margin-top:100px; margin-bottom:20px;">
 	
@@ -62,7 +62,7 @@
 				<td th:text="|${selectBanCustomerCoupon.couponDscntRate}%|">할인율</td>
 				<td th:text="${selectBanCustomerCoupon.couponUseDt}">사용일</td>
 				<td th:text="${selectBanCustomerCoupon.couponEprDt}">만료일</td>
-				<td th:text="${selectBanCustomerCoupon.couponUseDv}">상태</td>
+				<td style="color:red;" th:text="${selectBanCustomerCoupon.couponUseDv}">상태</td>
 			</tr>
 		</table>
 		

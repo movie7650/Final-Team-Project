@@ -58,14 +58,20 @@ public interface IInquiryRepository {
 	// 문의 아이디로 문의 내용 조회 + 문의 답변 보기
 	InquiryInfoWithAnswer selectInquiryInfoWithAnswerByInquiryId(int inquiryId);
 	
-	//내 문의글 조회 
-	List<MyInquirySelect> selectMyInquiry(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
+	//내 문의글 - 답변대기 조회
+	List<MyInquirySelect> selectMyInquiryReplyWaiting(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
+	
+	//내 문의글 - 답변완료 조회
+	List<MyInquirySelect> selectMyInquiryReplyCompleted(@Param("customerId")int customerId, @Param("start")int start, @Param("end")int end);
+
+	//inquiry status가 Y인 답변완료 갯수
+	int countInquiryReplyCompletedStatusY(int customerId);
 	
 	//내 문의글 삭제
 	void deleteMyInquiry(@Param("inquiryId")int inquiryId);
 	
-	//inquiry status가  Y 인거 갯수
-	int countInquiryStatusY(int customerId);
+	//inquiry status가  Y인 답변대기 갯수
+	int countInquiryReplyWaitingStatusY(int customerId);
 	
 	//문의내용 선택하기
 	String selectInquiryContent(int inquiryId);

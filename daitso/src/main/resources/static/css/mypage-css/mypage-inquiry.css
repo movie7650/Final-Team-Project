@@ -149,5 +149,66 @@
 	padding-left:15px;
 	padding-top:10px;
 }
+.inquiry-status-container{
+	width:855px;
+	margin-bottom:30px;
+	margin-left:1.5px;
+}
+.reply-waiting{
+	padding-top:1.5%;
+	width:445px;
+	height:55px;
+	border-top:solid 1px #39594e;
+	border-left:solid 1px #39594e;
+	border-right:solid 1px #39594e;
+	color:#39594e;
+	float:left;
+	text-align:center;
+}
+.reply-completed{
+	padding-top:1.5%;
+	border-bottom:solid 1px #39594e;
+	width:444px;
+	height:55px;
+	text-align:center;
+	margin-left:444px;
+	background-color:#f3f3f3;
+}
+.reply-completed a{
+	color:#39594e;
+}
+.reply-completed a:hover{
+	color:#39594e;
+}
+
+.reply-reply-waiting{
+	padding-top:1.5%;
+	width:445px;
+	height:55px;
+	border-bottom:solid 1px #39594e;
+	border-right:solid 1px #39594e;
+	color:#39594e;
+	float:left;
+	text-align:center;
+	background-color:#f3f3f3;
+}
+.reply-reply-completed{
+	padding-top:1.5%;
+	border-top:solid 1px #39594e;
+	border-left:solid 1px #39594e;
+	border-right:solid 1px #39594e;
+	width:444px;
+	height:55px;
+	text-align:center;
+	margin-left:444px;
+	color:#39594e;
+}
+.reply-reply-waiting a{
+	color:#39594e;
+}
+.reply-reply-waiting a:hover{
+	color:#39594e;
+}
+
 
 
