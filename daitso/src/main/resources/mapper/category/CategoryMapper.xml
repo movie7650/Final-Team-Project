@@ -105,7 +105,7 @@
    		FROM  (
     			SELECT category_id, category_nm, category_content, category_image
     			FROM category
-    			WHERE category_id != 0
+    			WHERE category_id != 0 and status = 'Y'
 				ORDER BY dbms_random.value
 			  )
 		WHERE rownum <= 6
