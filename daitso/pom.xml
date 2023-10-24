@@ -10,7 +10,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>daitso</artifactId>
 	<version>1.0</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>daitso</name>
 	<description>kcc 정보통신 최종프로젝트</description>
 	<properties>
