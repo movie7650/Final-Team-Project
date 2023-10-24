@@ -51,6 +51,9 @@ public interface ICustomerService {
 
 	// 내비밀번호 가져오기
 	String selectMyPassword(int customerId);
+	
+	//소셜로그인인지 확인하는 customer login method 가져오기
+	String checkLoginMethod(int customerId);
 
 	// 내정보
 	// UPDATE--------------------------------------------------------------------------

@@ -65,7 +65,7 @@
 			</div><!-- left-menu -->
 			<div class="left-menu">
 				<div class="left-menu-title">MY정보</div>
-				<div class="left-menu-semi-01"><a th:href="@{/mypage/checkuser}">개인정보확인/수정</a></div>
+				<div th:if="${checklogin} == 'inside'"  class="left-menu-semi-01"><a th:href="@{/mypage/checkuser}">개인정보확인/수정</a></div>
 				<div class="left-menu-semi-01"><a th:href="@{/mypage/myshipping}">배송지관리</a></div>
 				<!-- <div class="left-menu-semi-01"><a th:href="@{/mypage/mypoint}">내포인트</a></div> -->
 			</div><!-- left-menu -->

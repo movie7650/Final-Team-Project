@@ -135,4 +135,9 @@ public class CustomerService implements ICustomerService {
 	public int countNewEmail(String newEmail) {
 		return customerRepository.countNewEmail(newEmail);
 	}
+	//소셜로그인인지 확인하는 customer login method 가져오기 
+	@Override
+	public String checkLoginMethod(int customerId) {
+		return customerRepository.checkLoginMethod(customerId);
+	}
 }

@@ -114,7 +114,11 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-
+		
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -190,7 +194,9 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -243,7 +249,10 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -317,6 +326,10 @@ public class MyPageController {
 			return "redirect:/customer/login";
 		}
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -389,7 +402,11 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-
+		
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -462,7 +479,11 @@ public class MyPageController {
 			redirectAttributes.addFlashAttribute("error", "다시 로그인 해주세요!");
 			return "redirect:/customer/login";
 		}
-
+		
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단 잔여포인트
 		String point = pointService.selectTotalPoint(customerId);
 		if (point == null) {
@@ -549,7 +570,11 @@ public class MyPageController {
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
-
+		
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송중갯수 출력
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
@@ -670,6 +695,10 @@ public class MyPageController {
 		}
 		model.addAttribute("totalPoint", point + "P");
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -752,6 +781,10 @@ public class MyPageController {
 				int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 				model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+				//소셜 로그인인지 확인하는 loginMethod가져오기
+				String checkLogin = customerService.checkLoginMethod(customerId);
+				model.addAttribute("checklogin", checkLogin);
+				
 				// 상단에 배송중갯수 출력
 				int shipCount01 = purchaseService.selectShipping(customerId);
 				model.addAttribute("shipCount", shipCount01);
@@ -857,6 +890,10 @@ public class MyPageController {
 		}
 		model.addAttribute("totalPoint", point + "P");
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -934,6 +971,10 @@ public class MyPageController {
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
@@ -1029,6 +1070,10 @@ public class MyPageController {
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
@@ -1085,6 +1130,10 @@ public class MyPageController {
 		int shipCount01 = purchaseService.selectShipping(customerId);
 		model.addAttribute("shipCount", shipCount01);
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
@@ -1229,6 +1278,10 @@ public class MyPageController {
 		}
 		model.addAttribute("totalPoint", point + "P");
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
@@ -1283,6 +1336,10 @@ public class MyPageController {
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 입금/결제 갯수
 		int payCoin = purchaseService.selectPayCoin(customerId);
 		model.addAttribute("payCoinCount", payCoin);
@@ -1354,6 +1411,10 @@ public class MyPageController {
 		}
 		model.addAttribute("totalPoint", point + "P");
 
+		//소셜 로그인인지 확인하는 loginMethod가져오기
+		String checkLogin = customerService.checkLoginMethod(customerId);
+		model.addAttribute("checklogin", checkLogin);
+		
 		// 상단에 배송완료 갯수 출력
 		int shipCompleteCount = purchaseService.selectShippingComplete(customerId);
 		model.addAttribute("shippingCompleteCount", shipCompleteCount);
