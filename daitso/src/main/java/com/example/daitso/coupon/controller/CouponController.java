@@ -38,7 +38,7 @@ public class CouponController {
 		int customerId = logincheckService.loginCheck();
 		
 		model.addAttribute("customerId", customerId);
-		return "/coupon/coupon-main";
+		return "coupon/coupon-main";
 	}
 	
 	@PostMapping("/download")
@@ -87,7 +87,7 @@ public class CouponController {
 		 model.addAttribute("startPage", startPage);
 		 model.addAttribute("endPage", endPage);
 		 
-		return "/coupon/coupon-sub";
+		return "coupon/coupon-sub";
 	}
 
 }

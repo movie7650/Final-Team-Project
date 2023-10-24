@@ -84,7 +84,7 @@ public class CategoryController {
 		model.addAttribute("productList", list);
 		model.addAttribute("path", path);
 		
-		return "/main/product";
+		return "main/product";
 	}
 
 }
