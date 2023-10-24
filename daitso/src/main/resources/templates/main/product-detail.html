@@ -112,7 +112,7 @@
 </div>
 <div class="review-frame d-flex flex-column justify-content-center align-items-center">
 	<div style="width:1100px">
-		<div>
+		<div class="">
 			<div class="modal-body">
 				<h4 style="margin-bottom:30px;">상품리뷰([[${rCnt}]])</h4>
 				<div class="review-body" style="min-height: 600px;" th:if="${rCnt != 0}">
@@ -133,9 +133,9 @@
 								<p style="color:gray">[[${review.productNm}]] [[${review.options}]]</p>
 							</div>
 							<div class="d-flex" style="margin-bottom:10px">
-								<img style="cursor: pointer; width: 100px; height: 100px" th:onclick="openModalImg([[${review.reviewImageFirst}]])" th:if="${review.reviewImageFirst != 'null'}" th:src="${review.reviewImageFirst}">
-								<img style="cursor: pointer; width: 100px; height: 100px" th:onclick="openModalImg([[${review.reviewImageSecond}]])" th:if="${review.reviewImageSecond != 'null'}" th:src="${review.reviewImageSecond}">
-								<img style="cursor: pointer; width: 100px; height: 100px" th:onclick="openModalImg([[${review.reviewImageThird}]])" th:if="${review.reviewImageThird != 'null'}" th:src="${review.reviewImageThird}">
+								<img style="cursor: pointer; width: 100px; height: 100px; margin-right: 10px;" th:onclick="openModalImg([[${review.reviewImageFirst}]])" th:if="${review.reviewImageFirst != 'null'}" th:src="${review.reviewImageFirst}">
+								<img style="cursor: pointer; width: 100px; height: 100px; margin-right: 10px;" th:onclick="openModalImg([[${review.reviewImageSecond}]])" th:if="${review.reviewImageSecond != 'null'}" th:src="${review.reviewImageSecond}">
+								<img style="cursor: pointer; width: 100px; height: 100px; margin-right: 10px;" th:onclick="openModalImg([[${review.reviewImageThird}]])" th:if="${review.reviewImageThird != 'null'}" th:src="${review.reviewImageThird}">
 							</div>
 							<p style="font-weight: bold; margin-bottom:0px;">[[${review.reviewTitle}]]</p>
 							<p>[[${review.reviewContent}]]</p>
@@ -156,7 +156,7 @@
 				<div class="review-none d-flex justify-content-center align-items-center" style="border: 2px solid #e6e6e6; min-height: 600px;" th:if="${rCnt == 0}">
 					<div style="font-size: 25px; font-weight: bold">해당 상품은 아직 리뷰가 없습니다ㅠ.ㅠ</div>
 				</div>
-				<div class="d-block">
+				<div class="reivew-pages d-block">
 					<div class="d-flex justify-content-center mb-4">
 						<div th:replace="~{/include/product-review-paging :: product-review-paging}"></div>			
 					</div>
@@ -225,11 +225,14 @@
 </div>
 <div class="modal-img">
 	<div class="modal-frame">
-		<div class="modal-img-frame" style="background-color:#e5e5e5">
+		<div style="background-color:#e5e5e5">
 			<div class="d-flex justify-content-between align-items-center" style="margin: 0 10px 0 10px; height: 55px">
 				<h5 style="margin:0px">이미지</h5>
 				<div onclick="closeModalImg()"><span style="font-size:30px; cursor:pointer">×</span></div>
 			</div>
+		</div>
+		<div style="width: 600px; height: 545px;" class="modal-img-frame">
+			
 		</div>
 	</div>
 </div>
@@ -644,9 +647,18 @@
 		document.getElementById("cart-need-login").style.display = 'none';
 	}
 
-	function changeReviewPage(productGroupId, page){
+	function changeReviewPage(productGroupId, page, start, end){
 		const reviewBody = document.querySelector(".review-body");
 		const reviewNone = document.querySelector(".review-none");
+		for(var i=start; i<=end; i++){
+			const rBtn = document.querySelector(`.rBtn${i}`);
+			if(i == page){
+				rBtn.classList.replace('paging-btn' , 'paging-btn-active');
+			}else{
+				rBtn.classList.replace('paging-btn-active', 'paging-btn');
+			}
+		}
+		
 		customerId = (customerId == 'whoAreYou') ? -1 : customerId; 
 		
 		fetch("/review/" + productGroupId +"/" + page + "/" + customerId)
@@ -674,9 +686,9 @@
 							<p style="color:gray">${review.productNm} ${review.options}</p>
 						</div>
 						<div class="d-flex" style="margin-bottom:10px">
-							${review.reviewImageFirst != 'null' ? ` <img style="width: 100px; height: 100px" src=${review.reviewImageFirst}> ` : `` }
-							${review.reviewImageSecond != 'null' ? ` <img style="width: 100px; height: 100px" src=${review.reviewImageSecond}> ` : `` }
-							${review.reviewImageThird != 'null' ? ` <img style="width: 100px; height: 100px" src=${review.reviewImageThird}> ` : `` }
+							${review.reviewImageFirst != 'null' ? ` <img style="width: 100px; height: 100px; margin-right: 10px;" src=${review.reviewImageFirst}> ` : `` }
+							${review.reviewImageSecond != 'null' ? ` <img style="width: 100px; height: 100px; margin-right: 10px;" src=${review.reviewImageSecond}> ` : `` }
+							${review.reviewImageThird != 'null' ? ` <img style="width: 100px; height: 100px; margin-right: 10px;" src=${review.reviewImageThird}> ` : `` }
 						</div>
 						<p style="font-weight: bold; margin-bottom:0px;">${review.reviewTitle}</p>
 						<p>${review.reviewContent}</p>
@@ -715,9 +727,9 @@
 		modalImg.classList.toggle('show');
 		const imgFrame = document.querySelector('.modal-img-frame');
 		const el = `
-					<div><img src=${src}></img></div>
+					<img src=${src} style="width: 100%; height: 100%;"></img>
 					`
-		imgFrame.innerHTML += el;
+		imgFrame.innerHTML = el;
 	}
 	
 	//문의하기 팝업창 닫기

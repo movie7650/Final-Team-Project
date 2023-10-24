@@ -42,9 +42,15 @@ public class CouponController {
 	@PostMapping("/download")
 	@ResponseBody
 	public String download(@RequestBody CouponEventInsert coupon) {
+			
+		try {
+			int num = couponService.insertEventCoupon(coupon);			
+			return String.valueOf(num);
+		}catch(IllegalStateException e) {
+			System.out.println("제발" + e.getMessage());
+			return e.getMessage();
+		}
 		
-		int num = couponService.insertEventCoupon(coupon);
-		return String.valueOf(num);
 	}
 	
 	@GetMapping("/download/{page}")

@@ -44,4 +44,5 @@ class InquiryServiceTest {
         int myInquiryListAfter = inquiryService.countInquiryStatusY(17);
         assertThat(myInquiryListAfter).isEqualTo(myInquiryListBefore + 1);
     }
+    
 }

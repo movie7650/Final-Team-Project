@@ -28,6 +28,7 @@ public class ReviewController {
 	@GetMapping("/{productGroupId}/{page}/{customerId}")
 	@ResponseBody
 	public List<ReviewProductDetail> reviewPaging(@PathVariable int productGroupId, @PathVariable int page, @PathVariable int customerId){
+		
 		return reviewService.selectProductReview(productGroupId, page, customerId);
 	}
 	

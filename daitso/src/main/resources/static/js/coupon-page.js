@@ -31,18 +31,14 @@ function getCoupon(couponId, customerId, _csrfToken){
 				},
 				body: JSON.stringify(data)
 			})
-			.then(response => response.json())
 			.then(data=> {
-				if(data > 0){
-					window.alert("다운로드 성공.");
-					window.location.replace(window.location.origin + "/mypage/mycoupon");
-				}else if(data == -1){
-					window.alert("이미 담긴 쿠폰입니다.");
-					window.location.replace(window.location.origin + "/mypage/mycoupon");
-				}else{
-					window.alert("다운로드 실패.");
-					window.location.reload();
-				}
+				console.log(data);
+				window.alert("다운로드 성공.");
+				window.location.replace(window.location.origin + "/mypage/mycoupon");
+			})
+			.catch(error => {
+				console.log(error);
+				window.alert(error);	
 			})
 	}
 }
