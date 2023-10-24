@@ -28,7 +28,6 @@ private byte[] rawData;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	

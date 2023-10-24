@@ -12,7 +12,7 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
-@WebFilter("/*")
+@WebFilter(urlPatterns = { "/admin/*", "/product/*", "/mypage/*", "/shipping/*"})
 public class XSSFilter implements Filter{
 
 	@SuppressWarnings("unused")
