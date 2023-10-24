@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/header :: header}">
+<head th:replace="include/header :: header">
 </head>
 <body>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard}"></div>
+<div th:replace="include/body-header :: bodyHeader"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
 
 <div class="update-customer-main">
-<div th:replace="~{/include/mypage-bread-board :: mypageBreadBoard01}"></div>
+<div th:replace="include/mypage-bread-board :: mypageBreadBoard01"></div>
 <div class="update-customer-title">회원정보수정</div>
 <div style="margin-right:102px;">
 <div class="update-table-container-01">
@@ -137,7 +137,7 @@
 </script>
 
 
-<div th:replace="~{/include/footer :: footer}"></div>
+<div th:replace="include/footer :: footer"></div>
 <script th:src="@{/js/mic.js}"></script>
 </body>
 </html>
