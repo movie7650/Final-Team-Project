@@ -31,10 +31,15 @@ function getCoupon(couponId, customerId, _csrfToken){
 				},
 				body: JSON.stringify(data)
 			})
-			.then(data=> {
-				console.log(data);
-				window.alert("다운로드 성공.");
-				window.location.replace(window.location.origin + "/mypage/mycoupon");
+			.then(response=> {
+				if(!response.ok){
+					return response.text().then(error => {
+						throw new Error(error)
+					})
+				}else{
+					window.alert("다운로드 성공.");
+					window.location.replace(window.location.origin + "/mypage/mycoupon");					
+				}
 			})
 			.catch(error => {
 				console.log(error);

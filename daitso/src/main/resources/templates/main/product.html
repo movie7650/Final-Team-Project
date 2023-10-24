@@ -18,7 +18,7 @@
 		</div>
 		<div class="d-flex justify-content-center">
 			
-			<div style="position:relative">
+			<div style="position:relative; min-height:650px;">
 				<th:block th:if="${categoryId != 'noCategory'}">
 					<div class="d-flex align-items-center" style="height: 40px; margin-top:15px; padding-left:10px; font-size:12px">
 						<a class="a-sort" th:href="@{'/category/' + ${categoryId} + '?sort=lowPrice'}" style="margin-left: 20px">낮은 가격순</a>
