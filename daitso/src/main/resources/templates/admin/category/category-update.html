@@ -1,5 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<head th:replace="include/bs-header :: bsHeader"></head>
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" th:href="@{/css/category-update.css}">
@@ -10,8 +10,8 @@
 }
 </style>
 <body>
-	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
-	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+	<div th:replace="include/admin-body-header :: adminBodyHeader"></div>
+	<div th:replace="include/admin-frame :: adminFrame"></div>
 	<div class="container-lg" style="padding-top:10px;">
 		<!-- 오른쪽 컨텐츠 -->
 		<div id="table">
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-	<div th:replace="~{/include/admin-footer :: footer}"></div>
+	<div th:replace="include/admin-footer :: footer"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://ilikenwf.github.io/jquery.mjs.nestedSortable.js"></script>

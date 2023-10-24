@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/include/bs-header :: bsHeader}"></head>
+<head th:replace="include/bs-header :: bsHeader"></head>
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-purchase.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-inquiry.css}">
 <body>
-	<div th:replace="~{/include/admin-body-header :: adminBodyHeader}"></div>
-	<div th:replace="~{/include/admin-frame :: adminFrame}"></div>
+	<div th:replace="include/admin-body-header :: adminBodyHeader"></div>
+	<div th:replace="include/admin-frame :: adminFrame"></div>
 	<div class="container-lg" style="padding-top: 10px">
 		<!-- <div class="admin-inquiry-title">문의 조회/답변</div> -->
 		<div style="font-weight: bold; margin-top: 20px; font-size:20px;">문의관리 <img class="cart-order-list-img" src="/assets/common/right_arrow_gray.svg"> 문의 조회/답변</div>
@@ -80,7 +80,7 @@
 	</div>
 	</div>
 	</div>
-	<div th:replace="~{/include/admin-footer :: footer}"></div>
+	<div th:replace="include/admin-footer :: footer"></div>
 </body>
 <script type="text/javascript" th:inline="javascript">
 
