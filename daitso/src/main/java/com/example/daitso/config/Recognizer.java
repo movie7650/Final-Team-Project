@@ -54,6 +54,7 @@ public class Recognizer {
 	          public void onStart(StreamController controller) {}
 
 	          public void onResponse(StreamingRecognizeResponse response) {
+	        	  System.out.println("여기가 도나?" + response);
 	            responses.add(response);
 	          }
 
@@ -76,7 +77,7 @@ public class Recognizer {
 	    RecognitionConfig recognitionConfig =
 	        RecognitionConfig.newBuilder()
 	            .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
-	            .setLanguageCode("en-US")
+	            .setLanguageCode("ko-KR")
 	            .setSampleRateHertz(16000)
 	            .build();
 	    StreamingRecognitionConfig streamingRecognitionConfig =
@@ -98,7 +99,7 @@ public class Recognizer {
 
 	    if (!AudioSystem.isLineSupported(targetInfo)) {
 	      System.out.println("Microphone not supported");
-	      System.exit(0);
+	      responseObserver.onError(null);
 	    }
 	    // Target data line captures the audio stream the microphone produces.
 	    TargetDataLine targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
@@ -112,7 +113,7 @@ public class Recognizer {
 	      long estimatedTime = System.currentTimeMillis() - startTime;
 	      byte[] data = new byte[6400];
 	      audio.read(data);
-	      if (estimatedTime > 60000) { // 60 seconds
+	      if (estimatedTime > 10000) { // 60 seconds
 	        System.out.println("Stop speaking.");
 	        targetDataLine.stop();
 	        targetDataLine.close();
