@@ -263,31 +263,6 @@ public class InfiniteStreamRecognize {
             targetDataLine.close(); // 오디오 라인을 닫습니다.
             System.out.println("오버");
 
-			/*
-			 * if (resultEndTimeInMS > 0) { finalRequestEndTime = isFinalEndTime; }
-			 * resultEndTimeInMS = 0;
-			 * 
-			 * lastAudioInput = null; lastAudioInput = audioInput; audioInput = new
-			 * ArrayList<ByteString>();
-			 * 
-			 * restartCounter++;
-			 * 
-			 * if (!lastTranscriptWasFinal) { System.out.print('\n'); break; }
-			 * 
-			 * newStream = true;
-			 * 
-			 * clientStream =
-			 * client.streamingRecognizeCallable().splitCall(responseObserver);
-			 * 
-			 * request = StreamingRecognizeRequest.newBuilder()
-			 * .setStreamingConfig(streamingRecognitionConfig) .build();
-			 * 
-			 * System.out.println(YELLOW); System.out.printf("%d: RESTARTING REQUEST\n",
-			 * restartCounter * STREAMING_LIMIT);
-			 * 
-			 * startTime = System.currentTimeMillis();
-			 */
-
           } else {
 
             if ((newStream) && (lastAudioInput.size() > 0)) {
