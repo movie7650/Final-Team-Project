@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.config.InfiniteStreamRecognize;
+import com.example.daitso.config.Recognizer;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.SpecialProduct;
 import com.example.daitso.product.service.IProductService;
@@ -48,15 +49,15 @@ public class HelloController {
 	
 	@GetMapping("voice")
 	@ResponseBody
-	public Map<String, String> stt(@RequestParam(value="selector", required = false, defaultValue="0") int selector) {
+	public Map<String, String> stt(@RequestParam(value="selector", required = false, defaultValue="0") int selector) throws Exception {
 		Map<String, String> response = new HashMap<>();
-		if(selector == 1) {
-			InfiniteStreamRecognize.doThatShit();
-			return response;
-		}else {
-			response.put("text", InfiniteStreamRecognize.doThat(null));
-			return response;			
-		}
+		Recognizer.streamingMicRecognize();
+		return response;
+		/*
+		 * if(selector == 1) { InfiniteStreamRecognize.doThatShit(); return response;
+		 * }else { response.put("text", InfiniteStreamRecognize.doThat(null)); return
+		 * response; }
+		 */
 	}
 
 }
