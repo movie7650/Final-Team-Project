@@ -233,7 +233,8 @@ public class InfiniteStreamRecognize {
 
         if (!AudioSystem.isLineSupported(targetInfo)) {
           System.out.println("Microphone not supported");
-          System.exit(0);
+			/* doThatShit(); */
+          System.out.println(targetInfo);
         }
         // Target data line captures the audio stream the microphone produces.
         targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
