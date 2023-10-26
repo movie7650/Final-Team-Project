@@ -4,18 +4,14 @@
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-product.css}">
 <link rel="stylesheet" th:href="@{/css/admin-css/admin-frame.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<!-- <style>
-.container {
-            zoom: 0.95; 
-        	}
-</style> -->
+
 <body>
 	<div th:replace="include/admin-body-header :: adminBodyHeader"></div>
 	<div th:replace="include/admin-frame :: adminFrame"></div>
 	<div class="container-lg" style="padding-top: 10px">
 		<div class="row" style="margin-top: 15px; align-items: flex-end;">
 
-			<!-- 일별(현재 날짜를 기준으로 7일치), 주별(현재 날짜를 기준으로 4주치), 월별(현재 날짜를 기준으로 5개월치) 매출 통계  -->
+			<!-- 일별(현재 날짜를 포함해서 7일치), 주별(현재 날짜를 포함해서 4주지), 월별(현재 날짜를 포함해서 5개월치) 매출 통계  -->
 			<div class="col-lg-6" style="margin-top: 20px;">
 				<div class="card">
 					<!-- 드롭다운 메뉴 -->
@@ -25,7 +21,7 @@
 						    </button>
 						    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
 						        <li class="dropdown-header">
-						            <h8>-</h8>
+						            <h8>기간 옵션</h8>
 						        </li>
 						        <li><a class="dropdown-item" href="#" id="filterRevenueDay" data-date-type="day">일별</a></li>
 						        <li><a class="dropdown-item" href="#" id="filterRevenueWeek" data-date-type="week">주별</a></li>
@@ -52,7 +48,7 @@
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="filterDropdown">
 								<li class="dropdown-header">
-									<h8>-</h8>
+									<h8>기간 옵션</h8>
 								</li>
 								<li><a class="dropdown-item" href="#"
 									id="filterTopSellingDay">당일</a></li>
@@ -277,51 +273,60 @@
         document.querySelector(`#${cardId}`).textContent = headerText;
     }
 	
+	
 	// 상품 부족한 재고(10개 미만), 충분한 재고 나눠서 조회하기
     function renderStockPie() {
-        $.ajax({
-            url: '/admin/stock-pie',
-            method: 'GET',
-            success: function (data) {
-            	console.log(data);
-            	
-                var labels = data.map(item => item.productNm || item.label);
-                var quantities = data.map(item => item.productStock);
-				
-                var backgroundColors = data.map(item => {
-                    return item.label === '재고 10개 이상' ? '#3333FF' : '#FF5733';
-                });
-                
-                console.log(labels);
-                console.log(quantities);
-                // 파이 차트 생성
-                var ctx = document.getElementById('stockChart').getContext('2d');
-                var stockChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: quantities,
-                            backgroundColor: backgroundColors,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true, // 레이블 표시 여부
-                                position: 'top', // 레이블 위치 (top, bottom, left, right)
-                            },
-                        }
+    $.ajax({
+        url: '/admin/stock-pie',
+        method: 'GET',
+        success: function (data) {
+            console.log(data);
+
+            var labels = data.map(item => item.productNm || item.label);
+            var quantities = data.map(item => item.productStock);
+
+            var backgroundColors = data.map(item => {
+                if (item.productStock >= 10) {
+                    return '#3333FF'; // 재고 10개 이상 (파랑색)
+                } else if (item.productStock > 0) {
+                    return '#FF5733'; // 재고 1개부터 10개 미만 (주황색)
+                } else {
+                    return 'black'; // 재고가 0인 경우 (검정색)
+                }
+            });
+
+            console.log(labels);
+            console.log(quantities);
+
+            // 파이 차트 생성
+            var ctx = document.getElementById('stockChart').getContext('2d');
+            var stockChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: quantities,
+                        backgroundColor: backgroundColors,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true, // 레이블 표시 여부
+                            position: 'top', // 레이블 위치 (top, bottom, left, right)
+                        },
                     }
-                });
-            },
-            error: function (error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    }
+                }
+            });
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
 
     // 페이지 로드 시 데이터 가져와서 차트 생성
     renderStockPie();
