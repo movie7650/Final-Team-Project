@@ -31,13 +31,14 @@
 						<div class="header-search-input">
                         	<input id="search-product" type="text" name="searchText" placeholder="다있소 매장상품을 검색해보세요!" class="korea-input">
                     	</div>
+                    	<div class="hearder-search-div">					
+                        	<div class="header-search-btn" onclick="startSpeechRecognition();" style="width:25px; height:25px"><img th:src="@{/assets/header/micBefore.png}"></div>					
+						</div>
                     	<div class="header-search-submit">
                         	<button class="header-search-btn" type="submit"><img th:src="@{/assets/header/search.svg}"></button>
                     	</div>
 					</form>
-					<div class="hearder-search-div">
-                        <button class="header-search-btn" onclick="pressMic();"><img th:src="@{/assets/header/microphone-svgrepo-com.svg}"></button>					
-					</div>
+					
 				</div>					
 			</div>
 			<div class="header-mydaitso">
