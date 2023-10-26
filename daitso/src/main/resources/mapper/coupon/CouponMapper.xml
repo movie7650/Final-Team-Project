@@ -164,6 +164,14 @@
          WHERE coupon_sn = #{couponSn}
     </select>
 
+ 	<insert id="issueCoupons">
+	    INSERT ALL
+			INTO customer_coupon (customer_coupon_id, customer_id, coupon_id, COUPON_USE_DV)
+			VALUES (customer_coupon_seq.NEXTVAL, customer_id, #{couponId}, 203)
+			SELECT customer_id FROM customer
+	</insert> 
+
+	
 	<!-- 
 		기능: 이벤트 쿠폰 조회하기
 		담당자: 나현웅

@@ -403,4 +403,9 @@ public class AdminService implements IAdminService{
 		couponRepository.changeCouponDv(couponId, commonCodeId);
 	}
 
+	@Override
+	public void issueCoupons(int couponId) {
+		couponRepository.issueCoupons(couponId);
+	}
+
 }

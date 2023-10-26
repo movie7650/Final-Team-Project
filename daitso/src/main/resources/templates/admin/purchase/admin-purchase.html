@@ -37,6 +37,7 @@
 
 
 		<div style="height: 605px;">
+		
 			<table class="table" style="text-align: center; table-layout:fixed">
 				<thead>
 					<tr>
@@ -48,16 +49,6 @@
 						<th>배송상태</th>
 					</tr>
 				</thead>
-				
-<!-- 				<div class="admin-purchase-thead">
-					<div>순번</div>
-					<div>회원명</div>
-					<div>주문번호</div>
-					<div>구매상품</div>
-					<div>등록날짜</div>
-					<div>배송상태</div>
-				</div> -->
-			
 				<tbody id="purchaseTable">		
  					 <tr th:each="purchase : ${purchaselist}">
 					 	<td th:text="${purchase.rn}"></td>
@@ -67,14 +58,14 @@
 						<td th:text="${purchase.productNm}"></td>
 						<td th:text="${purchase.createDt}"></td>
 						<td>
-							<form th:action="@{/admin/purchase/change-status}" method="post" style="display:flex; align-items: center; justify-content: space-evenly;">
-								<input type="hidden" name="purchaseId" th:value="${purchase.purchaseId}"> 
-									<select	onchange="this.form.submit()" name="commonCodeId" class="form-select">
-	 								<option value="401" th:selected="${purchase.commonCodeNm == '입금/결제'}">입금/결제</option>
-									<option value="402" th:selected="${purchase.commonCodeNm == '배송중'}">배송중</option>
-									<option value="403" th:selected="${purchase.commonCodeNm == '배송완료'}">배송완료</option>
-									</select>
-							</form>
+						<form id="changeForm" th:action="@{/admin/purchase/change-status}" method="post">
+							<input type="hidden" name="purchaseId" th:value="${purchase.purchaseId}"> 
+							<select	th:onchange="submitForm([[${purchase.purchaseId}]])" th:id="${purchase.purchaseId}" class="form-select">
+ 								<option value="401" th:selected="${purchase.commonCodeNm == '입금/결제'}">입금/결제</option>
+								<option value="402" th:selected="${purchase.commonCodeNm == '배송중'}">배송중</option>
+								<option value="403" th:selected="${purchase.commonCodeNm == '배송완료'}">배송완료</option>
+							</select>
+						</form>
 						</td>
 					</tr>	 		 
 			   </tbody>
@@ -172,6 +163,57 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
 	
+	function showAlert(message) {
+	    alert(message);
+	}
+	
+     function submitForm(purchaseId) {
+        var selectForm =  document.getElementById(purchaseId);
+        var commonCodeId = selectForm.options[selectForm.selectedIndex].value;
+  
+        
+        fetch( window.location.origin + "/admin/purchase/change-status" , {
+		    method: "POST",
+		    headers: { 
+		        "Content-Type": "application/json"
+		    },
+		    body: JSON.stringify({
+		    	purchaseId: purchaseId,
+	            commonCodeId: commonCodeId
+		    }),
+		})
+		.then((res) => res.json())
+		.then((data) => {
+			showAlert(data.message);
+			location.reload();
+		});	  
+    } 
+    
+    
+/*     function submitForm(purchaseId) {
+        var commonCodeId = document.querySelector('select[name="commonCodeId"]').value;
+        var requestData = {
+            purchaseId: purchaseId,
+            commonCodeId: commonCodeId
+        };
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/purchase/change-status",
+            data: JSON.stringify(requestData),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+                showAlert(data);
+
+            },
+            error: function (xhr, status, error) {
+                showAlert(xhr.responseText);
+            }
+        });
+    } */
+
+    
 	function setActiveButton(buttonId) {
 	    // 모든 버튼 초기화 (unclicked-title 스타일로 변경)
 	    document.getElementById("btn-401").classList.add("unclicked-title");
@@ -183,6 +225,7 @@
 	    document.getElementById(buttonId).classList.add("clicked-title");
 	}
 
+    
 	//배송 상태별 데이터 + 페이지
 	function loadData(commonCodeId, page) {
 	    $.ajax({
@@ -190,6 +233,7 @@
 	        url: "/admin/purchases",
 	        data: { commonCodeId: commonCodeId, page: page }, 
 	        success: function (data) {
+	        	$('#searchCount').hide();
 	            var tableBody = $('#purchaseTable');
 	            tableBody.empty(); 
 	            if (data.length === 0) {
@@ -204,9 +248,9 @@
 	                        "<td>" + data.data[i].productNm + "</td>" +
 	                        "<td>" + data.data[i].createDt + "</td>" +
 	                        "<td>" +
-	                        "<form action='/admin/purchase/change-status' method='post' style='display:flex; align-items: center; justify-content: space-evenly;'>" +
+	                        "<form  id='changeForm' th:action='@{/admin/purchase/change-status}' method='post'>" +
 	                        "<input type='hidden' name='purchaseId' value='" + data.data[i].purchaseId + "'>" +
-	                        "<select onchange='this.form.submit()' name='commonCodeId' class='form-select'>" +
+	                        "<select onchange='submitForm(" + data.data[i].purchaseId + ")' id='" + data.data[i].purchaseId + "' + class='form-select'>" +
 	                        "<option value='401' " + (data.data[i].commonCodeId === 401 ? 'selected' : '') + ">입금/결제</option>" +
 	                        "<option value='402' " + (data.data[i].commonCodeId === 402 ? 'selected' : '') + ">배송중</option>" +
 	                        "<option value='403' " + (data.data[i].commonCodeId === 403 ? 'selected' : '') + ">배송완료</option>" +
@@ -293,9 +337,9 @@
 	                        "<td>" + data.data[i].productNm + "</td>" +
 	                        "<td>" + data.data[i].createDt + "</td>" +
 	                        "<td>" +
-	                        "<form action='/admin/purchase/change-status' method='post' style='display:flex; align-items: center; justify-content: space-evenly;'>" +
+	                        "<form  id='changeForm' th:action='@{/admin/purchase/change-status}' method='post'>" +
 	                        "<input type='hidden' name='purchaseId' value='" + data.data[i].purchaseId + "'>" +
-	                        "<select onchange='this.form.submit()' name='commonCodeId' class='form-select'>" +
+	                        "<select onchange='submitForm(" + data.data[i].purchaseId + ")' id='" + data.data[i].purchaseId + "' + class='form-select'>" +
 	                        "<option value='401' " + (data.data[i].commonCodeId === 401 ? 'selected' : '') + ">입금/결제</option>" +
 	                        "<option value='402' " + (data.data[i].commonCodeId === 402 ? 'selected' : '') + ">배송중</option>" +
 	                        "<option value='403' " + (data.data[i].commonCodeId === 403 ? 'selected' : '') + ">배송완료</option>" +
@@ -348,8 +392,7 @@
 	        }
 	    });
 	}
-	
-	
+		
 	 // 주문 상세 내역 조회하기
 	 function getPurchaseDetails(purchaseNum) { 
 	         fetch("/admin/purchase-details/" + purchaseNum)
@@ -380,7 +423,6 @@
 	              });
 	      }
 
-	 
 		// 천 단위로 comma 찍기
 	    function inputNumberFormat(obj) {
 	        obj.value = comma(uncomma(obj.value));

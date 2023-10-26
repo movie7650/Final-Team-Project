@@ -26,7 +26,7 @@ public interface ICouponRepository {
 	int selectCountCouponsByDv(@Param("commonCodeId") int commonCodeId);
 
 	void changeCouponDv(@Param("couponId") int couponId, @Param("commonCodeId") int commonCodeId);
-
+	
 	// 쿠폰 삭제하기
 	void deleteCoupon(int couponId);
 	
@@ -35,6 +35,8 @@ public interface ICouponRepository {
 	
 	// 쿠폰 일련번호 중복 확인을 위한 개수 조회하기
 	int countByCouponSn(String couponSn);
+	
+	void issueCoupons(int couponId);
 	
 	// 이벤트 쿠폰 조회하기
 	List<CouponEvent> selectEventCoupon(@Param("start") int start, @Param("end") int end);

@@ -246,7 +246,6 @@
 	        var couponId = $(this).siblings("input[name='couponId']").val();
 	        var commonCodeId = $(this).val();
 
-	        // 비동기 요청 보내기
 	        $.ajax({
 	            type: "POST",
 	            url: "/admin/coupon/change",
@@ -355,7 +354,7 @@
 	                        "<td>" +
 	                        "<div class='btn-group'>" +
 	                        "<button class='btn btn-xs' style='background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600'" +
-	                        "type='button' onclick=''>발급</button>" +
+	                        "type='button' onclick='issueCoupon(" + data.data[i].couponId + ")'>발급</button>" +
 	                        "<button class='btn btn-xs' style='background-color: #1a385d; border-color: #1a385d; font-weight: 600; color:white'" +
 	                        "type='button' onclick='deleteCoupon(" + data.data[i].couponId + ", " + data.data[i].commonCodeId + ")'>삭제</button>" +
 	                        "</td>" +
@@ -405,7 +404,21 @@
 	    });
 	}
 	
-
+	function issueCoupon(couponId) {
+	    $.ajax({
+	        type: "POST",
+	        url: "/admin/coupon/issue", 
+	        data: { couponId: couponId }, 
+	        success: function (data) {
+	        	console.log(data);
+	            alert(data);
+	        },
+	        error: function (error) {
+	            // 에러 발생 시의 처리
+	            alert("발급 실패");
+	        }
+	    });
+	}
 	
     function submitForm() {
     	var couponNm  = document.getElementById("couponNm").value;
