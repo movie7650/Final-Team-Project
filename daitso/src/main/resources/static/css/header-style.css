@@ -113,12 +113,12 @@
 .header-search-box {
 	display:flex;
 	width: 440px;
-	border-bottom: 3px solid #39594e; 
 }
 
 .header-search-form{
 	display: flex;
 	align-items: center;
+	border-bottom: 3px solid #39594e; 
 }
 
 .header-search-input{
