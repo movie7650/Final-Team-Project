@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.admin.exceptions.DuplicateProductException;
+import com.example.daitso.admin.model.AdminShippingStatusMessage;
 import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.admin.service.S3Service;
 import com.example.daitso.category.model.Category;
@@ -488,22 +489,55 @@ public class AdminController {
     }
 
     // 배송 상태 변경하기
+//    @PostMapping("/purchase/change-status")
+//    public String changePurchaseStatus(int purchaseId, int commonCodeId, Model model) {
+//        adminService.changePurchaseStatus(purchaseId, commonCodeId);
+//        model.addAttribute("message","배송 상태가 변경되었습니다.");
+//		model.addAttribute("searchUrl","/admin/purchase");
+//		return "admin/message";
+//    }	 
+    
     @PostMapping("/purchase/change-status")
-    public String changePurchaseStatus(int purchaseId, int commonCodeId, Model model) {
-        adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        model.addAttribute("message","배송 상태가 변경되었습니다.");
-		model.addAttribute("searchUrl","/admin/purchase");
-		return "admin/message";
-    }	 
+    @ResponseBody
+    public AdminShippingStatusMessage changePurchaseStatus(@RequestBody String data) {
+    	JsonElement element = JsonParser.parseString(data);
+    	
+    	AdminShippingStatusMessage message = new AdminShippingStatusMessage();
+    	message.setMessage("배송 상태가 변경되었습니다.");
+    	
+    	int purchaseId = Integer.valueOf(element.getAsJsonObject().get("purchaseId").getAsString());
+		int commonCodeId = Integer.valueOf(element.getAsJsonObject().get("commonCodeId").getAsString());
+        
+		adminService.changePurchaseStatus(purchaseId, commonCodeId);
+        
+		return message;
+    }	
     
 //    @PostMapping("/purchase/change-status")
 //    @ResponseBody
-//    public ResponseEntity<String> changePurchaseStatus(int purchaseId, int commonCodeId, Model model) {
+//    public AdminShippingStatusMessage changePurchaseStatus(@RequestBody Map<String, Object> requestData) {
+//        AdminShippingStatusMessage message = new AdminShippingStatusMessage();
+//        message.setMessage("배송 상태가 변경되었습니다.");
+//
+//        int purchaseId = (int) requestData.get("purchaseId");
+//        int commonCodeId = (int) requestData.get("commonCodeId");
+//
+//        adminService.changePurchaseStatus(purchaseId, commonCodeId);
+//
+//        return message;
+//    }
+    
+//    @PostMapping("/purchase/change-status")
+//    @ResponseBody
+//    public ResponseEntity<String> changePurchaseStatus(@RequestBody Map<String, Integer> requestData) {       
+//        int purchaseId = requestData.get("purchaseId");
+//        int commonCodeId = requestData.get("commonCodeId");
 //        adminService.changePurchaseStatus(purchaseId, commonCodeId);
 //        String message = "배송 상태가 변경되었습니다.";
-//		return ResponseEntity.ok(message);
-//    }	 
-    
+//        return ResponseEntity.ok(message);
+//    }
+
+
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
@@ -929,6 +963,14 @@ public class AdminController {
 // 	}
  	
  	
+ 	@PostMapping("/coupon/issue")
+ 	@ResponseBody
+ 	public ResponseEntity<String> issueCoupons(@RequestParam int couponId, Model model) {
+ 		adminService.issueCoupons(couponId);
+ 		String message = "쿠폰을 발급하였습니다.";
+ 	    return ResponseEntity.ok(message);
+ 	}
+    
  	@GetMapping("/chart")
     public String showAdminChart(Model model) {
         return "admin/admin-chart";

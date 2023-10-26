@@ -140,7 +140,6 @@ public interface IAdminService {
 	//
 	int selectCountCouponsByDv(int commonCodeId);
 	
-
 	void changeCouponDv(int couponId, int commonCodeId);
 	
 	// 쿠폰 삭제하기
@@ -148,6 +147,8 @@ public interface IAdminService {
 
 	// 쿠폰 등록하기
 	void registerCoupons(CouponCheck couponCheck);
+	
+	void issueCoupons(int couponId);
 	
 	// 쿠폰 일련번호 중복 확인하기
 	boolean isCouponSnUnique(String couponSn);
