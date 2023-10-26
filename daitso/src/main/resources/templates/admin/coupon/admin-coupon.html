@@ -25,7 +25,7 @@
 		<div>
 			<div style="display: flex; height: 60px; line-height: 60px; text-align: center; margin-top: 20px; font-size: 16px; margin-bottom: 20px;">
 				<a class="clicked-title"   id="btn-601" type="button" onclick="loadData(601); setActiveButton('btn-601');">용도 미정 쿠폰</a>				
-				<a class="unclicked-title" id="btn-602" type="button" onclick="loadedData(602); setActiveButton('btn-602');">전체 고객 대상 쿠폰</a>
+				<a class="unclicked-title" id="btn-602" type="button" onclick="loadsData(602); setActiveButton('btn-602');">전체 고객 대상 쿠폰</a>
 				<a class="unclicked-title" id="btn-603" type="button" onclick="loadedData(603); setActiveButton('btn-603');">프로모션 쿠폰</a>
 			</div>
 		</div>
@@ -39,7 +39,7 @@
 						<th style="width: 12%;">쿠폰 발행일</th>
 						<th style="width: 12%;">쿠폰 만료일</th>
 						<th style="width: 15%;">쿠폰 구분</th>
-						<th style="width: 10%;"></th>
+						<th style="width: 12%;"></th>
 					</tr>
 				</thead>
 				<tbody id="couponTable">		
@@ -163,8 +163,6 @@
         loadData(601);
     });
 
-
-	//배송 상태별 데이터 + 페이지
 	function loadData(commonCodeId, page) {
 	    $.ajax({
 	        type: "GET",
@@ -333,10 +331,83 @@
 	    });
 	}
 	
+	function loadsData(commonCodeId, page) {
+	    $.ajax({
+	        type: "GET",
+	        url: "/admin/coupons",
+	        data: { commonCodeId: commonCodeId, page: page }, 
+	        success: function (data) {
+	        	console.log(data);
+	            var tableBody = $('#couponTable');
+	            tableBody.empty(); 
+	            if (data.length === 0) {
+	                /* var noResultRow = "<tr><td colspan='5'> 검색 결과가 없습니다.</td></tr>";
+	                tableBody.append(noResultRow); */
+	            } else {
+	            	for (var i = 0; i < data.data.length; i++) {	            		
+ 	                    var newRow = "<tr>" +
+	                        "<td>" + data.data[i].rn + "</td>" +
+	                        "<td>" + data.data[i].couponNm + "</td>" +
+	                        "<td>" + data.data[i].couponDscntRate + '%' + "</td>" +
+	                        "<td>" + data.data[i].couponPblDt + "</td>" +
+	                        "<td>" + data.data[i].couponEprDt + "</td>" +
+	                        "<td>" + data.data[i].commonCodeNm + "</td>" +
+	                        "<td>" +
+	                        "<div class='btn-group'>" +
+	                        "<button class='btn btn-xs' style='background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600'" +
+	                        "type='button' onclick=''>발급</button>" +
+	                        "<button class='btn btn-xs' style='background-color: #1a385d; border-color: #1a385d; font-weight: 600; color:white'" +
+	                        "type='button' onclick='deleteCoupon(" + data.data[i].couponId + ", " + data.data[i].commonCodeId + ")'>삭제</button>" +
+	                        "</td>" +
+	                        "</tr>";  
+	                    tableBody.append(newRow);
+	                }
+	            }
+
+	            /// 페이징 정보 업데이트
+	            var pagination = $('#pagination');
+	            pagination.empty();
+	            
+	            // 첫 페이지로 이동하는 링크
+	             var firstLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+				    "<a class='page-link' onclick='loadsData(" + commonCodeId + ")' aria-label='First'><span aria-hidden='true'>&laquo;</span></a>" +
+				    "</li>";
+				 pagination.append(firstLink);
+
+	            // 이전 페이지로 이동하는 링크
+	            var prevLink = "<li class='page-item " + (data.currentPage === 1 ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadsData(" + commonCodeId + ", " + (data.currentPage - 1) + ")' aria-label='Previous'><span aria-hidden='true'>&lsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(prevLink);
+
+	            for (var i = 1; i <= data.totalPages; i++) {
+	                var pageLink = "<li class='page-item " + (i === data.currentPage ? 'active' : '') + "'>" +
+	                    "<a class='page-link' onclick='loadsData(" + commonCodeId + ", " + i + ")'>" + i + "</a>" +
+	                    "</li>";
+	                pagination.append(pageLink);
+	            }
+
+	            // 다음 페이지로 이동하는 링크
+	            var nextLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+	                "<a class='page-link' onclick='loadsData(" + commonCodeId + ", " + (data.currentPage + 1) + ")' aria-label='Next'><span aria-hidden='true'>&rsaquo;</span></a>" +
+	                "</li>";
+	            pagination.append(nextLink);
+	            
+	            // 마지막 페이지로 이동하는 링크
+	             var lastLink = "<li class='page-item " + (data.currentPage === data.totalPages ? 'disabled' : '') + "'>" +
+		             "<a class='page-link' onclick='loadsData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
+		             "</li>";
+	        	 pagination.append(lastLink);
+	        },
+	        error: function (error) {
+	            console.log("에러 발생: " + error);
+	        }
+	    });
+	}
+	
 
 	
     function submitForm() {
-    	
     	var couponNm  = document.getElementById("couponNm").value;
     	var couponDscntRate  = document.getElementById("couponDscntRate").value;
     	var combinedCouponNm = couponNm  + " " + couponDscntRate  + "%";
@@ -582,6 +653,7 @@
             data: { couponId: couponId },
             success: function (data) {
                 showAlert(data);
+                loadsData(commonCodeId);
                 loadedData(commonCodeId);
                
             },
