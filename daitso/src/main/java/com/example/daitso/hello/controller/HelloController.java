@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.daitso.category.model.Category;
 import com.example.daitso.category.sevice.ICategoryService;
 import com.example.daitso.config.InfiniteStreamRecognize;
+import com.example.daitso.config.Recognizer;
+import com.example.daitso.config.Recongize;
 import com.example.daitso.product.model.Product;
 import com.example.daitso.product.model.SpecialProduct;
 import com.example.daitso.product.service.IProductService;
@@ -26,14 +28,14 @@ import com.example.daitso.product.service.IProductService;
 @Controller
 @RequestMapping("/")
 public class HelloController {
-	
+
 	@Autowired
 	IProductService productService;
-	
+
 	@Autowired
 	ICategoryService categoryService;
-	
-	//메인 페이지
+
+	// 메인 페이지
 	@GetMapping("")
 	public String hello(Model model) {
 		List<SpecialProduct> list = productService.selectSpecialProduct();
@@ -42,22 +44,23 @@ public class HelloController {
 		model.addAttribute("productList", list);
 		model.addAttribute("saleProductList", sList);
 		model.addAttribute("categoryList", cList);
-		
+
 		return "main/main";
 	}
-	
-	@GetMapping("voice")
-	@ResponseBody
-	public Map<String, String> stt(@RequestParam(value="selector", required = false, defaultValue="0") int selector) {
-		Map<String, String> response = new HashMap<>();
-		if(selector == 1) {
-			InfiniteStreamRecognize.doThatShit();
-			return response;
-		}else {
-			response.put("text", InfiniteStreamRecognize.doThat(null));
-			return response;			
-		}
-	}
+
+	/* google stt code
+	 * @GetMapping("voice")
+	 * 
+	 * @ResponseBody public Map<String, String> stt(@RequestParam(value="selector",
+	 * required = false, defaultValue="0") int selector) throws Exception {
+	 * Map<String, String> response = new HashMap<>();
+	 * Recongize.syncRecognizeFile("test.mp3"); return response;
+	 * 
+	 * if(selector == 1) { InfiniteStreamRecognize.doThatShit(); return response;
+	 * }else { response.put("text", InfiniteStreamRecognize.doThat(null)); return
+	 * response; }
+	 * 
+	 * }
+	 */
 
 }
-

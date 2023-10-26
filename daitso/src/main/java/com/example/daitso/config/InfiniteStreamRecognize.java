@@ -233,7 +233,8 @@ public class InfiniteStreamRecognize {
 
         if (!AudioSystem.isLineSupported(targetInfo)) {
           System.out.println("Microphone not supported");
-          System.exit(0);
+			/* doThatShit(); */
+          System.out.println(targetInfo);
         }
         // Target data line captures the audio stream the microphone produces.
         targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
@@ -261,31 +262,6 @@ public class InfiniteStreamRecognize {
             targetDataLine.stop(); // 녹음을 멈춥니다.
             targetDataLine.close(); // 오디오 라인을 닫습니다.
             System.out.println("오버");
-
-			/*
-			 * if (resultEndTimeInMS > 0) { finalRequestEndTime = isFinalEndTime; }
-			 * resultEndTimeInMS = 0;
-			 * 
-			 * lastAudioInput = null; lastAudioInput = audioInput; audioInput = new
-			 * ArrayList<ByteString>();
-			 * 
-			 * restartCounter++;
-			 * 
-			 * if (!lastTranscriptWasFinal) { System.out.print('\n'); break; }
-			 * 
-			 * newStream = true;
-			 * 
-			 * clientStream =
-			 * client.streamingRecognizeCallable().splitCall(responseObserver);
-			 * 
-			 * request = StreamingRecognizeRequest.newBuilder()
-			 * .setStreamingConfig(streamingRecognitionConfig) .build();
-			 * 
-			 * System.out.println(YELLOW); System.out.printf("%d: RESTARTING REQUEST\n",
-			 * restartCounter * STREAMING_LIMIT);
-			 * 
-			 * startTime = System.currentTimeMillis();
-			 */
 
           } else {
 
