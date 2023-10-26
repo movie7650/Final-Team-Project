@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.daitso.admin.exceptions.DuplicateProductException;
+import com.example.daitso.admin.model.AdminShippingStatusMessage;
 import com.example.daitso.admin.service.IAdminService;
 import com.example.daitso.admin.service.S3Service;
 import com.example.daitso.category.model.Category;
@@ -309,9 +310,40 @@ public class AdminController {
 	}
 	
 	// 상품 등록하기 ★
-	@PostMapping("/product")
-	public String registerProduct(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
-		// 입력 필드가 비어 있으면 '-'으로 대체
+//	@PostMapping("/product")
+//	public String registerProduct(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+//		// 입력 필드가 비어 있으면 '-'으로 대체
+//	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
+//	        product.setProductOptionFirst("-");
+//	    }
+//	    if (product.getProductOptionSecond() == null || product.getProductOptionSecond().isEmpty()) {
+//	        product.setProductOptionSecond("-");
+//	    }
+//	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
+//	        product.setProductOptionThird("-");
+//	    }
+//	    if (files.size() < 3) {
+//	        String errorMessage = "3개의 이미지 파일을 업로드해주세요.";
+//	        model.addAttribute("message", errorMessage);
+//	        return "redirect:/admin/product";
+//	    }
+//
+//	    try {
+//	    	adminService.registerProduct(product, files);
+//	    	String successMessage = "상품이 등록되었습니다.";
+//	    	model.addAttribute("message", successMessage);
+//	    } catch (DuplicateProductException e) {
+//	    	String errorMessage = "상품이 중복되었습니다! 다시 등록해주세요.";
+//	        model.addAttribute("message", errorMessage);
+//	    } catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//		return "redirect:/admin/product";
+//	}
+		
+	@PostMapping("/product/new")
+	public ResponseEntity<String> registerProduct(ProductCheck product, Model model, @RequestPart List<MultipartFile> files) {
+	    // 입력 필드가 비어 있으면 '-'으로 대체
 	    if (product.getProductOptionFirst() == null || product.getProductOptionFirst().isEmpty()) {
 	        product.setProductOptionFirst("-");
 	    }
@@ -321,19 +353,18 @@ public class AdminController {
 	    if (product.getProductOptionThird() == null || product.getProductOptionThird().isEmpty()) {
 	        product.setProductOptionThird("-");
 	    }
-	    
 	    try {
-	    	adminService.registerProduct(product, files);
-	    	String successMessage = "상품이 등록되었습니다.";
-	    	model.addAttribute("message", successMessage);
+	        adminService.registerProduct(product, files);
+	        String message = "상품이 등록되었습니다.";
+	        return ResponseEntity.ok(message);
 	    } catch (DuplicateProductException e) {
-	    	String errorMessage = "상품이 중복되었습니다! 다시 등록해주세요.";
-	        model.addAttribute("message", errorMessage);
+	        String message = "상품이 중복되었습니다. 다시 등록해주세요.";
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
 	    } catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return "redirect:/admin/product";
+	        throw new RuntimeException(e);
+	    }
 	}
+
 	
 //	@PostMapping("/product/original")
 //	@ResponseBody
@@ -461,13 +492,55 @@ public class AdminController {
     }
 
     // 배송 상태 변경하기
+//    @PostMapping("/purchase/change-status")
+//    public String changePurchaseStatus(int purchaseId, int commonCodeId, Model model) {
+//        adminService.changePurchaseStatus(purchaseId, commonCodeId);
+//        model.addAttribute("message","배송 상태가 변경되었습니다.");
+//		model.addAttribute("searchUrl","/admin/purchase");
+//		return "admin/message";
+//    }	 
+    
     @PostMapping("/purchase/change-status")
-    public String changePurchaseStatus(int purchaseId, int commonCodeId, Model model) {
-        adminService.changePurchaseStatus(purchaseId, commonCodeId);
-        model.addAttribute("message","배송 상태가 변경되었습니다.");
-		model.addAttribute("searchUrl","/admin/purchase");
-		return "admin/message";
-    }	 
+    @ResponseBody
+    public AdminShippingStatusMessage changePurchaseStatus(@RequestBody String data) {
+    	JsonElement element = JsonParser.parseString(data);
+    	
+    	AdminShippingStatusMessage message = new AdminShippingStatusMessage();
+    	message.setMessage("배송 상태가 변경되었습니다.");
+    	
+    	int purchaseId = Integer.valueOf(element.getAsJsonObject().get("purchaseId").getAsString());
+		int commonCodeId = Integer.valueOf(element.getAsJsonObject().get("commonCodeId").getAsString());
+        
+		adminService.changePurchaseStatus(purchaseId, commonCodeId);
+        
+		return message;
+    }	
+    
+//    @PostMapping("/purchase/change-status")
+//    @ResponseBody
+//    public AdminShippingStatusMessage changePurchaseStatus(@RequestBody Map<String, Object> requestData) {
+//        AdminShippingStatusMessage message = new AdminShippingStatusMessage();
+//        message.setMessage("배송 상태가 변경되었습니다.");
+//
+//        int purchaseId = (int) requestData.get("purchaseId");
+//        int commonCodeId = (int) requestData.get("commonCodeId");
+//
+//        adminService.changePurchaseStatus(purchaseId, commonCodeId);
+//
+//        return message;
+//    }
+    
+//    @PostMapping("/purchase/change-status")
+//    @ResponseBody
+//    public ResponseEntity<String> changePurchaseStatus(@RequestBody Map<String, Integer> requestData) {       
+//        int purchaseId = requestData.get("purchaseId");
+//        int commonCodeId = requestData.get("commonCodeId");
+//        adminService.changePurchaseStatus(purchaseId, commonCodeId);
+//        String message = "배송 상태가 변경되었습니다.";
+//        return ResponseEntity.ok(message);
+//    }
+
+
     
     // 주문 내역 검색하기 (회원명, 주문번호 선택해서)
     @GetMapping("/search-purchase")
@@ -893,6 +966,14 @@ public class AdminController {
 // 	}
  	
  	
+ 	@PostMapping("/coupon/issue")
+ 	@ResponseBody
+ 	public ResponseEntity<String> issueCoupons(@RequestParam int couponId, Model model) {
+ 		adminService.issueCoupons(couponId);
+ 		String message = "쿠폰을 발급하였습니다.";
+ 	    return ResponseEntity.ok(message);
+ 	}
+    
  	@GetMapping("/chart")
     public String showAdminChart(Model model) {
         return "admin/admin-chart";
@@ -991,7 +1072,6 @@ public class AdminController {
         return customerCounts; 
     }
 
-    
     
 	// 카테고리 수정하기
 	@GetMapping("/category/update")
