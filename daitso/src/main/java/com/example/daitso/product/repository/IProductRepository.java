@@ -111,5 +111,11 @@ public interface IProductRepository {
 	// 상품 개수 조회(검색시)
 	int selectSearchProductCount(@Param("searchText") String searchText);
 	
+	// 이미지 삭제할 상품 조회(임시 코드)
+	List<Map<String, Integer>> selectImgProduct(@Param("productGroupId") int productGroupId, @Param("imgUrl") String imgUrl, @Param("deleteFirstImage") boolean deleteFirstImage, @Param("deleteSecondImage") boolean deleteSecondImage, @Param("deleteThirdImage") boolean deleteThirdImage);
+	
+	// 이미지 삭제 상품 코드(임시 코드)
+	void updateProductImg(List<Map<String, Integer>> list, boolean deleteFirstImage, boolean deleteSecondImage, boolean deleteThirdImage);
+	
 }
 
