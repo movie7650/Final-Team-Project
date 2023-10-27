@@ -257,12 +257,15 @@ public class AdminController {
 	// 상품 이미지 정보 삭제하기
 	@PostMapping("/deleteProductImages")
     public ResponseEntity<?> deleteProductImages(@RequestParam int productId,
+    											 @RequestParam int productGroupId,
+    											 @RequestParam String imageUrl,
                                                  @RequestParam(required = false) boolean deleteFirstImage,
                                                  @RequestParam(required = false) boolean deleteSecondImage,
                                                  @RequestParam(required = false) boolean deleteThirdImage) {
+		System.out.println("여기 오잖아" + productId + " : " + productGroupId + " : " + imageUrl);
         try {
             // 상품 이미지 정보 삭제
-            adminService.deleteProductImages(productId, deleteFirstImage, deleteSecondImage, deleteThirdImage);
+            adminService.deleteProductImages(productId, productGroupId, imageUrl, deleteFirstImage, deleteSecondImage, deleteThirdImage);
             // 성공적인 응답 반환
             return ResponseEntity.ok().build();
         } catch (Exception e) {

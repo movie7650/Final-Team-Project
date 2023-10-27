@@ -872,4 +872,43 @@
 		)
 	</select>
 	
+	<!--(임시 코드) 
+		기능: 지정된 imgurl을 가지는 상품 조회
+		담당자: 나현웅
+	 -->
+	<select id="selectImgProduct" resultType="map">
+	 	SELECT product_id as productId
+	 	FROM product
+	 	WHERE product_group_id = #{productGroupdId} 
+	 	<if test="deleteFirstImage">
+       		AND  product_image_first = #{imgUrl}
+	    </if>
+	    <if test="deleteSecondImage">
+       		AND  product_image_second = #{imgUrl}
+	    </if>
+	    <if test="deleteThirdImage">
+    		AND  product_image_third = #{imgUrl}
+       	</if> 
+	 	
+	 	
+	 </select>
+	 
+	<update id="updateProductImg">
+		<foreach collection="list" item="item" index="index" separator=" ">
+			UPDATE 
+			<set>
+		        <if test="deleteFirstImage">
+		        		  product_image_first = NULL,
+		        </if>
+		        <if test="deleteSecondImage">
+		        		  product_image_second = NULL,
+		        </if>
+		        <if test="deleteThirdImage">
+		        		  product_image_third = NULL
+		        </if>
+        	</set>
+			WHERE product_id = #{index.PRODUCTID}
+		</foreach>
+	</update>
+	
 </mapper>
