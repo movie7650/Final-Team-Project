@@ -56,7 +56,7 @@ public interface IAdminService {
 	List<ProductCheck> searchProductsByName(String searchText);
 	
 	// 상품 이미지 정보 삭제하기
-	void deleteProductImages(int productId, int productGroupdId, String imageUrl, boolean deleteFirstImage, boolean deleteSecondImage, boolean deleteThirdImage);
+	void deleteProductImages(int productId, int productGroupId, String imageUrl, boolean deleteFirstImage, boolean deleteSecondImage, boolean deleteThirdImage);
 	
 	// 상품 이미지 수정하기
 //	void updateProductImages(int productId, List<String> imageUrls);

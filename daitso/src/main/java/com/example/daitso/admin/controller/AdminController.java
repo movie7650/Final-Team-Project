@@ -262,7 +262,6 @@ public class AdminController {
                                                  @RequestParam(required = false) boolean deleteFirstImage,
                                                  @RequestParam(required = false) boolean deleteSecondImage,
                                                  @RequestParam(required = false) boolean deleteThirdImage) {
-		System.out.println("여기 오잖아" + productId + " : " + productGroupId + " : " + imageUrl);
         try {
             // 상품 이미지 정보 삭제
             adminService.deleteProductImages(productId, productGroupId, imageUrl, deleteFirstImage, deleteSecondImage, deleteThirdImage);

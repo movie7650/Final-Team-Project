@@ -19,7 +19,7 @@
 <div th:replace="include/body-header :: bodyHeader"></div>
 <div class="d-flex justify-content-center align-items-center" style="height: 530px">
 	<div class="d-flex" style="width: 1100px; height:440px">
-		<div class="d-flex flex-column" style="margin-right: 10px">
+		<div class="d-flex flex-column last-class" style="margin-right: 10px">
 			<div class="margin-b-5" th:if="${product.productImageFirst != null}" style="width:50px; height:50px;">
 				<img class="s-img-first" style="width: 100%; height: 100%" th:src="${product.productImageFirst}">				
 			</div>
@@ -302,7 +302,8 @@
 <div th:replace="include/footer :: footer"></div>
 </body>
 <script th:src="@{/js/speech.js}"></script>
-<script th:inline="javascript">	
+</html>
+<script th:inline="javascript">
 	const body = document.querySelector("body");
 	const modal = document.querySelector(".modal");
 	const modalImg = document.querySelector(".modal-img");
@@ -324,35 +325,37 @@
 	totalPrice.textContent = fPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + '원';
 	totalPrice.value = fPrice;
 
-
-	//이미지 마우스 오버시 메인 이미지 변경
-	const sImgFirst = document.querySelector('.s-img-first');
-	const sImgSecond = document.querySelector('.s-img-second');
-	const sImgThird = document.querySelector('.s-img-third');
-	if(sImgFirst != null){
-		sImgFirst.addEventListener('mouseover',function(){
-			const img = document.querySelector('.img-first');
-			img.src = sImgFirst.src;
-			const imgZoom = document.querySelector('.img-zoom');
-			imgZoom.style.background = `url(${sImgFirst.src}) no-repeat`;
-		})		
-	}
-	if(sImgSecond != null){
-		sImgSecond.addEventListener('mouseover',function(){
-			const img = document.querySelector('.img-first');
-			img.src = sImgSecond.src;
-			const imgZoom = document.querySelector('.img-zoom');
-			imgZoom.style.background = `url(${sImgSecond.src}) no-repeat`;
-		})		
-	}
-	if(sImgThird != null){
-		sImgThird.addEventListener('mouseover',function(){
-			const img = document.querySelector('.img-first');
-			img.src = sImgThird.src;
-			const imgZoom = document.querySelector('.img-zoom');
-			imgZoom.style.background = `url(${sImgThird.src}) no-repeat`;
-		})		
-	}
+	const lastClass = document.querySelector(".last-class");
+	lastClass.addEventListener('mouseover', function() {
+			//이미지 마우스 오버시 메인 이미지 변경
+		const sImgFirst = document.querySelector('.s-img-first');
+		const sImgSecond = document.querySelector('.s-img-second');
+		const sImgThird = document.querySelector('.s-img-third');
+		if(sImgFirst != null){
+			sImgFirst.addEventListener('mouseover',function(){
+				const img = document.querySelector('.img-first');
+				img.src = sImgFirst.src;
+				const imgZoom = document.querySelector('.img-zoom');
+				imgZoom.style.background = `url(${sImgFirst.src}) no-repeat`;
+			})
+		}
+		if(sImgSecond != null){
+			sImgSecond.addEventListener('mouseover',function(){
+				const img = document.querySelector('.img-first');
+				img.src = sImgSecond.src;
+				const imgZoom = document.querySelector('.img-zoom');
+				imgZoom.style.background = `url(${sImgSecond.src}) no-repeat`;
+			})
+		}
+		if(sImgThird != null){
+			sImgThird.addEventListener('mouseover',function(){
+				const img = document.querySelector('.img-first');
+				img.src = sImgThird.src;
+				const imgZoom = document.querySelector('.img-zoom');
+				imgZoom.style.background = `url(${sImgThird.src}) no-repeat`;
+			})
+		}
+	})
 	
 	
 	const imageContainer = document.querySelector('.img-first');
@@ -578,10 +581,24 @@
         fetch("/product/change/" + productGroupId + params)
         .then(response => response.json())
         .then(data => {
+        	console.log(data);
         	document.querySelector('.img-first').src = data.productImageFirst;
         	document.querySelector('.s-img-first').src = data.productImageFirst;
-        	if(document.querySelector('.s-img-second')) document.querySelector('.s-img-second').src = data.productImageSecond;
-        	if(document.querySelector('.s-img-third')) document.querySelector('.s-img-third').src = data.productImageThird;
+			const el = `${data.productImageFirst != null ?
+				`<div class="margin-b-5" style="width:50px; height:50px;">
+					<img class="s-img-first" style="width: 100%; height: 100%" src="${data.productImageFirst}">
+				 </div>` : `` }
+			${data.productImageSecond != null ?
+				`<div class="margin-b-5" style="width:50px; height:50px;">
+					<img class="s-img-second" style="width: 100%; height: 100%" src="${data.productImageSecond}">
+				 </div>` : ``}
+			${data.productImageThird != null ?
+				`<div style="width:50px; height:50px;">
+					<img class="s-img-third" style="width: 100%; height: 100%" src="${data.productImageThird}">
+				</div>`: ``}
+			`
+			lastClass.innerHTML = el;
+
             const product = data;
             const cPrice = product.productPrice;
         	totalPrice.value = cPrice;
@@ -832,4 +849,3 @@
 		}
 	}
 </script>
-</html>
