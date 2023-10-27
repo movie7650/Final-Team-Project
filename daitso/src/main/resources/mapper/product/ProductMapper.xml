@@ -879,7 +879,7 @@
 	<select id="selectImgProduct" resultType="map">
 	 	SELECT product_id as productId
 	 	FROM product
-	 	WHERE product_group_id = #{productGroupdId} 
+	 	WHERE product_group_id = #{productGroupId}
 	 	<if test="deleteFirstImage">
        		AND  product_image_first = #{imgUrl}
 	    </if>
@@ -888,14 +888,15 @@
 	    </if>
 	    <if test="deleteThirdImage">
     		AND  product_image_third = #{imgUrl}
-       	</if> 
-	 	
-	 	
+       	</if>
 	 </select>
-	 
+	<!--(임시 코드)
+       기능: 지정된 imgurl을 가지는 상품 이미지 컬럼 null로 업데이트
+       담당자: 나현웅
+    -->
 	<update id="updateProductImg">
-		<foreach collection="list" item="item" index="index" separator=" ">
-			UPDATE 
+		<foreach collection="list" item="item" open="DECLARE BEGIN" separator=";" close="; END;">
+			UPDATE product
 			<set>
 		        <if test="deleteFirstImage">
 		        		  product_image_first = NULL,
@@ -907,7 +908,7 @@
 		        		  product_image_third = NULL
 		        </if>
         	</set>
-			WHERE product_id = #{index.PRODUCTID}
+			WHERE product_id = #{item.PRODUCTID}
 		</foreach>
 	</update>
 	
