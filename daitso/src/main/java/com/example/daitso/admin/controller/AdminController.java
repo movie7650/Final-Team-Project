@@ -969,7 +969,7 @@ public class AdminController {
  	@ResponseBody
  	public ResponseEntity<String> issueCoupons(@RequestParam int couponId, Model model) {
  		adminService.issueCoupons(couponId);
- 		String message = "쿠폰을 발급하였습니다.";
+ 		String message = "전체 고객 대상으로 쿠폰을 모두 발급하였습니다.";
  	    return ResponseEntity.ok(message);
  	}
     

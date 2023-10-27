@@ -163,6 +163,7 @@
         loadData(601);
     });
 
+    // 용도 미정 쿠폰
 	function loadData(commonCodeId, page) {
 	    $.ajax({
 	        type: "GET",
@@ -242,7 +243,8 @@
 	    });
 	}
 	
-	// 쿠폰 변경 처리 핸들러 설정
+	
+	// 쿠폰 변경 처리
 	function setupChangeCouponDvHandlers() {
 	    $(".common-code-select").on("change", function() {
 	        var couponId = $(this).siblings("input[name='couponId']").val();
@@ -260,6 +262,7 @@
 	    });
 	}
 	
+	// 프로모션 쿠폰
 	function loadedData(commonCodeId, page) {
 	    $.ajax({
 	        type: "GET",
@@ -332,6 +335,7 @@
 	    });
 	}
 	
+	// 전체 고객 대상 쿠폰
 	function loadsData(commonCodeId, page) {
 	    $.ajax({
 	        type: "GET",
@@ -416,8 +420,7 @@
 	            alert(data);
 	        },
 	        error: function (error) {
-	            // 에러 발생 시의 처리
-	            alert("발급 실패");
+	            alert("쿠폰 발급을 실패하였습니다.");
 	        }
 	    });
 	}

@@ -177,6 +177,7 @@ public class AdminService implements IAdminService{
 		//productRepository.deleteProductImages(productId, deleteFirstImage, deleteSecondImage, deleteThirdImage);
 		List<Map<String,Integer>> list = productRepository.selectImgProduct(productGroupId, imageUrl, deleteFirstImage, deleteSecondImage, deleteThirdImage);
 		productRepository.updateProductImg(list, deleteFirstImage, deleteSecondImage, deleteThirdImage);
+
 	 }
 	
 	// 상품 이미지 수정하기
