@@ -655,7 +655,8 @@
             }
         });    
     }
-      
+     
+    // 신규 상품 등록하기
 	function submitNew() {
 	    const changedPrices = document.querySelectorAll("#productPrices");
 	    for (let i = 0; i < changedPrices.length; i++) {
@@ -676,7 +677,8 @@
 	        contentType: false,
 	        success: function (data) {
 	            showAlert(data);
-	            $('#registerNewModal').modal('hide'); 
+	            $('#registerNewModal').mrelodal('hide');
+	            location.reload();
 	        },
 	        error: function (xhr, status, error) {
 	            showAlert("필수 입력 항목을 입력해주세요.");
