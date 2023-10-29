@@ -17,7 +17,6 @@
 				없습니다. 배송지를 추가해주세요!</div>
 			<div th:each="mypageshippinglist : ${myshippinglist}"
 				class="address-container">
-				<!-- <div th:if="${mypageshippinglist.shippingDv}=='일반배송지'" class="nomal-address"></div> -->
 				<div th:if="${mypageshippinglist.shippingDv}=='기본배송지'"
 					class="base-address">기본배송지</div>
 				<div th:text="${mypageshippinglist.shippingReceiverNM}"
