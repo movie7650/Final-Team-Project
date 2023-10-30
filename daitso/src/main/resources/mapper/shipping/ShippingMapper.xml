@@ -244,9 +244,9 @@
 	 	담당자: 윤상영
 	 -->
 	 <delete id="deleteMyshipping" parameterType="int">
-	 	DELETE 
-	 	  FROM shipping
-		 WHERE shipping_id=#{shippingId}
+	 	UPDATE shipping
+		   SET status='N'
+		WHERE shipping_id=#{shippingId}
 	 </delete>
 	  <!-- 
 		기능: shippingId에 따른 배송지구분가져오기

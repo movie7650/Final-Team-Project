@@ -12,7 +12,7 @@
 			    category_nm AS categoryNm, 
 			    level AS lv,
 			    CONNECT_BY_ISLEAF AS isLeaf
-		FROM category 
+		FROM (SELECT * FROM category WHERE status = 'Y')
 		WHERE status = 'Y'
 		<if test="categoryId != -1">
 			AND CONNECT_BY_ROOT category_nm = 
