@@ -734,7 +734,7 @@
 	                GROUP BY product_group_id
 	              ) sr
 	    ON p.product_group_id = sr.product_group_id
-	    WHERE discount_rate != 0
+	    WHERE discount_rate != 0 and p.status = 'Y'
 	</select>
 	
 	

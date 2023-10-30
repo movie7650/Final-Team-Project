@@ -156,7 +156,7 @@
 				const parent = document.querySelector(`.li${data.categoryPrId}`)
 				parent.innerHTML += elements;
 				for (let j=0; j<data.lv-1; j++){
-					span.innerHTML += '&nbsp';
+					span.innerHTML += '&nbsp&nbsp';
 				}
 				const tag = document.querySelector(`.li${data.categoryId}`);		
 				tag.prepend(span);
@@ -198,7 +198,7 @@
 				const parent = document.querySelector(`.ul${data.categoryPrId}`)
 				parent.innerHTML += elements;	
 				for (let j=0; j<data.lv-1; j++){
-					span.innerHTML += '&nbsp';
+					span.innerHTML += '&nbsp&nbsp';
 				}
 				const tag = document.querySelector(`.li${data.categoryId}`);		
 				tag.prepend(span);
