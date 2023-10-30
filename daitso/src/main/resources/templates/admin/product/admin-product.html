@@ -672,12 +672,12 @@
 	    $.ajax({
 	        type: "POST",
 	        url: "/admin/product/new",
-	        data: formData, // 멀티파트 파일 포함된 폼 데이터 전송
-	        processData: false, // 데이터 처리를 jQuery에게 맡김
+	        data: formData, 
+	        processData: false, 
 	        contentType: false,
 	        success: function (data) {
 	            showAlert(data);
-	            $('#registerNewModal').mrelodal('hide');
+	            $('#registerNewModal').modal('hide');
 	            location.reload();
 	        },
 	        error: function (xhr, status, error) {
