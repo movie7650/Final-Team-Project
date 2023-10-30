@@ -36,18 +36,15 @@
 </div><!-- update-table-container -->
 </div>
 </div><!--check-customer-main  -->
-
-
-		<script>
-		   var msg = '[[${msg}]]';
-		   if(msg === '비밀번호를 다시 확인해 주세요.') {
-		       alert("비밀번호를 다시 확인해 주세요.");
-		   }
-		</script>
-
-
-
 <div th:replace="include/footer :: footer"></div>
 </body>
+
 <script th:src="@{/js/mic.js}"></script>
+
 </html>
+<script>
+   var msg = '[[${msg}]]';
+   if(msg === '비밀번호를 다시 확인해 주세요.') {
+       alert("비밀번호를 다시 확인해 주세요.");
+   }
+</script>
