@@ -16,8 +16,7 @@
 		<div style="padding-bottom: 15px;justify-content: flex-end;border-bottom: 2px solid #1a385d;display: flex;margin-bottom: 20px;">
 			<div style="text-align: end;">
 				<button class="btn btn-primary" style="background-color: #1a385d; border-color: #1a385d; font-weight: 600;"
-					data-bs-toggle="modal" data-bs-target="#registerModal"
-					type="button">등록</button>
+					data-bs-toggle="modal" data-bs-target="#registerModal" type="button">등록</button>
 			</div>
 		</div>
 		<div style="height: 695px;">
@@ -236,6 +235,10 @@
 		             "<a class='page-link' onclick='loadData(" + commonCodeId + ", " + (data.totalPages) + ")' aria-label='Last'><span aria-hidden='true'>&raquo;</span></a>" +
 		             "</li>";
 	        	 pagination.append(lastLink);
+	        	 
+	        	 $('.table td, .table th').css({
+	                 padding: '0.8rem'
+	             });
 	        },
 	        error: function (error) {
 	            console.log("에러 발생: " + error);
@@ -360,7 +363,7 @@
 	                        "<td>" +
 	                        "<div class='btn-group'>" +
 	                        "<button class='btn btn-xs' style='background-color: #ffffff; border: solid 2px; border-color: #1a385d;color: #1a385d;font-weight: 600'" +
-	                        "type='button' onclick='issueCoupon(" + data.data[i].couponId + ")'>발급</button>" +
+	                        "type='button' onclick='issueCoupon(" + data.data[i].couponId + ", this)'>발급</button>" +
 	                        "<button class='btn btn-xs' style='background-color: #1a385d; border-color: #1a385d; font-weight: 600; color:white'" +
 	                        "type='button' onclick='deleteCoupon(" + data.data[i].couponId + ", " + data.data[i].commonCodeId + ")'>삭제</button>" +
 	                        "</td>" +
@@ -410,7 +413,7 @@
 	    });
 	}
 	
-	function issueCoupon(couponId) {
+	function issueCoupon(couponId, rowElement) {
 	    $.ajax({
 	        type: "POST",
 	        url: "/admin/coupon/issue", 
@@ -418,6 +421,8 @@
 	        success: function (data) {
 	        	console.log(data);
 	            alert(data);
+	         // 쿠폰 발급 성공 시 해당 행 삭제
+	            $(rowElement).closest('tr').remove();
 	        },
 	        error: function (error) {
 	            alert("쿠폰 발급을 실패하였습니다.");
