@@ -18,7 +18,7 @@
 <body>
 <div th:replace="include/body-header :: bodyHeader"></div>
 <div th:replace="include/mypage-bread-board :: mypageBreadBoard"></div>
-<form th:action="@{/mypage/order-list}" method="post">
+<!-- <form th:action="@{/mypage/order-list}" method="post"> -->
 
 
  <div class="order-list-main"> 
@@ -70,7 +70,7 @@
 		 </div>
  </div><!-- order-list-main -->
 
-</form>
+<!-- </form> -->
 
 <div th:if="${payCoinCount}!= 0" style="display:flex; justify-content: center;">
 <nav  aria-label="Page navigation">
