@@ -164,6 +164,10 @@
          WHERE coupon_sn = #{couponSn}
     </select>
 
+	<!-- 
+    	기능: 전체 고객 대상 쿠폰 발급하기
+    	담당자: 이세인
+     --> 
  	<insert id="issueCoupons">
 	    INSERT ALL
 			INTO customer_coupon (customer_coupon_id, customer_id, coupon_id, COUPON_USE_DV)

@@ -2,6 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include/header :: header">
 <link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<title>주문 상세보기</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WJB8ZT4ELE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WJB8ZT4ELE');
+</script>
 </head>
 <body>
 <form th:action="@{/mypage/order-list}" method="post">
