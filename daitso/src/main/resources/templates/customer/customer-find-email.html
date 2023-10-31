@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include/header :: header">
+<head>
 <title>아이디(이메일) 찾기</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJB8ZT4ELE"></script>
@@ -12,6 +12,7 @@
   gtag('config', 'G-WJB8ZT4ELE');
 </script>
 </head>
+<head th:replace="include/header :: header"></head>
 <body>
 <div th:replace="include/body-header :: bodyHeader"></div>
 <div id="customer-find-container">

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include/header :: header">
-<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
+<head>
 <title>배송중 페이지</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJB8ZT4ELE"></script>
@@ -12,6 +11,9 @@
 
   gtag('config', 'G-WJB8ZT4ELE');
 </script>
+</head>
+<head th:replace="include/header :: header">
+<link rel="stylesheet" th:href="@{/css/admin-frame.css}">
 </head>
 <body>
 <div th:replace="include/body-header :: bodyHeader"></div>

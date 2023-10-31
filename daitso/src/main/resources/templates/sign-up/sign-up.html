@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include/user-header :: userHeader">
+<head>
 <title>회원가입</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJB8ZT4ELE"></script>
@@ -11,6 +11,8 @@
 
   gtag('config', 'G-WJB8ZT4ELE');
 </script>
+</head>
+<head th:replace="include/user-header :: userHeader">
 </head>
 <body>
 	<div class="sign-up-container">
